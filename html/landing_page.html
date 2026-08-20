@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Corvacho's Restaurante - Cada pedido es una experiencia de alta cocina en casa." />
+  <title>Corvacho's Restaurante | Alta Cocina</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../style/styles.css" />
+</head>
+<body>
+
+  <!---barra de navegacion--->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <img src="../Images/logo-simple.png" alt="Corvacho's Logo" class="nav-logo" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link">Inicio</a></li>
+        <li><a href="#about" class="nav-link">Nosotros</a></li>
+
+        <li><a href="#contact" class="nav-link">Contacto</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="btn-ghost" id="loginBtn">Login</a>
+        <a href="#" class="btn-gold" id="signupBtn">Sign Up</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!--- SECTION--->
+  <section class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-logo-wrap">
+        <img src="../Images/logo-completo.png" alt="Corvacho's Restaurante" class="hero-logo" />
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-text">
+        <p class="hero-tagline">Alta cocina, sabor autentico</p>
+        <h1 class="hero-slogan">Experiencia gastronomica que te deja sin palabras</h1>
+       
+        <div class="hero-cta">
+          <a href="#contact" class="btn-outline" id="heroReserveBtn">Reservar Mesa</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!---ABOUT SECTION--->
+  <section class="about" id="about">
+    <div class="section-container">
+
+      <h2 class="section-title"><span class="gold">Nosotros</span></h2>
+
+      <!-- Layout: texto + imagen -->
+      <div class="about-layout">
+
+        <div class="about-text">
+          <p class="section-desc">
+            En Corvacho's somos un restaurante de alta cocina comprometido con brindarte una experiencia gastronómica única.
+           con varios platos gourmet,
+            creando sabores que conquistan el paladar desde el primer bocado.
+          </p>
+          <p class="section-desc">
+            Ya sea en nuestra sala, con su ambiente cálido y sofisticado, o desde la comodidad de tu hogar a través de nuestro servicio de domicilios,
+            garantizamos la misma calidad, presentación y pasión en cada plato.
+            Porque en Corvacho's, la excelencia no tiene dirección.
+          </p>
+        </div>
+
+        <!-- Imagen del restaurante -->
+        <div class="about-building">
+          <div class="building-frame">
+            <img src="../Images/Edificio.jpeg" alt="Corvacho's Restaurante - Sede" class="building-img" />
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!---FOOD SECTION--->
+  <section class="food" id="food">
+    <div class="section-container">
+      <h2 class="section-title"><span class="gold">Nuestras especialidades</span></h2>
+      
+      <div class="food-grid">
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/comida-berenjenas_a_la_parmesana.png" alt="Berenjenas a la Parmesana" />
+          </div>
+          <h3 class="food-name">Berenjenas a la Parmesana</h3>
+        </div>
+
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/Comida-burrata.png" alt="Burrata" />
+          </div>
+          <h3 class="food-name">Burrata</h3>
+        </div>
+
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/comida-carpaccio_di_salmone.png" alt="Carpaccio di Salmone" />
+          </div>
+          <h3 class="food-name">Carpaccio di Salmone</h3>
+        </div>
+
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/comida-papas_a_la_francesa.png" alt="Papas a la Francesa" />
+          </div>
+          <h3 class="food-name">Papas a la Francesa</h3>
+        </div>
+
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/comida-pasta_gratinada_del_chef.png" alt="Pasta Gratinada del Chef" />
+          </div>
+          <h3 class="food-name">Pasta Gratinada del Chef</h3>
+        </div>
+
+        <div class="food-card">
+          <div class="food-image">
+            <img src="../Images/comida-polpo_alla_griglia.png" alt="Polpo alla Griglia" />
+          </div>
+          <h3 class="food-name">Polpo alla Griglia</h3>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!---CONTACT FORM SECTION--->
+  <section class="contact-form-section" id="contact-form">
+    <div class="section-container">
+      <h2 class="section-title"><span class="gold">Formulario de Contacto</span></h2>
+      <p class="contact-form-subtitle">Rellena tu información y te responderemos lo antes posible.</p>
+
+      <form class="contact-form" id="contactForm" novalidate>
+
+        <!-- Nombre -->
+        <div class="cf-row">
+          <div class="cf-group">
+            <label class="cf-label" for="cfFirstName">Nombre</label>
+            <input class="cf-input" type="text" id="cfFirstName" name="firstName" placeholder="Nombre" required />
+            <span class="cf-error" id="errFirstName"></span>
+          </div>
+          <div class="cf-group">
+            <label class="cf-label" for="cfLastName">Apellido</label>
+            <input class="cf-input" type="text" id="cfLastName" name="lastName" placeholder="Apellido" required />
+            <span class="cf-error" id="errLastName"></span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="cf-group">
+          <label class="cf-label" for="cfEmail">Tu correo electrónico</label>
+          <input class="cf-input" type="email" id="cfEmail" name="email" placeholder="ej. hola@corvachos.com" required />
+          <span class="cf-error" id="errEmail"></span>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="cf-group">
+          <label class="cf-label" for="cfPhone1">Teléfono*</label>
+          <input class="cf-input" type="tel" id="cfPhone1" name="phone1" placeholder="ej. +57 300 913 4441" />
+        </div>
+
+        <!-- Asunto -->
+        <div class="cf-group">
+          <label class="cf-label" for="cfSubject">Asunto del mensaje*</label>
+          <input class="cf-input" type="text" id="cfSubject" name="subject" placeholder="Escribe el asunto de tu mensaje..." required />
+          <span class="cf-error" id="errSubject"></span>
+        </div>
+
+        <!-- Mensaje -->
+        <div class="cf-group">
+          <label class="cf-label" for="cfMessage">Mensaje*</label>
+          <textarea class="cf-textarea" id="cfMessage" name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+          <span class="cf-error" id="errMessage"></span>
+        </div>
+
+        <!-- Submit -->
+        <div class="cf-submit-row">
+          <button type="submit" class="cf-submit-btn" id="cfSubmitBtn">
+            <span class="cf-btn-text">ENVIAR FORMULARIO</span>
+            <span class="cf-btn-loader" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <!-- Success message -->
+        <div class="cf-success" id="cfSuccess" aria-live="polite"></div>
+
+      </form>
+    </div>
+  </section>
+
+  <!---FOOTER--->
+  <footer class="footer" id="contact">
+    <div class="footer-container">
+
+      <div class="footer-col footer-brand">
+        <img src="../Images/logo-completo.png" alt="Corvacho's" class="footer-logo" />
+        <p class="footer-tagline">
+          Cada pedido en Corvacho's<br />es una experiencia de<br />alta cocina en casa.
+        </p>
+      </div>
+
+      <div class="footer-col footer-contact">
+        <h4 class="footer-heading">Contactanos</h4>
+        <ul class="footer-list">
+          <li>
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Sede Administrativa: Calle 40 #7-60 Bogota Colombia</span>
+          </li>
+          <li>
+            <i class="fa-solid fa-envelope"></i>
+            <a href="mailto:Marketing@alucan.com.co">administrativo@corvachos.com</a>
+          </li>
+          <li>
+            <i class="fa-solid fa-phone"></i>
+            <a href="tel:+3009134441">CEL: +300 913 4441</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-social">
+        <h4 class="footer-heading">Siguenos</h4>
+        <div class="social-icons">
+          <a href="#" class="social-btn" id="igBtn" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="#" class="social-btn" id="fbBtn" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="#" class="social-btn" id="waBtn" aria-label="WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>2026 Corvacho's Restaurante. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>
+
