@@ -1,0 +1,93 @@
+<!--El landing page debe ser el index.html al ser la primera página a la que entra el usuario-->
+<!--LANDING PAGE-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corvacho's Restaurante</title>
+    <!-- Para bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../style/styles.css">
+    <link rel="stylesheet" href="../style/landing.css">
+</head>
+
+<!--pagina principal-->
+<body>
+
+    <!--Barra de navegación hecha con bootstrap-->
+    <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <!--logo en navbar-->
+        <a class="navbar-brand" href="#"><img src="../Images/logo-simple.png" height="60px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <!--links navbar-->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+            <a class="nav-link" href="#hero">INICIO</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#about">NOSOTROS</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">CONTACTO</a>
+            </li class="nav-item">
+            <li class="nav-item">
+            <a class="nav-link login" href="#">LOGIN</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link signup" href="#">SIGN UP</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <!--seccion inicial-->
+    <section class="hero d-flex align-items-center" id="hero">
+    <div class="container-fluid">
+        <div class="hero-content">
+            <!-- Columna izquierda: logo grande -->
+            <div class="hero-logo">
+                <img src="../images/logo-completo.png" alt="Corvacho's Restaurante">
+            </div>
+
+            <!-- Línea divisoria -->
+            <div class="hero-divider"></div>
+
+            <!-- Columna derecha: texto -->
+            <div class="hero-text">
+                <p class="hero-label">ALTA COCINA, <span>SABOR AUTENTICO</span></p>
+                <h1 class="hero-h1">Experiencia gastronomica que te deja sin palabras</h1>
+                <a href="#reservas" class="btn-hero-outline">RESERVAR MESA</a>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!--Seccion About-->
+    <section class="about d-flex align-items-center" id="about">
+    <div class="container-fluid">
+        <div class="about-tittle"><h1>Nosotros</h1></div>
+        <div class="about-content">
+            <p>En Corvacho's somos un restaurante de alta cocina comprometido con brindarte una experiencia gastronómica única. con varios platos gourmet, creando sabores que conquistan el paladar desde el primer bocado. <br>Ya sea en nuestra sala, con su ambiente cálido y sofisticado, o desde la comodidad de tu hogar a través de nuestro servicio de domicilios, garantizamos la misma calidad, presentación y pasión en cada plato. Porque en Corvacho's, la excelencia no tiene dirección.</p>
+            <img src="../Images/Edificio.jpeg" alt="Sede principal Corvachos" height="500px">
+        </div>
+    
+    </div>
+    </section>
+
+
+</body>
+
+<!--Para Bootstrap-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+crossorigin="anonymous"></script>
+</html>

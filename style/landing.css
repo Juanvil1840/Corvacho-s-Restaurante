@@ -1,0 +1,195 @@
+/*css landing page*/
+/*Barra de navegación*/
+
+/*boton signup*/
+.navbar .nav-link.signup{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 47px;
+    width: 130px;
+    border-radius: 7px;
+    border: none;
+    background-color: #cd9e46;
+    color: #001c2a;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link.signup:hover{
+    background-color: #ac7e33;
+    color: white;
+}
+
+
+/*boton login*/
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 47px;
+    width: 130px;
+    border-radius: 7px;
+    border: 2px solid #334955;
+    background-color: #001c2a;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.login:hover{
+    border: 2px solid #6f8896;
+    color: #adb7bd;
+}
+
+/*Hero Page*/
+.hero {
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 15, 20, 0.70), rgba(0, 15, 20, 0.80)), url('../images/fondo-main.jpeg');        
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+.hero-content {
+    padding-top: 40px; 
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding-left: 130px;
+}
+
+/* Columna del logo */
+.hero-logo {
+    flex-shrink: 0; /* que no se achique cuando falte espacio */
+    text-align: center;
+}
+
+.hero-logo img{
+    height: 350px;
+}
+
+/* Línea divisoria vertical */
+.hero-divider {
+    width: 1px;
+    height: 350px;
+    background-color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+/* Columna de texto */
+.hero-text {
+    max-width: 650px;
+}
+
+.hero-label {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.hero-label span {
+    color: #cd9e46; /* dorado para la segunda parte del texto */
+}
+
+.hero-text h1 {
+    font-family: Cormorant Garamond;
+    font-size: 3.2rem;
+    line-height: 1.2;
+    font-weight: 500;
+    margin-bottom: 32px;
+    color: white;
+}
+
+.btn-hero-outline {
+    display: inline-block;
+    padding: 14px 32px;
+    border: 1px solid #cd9e46;
+    border-radius: 7px;
+    color: #cd9e46;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.btn-hero-outline:hover {
+    background-color: #cd9e46;
+    color: #001c2a;
+}
+
+/*About Page*/
+.about{
+    height: 100vh;
+    color:white;
+    background-color: #013741;
+}
+
+.about-tittle{
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.about-content{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+    gap:20px;
+}
+
+.about-content p{
+    line-height: 2;
+
+}
+
+.about-content img{
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: auto; /*que no fuerce 100vh si el contenido es más alto */
+        min-height: 100vh;
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+
+    .hero-content {
+        flex-direction: column; /*apila verticalmente */
+        align-items: center;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        gap: 24px;
+    }
+
+    .hero-logo img {
+        max-width: 500px; /* logo más pequeño en pantalla pequeña */
+    }
+
+    .hero-divider {
+        display: none; /* la línea vertical se elimina en vertical */
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-text .hero-h1 {
+        font-size: 3rem; /* letra mas pequeña */
+        line-height: 1.3;
+        color:white;
+    }
+
+    .hero-label {
+        font-size: 0.75rem;
+    }
+}
