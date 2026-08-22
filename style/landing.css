@@ -154,7 +154,39 @@
     border-radius: 8px;
 }
 
+/*imagenes seccion nuestra especialidad*/
+
+.especialidad .especialidad-tittle{
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 40px;
+}
+
+.especialidad-content{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    width: 100%;
+}
+
+.especialidad-content .especialidad-plato {
+    width: calc(50% - 230px);  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.especialidad-content .especialidad-plato img{
+    height: 300px;
+    width: 450px;
+    object-fit: cover;
+    border-radius: 8px;
+}
 @media (max-width: 768px) {
+    /*hero*/
     .hero {
         height: auto; /*que no fuerce 100vh si el contenido es más alto */
         min-height: 100vh;
@@ -192,4 +224,42 @@
     .hero-label {
         font-size: 0.75rem;
     }
+
+    /* About  */
+    .about {
+        height: auto;
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .about-content {
+        flex-direction: column; /* imagen debajo del texto */
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+    }
+
+    .about-content img {
+        width: 100%;
+        max-width: 350px;
+        height: auto; /* que no fuerce el height:500px fijo  */
+    }
+
+    /* Especialidad */
+    .especialidad {
+        height: auto;
+        padding-bottom: 60px;
+    }
+
+    .especialidad-content .especialidad-plato {
+        width: 100%;
+        max-width: 350px; 
+    }
+
+    .especialidad-content .especialidad-plato img {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+    }
+
 }
