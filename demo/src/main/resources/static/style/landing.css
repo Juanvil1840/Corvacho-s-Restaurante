@@ -170,7 +170,7 @@
 }
 
 .especialidad-content .especialidad-plato {
-    width: calc(50% - 230px);  
+    width: calc(50% - 100px);  
     display: flex;
     flex-direction: column;
     justify-content: center;
