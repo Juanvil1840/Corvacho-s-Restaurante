@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +16,5 @@ public class Producto {
     private String descripcion;
     private String imagen;
     private boolean disponible;
-
+    private List<String> ingredientes;
 }

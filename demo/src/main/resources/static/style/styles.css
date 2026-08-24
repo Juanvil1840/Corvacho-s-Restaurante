@@ -37,7 +37,7 @@ body {
 }
 
 .navbar-nav {
-    gap: 20px; /* ajusta el valor a tu gusto */
+    gap: 20px; 
 }
 
 .nav-link:hover{

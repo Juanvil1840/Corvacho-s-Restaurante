@@ -1,24 +1,24 @@
-<!--Página de menú-->
+<!--Página de detalle de producto-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>menu Corvacho's</title>
-        <!-- Para bootstrap-->
+    <title th:text="${producto.nombre} + ' | Corvacho\'s'">Detalle | Corvacho's</title>
+    <!-- Para bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
 
-    <link rel="stylesheet" href="../style/styles.css">
-    <link rel="stylesheet" href="../style/menu.css">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/detalle.css}">
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <!--logo en navbar-->
-        <a class="navbar-brand" href="/"><img src="../Images/logo-simple.png" height="60px"></a>
+        <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -36,26 +36,22 @@
     </div>
     </nav>
 
-
-    <div class="menu-grid">
-    <h1 class="menu-text1">Platos Fuertes</h1>
-
-    <div class="tarjetas">
-        <div class="card" style="width: 18rem;" th:each="producto : ${productos}">
-            <img th:src="${producto.imagen}" class="card-img-top" th:alt="${producto.nombre}">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${producto.nombre}">Card title</h5>
-                <p class="card-text" th:text="'$ ' + ${producto.precio}">Precio</p>
-                <a th:href="@{/menu/detalle/{id}(id=${producto.id})}" class="btn btn-primary">Ver descripción</a>
-            </div>
+    <div class="detalle-container">
+        <!-- Lado izquierdo: información -->
+        <div class="detalle-info">
+            <a th:href="@{/menu}" class="btn-volver">&#8592; Volver al menú</a>
+            <h1 class="detalle-nombre" th:text="${producto.nombre}">Nombre del plato</h1>
+            <h3 class="detalle-subtitulo">Ingredientes</h3>
+            <ul class="detalle-ingredientes">
+                <li th:each="ingrediente : ${producto.ingredientes}" th:text="${ingrediente}"></li>
+            </ul>
+        </div>
+        <!-- Lado derecho: imagen -->
+        <div class="detalle-imagen-container">
+            <img th:src="${producto.imagen}" th:alt="${producto.nombre}" class="detalle-imagen">
         </div>
     </div>
 
-</div>
-
-
-
-    
 </body>
 <!--Para Bootstrap-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 

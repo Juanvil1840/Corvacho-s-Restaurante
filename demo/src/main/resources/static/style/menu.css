@@ -12,12 +12,12 @@
 
 .tarjetas {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas iguales */
+    grid-template-columns: repeat(2, 1fr); 
     gap: 20px;
 }
 
 .card {
-    width: 100% !important; /* para que no choque con el width: 18rem inline */
+    width: 100% !important; 
     align-items: center;
 }
 .card-body {
