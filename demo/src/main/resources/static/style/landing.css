@@ -147,7 +147,6 @@
 
 .about-content p{
     line-height: 2;
-
 }
 
 .about-content img{
@@ -175,8 +174,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-
 }
 
 .especialidad-content .especialidad-plato img{
@@ -185,17 +182,18 @@
     object-fit: cover;
     border-radius: 8px;
 }
+
 @media (max-width: 768px) {
     /*hero*/
     .hero {
-        height: auto; /*que no fuerce 100vh si el contenido es más alto */
+        height: auto;
         min-height: 100vh;
         padding-top: 100px;
         padding-bottom: 60px;
     }
 
     .hero-content {
-        flex-direction: column; /*apila verticalmente */
+        flex-direction: column;
         align-items: center;
         text-align: center;
         padding-left: 20px;
@@ -204,11 +202,11 @@
     }
 
     .hero-logo img {
-        max-width: 500px; /* logo más pequeño en pantalla pequeña */
+        max-width: 500px;
     }
 
     .hero-divider {
-        display: none; /* la línea vertical se elimina en vertical */
+        display: none;
     }
 
     .hero-text {
@@ -216,7 +214,7 @@
     }
 
     .hero-text .hero-h1 {
-        font-size: 3rem; /* letra mas pequeña */
+        font-size: 3rem;
         line-height: 1.3;
         color:white;
     }
@@ -233,7 +231,7 @@
     }
 
     .about-content {
-        flex-direction: column; /* imagen debajo del texto */
+        flex-direction: column;
         padding-left: 20px;
         padding-right: 20px;
         text-align: center;
@@ -242,7 +240,7 @@
     .about-content img {
         width: 100%;
         max-width: 350px;
-        height: auto; /* que no fuerce el height:500px fijo  */
+        height: auto;
     }
 
     /* Especialidad */
@@ -261,18 +259,15 @@
         height: auto;
         max-height: 250px;
     }
-
 }
 
 /* FORMULARIO DE CONTACTO */
 
-/* Contenedor de la sección */
 #contacto {
     background-color: #013741;
     padding: 60px 20px;
 }
 
-/* Título de la sección */
 #contacto-titulo {
     text-align: center;
     color: #cd9e46;
@@ -282,13 +277,11 @@
     margin-bottom: 30px;
 }
 
-/* Contenedor del formulario */
 #formulario-contacto {
     max-width: 700px;
     margin: 0 auto;
 }
 
-/* Fila de nombre y apellido  */
 #contacto-fila-nombre {
     display: flex;
     gap: 20px;
@@ -299,12 +292,10 @@
     flex: 1;
 }
 
-/* Separación entre campos */
 #formulario-contacto > div {
     margin-bottom: 20px;
 }
 
-/* Labels de todos los campos */
 #formulario-contacto label {
     color: #a0b8bf;
     font-size: 0.75rem;
@@ -314,7 +305,6 @@
     margin-bottom: 6px;
 }
 
-/* Inputs y textarea */
 #formulario-contacto input,
 #formulario-contacto textarea {
     width: 100%;
@@ -326,17 +316,14 @@
     border-radius: 4px;
 }
 
-/* Campo asunto resaltado con borde dorado */
 #asunto {
     border: 1px solid #cd9e46;
 }
 
-/* Textarea redimensionable verticalmente */
 #mensaje {
     resize: vertical;
 }
 
-/* Botón enviar */
 #contacto-btn {
     background-color: #cd9e46;
     color: #001c2a;
@@ -354,7 +341,6 @@
     color: white;
 }
 
-/* Mensaje de respuesta del formulario (JS) */
 #respuesta-form {
     margin-top: 14px;
     color: #cd9e46;
@@ -362,21 +348,18 @@
 
 /* FOOTER*/
 
-/* Contenedor general del footer */
 #footer {
     background-color: #010f14;
     color: #a0b8bf;
     padding: 50px 80px 0 80px;
 }
 
-/* Fila principal: logo + contacto */
 #footer-main {
     display: flex;
     gap: 80px;
     padding-bottom: 40px;
 }
 
-/* Columna del logo */
 #footer-logo-col {
     display: flex;
     flex-direction: column;
@@ -384,14 +367,10 @@
     gap: 16px;
 }
 
-/* Logo del footer */
 #footer-logo {
     height: 160px;
 }
 
-
-
-/* Columna de contacto */
 #footer-contacto-col {
     display: flex;
     flex-direction: column;
@@ -400,7 +379,6 @@
     margin: 0 auto;
 }
 
-/* Título CONTÁCTANOS */
 #footer-contacto-titulo {
     color: #a0b8bf;
     font-size: 1.5rem;
@@ -409,9 +387,6 @@
     margin-bottom: 4px;
 }
 
-
-
-/* Líneas de datos de contacto */
 #footer-contacto-col p {
     text-align: center;
     font-size: 1.3rem;
@@ -419,7 +394,6 @@
     margin: 0;
 }
 
-/* Barra inferior del footer */
 #footer-bottom {
     border-top: 1px solid #1a3040;
     padding: 18px 0;
@@ -428,7 +402,6 @@
     color: #fcfcfc;
 }
 
-/* Columna redes sociales - empujada al extremo derecho */
 #footer-redes-col {
     display: flex;
     flex-direction: column;
@@ -437,7 +410,6 @@
     margin-left: auto;
 }
 
-/* Título SÍGUENOS */
 #footer-redes-titulo {
     color: #a0b8bf;
     font-size: 1.5rem;
@@ -446,7 +418,6 @@
     margin-bottom: 4px;
 }
 
-/* Línea dorada bajo SÍGUENOS */
 #footer-redes-divider {
     border: none;
     border-top: 1px solid #cd9e46;
@@ -454,14 +425,12 @@
     margin: 0 0 10px 0;
 }
 
-/* Contenedor de los tres iconos (apilados verticalmente) */
 #footer-redes-iconos {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-/* Círculo de cada icono */
 .footer-icono {
     display: flex;
     align-items: center;

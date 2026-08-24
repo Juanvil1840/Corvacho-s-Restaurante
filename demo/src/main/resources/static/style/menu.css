@@ -1,0 +1,51 @@
+.menu-grid {
+    margin-top: 100px;
+    padding-top: 50px;
+    max-width: 900px;      /* controla el ancho del recuadro que rodea todo */
+    margin-left: auto;
+    margin-right: auto;    /*centra el bloque completo en la página */
+    padding: 30px;
+    border: 20px solid #d4af6a; 
+    background-color: white;
+    border-radius: 8px;
+}
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
+}
+
+.card {
+    width: 100% !important; 
+    align-items: center;
+}
+.card-body {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; /* evita que las imágenes se vean deformadas */
+}
+.menu-text1{
+    color:#003741;
+    text-align: center;
+}
+
+.btn{
+    background-color: #cd9e46;
+    border:none;
+}
+.btn:hover{
+    background-color: #d4af6a;
+}
+
+.card-tittle{
+    color:#003741;
+}

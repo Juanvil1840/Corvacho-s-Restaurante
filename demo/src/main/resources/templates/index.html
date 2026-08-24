@@ -1,8 +1,5 @@
-<!--El landing page debe ser el index.html al ser la primera página a la que entra el usuario-->
-<!--LANDING PAGE-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +15,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 
-<!--pagina principal-->
 <body>
 
     <!--Barra de navegación hecha con bootstrap-->
@@ -39,7 +35,7 @@
             <a class="nav-link" href="#about">NOSOTROS</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" href="#">CONTACTO</a>
+            <a class="nav-link" href="#contacto">CONTACTO</a>
             </li>
             <li class="nav-item">
             <a class="nav-link login" href="#">LOGIN</a>
@@ -68,7 +64,7 @@
             <div class="hero-text">
                 <p class="hero-label">ALTA COCINA, <span>SABOR AUTENTICO</span></p>
                 <h1 class="hero-h1">Experiencia gastronomica que te deja sin palabras</h1>
-                <a href="#reservas" class="btn-hero-outline">RESERVAR MESA</a>
+                <a th:href="@{/menu}" href="/menu" class="btn-hero-outline">VER MENÚ</a>
             </div>
         </div>
     </div>
@@ -82,12 +78,11 @@
             <p>En Corvacho's somos un restaurante de alta cocina comprometido con brindarte una experiencia gastronómica única. con varios platos gourmet, creando sabores que conquistan el paladar desde el primer bocado. <br>Ya sea en nuestra sala, con su ambiente cálido y sofisticado, o desde la comodidad de tu hogar a través de nuestro servicio de domicilios, garantizamos la misma calidad, presentación y pasión en cada plato. Porque en Corvacho's, la excelencia no tiene dirección.</p>
             <img th:src="@{/Images/Edificio.jpeg}" src="/Images/Edificio.jpeg" alt="Sede principal Corvachos" height="500px">
         </div>
-    
     </div>
     </section>
 
     <!--Section de especialidades-->
-    <section class="especialidad d-flex align-items-center" >
+    <section class="especialidad d-flex align-items-center">
     <div class="container-fluid">
         <div class="especialidad-tittle"><h1>Nuestras Especialidades</h1></div>
         <div class="especialidad-content">
@@ -120,20 +115,14 @@
             <img th:src="@{/Images/comida-polpo_alla_griglia.png}" src="/Images/comida-polpo_alla_griglia.png" height="300px">
             <p>polpo alla griglia</p>
             </div>
-            
         </div>
-
     </div>
     </section>
 
     <!--Seccion Formulario de Contacto-->
     <section id="contacto">
-
         <h2 id="contacto-titulo">Formulario de Contacto</h2>
-
         <form id="formulario-contacto">
-
-            <!-- Nombre y Apellido  -->
             <div id="contacto-fila-nombre">
                 <div>
                     <label for="nombre">Nombre</label>
@@ -167,21 +156,15 @@
 
             <button type="submit" id="contacto-btn">Enviar</button>
             <p id="respuesta-form"></p>
-
         </form>
-
     </section>
 
     <footer id="footer">
         <div id="footer-main">
-
-            <!-- Columna izquierda: logo y descripción -->
             <div id="footer-logo-col">
                 <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
-                
             </div>
 
-            <!-- Columna derecha: contacto -->
             <div id="footer-contacto-col">
                 <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
                 <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
@@ -189,7 +172,6 @@
                 <p>&#128222; CEL: +300 913 4441</p>
             </div>
 
-            <!-- Columna redes sociales -->
             <div id="footer-redes-col">
                 <h4 id="footer-redes-titulo">SÍGUENOS</h4>
                 <hr id="footer-redes-divider">
@@ -199,7 +181,6 @@
                     <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
             </div>
-
         </div>
 
         <div id="footer-bottom">
@@ -207,14 +188,12 @@
         </div>
     </footer>
 
+    <!--Para Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+
+    <!--JS propio-->
+    <script th:src="@{/js/landing.js}" src="/js/landing.js"></script>
 </body>
-
-
-<!--Para Bootstrap-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-crossorigin="anonymous"></script>
-
-<!--JS propio-->
-<script th:src="@{/js/landing.js}" src="/js/landing.js"></script>
 </html>
