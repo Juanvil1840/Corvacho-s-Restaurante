@@ -1,7 +1,8 @@
 <!--El landing page debe ser el index.html al ser la primera página a la que entra el usuario-->
 <!--LANDING PAGE-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +11,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
     crossorigin="anonymous">
-
-    <link rel="stylesheet" href="../style/styles.css">
-    <link rel="stylesheet" href="../style/landing.css">
+ 
+    <link rel="stylesheet" th:href="@{/style/styles.css}" href="/style/styles.css">
+    <link rel="stylesheet" th:href="@{/style/landing.css}" href="/style/landing.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 
 <!--pagina principal-->
@@ -22,7 +25,7 @@
     <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
         <!--logo en navbar-->
-        <a class="navbar-brand" href="#"><img src="../Images/logo-simple.png" height="60px"></a>
+        <a class="navbar-brand" href="#"><img th:src="@{/Images/logo-simple.png}" src="/Images/logo-simple.png" height="60px"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -55,7 +58,7 @@
         <div class="hero-content">
             <!-- Columna izquierda: logo grande -->
             <div class="hero-logo">
-                <img src="../images/logo-completo.png" alt="Corvacho's Restaurante">
+                <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Corvacho's Restaurante">
             </div>
 
             <!-- Línea divisoria -->
@@ -77,7 +80,7 @@
         <div class="about-tittle"><h1>Nosotros</h1></div>
         <div class="about-content">
             <p>En Corvacho's somos un restaurante de alta cocina comprometido con brindarte una experiencia gastronómica única. con varios platos gourmet, creando sabores que conquistan el paladar desde el primer bocado. <br>Ya sea en nuestra sala, con su ambiente cálido y sofisticado, o desde la comodidad de tu hogar a través de nuestro servicio de domicilios, garantizamos la misma calidad, presentación y pasión en cada plato. Porque en Corvacho's, la excelencia no tiene dirección.</p>
-            <img src="../Images/Edificio.jpeg" alt="Sede principal Corvachos" height="500px">
+            <img th:src="@{/Images/Edificio.jpeg}" src="/Images/Edificio.jpeg" alt="Sede principal Corvachos" height="500px">
         </div>
     
     </div>
@@ -89,32 +92,32 @@
         <div class="especialidad-tittle"><h1>Nuestras Especialidades</h1></div>
         <div class="especialidad-content">
             <div class="especialidad-plato">
-            <img src="../Images/comida-berenjenas_a_la_parmesana.png" height="300px">
+            <img th:src="@{/Images/comida-berenjenas_a_la_parmesana.png}" src="/Images/comida-berenjenas_a_la_parmesana.png" height="300px">
             <p>berenjenas a la parmesana</p>
             </div>
 
             <div class="especialidad-plato">
-            <img src="../Images/Comida-burrata.png" height="300px">
+            <img th:src="@{/Images/Comida-burrata.png}" src="/Images/Comida-burrata.png" height="300px">
             <p>Burrata</p>
             </div>
 
             <div class="especialidad-plato">
-            <img src="../Images/comida-carpaccio_di_salmone.png" height="300px">
+            <img th:src="@{/Images/comida-carpaccio_di_salmone.png}" src="/Images/comida-carpaccio_di_salmone.png" height="300px">
             <p>carpaccio di salmone</p>
             </div>
 
             <div class="especialidad-plato">
-            <img src="../Images/comida-papas_a_la_francesa.png" height="300px">
+            <img th:src="@{/Images/comida-papas_a_la_francesa.png}" src="/Images/comida-papas_a_la_francesa.png" height="300px">
             <p>papas a la Francesa</p>
             </div>
 
             <div class="especialidad-plato">
-            <img src="../Images/comida-pasta_gratinada_del_chef.png" height="300px">
+            <img th:src="@{/Images/comida-pasta_gratinada_del_chef.png}" src="/Images/comida-pasta_gratinada_del_chef.png" height="300px">
             <p>pasta gratinada del chef</p>
             </div>
 
             <div class="especialidad-plato">
-            <img src="../Images/comida-polpo_alla_griglia.png" height="300px">
+            <img th:src="@{/Images/comida-polpo_alla_griglia.png}" src="/Images/comida-polpo_alla_griglia.png" height="300px">
             <p>polpo alla griglia</p>
             </div>
             
@@ -123,11 +126,95 @@
     </div>
     </section>
 
+    <!--Seccion Formulario de Contacto-->
+    <section id="contacto">
+
+        <h2 id="contacto-titulo">Formulario de Contacto</h2>
+
+        <form id="formulario-contacto">
+
+            <!-- Nombre y Apellido  -->
+            <div id="contacto-fila-nombre">
+                <div>
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre"/>
+                </div>
+                <div>
+                    <label for="apellido">Apellido</label>
+                    <input type="text" id="apellido" name="apellido" placeholder="Apellido"/>
+                </div>
+            </div>
+
+            <div>
+                <label for="correo">Tu Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" placeholder="ej. hola@corvachos.com"/>
+            </div>
+
+            <div>
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="ej. 300 000 0000"/>
+            </div>
+
+            <div>
+                <label for="asunto">Asunto del Mensaje</label>
+                <input type="text" id="asunto" name="asunto" placeholder="Escribe el asunto de tu mensaje..."/>
+            </div>
+
+            <div>
+                <label for="mensaje">Mensaje</label>
+                <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..."></textarea>
+            </div>
+
+            <button type="submit" id="contacto-btn">Enviar</button>
+            <p id="respuesta-form"></p>
+
+        </form>
+
+    </section>
+
+    <footer id="footer">
+        <div id="footer-main">
+
+            <!-- Columna izquierda: logo y descripción -->
+            <div id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
+                
+            </div>
+
+            <!-- Columna derecha: contacto -->
+            <div id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </div>
+
+            <!-- Columna redes sociales -->
+            <div id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
 
 </body>
+
 
 <!--Para Bootstrap-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
 integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
 crossorigin="anonymous"></script>
+
+<!--JS propio-->
+<script th:src="@{/js/landing.js}" src="/js/landing.js"></script>
 </html>

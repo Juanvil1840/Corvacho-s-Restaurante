@@ -263,3 +263,214 @@
     }
 
 }
+
+/* FORMULARIO DE CONTACTO */
+
+/* Contenedor de la sección */
+#contacto {
+    background-color: #013741;
+    padding: 60px 20px;
+}
+
+/* Título de la sección */
+#contacto-titulo {
+    text-align: center;
+    color: #cd9e46;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+/* Contenedor del formulario */
+#formulario-contacto {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Fila de nombre y apellido  */
+#contacto-fila-nombre {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#contacto-fila-nombre > div {
+    flex: 1;
+}
+
+/* Separación entre campos */
+#formulario-contacto > div {
+    margin-bottom: 20px;
+}
+
+/* Labels de todos los campos */
+#formulario-contacto label {
+    color: #a0b8bf;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* Inputs y textarea */
+#formulario-contacto input,
+#formulario-contacto textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #022c38;
+    border: 1px solid #334955;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 4px;
+}
+
+/* Campo asunto resaltado con borde dorado */
+#asunto {
+    border: 1px solid #cd9e46;
+}
+
+/* Textarea redimensionable verticalmente */
+#mensaje {
+    resize: vertical;
+}
+
+/* Botón enviar */
+#contacto-btn {
+    background-color: #cd9e46;
+    color: #001c2a;
+    border: none;
+    padding: 14px 40px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+#contacto-btn:hover {
+    background-color: #ac7e33;
+    color: white;
+}
+
+/* Mensaje de respuesta del formulario (JS) */
+#respuesta-form {
+    margin-top: 14px;
+    color: #cd9e46;
+}
+
+/* FOOTER*/
+
+/* Contenedor general del footer */
+#footer {
+    background-color: #010f14;
+    color: #a0b8bf;
+    padding: 50px 80px 0 80px;
+}
+
+/* Fila principal: logo + contacto */
+#footer-main {
+    display: flex;
+    gap: 80px;
+    padding-bottom: 40px;
+}
+
+/* Columna del logo */
+#footer-logo-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+/* Logo del footer */
+#footer-logo {
+    height: 160px;
+}
+
+
+
+/* Columna de contacto */
+#footer-contacto-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+}
+
+/* Título CONTÁCTANOS */
+#footer-contacto-titulo {
+    color: #a0b8bf;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+
+
+/* Líneas de datos de contacto */
+#footer-contacto-col p {
+    text-align: center;
+    font-size: 1.3rem;
+    color: #6f8896;
+    margin: 0;
+}
+
+/* Barra inferior del footer */
+#footer-bottom {
+    border-top: 1px solid #1a3040;
+    padding: 18px 0;
+    text-align: center;
+    font-size: 2rem;
+    color: #fcfcfc;
+}
+
+/* Columna redes sociales - empujada al extremo derecho */
+#footer-redes-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+/* Título SÍGUENOS */
+#footer-redes-titulo {
+    color: #a0b8bf;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+/* Línea dorada bajo SÍGUENOS */
+#footer-redes-divider {
+    border: none;
+    border-top: 1px solid #cd9e46;
+    width: 40px;
+    margin: 0 0 10px 0;
+}
+
+/* Contenedor de los tres iconos (apilados verticalmente) */
+#footer-redes-iconos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Círculo de cada icono */
+.footer-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #334955;
+    color: #6f8896;
+    font-size: 1.1rem;
+    cursor: default;
+}
