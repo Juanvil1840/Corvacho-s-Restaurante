@@ -1,4 +1,4 @@
-/* ===== DETALLE DE PRODUCTO ===== */
+/* DETALLE DE PRODUCTO */
 
 .detalle-container {
     margin-top: 120px;
@@ -14,7 +14,7 @@
     align-items: flex-start;
 }
 
-/* --- Lado izquierdo: información --- */
+/* Lado izquierdo: información */
 .detalle-info {
     flex: 1;
     display: flex;
@@ -82,7 +82,7 @@
     border-bottom: none;
 }
 
-/* --- Lado derecho: imagen --- */
+/* imagen */
 .detalle-imagen-container {
     flex: 1;
     display: flex;
@@ -98,7 +98,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Responsive: en pantallas pequeñas apilar --- */
+/*  Responsive: en pantallas pequeñas apilar  */
 @media (max-width: 768px) {
     .detalle-container {
         flex-direction: column-reverse;
