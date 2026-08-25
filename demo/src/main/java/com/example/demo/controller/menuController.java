@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.service.ProductoService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class MenuController {
@@ -25,4 +27,11 @@ public class MenuController {
         model.addAttribute("producto", productoService.obtenerPorId(id));
         return "detalle-producto";
     }
+
+    @GetMapping("/menu/adminTable")
+    public String getMethodName(Model model) {
+         model.addAttribute("productos", productoService.obtenerTodos());
+        return "adminMenu";
+    }
+    
 }
