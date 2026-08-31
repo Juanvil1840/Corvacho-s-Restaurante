@@ -1,0 +1,87 @@
+
+/* Sección principal del login */
+.login-section {
+    min-height: 100vh;
+    background-image: linear-gradient(rgba(0, 15, 20, 0.55), rgba(0, 15, 20, 0.55)), url('../Images/Edificio.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px;
+}
+
+/* Formulario */
+.login-form {
+    width: 100%;
+    max-width: 448px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 24px;
+}
+
+.login-form label {
+    color: white;
+    font-size: 1.15rem;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #4b5563;
+    background-color: rgba(0, 40, 60, 0.85);
+    color: white;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.login-form input::placeholder {
+    color: #9ca3af;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #ca8a04;
+}
+
+/* Mensaje de error */
+.login-error {
+    color: #ef4444;
+    text-align: center;
+}
+
+/* Botón INGRESAR */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    border-radius: 6px;
+    border: 2px solid #6b7280;
+    background-color: rgba(0, 28, 42, 0.9);
+    color: white;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 8px;
+}
+
+.login-btn:hover {
+    background-color: #b45309;
+    border-color: #b45309;
+}
+
+/* Link Registrate */
+.login-registrate {
+    text-align: center;
+    color: #d1d5db;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.login-registrate a {
+    color: white;
+    text-decoration: underline;
+}
