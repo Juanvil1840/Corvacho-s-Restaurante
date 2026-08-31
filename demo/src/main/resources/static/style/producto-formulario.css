@@ -1,0 +1,290 @@
+/* ============================================
+   ESTILOS PARA FORMULARIO DE PRODUCTOS 
+   (Unificado con el estilo de la app)
+   ============================================ */
+
+.body-producto-form {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor principal */
+.producto-form-contenedor {
+    max-width: 600px;
+    margin: 100px auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+.producto-form-titulo {
+    color: #cd9e46;
+    font-size: 2.2rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.producto-form-titulo::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: #cd9e46;
+    margin: 10px auto 0;
+    border-radius: 4px;
+}
+
+/* Tarjeta del formulario */
+.producto-form-tarjeta {
+    background: #013741;
+    border-radius: 16px;
+    padding: 2rem 2rem 1.8rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid #1a3040;
+}
+
+/* Grupos del formulario */
+.producto-form-grupo {
+    margin-bottom: 1.1rem;
+}
+
+.producto-form-grupo label {
+    display: block;
+    color: #a0b8bf;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.producto-form-grupo input,
+.producto-form-grupo textarea,
+.producto-form-grupo select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #334955;
+    border-radius: 6px;
+    background: #022c38;
+    color: #fcfafa;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.producto-form-grupo input::placeholder,
+.producto-form-grupo textarea::placeholder {
+    color: #4a6a7a;
+}
+
+.producto-form-grupo input:focus,
+.producto-form-grupo textarea:focus,
+.producto-form-grupo select:focus {
+    border-color: #cd9e46;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(205, 158, 70, 0.15);
+    background: #013741;
+}
+
+.producto-form-grupo textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.producto-form-grupo input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    accent-color: #cd9e46;
+    transform: scale(1.2);
+}
+
+.producto-form-grupo .checkbox-label {
+    display: flex;
+    align-items: center;
+    color: #fcfafa;
+    font-size: 0.95rem;
+    font-weight: normal;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+.producto-form-grupo small {
+    display: block;
+    margin-top: 4px;
+    color: #6f8896;
+    font-size: 0.75rem;
+}
+
+/* Botones */
+.producto-form-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.producto-form-btn-guardar {
+    display: inline-block;
+    padding: 0.6rem 2rem;
+    border: 2px solid #cd9e46;
+    border-radius: 6px;
+    color: #cd9e46;
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.producto-form-btn-guardar:hover {
+    background: #cd9e46;
+    color: #001c2a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(205, 158, 70, 0.25);
+}
+
+.producto-form-btn-cancelar {
+    display: inline-block;
+    padding: 0.6rem 2rem;
+    border: 2px solid #6f8896;
+    border-radius: 6px;
+    color: #a0b8bf;
+    background: transparent;
+    font-weight: 600;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.producto-form-btn-cancelar:hover {
+    background: #6f8896;
+    color: #001c2a;
+}
+
+/* Footer */
+.footer-producto-form {
+    background-color: #010f14;
+    color: #a0b8bf;
+    padding: 20px 80px 0 80px;
+    margin-top: auto;
+}
+
+.footer-producto-form .footer-main {
+    display: flex;
+    gap: 60px;
+    padding-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer-producto-form .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.footer-producto-form .footer-col img {
+    height: 60px;
+    object-fit: contain;
+}
+
+.footer-producto-form .footer-col h4 {
+    color: #a0b8bf;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-producto-form .footer-col p {
+    font-size: 0.8rem;
+    color: #6f8896;
+    margin: 0;
+}
+
+.footer-producto-form .footer-iconos {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.footer-producto-form .footer-iconos span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #334955;
+    color: #6f8896;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.footer-producto-form .footer-iconos span:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+}
+
+.footer-producto-form .footer-bottom {
+    border-top: 1px solid #1a3040;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #6f8896;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .producto-form-contenedor {
+        margin: 80px auto 1rem;
+        padding: 0 15px;
+    }
+
+    .producto-form-titulo {
+        font-size: 1.8rem;
+    }
+
+    .producto-form-tarjeta {
+        padding: 1.2rem;
+    }
+
+    .producto-form-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .producto-form-acciones .producto-form-btn-guardar,
+    .producto-form-acciones .producto-form-btn-cancelar {
+        text-align: center;
+    }
+
+    .footer-producto-form {
+        padding: 15px 20px 0 20px;
+    }
+
+    .footer-producto-form .footer-main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .footer-producto-form .footer-col {
+        align-items: center;
+    }
+
+    .footer-producto-form .footer-iconos {
+        justify-content: center;
+    }
+}

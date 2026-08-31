@@ -16,5 +16,6 @@ public class Cliente {
     private String contraseña;
     private String telefono;
     private String direccion;
+    private boolean activo = true;  // Por defecto, el cliente esta activo
     
 }

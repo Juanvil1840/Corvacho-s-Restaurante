@@ -14,6 +14,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
+    // === MÉTODOS DE LECTURA (YA EXISTENTES) ===
     @Override
     public Collection<Producto> obtenerTodos() {
         return productoRepository.findAll();
@@ -22,5 +23,21 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Producto obtenerPorId(Integer id) {
         return productoRepository.findById(id);
+    }
+
+    // === NUEVOS MÉTODOS PARA CRUD ===
+    @Override
+    public Producto guardar(Producto producto) {
+        return productoRepository.save(producto);
+    }
+
+    @Override
+    public void eliminar(Integer id) {
+        productoRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existe(Integer id) {
+        return productoRepository.existsById(id);
     }
 }

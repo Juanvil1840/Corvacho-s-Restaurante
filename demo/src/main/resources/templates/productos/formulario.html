@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${producto.id} ? 'Editar Producto' : 'Nuevo Producto'">Formulario Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+    <link rel="stylesheet" th:href="@{/style/producto-formulario.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="body-producto-form">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="producto-form-contenedor">
+        <h1 class="producto-form-titulo" th:text="${producto.id} ? ' Editar Producto' : '➕ Nuevo Producto'"></h1>
+
+        <div class="producto-form-tarjeta">
+            <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="producto-form-grupo">
+                    <label>Nombre</label>
+                    <input type="text" th:field="*{nombre}" required>
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label>Precio</label>
+                    <input type="number" step="0.01" th:field="*{precio}" required>
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label>Descripción</label>
+                    <textarea th:field="*{descripcion}" rows="3"></textarea>
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label>URL de Imagen</label>
+                    <input type="url" th:field="*{imagen}">
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label>Ingredientes</label>
+                    <input type="text" th:field="*{ingredientes}" placeholder="Tomate, Queso, Albahaca">
+                    <small>Separa los ingredientes con comas</small>
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label class="checkbox-label">
+                        <input type="checkbox" th:field="*{disponible}">
+                        Disponible
+                    </label>
+                </div>
+
+                <div class="producto-form-acciones">
+                    <button type="submit" class="producto-form-btn-guardar">Guardar</button>
+                    <a href="/productos" class="producto-form-btn-cancelar">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-producto-form">
+        <div class="footer-main">
+            <div class="footer-col">
+                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
+            </div>
+            <div class="footer-col">
+                <h4>CONTÁCTANOS</h4>
+                <p>&#128205; Calle 40 #7-60 Bogotá</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; +300 913 4441</p>
+            </div>
+            <div class="footer-col">
+                <h4>SÍGUENOS</h4>
+                <div class="footer-iconos">
+                    <span><i class="bi bi-instagram"></i></span>
+                    <span><i class="bi bi-facebook"></i></span>
+                    <span><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

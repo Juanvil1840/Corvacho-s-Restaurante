@@ -1,0 +1,353 @@
+/* ============================================
+   PERFIL - ESTRUCTURA VERTICAL (Avatar + Info + Reservas)
+   ============================================ */
+
+.body-perfil {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================ */
+/* 1. SECCIÓN DE INFORMACIÓN PERSONAL */
+/* ============================================ */
+.perfil-seccion-info {
+    max-width: 1100px;
+    margin: 100px auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+.perfil-contenedor-info {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background: #013741;
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid #1a3040;
+}
+
+/* Columna izquierda: Avatar CUADRADO */
+.perfil-avatar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.perfil-avatar-cuadrado {
+    width: 150px;
+    height: 150px;
+    border: 4px solid #cd9e46;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #022c38;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.perfil-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.perfil-btn-editar {
+    display: inline-block;
+    padding: 0.5rem 1.8rem;
+    border: 2px solid #cd9e46;
+    border-radius: 6px;
+    color: #cd9e46;
+    background: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.perfil-btn-editar:hover {
+    background: #cd9e46;
+    color: #001c2a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(205, 158, 70, 0.25);
+}
+
+/* Columna derecha: Datos */
+.perfil-datos-col {
+    flex: 1;
+}
+
+.perfil-titulo-info {
+    color: #cd9e46;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #1a3040;
+    padding-bottom: 0.3rem;
+}
+
+.perfil-nombre {
+    color: #fcfafa;
+    font-size: 1.8rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 0.8rem;
+}
+
+.perfil-dato {
+    color: #a0b8bf;
+    font-size: 1.05rem;
+    margin: 0.4rem 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.perfil-dato i {
+    color: #cd9e46;
+    font-size: 1.1rem;
+    width: 24px;
+    text-align: center;
+}
+
+.perfil-dato span {
+    color: #fcfafa;
+}
+/* ============================================ */
+/* BOTÓN CERRAR SESIÓN */
+/* ============================================ */
+/* ============================================ */
+/* BOTÓN CERRAR SESIÓN */
+/* ============================================ */
+.perfil-btn-cerrar {
+    display: inline-block;
+    padding: 0.5rem 1.8rem;
+    border: 2px solid #6f8896;
+    border-radius: 6px;
+    color: #a0b8bf;
+    background: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.perfil-btn-cerrar:hover {
+    background: #6f8896;
+    color: #001c2a;
+    transform: translateY(-2px);
+}
+/* ============================================ */
+/* 2. SECCIÓN DE RESERVAS (con fondo de edificio) */
+/* ============================================ */
+.perfil-seccion-reservas {
+    max-width: 1100px;
+    margin: 0 auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.perfil-fondo-reservas {
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+}
+
+.perfil-contenido-reservas {
+    width: 100%;
+}
+
+.perfil-titulo-reservas {
+    color: #cd9e46;
+    font-size: 1.8rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 1.5rem;
+}
+
+.perfil-mensaje-vacio {
+    text-align: center;
+    color: #a0b8bf;
+    padding: 1.5rem 0;
+}
+
+.perfil-mensaje-vacio i {
+    display: block;
+    font-size: 3rem;
+    color: #6f8896;
+    margin-bottom: 0.8rem;
+}
+
+.perfil-mensaje-vacio p {
+    font-size: 1.1rem;
+    margin: 0.2rem 0;
+}
+
+/* ============================================ */
+/* 3. FOOTER */
+/* ============================================ */
+.footer-perfil {
+    background-color: #010f14;
+    color: #a0b8bf;
+    padding: 20px 80px 0 80px;
+    margin-top: auto;
+}
+
+.footer-perfil .footer-main {
+    display: flex;
+    gap: 60px;
+    padding-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer-perfil .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.footer-perfil .footer-col img {
+    height: 60px;
+    object-fit: contain;
+}
+
+.footer-perfil .footer-col h4 {
+    color: #a0b8bf;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-perfil .footer-col p {
+    font-size: 0.8rem;
+    color: #6f8896;
+    margin: 0;
+}
+
+.footer-perfil .footer-iconos {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.footer-perfil .footer-iconos span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #334955;
+    color: #6f8896;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.footer-perfil .footer-iconos span:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+}
+
+.footer-perfil .footer-bottom {
+    border-top: 1px solid #1a3040;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #6f8896;
+}
+
+/* ============================================ */
+/* RESPONSIVE */
+/* ============================================ */
+@media (max-width: 992px) {
+    .perfil-contenedor-info {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.8rem;
+    }
+
+    .perfil-dato {
+        justify-content: center;
+    }
+
+    .perfil-fondo-reservas {
+        padding: 2rem 1.5rem;
+        min-height: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .perfil-seccion-info {
+        margin: 80px auto 1rem;
+        padding: 0 15px;
+    }
+
+    .perfil-contenedor-info {
+        padding: 1.2rem;
+    }
+
+    .perfil-avatar-cuadrado {
+        width: 110px;
+        height: 110px;
+    }
+
+    .perfil-nombre {
+        font-size: 1.5rem;
+    }
+
+    .perfil-dato {
+        font-size: 0.9rem;
+    }
+
+    .perfil-seccion-reservas {
+        padding: 0 15px;
+    }
+
+    .perfil-fondo-reservas {
+        padding: 1.5rem 1.2rem;
+        min-height: 180px;
+    }
+
+    .perfil-titulo-reservas {
+        font-size: 1.4rem;
+    }
+
+    .footer-perfil {
+        padding: 15px 20px 0 20px;
+    }
+
+    .footer-perfil .footer-main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .footer-perfil .footer-col {
+        align-items: center;
+    }
+
+    .footer-perfil .footer-iconos {
+        justify-content: center;
+    }
+}
