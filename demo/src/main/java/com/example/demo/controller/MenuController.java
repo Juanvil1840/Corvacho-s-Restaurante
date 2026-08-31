@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.service.ProductoService;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.example.demo.entities.Producto;
+import com.example.demo.service.CategoriaService;
 
 @Controller
 public class MenuController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private CategoriaService categoriaService;
 
     @GetMapping("/menu")
     public String menu(Model model) {
@@ -23,7 +28,11 @@ public class MenuController {
 
     @GetMapping("/menu/detalle/{id}")
     public String detalle(@PathVariable Integer id, Model model) {
-        model.addAttribute("producto", productoService.obtenerPorId(id));
+
+        Producto producto = productoService.obtenerPorId(id);
+
+        model.addAttribute("producto",producto);
+        model.addAttribute("categoria",categoriaService.findById(producto.getIdCategoria()));
         return "detalle-producto";
     }
 
