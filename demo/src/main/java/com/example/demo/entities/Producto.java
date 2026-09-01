@@ -17,4 +17,5 @@ public class Producto {
     private String imagen;
     private boolean disponible;
     private List<String> ingredientes;
+    private Integer idCategoria;
 }
