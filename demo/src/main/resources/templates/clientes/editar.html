@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Perfil - Corvacho's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+    <link rel="stylesheet" th:href="@{/style/editar.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="body-editar">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="editar-contenedor">
+        <h1 class="editar-titulo"> Editar Perfil</h1>
+        
+        <div class="editar-tarjeta">
+            <!-- Formulario de edición -->
+            <form th:action="@{/perfil/actualizar}" th:object="${cliente}" method="post">
+                <input type="hidden" th:field="*{clienteId}" />
+                
+                <div class="editar-grupo">
+                    <label>Nombre</label>
+                    <input type="text" th:field="*{nombre}" required>
+                </div>
+                
+                <div class="editar-grupo">
+                    <label>Apellido</label>
+                    <input type="text" th:field="*{apellido}" required>
+                </div>
+                
+                <div class="editar-grupo">
+                    <label>Correo</label>
+                    <input type="email" th:field="*{correo}" required>
+                </div>
+                
+                <div class="editar-grupo">
+                    <label>Contraseña</label>
+                    <input type="text" th:field="*{contraseña}" placeholder="Nueva contraseña" required>
+                </div>
+                
+                <div class="editar-grupo">
+                    <label>Teléfono</label>
+                    <input type="tel" th:field="*{telefono}">
+                </div>
+                
+                <div class="editar-grupo">
+                    <label>Dirección</label>
+                    <input type="text" th:field="*{direccion}">
+                </div>
+                
+                <div class="editar-acciones">
+                    <button type="submit" class="editar-btn editar-btn-guardar">Actualizar</button>
+                    <a th:href="@{/perfil/ver/{id}(id=${cliente.clienteId})}" 
+                       class="editar-btn editar-btn-cancelar"> Cancelar</a>
+                </div>
+            </form>
+
+            <!-- ============================================ -->
+            <!-- SECCIÓN DE SEGURIDAD (Desactivar Cuenta)      -->
+            <!-- ============================================ -->
+            <hr style="border-color: #334955; margin: 1.8rem 0;">
+            
+            <div class="editar-zona-seguridad">
+                <h4 style="color: #e57373; font-size: 1rem; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
+                    <i class="bi bi-shield-lock"></i> Zona de Seguridad
+                </h4>
+                <p style="color: #a0b8bf; font-size: 0.85rem; margin-bottom: 1rem;">
+                    Si desactivas tu cuenta, no podrás iniciar sesión hasta que la reactives. 
+                    Tus datos se conservarán por si decides volver.
+                </p>
+                
+                <!-- Botón que cambia según el estado del cliente -->
+                <div th:if="${cliente.activo}">
+                    <a th:href="@{/perfil/desactivar/{id}(id=${cliente.clienteId})}" 
+                       class="editar-btn editar-btn-peligro" 
+                       onclick="return confirm('¿Estás seguro de que quieres desactivar tu cuenta? Podrás reactivarla más tarde.')">
+                       <i class="bi bi-person-x"></i> Desactivar Cuenta
+                    </a>
+                </div>
+                <div th:unless="${cliente.activo}">
+                    <p style="color: #4caf50; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                        <i class="bi bi-check-circle"></i> Tu cuenta está actualmente inactiva.
+                    </p>
+                    <a th:href="@{/perfil/reactivar/{id}(id=${cliente.clienteId})}" 
+                       class="editar-btn editar-btn-reactivar">
+                       <i class="bi bi-arrow-counterclockwise"></i> Reactivar Cuenta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-editar">
+        <div class="footer-main">
+            <div class="footer-col">
+                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
+            </div>
+            <div class="footer-col">
+                <h4>CONTÁCTANOS</h4>
+                <p>&#128205; Calle 40 #7-60 Bogotá</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; +300 913 4441</p>
+            </div>
+            <div class="footer-col">
+                <h4>SÍGUENOS</h4>
+                <div class="footer-iconos">
+                    <span><i class="bi bi-instagram"></i></span>
+                    <span><i class="bi bi-facebook"></i></span>
+                    <span><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
