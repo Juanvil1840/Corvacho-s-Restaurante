@@ -51,6 +51,13 @@
     <div class="perfil-avatar-boton">
         <a href="/" class="perfil-btn-cerrar">Cerrar Sesión</a>
     </div>
+    <!-- Botón de Eliminar Cuenta -->
+    <div class="perfil-avatar-boton">
+        <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}" 
+           class="perfil-btn-cerrar"
+           style="background-color: #c62828; border-color: #c62828;"
+           onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')">Eliminar Cuenta</a>
+    </div>
 </div>
 
             <!-- Columna derecha: Información Personal -->

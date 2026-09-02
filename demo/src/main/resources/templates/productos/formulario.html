@@ -29,7 +29,7 @@
 
     <!-- Contenido principal -->
     <div class="producto-form-contenedor">
-        <h1 class="producto-form-titulo" th:text="${producto.id} ? ' Editar Producto' : '➕ Nuevo Producto'"></h1>
+        <h1 class="producto-form-titulo" th:text="${producto.id} ? ' Editar Producto' : ' Nuevo Producto'"></h1>
 
         <div class="producto-form-tarjeta">
             <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
@@ -59,6 +59,16 @@
                     <label>Ingredientes</label>
                     <input type="text" th:field="*{ingredientes}" placeholder="Tomate, Queso, Albahaca">
                     <small>Separa los ingredientes con comas</small>
+                </div>
+
+                <div class="producto-form-grupo">
+                    <label>Categoría</label>
+                    <select th:field="*{idCategoria}" required>
+                        <option value="">-- Seleccionar categoría --</option>
+                        <option th:each="cat : ${categorias}" 
+                                th:value="${cat.id}" 
+                                th:text="${cat.nombre}">Categoría</option>
+                    </select>
                 </div>
 
                 <div class="producto-form-grupo">

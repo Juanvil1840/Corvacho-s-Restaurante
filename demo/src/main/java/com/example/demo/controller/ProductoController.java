@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entities.Producto;
 import com.example.demo.service.ProductoService;
+import com.example.demo.service.CategoriaService;
 
 @Controller
 @RequestMapping("/productos")
@@ -14,6 +15,9 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
+
+    @Autowired
+    private CategoriaService categoriaService;
 
     // === LISTAR todos los productos ===
     @GetMapping
@@ -26,6 +30,7 @@ public class ProductoController {
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
         model.addAttribute("producto", new Producto());
+        model.addAttribute("categorias", categoriaService.findAll());
         return "productos/formulario";
     }
 
@@ -37,6 +42,7 @@ public class ProductoController {
             return "redirect:/productos";
         }
         model.addAttribute("producto", producto);
+        model.addAttribute("categorias", categoriaService.findAll());
         return "productos/formulario";
     }
 

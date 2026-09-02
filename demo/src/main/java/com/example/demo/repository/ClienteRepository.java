@@ -39,9 +39,24 @@ public class ClienteRepository {
         data.put(1, new Cliente(1, "Dolly", "Parton", "dp@gmail.com", "Jolene",
                 "3157274433", "3146 Glencliff Rd. Nashville", true));
 
-        // Configura el siguiente ID disponible en 2.
-        // Asi, cuando se cree un nuevo cliente, se le asignara el ID 2.
-        idGenerator.set(2);
+        data.put(2, new Cliente(2, "Carlos", "Corvacho", "carlos@gmail.com", "1234",
+                "3001234567", "Calle 40 #7-60 Bogotá", true));
+
+        data.put(3, new Cliente(3, "María", "López", "maria@gmail.com", "maria123",
+                "3109876543", "Carrera 15 #82-10 Bogotá", true));
+
+        data.put(4, new Cliente(4, "Andrés", "García", "andres@gmail.com", "andres456",
+                "3201234890", "Avenida 68 #45-20 Bogotá", true));
+
+        data.put(5, new Cliente(5, "Valentina", "Rodríguez", "vale@gmail.com", "vale789",
+                "3154567890", "Calle 100 #19-61 Bogotá", true));
+
+        data.put(6, new Cliente(6, "Santiago", "Martínez", "santi@gmail.com", "santi321",
+                "3187654321", "Carrera 7 #32-16 Bogotá", false));
+
+        // Configura el siguiente ID disponible en 7.
+        // Asi, cuando se cree un nuevo cliente, se le asignara el ID 7.
+        idGenerator.set(7);
     }
 
   
@@ -59,6 +74,16 @@ public class ClienteRepository {
     // - Retorna: Collection<Cliente> - Una coleccion con todos los clientes.
     public Collection<Cliente> findAll() {
         return data.values();
+    }
+
+    // Busca un cliente por su correo electronico.
+    public Cliente findByCorreo(String correo) {
+        for (Cliente cliente : data.values()) {
+            if (cliente.getCorreo().equals(correo)) {
+                return cliente;
+            }
+        }
+        return null;
     }
 
 

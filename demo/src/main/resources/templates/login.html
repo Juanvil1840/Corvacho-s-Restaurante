@@ -36,7 +36,7 @@
             <a class="nav-link login" th:href="@{/login}">LOG IN</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link signup" href="#">SIGN UP</a>
+            <a class="nav-link signup" th:href="@{/perfil/registro}">SIGN UP</a>
             </li>
         </ul>
         </div>
@@ -58,7 +58,7 @@
 
             <p class="login-registrate">
                 ¿No tienes una cuenta aún? 
-                <a href="#">Registrate</a>
+                <a th:href="@{/perfil/registro}">Registrate</a>
             </p>
         </form>
     </section>

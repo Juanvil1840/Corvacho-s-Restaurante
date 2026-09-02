@@ -54,7 +54,7 @@ public class ClientePerfilController {
     // 5. EDITAR PERFIL: Guardar cambios
     @PostMapping("/actualizar")
     public String actualizar(@ModelAttribute Cliente cliente) {
-        // Si la contraseña viene vacía, mantener la existente
+        // Si la contraseña viene vacia, mantener la existente
         if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) {
             Cliente existente = clienteService.obtenerPorId(cliente.getClienteId());
             if (existente != null) {
@@ -85,5 +85,12 @@ public class ClientePerfilController {
             clienteService.guardar(cliente);
         }
         return "redirect:/perfil/ver/" + id;
+    }
+
+    // 8. ELIMINAR CUENTA: El cliente elimina su cuenta permanentemente
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Integer id) {
+        clienteService.eliminar(id);
+        return "redirect:/perfil/registro";
     }
 }
