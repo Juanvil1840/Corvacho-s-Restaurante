@@ -1,11 +1,16 @@
 package com.example.demo.controller;
 
-import com.example.demo.entities.Cliente;
-import com.example.demo.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.entities.Cliente;
+import com.example.demo.service.ClienteService;
 
 @Controller
 @RequestMapping("/perfil") // Todas las url del controlador empiezan con perfil
@@ -24,13 +29,11 @@ public class ClientePerfilController {
 
     // Guardar cliente: Cuando el usuario se registre y ya halla ingresado sus datos
     @PostMapping("/guardar") // Vamos a recibir los datos del formulario que el cliente envio
-    public String guardar(@ModelAttribute Cliente cliente) { // Toma los datos y los ocnvertimos en un objeto Cliente
-        cliente.setActivo(true); // Como el cliente ya se registro, activo=true, poara que el pueda iniciar
-                                 // sesion despues
-        clienteService.guardar(cliente);// Se pasa el cliente a clienteService para que este lo guarde
-        return "redirect:/perfil/ver/" + cliente.getClienteId(); // Rederigimos al cliente para que vea su perfil,
-                                                                 // entonces si el nuevo cliente tiene un ID de 2, seria
-                                                                 // /perfil/ver/2
+    public String guardar(@ModelAttribute Cliente cliente) { // Toma los datos y los convertimos en un objeto Cliente
+        Cliente guardado = clienteService.registrar(cliente); // Le pedimos al service que active y guarde al cliente nuevo
+        return "redirect:/perfil/ver/" + guardado.getClienteId(); // Rederigimos al cliente para que vea su perfil,
+                                                                   // entonces si el nuevo cliente tiene un ID de 2, seria
+                                                                   // /perfil/ver/2
     }
 
     // Ver perfil: Cuando queremos ver el perfil de un cliente con su id
@@ -63,28 +66,15 @@ public class ClientePerfilController {
     // Guardar cammbios: Cuando el cliente guarde los cambios que hizo
     @PostMapping("/actualizar")
     public String actualizar(@ModelAttribute Cliente cliente) { // Toma los datos y los convierte en un objeto cliente
-        if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) { // Si la contraseña del cliente esta
-                                                                                    // vacia o es null buscamos su
-                                                                                    // antigua contraseña y la mostramos
-            Cliente existente = clienteService.obtenerPorId(cliente.getClienteId());
-            if (existente != null) {
-                cliente.setContraseña(existente.getContraseña());
-            }
-        }
-        clienteService.guardar(cliente); // Guardamos el cliente actualizado con los cambios que haya realizado
-        return "redirect:/perfil/ver/" + cliente.getClienteId(); // Lo redirigimos a su perfil para que vea los cambios
+        Cliente actualizado = clienteService.actualizar(cliente); // Le pedimos al service que conserve la contraseña si no mandaron una nueva y guarde los cambios
+        return "redirect:/perfil/ver/" + actualizado.getClienteId(); // Lo redirigimos a su perfil para que vea los cambios
     }
 
     // Desactivar cuenta: Le damos la opcion al cliente para que desactive su
     // cuenta, mas no la elimine
     @GetMapping("/desactivar/{id}")
     public String desactivar(@PathVariable Integer id) { // Toma el numero que viene con la URL
-        Cliente cliente = clienteService.obtenerPorId(id); // Buscamos el id del cliente en el servico
-        if (cliente != null) { // Si tenemos un cliente que no este vacio
-            cliente.setActivo(false); // Su parametro de activo ahora pasa a falso, lo contrario a cuando se guarda
-                                      // por primera vez que esta en true
-            clienteService.guardar(cliente); // Guardamos los cambios
-        }
+        clienteService.desactivar(id); // Le pedimos al service que busque al cliente y lo desactive
         return "redirect:/perfil/registro"; // Lo mandamos a la pagina de registro
     }
 
@@ -92,11 +82,7 @@ public class ClientePerfilController {
     // opcion de volver a activarla si desea
     @GetMapping("/reactivar/{id}")
     public String reactivar(@PathVariable Integer id) {// Toma el numero que viene con la URL
-        Cliente cliente = clienteService.obtenerPorId(id); // Buscamos al cliente por id
-        if (cliente != null) { // Si el cliente existe
-            cliente.setActivo(true); // La propiedad del cliente de activo vuelve a pasar a true
-            clienteService.guardar(cliente); // Guardamos los cambios
-        }
+        clienteService.reactivar(id); // Le pedimos al service que busque al cliente y lo vuelva a activar
         return "redirect:/perfil/ver/" + id; // Lo redirigimos a su perfil para que lo pueda ver
     }
 
