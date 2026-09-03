@@ -2,72 +2,149 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Corvacho's</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/style/styles.css}">
-    <link rel="stylesheet" th:href="@{/style/landing.css}">
-    <link rel="stylesheet" th:href="@{/style/login.css}" href="/style/login.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-</head>
-<body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" src="/Images/logo-simple.png" height="60px"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-            <a class="nav-link" th:href="@{/}">INICIO</a>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- landing.css solo para el footer -->
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+
+    <style>
+        nav img { height: 60px; width: auto; }
+        input::placeholder { color: #9ca3af; }
+    </style>
+</head>
+
+<body style="margin:0; padding:0;">
+
+    <!-- ===== NAVBAR con Tailwind ===== -->
+    <nav style="background-color: #001c2a;"
+         class="fixed top-0 left-0 right-0 z-50 px-6 py-2 flex items-center justify-between">
+
+        <!-- Logo -->
+        <a th:href="@{/}" href="/">
+            <img th:src="@{/Images/logo-simple.png}" src="/Images/logo-simple.png" alt="Logo Corvacho's">
+        </a>
+
+        <!-- Links -->
+        <ul class="flex items-center gap-6 list-none m-0 p-0">
+            <li>
+                <a th:href="@{/}" href="/"
+                   class="text-white text-sm tracking-widest no-underline"
+                   style="font-family: 'Montserrat', sans-serif;">INICIO</a>
             </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#contacto">CONTACTO</a>
+            <li>
+                <a href="#"
+                   class="text-white text-sm tracking-widest no-underline"
+                   style="font-family: 'Montserrat', sans-serif;">CONTACTO</a>
             </li>
-            <li class="nav-item">
-            <a class="nav-link login" th:href="@{/login}">LOG IN</a>
+            <!-- Botón LOG IN -->
+            <li>
+                <a th:href="@{/login}" href="/login"
+                   class="text-white text-sm tracking-widest no-underline px-6 py-2 rounded-md inline-flex items-center transition-colors duration-200"
+                   style="border: 2px solid #334955; background-color: #001c2a; font-family: 'Montserrat', sans-serif;">
+                    LOG IN
+                </a>
             </li>
-            <li class="nav-item">
-            <a class="nav-link signup" th:href="@{/perfil/registro}">SIGN UP</a>
+            <!-- Botón SIGN UP -->
+            <li>
+                <a th:href="@{/perfil/registro}" href="/perfil/registro"
+                   class="text-sm font-bold tracking-widest no-underline px-6 py-2 rounded-md inline-flex items-center transition-opacity duration-200"
+                   style="background-color: #cd9e46; color: #001c2a; font-family: 'Montserrat', sans-serif;">
+                    SIGN UP
+                </a>
             </li>
         </ul>
-        </div>
-    </div>
     </nav>
 
-    <section class="login-section">
-        <form class="login-form" th:action="@{/perfil/guardar}" th:object="${cliente}" method="post">
+    <!-- ===== SECCIÓN REGISTRO  ===== -->
+    <section class="flex items-center justify-center min-h-screen"
+             style="padding-top: 80px;
+                    background-image: linear-gradient(rgba(0,15,20,0.55), rgba(0,15,20,0.55)), url('/Images/Edificio.jpeg');
+                    background-size: cover;
+                    background-position: center;">
 
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" th:field="*{nombre}" placeholder="Tu nombre" required>
+        <form class="flex flex-col gap-4 w-full px-6 py-10"
+              th:action="@{/perfil/guardar}" th:object="${cliente}" method="post"
+              style="max-width: 448px;">
 
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" th:field="*{apellido}" placeholder="Tu apellido" required>
+            <!-- Nombre -->
+            <label for="nombre" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Nombre</label>
+            <input type="text" id="nombre" th:field="*{nombre}" placeholder="Tu nombre" required
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <label for="correo">Correo Electronico</label>
-            <input type="email" id="correo" th:field="*{correo}" placeholder="ej. correo@corvachos.com" required>
+            <!-- Apellido -->
+            <label for="apellido" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Apellido</label>
+            <input type="text" id="apellido" th:field="*{apellido}" placeholder="Tu apellido" required
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <label for="contraseña">Contraseña</label>
-            <input type="password" id="contraseña" th:field="*{contraseña}" placeholder="********" required>
+            <!-- Correo -->
+            <label for="correo" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Correo Electronico</label>
+            <input type="email" id="correo" th:field="*{correo}" placeholder="ej. correo@corvachos.com" required
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <label for="telefono">Teléfono</label>
-            <input type="tel" id="telefono" th:field="*{telefono}" placeholder="+57 300 000 0000">
+            <!-- Contraseña -->
+            <label for="contraseña" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Contraseña</label>
+            <input type="password" id="contraseña" th:field="*{contraseña}" placeholder="********" required
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" th:field="*{direccion}" placeholder="Calle 40 #7-60 Bogotá">
+            <!-- Teléfono -->
+            <label for="telefono" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Teléfono</label>
+            <input type="tel" id="telefono" th:field="*{telefono}" placeholder="+57 300 000 0000"
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <button type="submit" class="login-btn">REGISTRARSE</button>
+            <!-- Dirección -->
+            <label for="direccion" class="text-white text-lg"
+                   style="font-family: 'Cormorant Garamond', serif;">Dirección</label>
+            <input type="text" id="direccion" th:field="*{direccion}" placeholder="Calle 40 #7-60 Bogotá"
+                   class="w-full px-4 py-3 rounded-md text-white"
+                   style="background-color: rgba(0,40,60,0.85); border: 1px solid #4b5563; outline: none; font-size:1rem; box-sizing:border-box;"
+                   onfocus="this.style.borderColor='#ca8a04'" onblur="this.style.borderColor='#4b5563'">
 
-            <p class="login-registrate">
-                ¿Ya tienes una cuenta? 
-                <a th:href="@{/login}">Inicia sesión</a>
+            <!-- Botón REGISTRARSE -->
+            <button type="submit"
+                    class="w-full py-3 mt-2 text-white font-bold cursor-pointer rounded-md transition-colors duration-300"
+                    style="font-family: 'Montserrat', sans-serif; font-size: 1.1rem; letter-spacing: 3px;
+                           border: 2px solid #6b7280; background-color: rgba(0,28,42,0.9);"
+                    onmouseover="this.style.backgroundColor='#b45309'; this.style.borderColor='#b45309';"
+                    onmouseout="this.style.backgroundColor='rgba(0,28,42,0.9)'; this.style.borderColor='#6b7280';">
+                REGISTRARSE
+            </button>
+
+            <!-- Link login -->
+            <p class="text-center text-gray-300 text-base"
+               style="font-family: 'Cormorant Garamond', serif;">
+                ¿Ya tienes una cuenta?
+                <a th:href="@{/login}" href="/login"
+                   class="text-white underline hover:text-amber-400 transition-colors duration-200">
+                    Inicia sesión
+                </a>
             </p>
         </form>
     </section>
 
-    <!-- Footer -->
+    <!-- ===== FOOTER (estilizado por landing.css vía IDs) ===== -->
     <footer id="footer">
         <div id="footer-main">
             <div id="footer-logo-col">
@@ -97,6 +174,5 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

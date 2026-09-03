@@ -1,6 +1,4 @@
-/* ============================================
-   PERFIL - ESTRUCTURA VERTICAL (Avatar + Info + Reservas)
-   ============================================ */
+
 
 .body-perfil {
     background-color: #001c2a;
@@ -9,9 +7,7 @@
     flex-direction: column;
 }
 
-/* ============================================ */
-/* 1. SECCIÓN DE INFORMACIÓN PERSONAL */
-/* ============================================ */
+
 .perfil-seccion-info {
     max-width: 1100px;
     margin: 100px auto 2rem;
@@ -31,7 +27,7 @@
     border: 1px solid #1a3040;
 }
 
-/* Columna izquierda: Avatar CUADRADO */
+
 .perfil-avatar-col {
     display: flex;
     flex-direction: column;
@@ -86,14 +82,23 @@
     flex: 1;
 }
 
+.perfil-titulo-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #1a3040;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .perfil-titulo-info {
     color: #cd9e46;
-    font-size: 1.5rem;
+    font-size: 2.2rem;
     font-weight: 500;
     font-family: 'Cormorant Garamond', serif;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid #1a3040;
-    padding-bottom: 0.3rem;
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .perfil-nombre {
@@ -123,12 +128,7 @@
 .perfil-dato span {
     color: #fcfafa;
 }
-/* ============================================ */
-/* BOTÓN CERRAR SESIÓN */
-/* ============================================ */
-/* ============================================ */
-/* BOTÓN CERRAR SESIÓN */
-/* ============================================ */
+
 .perfil-btn-cerrar {
     display: inline-block;
     padding: 0.5rem 1.8rem;
@@ -149,9 +149,7 @@
     color: #001c2a;
     transform: translateY(-2px);
 }
-/* ============================================ */
-/* 2. SECCIÓN DE RESERVAS (con fondo de edificio) */
-/* ============================================ */
+
 .perfil-seccion-reservas {
     max-width: 1100px;
     margin: 0 auto 2rem;
@@ -200,9 +198,7 @@
     margin: 0.2rem 0;
 }
 
-/* ============================================ */
-/* 3. FOOTER */
-/* ============================================ */
+
 .footer-perfil {
     background-color: #010f14;
     color: #a0b8bf;
@@ -276,9 +272,7 @@
     color: #6f8896;
 }
 
-/* ============================================ */
-/* RESPONSIVE */
-/* ============================================ */
+
 @media (max-width: 992px) {
     .perfil-contenedor-info {
         flex-direction: column;

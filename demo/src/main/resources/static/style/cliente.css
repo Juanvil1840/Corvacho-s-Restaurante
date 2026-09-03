@@ -7,14 +7,14 @@
    - Texto: #2c1810 (marrón oscuro)
    ============================================ */
 
-/* === CONTENEDOR PRINCIPAL === */
+/*===Contenedor Principal==*/
 .cliente-contenedor {
     max-width: 500px;
     margin: 2rem auto;
     padding: 0 20px;
 }
 
-/* === TARJETAS (perfil) === */
+/*===Tarjeta perfil===*/
 .tarjeta-perfil {
     background: #ffffff;
     border-radius: 16px;
@@ -23,7 +23,7 @@
     border-left: 6px solid #d4a574;
 }
 
-/* === TÍTULOS === */
+/*===Titulos===*/
 .titulo-principal {
     color: #1a0f0a;
     font-size: 2rem;
@@ -43,7 +43,7 @@
     border-radius: 4px;
 }
 
-/* === ETIQUETAS Y CAMPOS DE TEXTO === */
+/*===Etiquetas===*/
 .etiqueta-campo {
     font-weight: 600;
     color: #2c1810;
@@ -60,7 +60,7 @@
     display: block;
 }
 
-/* === FORMULARIO === */
+/*===Formularios===*/
 .formulario-corvacho .grupo-campo {
     margin-bottom: 1rem;
 }
@@ -93,7 +93,7 @@
     background: #ffffff;
 }
 
-/* === BOTÓN ESTILO CORVACHO'S (Solo borde dorado) === */
+/*===Boton===*/
 .btn-corvacho-outline {
     display: inline-block;
     padding: 0.6rem 2.5rem;
@@ -116,13 +116,13 @@
     box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
 }
 
-/* === CONTENEDOR DEL BOTÓN (centrado) === */
+/*===Contenedor del boton===*/
 .accion-centrada {
     text-align: center;
     margin-top: 1.5rem;
 }
 
-/* === BOTONES PARA PERFIL (con fondo) === */
+/*===Botones perfil===*/
 .btn-corvacho {
     display: inline-block;
     padding: 0.5rem 1.5rem;
@@ -164,7 +164,7 @@
     background: #1e4d38;
 }
 
-/* === GRUPO DE BOTONES === */
+/*===Gupo de Botones===*/
 .grupo-acciones {
     display: flex;
     flex-wrap: wrap;
@@ -173,7 +173,7 @@
     justify-content: center;
 }
 
-/* === ENLACES === */
+/*===Enlaces===*/
 .enlace-corvacho {
     color: #8b5e3c;
     text-decoration: none;
@@ -185,7 +185,7 @@
     text-decoration: underline;
 }
 
-/* === ESTADO (Activo / Inactivo) === */
+/*===Estado*/
 .estado-activo {
     color: #2d6a4f;
     font-weight: 600;
@@ -196,7 +196,7 @@
     font-weight: 600;
 }
 
-/* === RESPONSIVE === */
+/*===RESPONSIVE===*/
 @media (max-width: 600px) {
     .cliente-contenedor {
         margin: 1rem auto;
@@ -222,7 +222,7 @@
     }
 }
 
-/* === FOOTER MÁS PEQUEÑO === */
+/*===Footer===*/
 .footer-corvacho {
     background-color: #1a0f0a;
     color: #d4a574;
