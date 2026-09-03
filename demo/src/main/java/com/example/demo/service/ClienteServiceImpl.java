@@ -8,34 +8,34 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entities.Cliente;
 import com.example.demo.repository.ClienteRepository;
 
-@Service
+@Service //Servicio
 public class ClienteServiceImpl implements ClienteService {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired//Inyeccion de dependencias
+    private ClienteRepository clienteRepository; //Variable clienteRepository de ClienteRpository para usarla en service
 
     @Override
-    public Collection<Cliente> obtenerTodos() {
-        return clienteRepository.findAll();
+    public Collection<Cliente> obtenerTodos() { //Funcion para obtener a todos los clientes
+        return clienteRepository.findAll(); //En el clienteRepository se hace un findAll para encontrarlos a todos
     }
 
     @Override
-    public Cliente obtenerPorId(Integer id) {
-        return clienteRepository.findById(id);
+    public Cliente obtenerPorId(Integer id) { //Funcion para obtener a un cliente por su id
+        return clienteRepository.findById(id); //Con el repository encontramos a un cliente en especifico por su id
     }
 
     @Override
-    public Cliente guardar(Cliente cliente) {
-        return clienteRepository.save(cliente);
+    public Cliente guardar(Cliente cliente) { //Funcion para guardar un cliente
+        return clienteRepository.save(cliente); //Guardamos al cliente o actualizamos su informacion
     }
 
     @Override
-    public void eliminar(Integer id) {
-        clienteRepository.deleteById(id);
+    public void eliminar(Integer id) { //Funcion para eliminar a un cliente con su id
+        clienteRepository.deleteById(id); //Eliminamos al cliente
     }
 
     @Override
-    public boolean existe(Integer id) {
-        return clienteRepository.existsById(id);
+    public boolean existe(Integer id) { //Funcion para verificar que un cliente existe por su id
+        return clienteRepository.existsById(id); //Retorna si existe con la funcion booleana de true o false
     }
 }

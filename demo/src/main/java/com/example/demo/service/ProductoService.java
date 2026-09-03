@@ -4,13 +4,13 @@ import java.util.Collection;
 
 import com.example.demo.entities.Producto;
 
-public interface ProductoService {
-    // === MÉTODOS DE LECTURA (YA EXISTENTES) ===
-    Collection<Producto> obtenerTodos();
-    Producto obtenerPorId(Integer id);
+public interface ProductoService { // Interfaz, los metodos que debe tener el servicio de producto
+    
+    Collection<Producto> obtenerTodos(); //Obtener todos los productos
+    Producto obtenerPorId(Integer id); //Obtener solo uno en especifico mediante su id
 
-    // === NUEVOS MÉTODOS PARA CRUD ===
-    Producto guardar(Producto producto);
-    void eliminar(Integer id);
-    boolean existe(Integer id);
+    
+    Producto guardar(Producto producto); //Guardar o actualizar un producto
+    void eliminar(Integer id); //Eliminar un producto
+    boolean existe(Integer id); //Verificar si el producto existe
 }
