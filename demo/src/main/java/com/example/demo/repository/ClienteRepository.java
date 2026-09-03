@@ -1,123 +1,95 @@
-
 package com.example.demo.repository;
 
 
-import com.example.demo.entities.Cliente;       // Entidad que representa a un cliente.
-import java.util.Collection;                   // Interfaz para colecciones de objetos.
-import java.util.HashMap;                      // Implementacion de mapa basada en hash.
-import java.util.Map;                          // Interfaz para mapas (clave-valor).
-import java.util.concurrent.atomic.AtomicInteger; // Generador de IDs atomicos (seguro para concurrencia).
-import org.springframework.stereotype.Repository; // Anotacion para indicar que es un repositorio.
+import com.example.demo.entities.Cliente;       
+import java.util.Collection;                 
+import java.util.HashMap;                      
+import java.util.Map;                         
+import java.util.concurrent.atomic.AtomicInteger; 
+import org.springframework.stereotype.Repository;
 
 
-@Repository
+@Repository //Es un repositorio
 public class ClienteRepository {
-    // ATRIBUTOS
     
-    private Map<Integer, Cliente> data = new HashMap<>();
+    private Map<Integer, Cliente> data = new HashMap<>(); //Creamos una base de datos en memoria y guardamos los datos en un Map
 
-    // Generador de IDs atomicos.
-    // - Garantiza que los IDs sean unicos 
-    // - Inicia en 1.
-    private AtomicInteger idGenerator = new AtomicInteger(1);
+    private AtomicInteger idGenerator = new AtomicInteger(1); //Generamos los id para los clientes, empezando en 1  y va aumentando
 
-   
-    // CONSTRUCTOR
-
-    // Se ejecuta cuando Spring crea una instancia de este repositorio.
-    // Sirve para cargar datos iniciales de prueba.
-    public ClienteRepository() {
+ 
+    public ClienteRepository() { //Constructor
   
-        // - ID: 1
-        // - Nombre: Dolly
-        // - Apellido: Parton
-        // - Correo: dp@gmail.com
-        // - Contrasena: Jolene
-        // - Telefono: 3157274433
-        // - Direccion: 3146 Glencliff Rd. Nashville
-        // - Activo: true (esta activo por defecto)
+        //Ejemplo de un usuario:
+        // D: 1
+        // Nombre: Dolly
+        // Apellido: Parton
+        // Correo: dp@gmail.com
+        // Contrasena: Jolene
+        // Telefono: 3157274433
+        // Direccion: 3146 Glencliff Rd. Nashville
+        // Activo: true (esta activo por defecto)
         data.put(1, new Cliente(1, "Dolly", "Parton", "dp@gmail.com", "Jolene",
                 "3157274433", "3146 Glencliff Rd. Nashville", true));
 
         data.put(2, new Cliente(2, "Carlos", "Corvacho", "carlos@gmail.com", "1234",
                 "3001234567", "Calle 40 #7-60 Bogotá", true));
 
-        data.put(3, new Cliente(3, "María", "López", "maria@gmail.com", "maria123",
+        data.put(3, new Cliente(3, "María", "López", "maria@gmail.com", "1234",
                 "3109876543", "Carrera 15 #82-10 Bogotá", true));
 
-        data.put(4, new Cliente(4, "Andrés", "García", "andres@gmail.com", "andres456",
+        data.put(4, new Cliente(4, "Andrés", "García", "andres@gmail.com", "1234",
                 "3201234890", "Avenida 68 #45-20 Bogotá", true));
 
-        data.put(5, new Cliente(5, "Valentina", "Rodríguez", "vale@gmail.com", "vale789",
+        data.put(5, new Cliente(5, "Valentina", "Rodríguez", "valentina@gmail.com", "1234",
                 "3154567890", "Calle 100 #19-61 Bogotá", true));
 
-        data.put(6, new Cliente(6, "Santiago", "Martínez", "santi@gmail.com", "santi321",
+        data.put(6, new Cliente(6, "Santiago", "Martínez", "santiago@gmail.com", "1234",
                 "3187654321", "Carrera 7 #32-16 Bogotá", false));
 
-        // Configura el siguiente ID disponible en 7.
-        // Asi, cuando se cree un nuevo cliente, se le asignara el ID 7.
-        idGenerator.set(7);
+    
+       
+        idGenerator.set(7); //Cuando se cree un nuevo cliente, se le asignara el ID 7.
     }
 
   
-    // METODOS DE LECTURA (READ)
-
-
-    // Busca un cliente por su ID.
-    // - Parametro: id (Integer) - El ID del cliente a buscar.
-    // - Retorna: Cliente - El objeto Cliente encontrado, o null si no existe.
-    public Cliente findById(Integer id) {
-        return data.get(id);
+    public Cliente findById(Integer id) { //Buscamos a un cliente por su id y lo retornamos
+        return data.get(id); //Le pasamos el id por parametro y devuelve toda la data del cliente con ese id
     }
 
-    // Retorna todos los clientes almacenados.
-    // - Retorna: Collection<Cliente> - Una coleccion con todos los clientes.
-    public Collection<Cliente> findAll() {
-        return data.values();
+  
+    public Collection<Cliente> findAll() { //Metodo que devuelve todos los clientes
+        return data.values(); //A diferencia de la anterior funcion este no tiene algun parametro de id porque necesitamos a todos, no a uno solo especifico
     }
 
-    // Busca un cliente por su correo electronico.
-    public Cliente findByCorreo(String correo) {
-        for (Cliente cliente : data.values()) {
-            if (cliente.getCorreo().equals(correo)) {
-                return cliente;
+
+    public Cliente findByCorreo(String correo) { //Buscar un cliente por su correo electronico
+        for (Cliente cliente : data.values()) { //Obtenemos los datos de todos los clientes
+            if (cliente.getCorreo().equals(correo)) { //Si un correo de un cliente equivale al objeto correo que pedimos lo retora
+                return cliente; //Retornamos cliente
             }
         }
-        return null;
+        return null; //Si no existe retornamos null
     }
 
 
-    // METODOS PARA CRUD (CREATE, UPDATE, DELETE)
 
-
-    // Guarda un cliente (crea o actualiza).
-    // - Si el cliente no tiene ID (es null o 0), se le asigna uno nuevo.
-    // - Si el cliente ya tiene ID, se actualiza el existente.
-    // - Parametro: cliente (Cliente) - El cliente a guardar.
-    // - Retorna: Cliente - El cliente guardado (con su ID asignado).
-    public Cliente save(Cliente cliente) {
-        // Verifica si el cliente es nuevo (sin ID)
-        if (cliente.getClienteId() == null || cliente.getClienteId() == 0) {
-            // Asigna un ID nuevo usando el generador atomico
-            cliente.setClienteId(idGenerator.getAndIncrement());
+    public Cliente save(Cliente cliente) { //Funcion para guardar un cliente 
+       
+        if (cliente.getClienteId() == null || cliente.getClienteId() == 0) {  // Verifica si el cliente es nuevo (sin ID)
+            
+            cliente.setClienteId(idGenerator.getAndIncrement()); //Asigna un ID nuevo usando 
         }
-        // Guarda o actualiza el cliente en el mapa
-        // - Si el ID ya existe, lo sobreescribe (actualiza).
-        // - Si el ID no existe, lo agrega (crea).
-        data.put(cliente.getClienteId(), cliente);
-        return cliente;
+        data.put(cliente.getClienteId(), cliente); //Guarda el cliente en el mapa, si el cliente ya existe (por su ID) lo actualiza y si no lo crea
+        return cliente; //Retornamos el objeto cliente
     }
 
-    // Elimina un cliente por su ID.
-    // - Parametro: id (Integer) - El ID del cliente a eliminar.
-    public void deleteById(Integer id) {
-        data.remove(id);
+    
+    public void deleteById(Integer id) { // Elimina un cliente por su ID
+        data.remove(id); 
     }
 
-    // Verifica si existe un cliente con el ID dado.
-    // - Parametro: id (Integer) - El ID a verificar.
-    // - Retorna: boolean - true si existe, false si no.
-    public boolean existsById(Integer id) {
-        return data.containsKey(id);
+
+    public boolean existsById(Integer id) {// Verifica si existe un cliente con el ID dado, funcion de tipo bool
+        return data.containsKey(id); //Si en el Map contiene al cliente con el id, este responde true o false
     }
 }

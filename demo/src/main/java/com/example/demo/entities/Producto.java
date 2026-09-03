@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor 
 @NoArgsConstructor      
-public class Producto {
+public class Producto { //Creamos una clase Producto con sus atributos, id,nombre,precio,descripcion, imagen, si esta disponile, los ingredientes y su categoria
     private Integer id;
     private String nombre;
     private double precio;

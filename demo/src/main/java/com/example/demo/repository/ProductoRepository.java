@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Producto;
 
-@Repository
+@Repository //Repositorio
 public class ProductoRepository {
 
-        private Map<Integer, Producto> data = new HashMap<>();
-        private AtomicInteger idGenerator = new AtomicInteger(21);
+        private Map<Integer, Producto> data = new HashMap<>(); //Usamos un Map para guardar los productos (platos)
+        private AtomicInteger idGenerator = new AtomicInteger(21); //El generador de ids empieza en 21, ya que tenemos 20 platos en memoria 
 
-        public ProductoRepository() {
+        public ProductoRepository() { //Agregamos los platillos con su nombre, precio, descripcion, imagen, si estan dispobibles, ingredientes y categorias
                 data.put(1, new Producto(1, "berenjenas a la parmesana", 40000.0,
                                 "capas de rodajas de berenjena fritas o asadas, alternadas con salsa de tomate, hojas de albahaca fresca, queso mozzarella y queso parmesano",
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/2c7fa867-64f4-4fea-af73-98ac6129b3c6.webp",
@@ -161,42 +161,33 @@ public class ProductoRepository {
                                 6)); // Pizzas
         }
 
-        // Busca un producto por su ID.
-        // - Parametro: id (Integer) - El ID del producto a buscar.
-        // - Retorna: Producto - El objeto Producto encontrado, o null si no existe.
-        public Producto findById(Integer id) {
-                return data.get(id);
+
+        
+        public Producto findById(Integer id) { // Buscamos un producto por su id
+                return data.get(id); //Retornamos la informacion asociada a ese id
         }
 
-        // Retorna todos los productos almacenados.
-        public Collection<Producto> findAll() {
+        
+        public Collection<Producto> findAll() { //Retorna todos los productos que tenenemos
                 return data.values();
         }
 
-        // METODOS PARA CRUD (CREATE, UPDATE, DELETE)
-
-        // Guarda un producto (crea o actualiza).
-        // - Si el producto no tiene ID (es null o 0), se le asigna uno nuevo.
-        // - Si el producto ya tiene ID, se actualiza el existente.
-        // - Parametro: producto (Producto) - El producto a guardar.
-        public Producto save(Producto producto) {
-                if (producto.getId() == null || producto.getId() == 0) { // Verifica si el producto es nuevo (sin ID)
-                        producto.setId(idGenerator.getAndIncrement());
+      
+        public Producto save(Producto producto) { //PaRa guardar un producto
+                if (producto.getId() == null || producto.getId() == 0) { //Verifica si el producto es nuevo, osea que no tenga id
+                        producto.setId(idGenerator.getAndIncrement()); //Asigna un nuevo ID, en este caso el 21
                 }
-                data.put(producto.getId(), producto);
-                return producto;
+                data.put(producto.getId(), producto); // Guardamos el producto, si ya existe el id se actualiza y si no se crea
+                return producto; //Retornamos el producto
         }
 
-        // Elimina un producto por su ID.
-        // - Parametro: id (Integer) - El ID del producto a eliminar.
-        public void deleteById(Integer id) {
-                data.remove(id);
+       
+        public void deleteById(Integer id) { //Elimina un producto por su ID
+                data.remove(id); //Usando la funcion y el id
         }
 
-        // Verifica si existe un producto con el ID dado.
-        // - Parametro: id (Integer) - El ID a verificar.
-        // - Retorna: boolean - true si existe, false si no.
-        public boolean existsById(Integer id) {
+        
+        public boolean existsById(Integer id) { //Verifica si existe un producto con el ID dado
                 return data.containsKey(id);
         }
 }
