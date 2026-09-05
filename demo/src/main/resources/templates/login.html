@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Corvacho's Restaurante</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+    crossorigin="anonymous">
+    <!-- Estilos del proyecto -->
+    <link rel="stylesheet" th:href="@{/style/styles.css}" href="/style/styles.css">
+    <link rel="stylesheet" th:href="@{/style/landing.css}" href="/style/landing.css">
+    <link rel="stylesheet" th:href="@{/style/login.css}" href="/style/login.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" src="/Images/logo-simple.png" height="60px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+            <a class="nav-link" th:href="@{/}">INICIO</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">CONTACTO</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link login" th:href="@{/login}">LOG IN</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link signup" th:href="@{/perfil/registro}">SIGN UP</a>
+            </li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <section class="login-section">
+        <form th:action="@{/login}" method="post" class="login-form">
+
+            <p th:if="${error}" class="login-error">Usuario o contraseña incorrectos</p>
+
+            <label for="correo">Correo Electronico</label>
+            <input type="text" id="correo" name="correo" placeholder="camilo@gmail.com" required>
+
+            <label for="contraseña">Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" placeholder="**********" required>
+
+            <button type="submit" class="login-btn">INGRESAR</button>
+
+            <p class="login-registrate">
+                ¿No tienes una cuenta aún? 
+                <a th:href="@{/perfil/registro}">Registrate</a>
+            </p>
+        </form>
+    </section>
+
+
+    <footer id="footer">
+        <div id="footer-main">
+            <div id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
+            </div>
+
+            <div id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </div>
+
+            <div id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous"></script>
+
+</body>
+</html>

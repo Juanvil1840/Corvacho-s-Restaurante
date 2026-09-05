@@ -41,6 +41,7 @@
         <div class="detalle-info">
             <a th:href="@{/menu}" class="btn-volver">&#8592; Volver al menú</a>
             <h1 class="detalle-nombre" th:text="${producto.nombre}">Nombre del plato</h1>
+            <p class="detalle-categoria">Categoría: <span th:text="${categoria.nombre}">Categoría</span></p>
             <h3 class="detalle-subtitulo">Ingredientes</h3>
             <ul class="detalle-ingredientes">
                 <li th:each="ingrediente : ${producto.ingredientes}" th:text="${ingrediente}"></li>

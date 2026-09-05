@@ -98,6 +98,10 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
+.detalle-categoria{
+    color: #002b36;
+}
+
 /*  Responsive: en pantallas pequeñas apilar  */
 @media (max-width: 768px) {
     .detalle-container {
