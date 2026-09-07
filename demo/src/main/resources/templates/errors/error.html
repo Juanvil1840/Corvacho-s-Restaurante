@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Corvacho's</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+</head>
+<body>
+    <div class="container text-center mt-5" style="max-width: 600px;">
+        <!-- Icono de error -->
+        <div class="mb-4">
+            <i class="bi bi-exclamation-triangle" style="font-size: 5rem; color: #cd9e46;"></i>
+        </div>
+        
+        <!-- Titulo -->
+        <h1 class="display-4" style="color: #cd9e46;">¡Ups! Algo salio mal</h1>
+        
+        <!-- Mensaje dinamico (viene del controlador) -->
+        <p class="lead mb-4" th:text="${mensaje}">Mensaje de error</p>
+        
+        <!-- Boton para volver al inicio -->
+        <a href="/" class="btn btn-primary">Volver al inicio</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

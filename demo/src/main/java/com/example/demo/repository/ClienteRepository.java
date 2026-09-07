@@ -28,27 +28,27 @@ public class ClienteRepository {
         // Telefono: 3157274433
         // Direccion: 3146 Glencliff Rd. Nashville
         // Activo: true (esta activo por defecto)
-        data.put(1, new Cliente(1, "Dolly", "Parton", "dp@gmail.com", "Jolene",
+        data.put(1L, new Cliente(1L, "Dolly", "Parton", "dp@gmail.com", "Jolene",
                 "3157274433", "3146 Glencliff Rd. Nashville", true));
 
-        data.put(2, new Cliente(2, "Carlos", "Corvacho", "carlos@gmail.com", "1234",
+        data.put(2L, new Cliente(2L, "Carlos", "Corvacho", "carlos@gmail.com", "1234",
                 "3001234567", "Calle 40 #7-60 Bogotá", true));
 
-        data.put(3, new Cliente(3, "María", "López", "maria@gmail.com", "1234",
+        data.put(3L, new Cliente(3L, "María", "López", "maria@gmail.com", "1234",
                 "3109876543", "Carrera 15 #82-10 Bogotá", true));
 
-        data.put(4, new Cliente(4, "Andrés", "García", "andres@gmail.com", "1234",
+        data.put(4L, new Cliente(4L, "Andrés", "García", "andres@gmail.com", "1234",
                 "3201234890", "Avenida 68 #45-20 Bogotá", true));
 
-        data.put(5, new Cliente(5, "Valentina", "Rodríguez", "valentina@gmail.com", "1234",
+        data.put(5L, new Cliente(5L, "Valentina", "Rodríguez", "valentina@gmail.com", "1234",
                 "3154567890", "Calle 100 #19-61 Bogotá", true));
 
-        data.put(6, new Cliente(6, "Santiago", "Martínez", "santiago@gmail.com", "1234",
+        data.put(6L, new Cliente(6L, "Santiago", "Martínez", "santiago@gmail.com", "1234",
                 "3187654321", "Carrera 7 #32-16 Bogotá", false));
 
     
        
-        idGenerator.set(7); //Cuando se cree un nuevo cliente, se le asignara el ID 7.
+        idGenerator.set(7L); //Cuando se cree un nuevo cliente, se le asignara el ID 7.
     }
 
   

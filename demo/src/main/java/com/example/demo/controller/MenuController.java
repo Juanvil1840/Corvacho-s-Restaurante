@@ -27,7 +27,7 @@ public class MenuController {
     }
 
     @GetMapping("/menu/detalle/{id}")
-    public String detalle(@PathVariable Integer id, Model model) {
+    public String detalle(@PathVariable Long id, Model model) {
 
         Producto producto = productoService.obtenerPorId(id);
 

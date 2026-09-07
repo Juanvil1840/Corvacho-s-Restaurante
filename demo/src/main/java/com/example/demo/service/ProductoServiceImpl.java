@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Producto;
 import com.example.demo.repository.ProductoRepository;
+import com.example.demo.errors.ProductoNotFoundException; 
 
 @Service //Servicio
 public class ProductoServiceImpl implements ProductoService {
@@ -20,11 +21,14 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.findAll(); //Con productosRepository utilizamos el finAll para encontrarlos a todos
     }
 
-    @Override
-    public Producto obtenerPorId(Long id) { //Obtenemos un producto por su id
-        return productoRepository.findById(id); //Retornamos el producto, con ayuda del productoRepository pasando el id por parametro
+   @Override
+    public Producto obtenerPorId(Long id) {
+    Producto producto = productoRepository.findById(id);
+    if (producto == null) {
+        throw new ProductoNotFoundException(id); 
     }
-    
+    return producto;
+}
     @Override
     public Producto guardar(Producto producto) { //Guardar producto
         return productoRepository.save(producto); //Podemos guardar el nuevo producto o actualizar uno ya existente

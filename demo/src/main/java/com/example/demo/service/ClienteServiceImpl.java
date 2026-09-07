@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.errors.ClienteNotFoundException; 
 
 import com.example.demo.entities.Cliente;
 import com.example.demo.repository.ClienteRepository;
@@ -20,10 +21,14 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteRepository.findAll(); // En el clienteRepository se hace un findAll para encontrarlos a todos
     }
 
-    @Override
-    public Cliente obtenerPorId(Long id) { // Funcion para obtener a un cliente por su id
-        return clienteRepository.findById(id); // Con el repository encontramos a un cliente en especifico por su id
+   @Override
+public Cliente obtenerPorId(Long id) {
+    Cliente cliente = clienteRepository.findById(id);
+    if (cliente == null) {
+        throw new ClienteNotFoundException(id); 
     }
+    return cliente;
+}
 
     @Override
     public Cliente guardar(Cliente cliente) { // Funcion para guardar un cliente

@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.errors;
 
 import com.example.demo.errors.ClienteNotFoundException;
 import com.example.demo.errors.ProductoNotFoundException;
@@ -19,9 +19,9 @@ public class GlobalExceptionHandler {
     // Maneja cuando un producto no se encuentra
     @ExceptionHandler(ProductoNotFoundException.class)
     public String handleProductoNotFound(ProductoNotFoundException ex, Model model) {
-        model.addAttribute("mensaje", ex.getMessage());
-        return "errors/error";
-    }
+    model.addAttribute("mensaje", ex.getMessage());
+    return "errors/error";
+}
 
     // Maneja cualquier otro error inesperado
     @ExceptionHandler(Exception.class)

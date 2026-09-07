@@ -36,15 +36,12 @@ public class ProductoController {
 
     // Formulario para editar un producto ya existente
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) { //Extrae el valor del id de la URL y lo convierte en un Long
-        Producto producto = productoService.obtenerPorId(id); //LLamammos a productosSevice para que obtenga el producto por su id
-        if (producto == null) { //Si el producto es null se velve a redirigir 
-            return "redirect:/productos";
-        }
-        model.addAttribute("producto", producto); //Si el producto existe lo agrega al modelo para que el formulario muestre sus datos actuales
-        model.addAttribute("categorias", categoriaService.findAll()); //Mostramos la categoria en la que esta
-        return "productos/formulario";
-    }
+public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+    Producto producto = productoService.obtenerPorId(id);
+    model.addAttribute("producto", producto);
+    model.addAttribute("categorias", categoriaService.findAll());
+    return "productos/formulario";
+}
 
     // Guardar: Puede que sea guardar un nuevo propducto o guardar los cambios (actualizar) de uno que ya existe
     @PostMapping("/guardar")
