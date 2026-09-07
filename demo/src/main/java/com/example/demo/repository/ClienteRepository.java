@@ -5,16 +5,16 @@ import com.example.demo.entities.Cliente;
 import java.util.Collection;                 
 import java.util.HashMap;                      
 import java.util.Map;                         
-import java.util.concurrent.atomic.AtomicInteger; 
+import java.util.concurrent.atomic.AtomicLong; 
 import org.springframework.stereotype.Repository;
 
 
 @Repository //Es un repositorio
 public class ClienteRepository {
     
-    private Map<Integer, Cliente> data = new HashMap<>(); //Creamos una base de datos en memoria y guardamos los datos en un Map
+    private Map<Long, Cliente> data = new HashMap<>(); //Creamos una base de datos en memoria y guardamos los datos en un Map
 
-    private AtomicInteger idGenerator = new AtomicInteger(1); //Generamos los id para los clientes, empezando en 1  y va aumentando
+    private AtomicLong idGenerator = new AtomicLong(1); //Generamos los id para los clientes, empezando en 1  y va aumentando
 
  
     public ClienteRepository() { //Constructor
@@ -52,7 +52,7 @@ public class ClienteRepository {
     }
 
   
-    public Cliente findById(Integer id) { //Buscamos a un cliente por su id y lo retornamos
+    public Cliente findById(Long id) { //Buscamos a un cliente por su id y lo retornamos
         return data.get(id); //Le pasamos el id por parametro y devuelve toda la data del cliente con ese id
     }
 
@@ -84,12 +84,12 @@ public class ClienteRepository {
     }
 
     
-    public void deleteById(Integer id) { // Elimina un cliente por su ID
+    public void deleteById(Long id) { // Elimina un cliente por su ID
         data.remove(id); 
     }
 
 
-    public boolean existsById(Integer id) {// Verifica si existe un cliente con el ID dado, funcion de tipo bool
+    public boolean existsById(Long id) {// Verifica si existe un cliente con el ID dado, funcion de tipo bool
         return data.containsKey(id); //Si en el Map contiene al cliente con el id, este responde true o false
     }
 }
