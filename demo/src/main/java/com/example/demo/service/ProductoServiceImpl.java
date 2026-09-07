@@ -21,7 +21,7 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public Producto obtenerPorId(Integer id) { //Obtenemos un producto por su id
+    public Producto obtenerPorId(Long id) { //Obtenemos un producto por su id
         return productoRepository.findById(id); //Retornamos el producto, con ayuda del productoRepository pasando el id por parametro
     }
     
@@ -31,12 +31,12 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void eliminar(Integer id) { //Eliminar producto
+    public void eliminar(Long id) { //Eliminar producto
         productoRepository.deleteById(id); //Eliminamos el producto por su id
     }
 
     @Override
-    public boolean existe(Integer id) { //Verificar si el producto ya existe, funcion booleana
+    public boolean existe(Long id) { //Verificar si el producto ya existe, funcion booleana
         return productoRepository.existsById(id); //Retornamos si existe o no
     }
 }

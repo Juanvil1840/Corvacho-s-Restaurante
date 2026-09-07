@@ -36,7 +36,7 @@ public class ProductoController {
 
     // Formulario para editar un producto ya existente
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Integer id, Model model) { //Extrae el valor del id de la URL y lo convierte en un integer
+    public String mostrarFormularioEditar(@PathVariable Long id, Model model) { //Extrae el valor del id de la URL y lo convierte en un Long
         Producto producto = productoService.obtenerPorId(id); //LLamammos a productosSevice para que obtenga el producto por su id
         if (producto == null) { //Si el producto es null se velve a redirigir 
             return "redirect:/productos";
@@ -55,7 +55,7 @@ public class ProductoController {
 
     // Eliminar un producto
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Integer id) { //Obtenemos el id
+    public String eliminar(@PathVariable Long id) { //Obtenemos el id
         productoService.eliminar(id); //Con ayuda del productoSerice, usamos la funcion eliminar y le pasamos por parametro el id
         return "redirect:/productos"; //Despues lo redirigimos a productos.html
     }

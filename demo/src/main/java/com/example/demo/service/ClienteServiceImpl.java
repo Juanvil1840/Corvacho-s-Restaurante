@@ -21,7 +21,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente obtenerPorId(Integer id) { // Funcion para obtener a un cliente por su id
+    public Cliente obtenerPorId(Long id) { // Funcion para obtener a un cliente por su id
         return clienteRepository.findById(id); // Con el repository encontramos a un cliente en especifico por su id
     }
 
@@ -49,7 +49,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void desactivar(Integer id) { // Desactiva la cuenta del cliente
+    public void desactivar(Long id) { // Desactiva la cuenta del cliente
         Cliente cliente = clienteRepository.findById(id);
         if (cliente != null) {
             cliente.setActivo(false); // Activo pasa a false
@@ -58,7 +58,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void reactivar(Integer id) { // Reactiva la cuenta del cliente
+    public void reactivar(Long id) { // Reactiva la cuenta del cliente
         Cliente cliente = clienteRepository.findById(id);
         if (cliente != null) {
             cliente.setActivo(true); // Activo vuelve a true
@@ -67,12 +67,12 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public void eliminar(Integer id) { // Funcion para eliminar a un cliente con su id
+    public void eliminar(Long id) { // Funcion para eliminar a un cliente con su id
         clienteRepository.deleteById(id); // Eliminamos al cliente
     }
 
     @Override
-    public boolean existe(Integer id) { // Funcion para verificar que un cliente existe por su id
+    public boolean existe(Long id) { // Funcion para verificar que un cliente existe por su id
         return clienteRepository.existsById(id); // Retorna si existe con la funcion booleana de true o false
     }
 }

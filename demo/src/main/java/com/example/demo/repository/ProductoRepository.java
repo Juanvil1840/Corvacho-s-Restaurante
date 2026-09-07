@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +13,8 @@ import com.example.demo.entities.Producto;
 @Repository //Repositorio
 public class ProductoRepository {
 
-        private Map<Integer, Producto> data = new HashMap<>(); //Usamos un Map para guardar los productos (platos)
-        private AtomicInteger idGenerator = new AtomicInteger(21); //El generador de ids empieza en 21, ya que tenemos 20 platos en memoria 
+        private Map<Long, Producto> data = new HashMap<>(); //Usamos un Map para guardar los productos (platos)
+        private AtomicLong idGenerator = new AtomicLong(21); //El generador de ids empieza en 21, ya que tenemos 20 platos en memoria 
 
         public ProductoRepository() { //Agregamos los platillos con su nombre, precio, descripcion, imagen, si estan dispobibles, ingredientes y categorias
                 data.put(1, new Producto(1, "berenjenas a la parmesana", 40000.0,
@@ -163,7 +163,7 @@ public class ProductoRepository {
 
 
         
-        public Producto findById(Integer id) { // Buscamos un producto por su id
+        public Producto findById(Long id) { // Buscamos un producto por su id
                 return data.get(id); //Retornamos la informacion asociada a ese id
         }
 
@@ -182,12 +182,12 @@ public class ProductoRepository {
         }
 
        
-        public void deleteById(Integer id) { //Elimina un producto por su ID
+        public void deleteById(Long id) { //Elimina un producto por su ID
                 data.remove(id); //Usando la funcion y el id
         }
 
         
-        public boolean existsById(Integer id) { //Verifica si existe un producto con el ID dado
+        public boolean existsById(Long id) { //Verifica si existe un producto con el ID dado
                 return data.containsKey(id);
         }
 }

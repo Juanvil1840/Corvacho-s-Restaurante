@@ -31,7 +31,7 @@ public class ClientePerfilController {
 
     // Ver perfil: Cuando  queremos ver el perfil de un cliente con su id
     @GetMapping("/ver/{id}")
-    public String verPerfil(@PathVariable Integer id, Model model) { //PathVariable integer id nos permite que si la URL es perfil/ver/5 se combierte a id=5
+    public String verPerfil(@PathVariable Long id, Model model) { //PathVariable Long id nos permite que si la URL es perfil/ver/5 se combierte a id=5
         Cliente cliente = clienteService.obtenerPorId(id); // Le pedimos al servicio a clienteService que busque al cliente con ese ID en el repositorio
         if (cliente == null) { //Si el cliente no existe o el ID no es valido, lo redirigimos a registro para evitar errores
             return "redirect:/perfil/registro"; //Lo llevamos a registro
@@ -42,7 +42,7 @@ public class ClientePerfilController {
 
     // Edigtar perfil: Cuando el cliente quiera cambiar algunos de sus datos
     @GetMapping("/editar/{id}")
-    public String mostrarEditar(@PathVariable Integer id, Model model) { //Toma el numero que viene con la URL
+    public String mostrarEditar(@PathVariable Long id, Model model) { //Toma el numero que viene con la URL
         Cliente cliente = clienteService.obtenerPorId(id); // Se busca a traves del service el cliente por su id
         if (cliente == null) { //Si el cliente no existe o el id es invalido lo redirigimos al registtro
             return "redirect:/perfil/registro";
@@ -66,7 +66,7 @@ public class ClientePerfilController {
 
     // Desactivar cuenta: Le damos la opcion al cliente para que desactive su cuenta, mas no la elimine
     @GetMapping("/desactivar/{id}")
-    public String desactivar(@PathVariable Integer id) { //Toma el numero que viene con la URL
+    public String desactivar(@PathVariable Long id) { //Toma el numero que viene con la URL
         Cliente cliente = clienteService.obtenerPorId(id); //Buscamos el id del cliente en el servico
         if (cliente != null) { //Si tenemos un cliente que no este vacio
             cliente.setActivo(false); //Su parametro de activo ahora pasa a falso, lo contrario a cuando se guarda por primera vez que esta en true
@@ -77,7 +77,7 @@ public class ClientePerfilController {
 
     // Reactivar la cuenta: Despues de desactivar la cuenta el cliente tiene la opcion de volver a activarla si desea
     @GetMapping("/reactivar/{id}")
-    public String reactivar(@PathVariable Integer id) {//Toma el numero que viene con la URL
+    public String reactivar(@PathVariable Long id) {//Toma el numero que viene con la URL
         Cliente cliente = clienteService.obtenerPorId(id); //Buscamos al cliente por id 
         if (cliente != null) { //Si el cliente existe
             cliente.setActivo(true); //La propiedad del cliente de activo vuelve a pasar a true
@@ -88,7 +88,7 @@ public class ClientePerfilController {
 
     // Elimina la cuenta(Borra la cuenta): Cuando el cliente quiere borrar su cuenta
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Integer id) { //Toma el numero que viene con la URL
+    public String eliminar(@PathVariable Long id) { //Toma el numero que viene con la URL
         clienteService.eliminar(id); //Le pedimos al servicio que elimine la cuenta del cliente por su id 
         return "redirect:/perfil/registro"; //  Redirigimos al cliente a resgistro
     }
