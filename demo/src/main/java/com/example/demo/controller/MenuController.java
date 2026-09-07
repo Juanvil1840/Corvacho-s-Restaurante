@@ -6,19 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.demo.service.ProductoService;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.entities.Producto;
-import com.example.demo.service.CategoriaService;
+import com.example.demo.service.ProductoService;
 
 @Controller
 public class MenuController {
 
     @Autowired
     private ProductoService productoService;
-
-    @Autowired
-    private CategoriaService categoriaService;
 
     @GetMapping("/menu")
     public String menu(Model model) {
@@ -28,11 +23,13 @@ public class MenuController {
 
     @GetMapping("/menu/detalle/{id}")
     public String detalle(@PathVariable Integer id, Model model) {
-
         Producto producto = productoService.obtenerPorId(id);
+        if (producto == null) {
+            return "redirect:/menu";
+        }
 
-        model.addAttribute("producto",producto);
-        model.addAttribute("categoria",categoriaService.findById(producto.getIdCategoria()));
+        model.addAttribute("producto", producto);
+        model.addAttribute("categoria", producto.getCategoria());
         return "detalle-producto";
     }
 
@@ -41,5 +38,4 @@ public class MenuController {
         model.addAttribute("productos", productoService.obtenerTodos());
         return "adminMenu";
     }
-
 }

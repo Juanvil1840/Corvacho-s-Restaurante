@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Producto;
 import com.example.demo.service.ProductoService;
 import com.example.demo.service.CategoriaService;
@@ -58,6 +59,10 @@ public class ProductoController {
     // (actualizar) de uno que ya existe
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Producto producto) { // Convierte los datos en un objeto producto
+        if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
+            Categoria cat = categoriaService.findById(producto.getCategoria().getId());
+            producto.setCategoria(cat);
+        }
         productoService.guardar(producto); // Luego con ayuda de productoService guardamos ese objeto con la nueva
                                            // informacion del formulario
         return "redirect:/productos"; // Redirigimos a productos.html

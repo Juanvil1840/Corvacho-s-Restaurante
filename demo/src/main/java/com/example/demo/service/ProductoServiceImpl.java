@@ -14,7 +14,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-    // === MÉTODOS DE LECTURA (YA EXISTENTES) ===
+    // === MÉTODOS DE LECTURA ===
     @Override
     public Collection<Producto> obtenerTodos() {
         return productoRepository.findAll();
@@ -22,10 +22,10 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public Producto obtenerPorId(Integer id) {
-        return productoRepository.findById(id);
+        return productoRepository.findById(id).orElse(null);
     }
 
-    // === NUEVOS MÉTODOS PARA CRUD ===
+    // === MÉTODOS PARA CRUD ===
     @Override
     public Producto guardar(Producto producto) {
         return productoRepository.save(producto);

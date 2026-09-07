@@ -12,7 +12,7 @@ import com.example.demo.repository.ClienteRepository;
 public class ClienteServiceImpl implements ClienteService {
 
     @Autowired // Inyeccion de dependencias de Spring
-    private ClienteRepository clienteRepository; // Utilizamos esta variable para hablar directamente con la base de datos
+    private ClienteRepository clienteRepository; // Repositorio Spring Data JPA
 
     @Override
     public Collection<Cliente> obtenerTodos() {
@@ -21,14 +21,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente obtenerPorId(Integer id) {
-        return clienteRepository.findById(id); // Le pedimos al repositorio el cliente con ese id especifico
+        return clienteRepository.findById(id).orElse(null); // Le pedimos al repositorio el cliente con ese id especifico
     }
 
     @Override
     public boolean existe(Integer id) {
         return clienteRepository.existsById(id); // Le preguntamos al repositorio si ese id ya esta registrado
     }
-
 
     @Override
     public Cliente guardar(Cliente cliente) {
@@ -40,7 +39,6 @@ public class ClienteServiceImpl implements ClienteService {
         clienteRepository.deleteById(id); // Le pedimos al repositorio que borre el cliente con ese id
     }
 
-    
     @Override
     public Cliente registrar(Cliente cliente) {
         cliente.setActivo(true); // Como el cliente se esta registrando por primera vez, activo=true, para que pueda iniciar sesion despues
@@ -51,7 +49,7 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente actualizar(Cliente cliente) {
         // Si la contraseña del cliente esta vacia o es null buscamos su antigua contraseña y la conservamos
         if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) {
-            Cliente existente = clienteRepository.findById(cliente.getClienteId()); // Buscamos al cliente actual en el repositorio
+            Cliente existente = clienteRepository.findById(cliente.getClienteId()).orElse(null); // Buscamos al cliente actual en el repositorio
             if (existente != null) {
                 cliente.setContraseña(existente.getContraseña()); // Le asignamos la contraseña que ya tenia guardada
             }
@@ -61,16 +59,16 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public void desactivar(Integer id) {
-        Cliente cliente = clienteRepository.findById(id); // Buscamos el cliente por su id en el repositorio
+        Cliente cliente = clienteRepository.findById(id).orElse(null); // Buscamos el cliente por su id en el repositorio
         if (cliente != null) { // Si tenemos un cliente que no este vacio
-            cliente.setActivo(false); // Su parametro de activo ahora pasa a falso, lo contrario a cuando se guarda por primera vez que esta en true
+            cliente.setActivo(false); // Su parametro de activo ahora pasa a falso
             clienteRepository.save(cliente); // Guardamos los cambios
         }
     }
 
     @Override
     public void reactivar(Integer id) {
-        Cliente cliente = clienteRepository.findById(id); // Buscamos al cliente por id
+        Cliente cliente = clienteRepository.findById(id).orElse(null); // Buscamos al cliente por id
         if (cliente != null) { // Si el cliente existe
             cliente.setActivo(true); // La propiedad del cliente de activo vuelve a pasar a true
             clienteRepository.save(cliente); // Guardamos los cambios
