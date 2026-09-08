@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Java / H2 generated files ###
+bin/
+*.class
+*.mv.db
+*.trace.db

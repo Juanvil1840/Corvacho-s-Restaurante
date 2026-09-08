@@ -42,11 +42,14 @@
             <a th:href="@{/menu}" class="btn-volver">&#8592; Volver al menú</a>
             <h1 class="detalle-nombre" th:text="${producto.nombre}">Nombre del plato</h1>
             <p class="detalle-categoria">Categoría: <span th:text="${categoria.nombre}">Categoría</span></p>
-            <h3 class="detalle-subtitulo">Ingredientes</h3>
-            <ul class="detalle-ingredientes">
-                <li th:each="ingrediente : ${producto.ingredientes}" th:text="${ingrediente}"></li>
-            </ul>
+
+            <h3 class="detalle-subtitulo">Descripción</h3>
+            <p th:text="${producto.descripcion}">
+                Descripción del producto
+            </p>
+
         </div>
+
         <!-- Lado derecho: imagen -->
         <div class="detalle-imagen-container">
             <img th:src="${producto.imagen}" th:alt="${producto.nombre}" class="detalle-imagen">
@@ -54,8 +57,10 @@
     </div>
 
 </body>
+
 <!--Para Bootstrap-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
 integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
 crossorigin="anonymous"></script>
+
 </html>

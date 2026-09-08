@@ -21,8 +21,8 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public Producto obtenerPorId(Integer id) {
-        return productoRepository.findById(id);
+    public Producto obtenerPorId(Long id) {
+        return productoRepository.findById(id).orElse(null);
     }
 
     // === NUEVOS MÉTODOS PARA CRUD ===
@@ -32,12 +32,12 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    public void eliminar(Integer id) {
+    public void eliminar(Long id) {
         productoRepository.deleteById(id);
     }
 
     @Override
-    public boolean existe(Integer id) {
+    public boolean existe(Long id) {
         return productoRepository.existsById(id);
     }
 }

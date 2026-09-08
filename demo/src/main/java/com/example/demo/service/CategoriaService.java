@@ -6,5 +6,5 @@ import com.example.demo.entities.Categoria;
 
 public interface CategoriaService{
     Collection<Categoria> findAll();
-    Categoria findById(Integer id);
+    Categoria findById(Long id);
 }

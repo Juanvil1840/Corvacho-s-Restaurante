@@ -27,12 +27,12 @@ public class MenuController {
     }
 
     @GetMapping("/menu/detalle/{id}")
-    public String detalle(@PathVariable Integer id, Model model) {
+    public String detalle(@PathVariable Long id, Model model) {
 
         Producto producto = productoService.obtenerPorId(id);
 
         model.addAttribute("producto",producto);
-        model.addAttribute("categoria",categoriaService.findById(producto.getIdCategoria()));
+        model.addAttribute("categoria", producto.getCategoria());
         return "detalle-producto";
     }
 
