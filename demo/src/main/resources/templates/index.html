@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,8 +62,7 @@
 
             <!-- Columna derecha: texto -->
             <div class="hero-text">
-                <p class="hero-label">ALTA COCINA, <span>SABOR AUTENTICO
-                    NTICO</span></p>
+                <p class="hero-label">ALTA COCINA, <span>SABOR AUTENTICO</span></p>
                 <h1 class="hero-h1">Experiencia gastronómica que te deja sin palabras</h1>
                 <a th:href="@{/menu}" href="/menu" class="btn-hero-outline">VER MENÚ</a>
             </div>
@@ -74,7 +73,7 @@
     <!--Seccion About-->
     <section class="about d-flex align-items-center" id="about">
     <div class="container-fluid">
-        <div class="about-tittle"><h1>Nosotros</h1></div>
+        <h1 class="about-tittle">Nosotros</h1>
         <div class="about-content">
             <p>En Corvacho's somos un restaurante de alta cocina comprometido con brindarte una experiencia gastronómica única. con varios platos gourmet, creando sabores que conquistan el paladar desde el primer bocado. <br>Ya sea en nuestra sala, con su ambiente cálido y sofisticado, o desde la comodidad de tu hogar a través de nuestro servicio de domicilios, garantizamos la misma calidad, presentación y pasión en cada plato. Porque en Corvacho's, la excelencia no tiene dirección.</p>
             <img th:src="@{/Images/Edificio.jpeg}" src="/Images/Edificio.jpeg" alt="Sede principal Corvachos" height="500px">
@@ -85,37 +84,37 @@
     <!--Section de especialidades-->
     <section class="especialidad d-flex align-items-center">
     <div class="container-fluid">
-        <div class="especialidad-tittle"><h1>Nuestras Especialidades</h1></div>
+        <h1 class="especialidad-tittle">Nuestras Especialidades</h1>
         <div class="especialidad-content">
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/comida-berenjenas_a_la_parmesana.png}" src="/Images/comida-berenjenas_a_la_parmesana.png" height="300px">
             <p>berenjenas a la parmesana</p>
-            </div>
+            </article>
 
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/Comida-burrata.png}" src="/Images/Comida-burrata.png" height="300px">
             <p>Burrata</p>
-            </div>
+            </article>
 
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/comida-carpaccio_di_salmone.png}" src="/Images/comida-carpaccio_di_salmone.png" height="300px">
             <p>carpaccio di salmone</p>
-            </div>
+            </article>
 
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/comida-papas_a_la_francesa.png}" src="/Images/comida-papas_a_la_francesa.png" height="300px">
             <p>papas a la Francesa</p>
-            </div>
+            </article>
 
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/comida-pasta_gratinada_del_chef.png}" src="/Images/comida-pasta_gratinada_del_chef.png" height="300px">
             <p>pasta gratinada del chef</p>
-            </div>
+            </article>
 
-            <div class="especialidad-plato">
+            <article class="especialidad-plato">
             <img th:src="@{/Images/comida-polpo_alla_griglia.png}" src="/Images/comida-polpo_alla_griglia.png" height="300px">
             <p>polpo alla griglia</p>
-            </div>
+            </article>
         </div>
     </div>
     </section>
@@ -162,18 +161,18 @@
 
     <footer id="footer">
         <div id="footer-main">
-            <div id="footer-logo-col">
+            <section id="footer-logo-col">
                 <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
-            </div>
+            </section>
 
-            <div id="footer-contacto-col">
+            <section id="footer-contacto-col">
                 <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
                 <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
                 <p>&#9993; administrativo@corvachos.com</p>
                 <p>&#128222; CEL: +300 913 4441</p>
-            </div>
+            </section>
 
-            <div id="footer-redes-col">
+            <section id="footer-redes-col">
                 <h4 id="footer-redes-titulo">SÍGUENOS</h4>
                 <hr id="footer-redes-divider">
                 <div id="footer-redes-iconos">
@@ -181,7 +180,7 @@
                     <span class="footer-icono"><i class="bi bi-facebook"></i></span>
                     <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
-            </div>
+            </section>
         </div>
 
         <div id="footer-bottom">

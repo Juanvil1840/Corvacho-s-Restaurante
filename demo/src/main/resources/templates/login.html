@@ -48,7 +48,7 @@
 
             <p th:if="${error}" class="login-error">Usuario o contraseña incorrectos</p>
 
-            <label for="correo">Correo Electronico</label>
+            <label for="correo">Correo Electrónico</label>
             <input type="text" id="correo" name="correo" placeholder="camilo@gmail.com" required>
 
             <label for="contraseña">Contraseña</label>
@@ -58,7 +58,7 @@
 
             <p class="login-registrate">
                 ¿No tienes una cuenta aún? 
-                <a th:href="@{/perfil/registro}">Registrate</a>
+                <a th:href="@{/perfil/registro}">Regístrate</a>
             </p>
         </form>
     </section>
@@ -66,18 +66,18 @@
 
     <footer id="footer">
         <div id="footer-main">
-            <div id="footer-logo-col">
+            <section id="footer-logo-col">
                 <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
-            </div>
+            </section>
 
-            <div id="footer-contacto-col">
+            <section id="footer-contacto-col">
                 <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
                 <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
                 <p>&#9993; administrativo@corvachos.com</p>
                 <p>&#128222; CEL: +300 913 4441</p>
-            </div>
+            </section>
 
-            <div id="footer-redes-col">
+            <section id="footer-redes-col">
                 <h4 id="footer-redes-titulo">SÍGUENOS</h4>
                 <hr id="footer-redes-divider">
                 <div id="footer-redes-iconos">
@@ -85,7 +85,7 @@
                     <span class="footer-icono"><i class="bi bi-facebook"></i></span>
                     <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
-            </div>
+            </section>
         </div>
 
         <div id="footer-bottom">
