@@ -31,6 +31,9 @@ public class MenuController {
 
         Producto producto = productoService.obtenerPorId(id);
 
+        if (producto == null) {
+            return "redirect:/menu";
+        }
         model.addAttribute("producto",producto);
         model.addAttribute("categoria", producto.getCategoria());
         return "detalle-producto";

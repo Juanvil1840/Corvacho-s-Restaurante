@@ -20,4 +20,13 @@ public class LoginServiceImpl implements LoginService {
         }
         return false;
     }
+
+    @Override
+    public Cliente autenticar(String correo, String contraseña) {
+        Cliente cliente = clienteRepository.findByCorreo(correo);
+        if (cliente != null && cliente.getContraseña().equals(contraseña)) {
+            return cliente;
+        }
+        return null;
+    }
 }
