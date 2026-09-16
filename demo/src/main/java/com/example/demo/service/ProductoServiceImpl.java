@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entities.Producto;
 import com.example.demo.repository.ProductoRepository;
 
-@Service
+@Service //Servicio
 public class ProductoServiceImpl implements ProductoService {
 
-    @Autowired
-    private ProductoRepository productoRepository;
+    @Autowired //Inyeccion de dependencias
+    private ProductoRepository productoRepository; //Variable productoRepository de ProductoRepository para utilizarla en service
 
-    // === MÉTODOS DE LECTURA (YA EXISTENTES) ===
+    
     @Override
-    public Collection<Producto> obtenerTodos() {
-        return productoRepository.findAll();
+    public Collection<Producto> obtenerTodos() { //Obtener todos los productos
+        return productoRepository.findAll(); //Con productosRepository utilizamos el finAll para encontrarlos a todos
     }
 
     @Override
@@ -27,8 +27,8 @@ public class ProductoServiceImpl implements ProductoService {
 
     // === NUEVOS MÉTODOS PARA CRUD ===
     @Override
-    public Producto guardar(Producto producto) {
-        return productoRepository.save(producto);
+    public Producto guardar(Producto producto) { //Guardar producto
+        return productoRepository.save(producto); //Podemos guardar el nuevo producto o actualizar uno ya existente
     }
 
     @Override

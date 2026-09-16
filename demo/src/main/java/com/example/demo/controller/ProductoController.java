@@ -3,11 +3,15 @@ package com.example.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.entities.Producto;
-import com.example.demo.service.ProductoService;
 import com.example.demo.service.CategoriaService;
+import com.example.demo.service.ProductoService;
 
 @Controller // Controlador
 @RequestMapping("/productos") // Cuando se baya a hacer una peticion de este controlador las url deben tener
@@ -21,6 +25,7 @@ public class ProductoController {
     private CategoriaService categoriaService; // Utilizamos la variable para llamar a todos los metodos de
                                                // CategoriaService
 
+    // Mostrar la ista con los productos
     // Mostrar la ista con los productos
     @GetMapping
     public String listar(Model model) {
@@ -39,6 +44,7 @@ public class ProductoController {
         return "productos/formulario"; // Retornamos el formulario.hmtl
     }
 
+    // Formulario para editar un producto ya existente
     // Formulario para editar un producto ya existente
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Long id, Model model) { // Extrae el valor del id de la URL y
@@ -63,6 +69,7 @@ public class ProductoController {
         return "redirect:/productos"; // Redirigimos a productos.html
     }
 
+    // Eliminar un producto
     // Eliminar un producto
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) { // Obtenemos el id

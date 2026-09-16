@@ -4,11 +4,12 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.errors.ClienteNotFoundException; 
 
 import com.example.demo.entities.Cliente;
 import com.example.demo.repository.ClienteRepository;
 
-@Service
+@Service // Servicio
 public class ClienteServiceImpl implements ClienteService {
 
     @Autowired // Inyeccion de dependencias de Spring
