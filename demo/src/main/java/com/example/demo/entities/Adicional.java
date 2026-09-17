@@ -23,9 +23,9 @@ public class Adicional{
     private Long id_adicional;
     @Column( length = 80, nullable = false)
     private String nombre;
-    @Column( precision = 10, scale = 2, nullable = false)
+    @Column( nullable = false)
     private double precio;
-    @Column(nullable = false)
+    @Column( nullable = false)
     private boolean disponible;
 
     @OneToMany(mappedBy = "adicional")
