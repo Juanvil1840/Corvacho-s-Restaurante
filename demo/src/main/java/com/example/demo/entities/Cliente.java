@@ -1,10 +1,15 @@
 package com.example.demo.entities;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +36,12 @@ public class Cliente {
     private String direccion;
     @Column(nullable = false)
     private boolean activo = true;  // Por defecto, el cliente esta activo
+
+    @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private Carrito carrito;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pedido> pedidos;
 
     public Cliente(String nombre, String apellido, String correo, String contraseña, String telefono, String direccion, boolean activo) {
     this.nombre = nombre;

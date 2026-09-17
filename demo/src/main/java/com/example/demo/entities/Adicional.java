@@ -1,12 +1,13 @@
 package com.example.demo.entities;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,19 @@ public class Adicional{
     @Column( length = 80, nullable = false)
     private String nombre;
     @Column( precision = 10, scale = 2, nullable = false)
-    private BigDecimal precio;
+    private double precio;
     @Column(nullable = false)
     private boolean disponible;
 
-    
+    @OneToMany(mappedBy = "adicional")
+    private List<ProductoAdicional> productoAdicionales;
+
+    @OneToMany(mappedBy = "adicional")
+    private List<DetallePedido> detallePedidos;
+
+    public Adicional(String nombre, double precio, boolean disponible){
+        this.nombre = nombre;
+        this.precio = precio;
+        this.disponible = disponible;
+    }
 }

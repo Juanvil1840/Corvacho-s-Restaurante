@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
-/* import java.util.List; */
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +39,15 @@ public class Producto {
     @ManyToOne
     @JoinColumn( name = "id_categoria", nullable = false) 
     private Categoria categoria;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<ProductoCarrito> productoCarritos;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<ProductoAdicional> productoAdicionales;
+
+    @OneToMany(mappedBy = "producto")
+    private List<DetallePedido> detallePedidos;
 
     public Producto(String nombre, double precio, String descripcion, String imagen, boolean disponible, Categoria categoria) {
     this.nombre = nombre;

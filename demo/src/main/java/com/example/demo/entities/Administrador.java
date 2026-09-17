@@ -20,4 +20,7 @@ public class Administrador {
     @Column (length = 80, nullable = false)
     private String nombre;
     
+    public Administrador(String nombre){
+        this.nombre = nombre;
+    }
 }
