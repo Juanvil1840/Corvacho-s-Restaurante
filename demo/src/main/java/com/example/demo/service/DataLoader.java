@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -7,12 +9,30 @@ import org.springframework.stereotype.Component;
 import com.example.demo.repository.CategoriaRepository;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.repository.ProductoRepository;
+import com.example.demo.repository.AdicionalRepository;
+import com.example.demo.repository.AdministradorRepository;
+import com.example.demo.repository.CarritoRepository;
+import com.example.demo.repository.DetallePedidoRepository;
+import com.example.demo.repository.DomiciliarioRepository;
+import com.example.demo.repository.OperadorRepository;
+import com.example.demo.repository.PedidoRepository;
+import com.example.demo.repository.ProductoAdicionalRepository;
+import com.example.demo.repository.ProductoCarritoRepository;
 
 import jakarta.transaction.Transactional;
 
 import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Cliente;
 import com.example.demo.entities.Producto;
+import com.example.demo.entities.Adicional;
+import com.example.demo.entities.Administrador;
+import com.example.demo.entities.Carrito;
+import com.example.demo.entities.DetallePedido;
+import com.example.demo.entities.Domiciliario;
+import com.example.demo.entities.Operador;
+import com.example.demo.entities.Pedido;
+import com.example.demo.entities.ProductoAdicional;
+import com.example.demo.entities.ProductoCarrito;
 
 @Component
 @Transactional 
@@ -27,6 +47,33 @@ public class DataLoader implements CommandLineRunner{
     
     @Autowired 
     private ClienteRepository clienteRepository;
+
+    @Autowired 
+    private AdicionalRepository adicionalRepository;
+
+    @Autowired 
+    private AdministradorRepository administradorRepository;
+
+    @Autowired 
+    private CarritoRepository carritoRepository;
+
+    @Autowired 
+    private DetallePedidoRepository detallePedidoRepository;
+
+    @Autowired 
+    private DomiciliarioRepository domiciliarioRepository;
+
+    @Autowired 
+    private OperadorRepository operadorRepository;
+
+    @Autowired 
+    private PedidoRepository pedidoRepository;
+
+    @Autowired 
+    private ProductoAdicionalRepository productoAdicionalRepository;
+
+    @Autowired 
+    private ProductoCarritoRepository productoCarritoRepository;
     
     @Override
     public void run(String... args) throws Exception {
@@ -44,30 +91,30 @@ public class DataLoader implements CommandLineRunner{
 
         /* Clientes */
 
-        clienteRepository.save(new Cliente("Daniel","Cedeño","cedeno.danielc@javeriana.edu.co","1234567","3106699555","Calle 45 #7-95",true));
-        clienteRepository.save(new Cliente("Jose","Pulido","jose.p@javeriana.edu.co","5678923","3113479585","Calle 98 #8-45",true));
-        clienteRepository.save(new Cliente("Sebastián","Rincón","rincon.sebas@javeriana.edu.co","1230987","3112549855","Calle 100 #4-35",true));
-        clienteRepository.save(new Cliente("Eileen","Rodriguez","eileen.rodriguez@javeriana.edu.co","1234900","3100076895","Calle 129 #9-42",true));
-        clienteRepository.save(new Cliente("Giovanny","Durán","gio.duran_@javeriana.edu.co","1236547","3057789635","Calle 40 #7-90",true));
-        clienteRepository.save(new Cliente("Diego","Melgarejo","diegui200@gmail.com","1233377","3177799950","Calle 80 #13-43",true));
-        clienteRepository.save(new Cliente("Karen","Colmenares","karencol07_@hotmail.com","7843567","3195054045","Calle 127 #5-35",true));
-        clienteRepository.save(new Cliente("Laura","Corvacho","corvacho.laura_xx@gmail.com","9876543","3096789500","Calle 200 #15-90",true));
-        clienteRepository.save(new Cliente("Juan","vil","vil_juan_2005@gmail.com","7799881","3145533789","Calle 150 #9-50",true));
-        clienteRepository.save(new Cliente("Sebastián","Angarita","angarita.sebastian@yahoo.com","5554445","3143224455","Calle 24b #5-75",true));
+        Cliente cliente1 = clienteRepository.save(new Cliente("Daniel","Cedeño","cedeno.danielc@javeriana.edu.co","1234567","3106699555","Calle 45 #7-95",true));
+        Cliente cliente2 = clienteRepository.save(new Cliente("Jose","Pulido","jose.p@javeriana.edu.co","5678923","3113479585","Calle 98 #8-45",true));
+        Cliente cliente3 = clienteRepository.save(new Cliente("Sebastián","Rincón","rincon.sebas@javeriana.edu.co","1230987","3112549855","Calle 100 #4-35",true));
+        Cliente cliente4 = clienteRepository.save(new Cliente("Eileen","Rodriguez","eileen.rodriguez@javeriana.edu.co","1234900","3100076895","Calle 129 #9-42",true));
+        Cliente cliente5 = clienteRepository.save(new Cliente("Giovanny","Durán","gio.duran_@javeriana.edu.co","1236547","3057789635","Calle 40 #7-90",true));
+        Cliente cliente6 = clienteRepository.save(new Cliente("Diego","Melgarejo","diegui200@gmail.com","1233377","3177799950","Calle 80 #13-43",true));
+        Cliente cliente7 = clienteRepository.save(new Cliente("Karen","Colmenares","karencol07_@hotmail.com","7843567","3195054045","Calle 127 #5-35",true));
+        Cliente cliente8 = clienteRepository.save(new Cliente("Laura","Corvacho","corvacho.laura_xx@gmail.com","9876543","3096789500","Calle 200 #15-90",true));
+        Cliente cliente9 = clienteRepository.save(new Cliente("Juan","vil","vil_juan_2005@gmail.com","7799881","3145533789","Calle 150 #9-50",true));
+        Cliente cliente10 = clienteRepository.save(new Cliente("Sebastián","Angarita","angarita.sebastian@yahoo.com","5554445","3143224455","Calle 24b #5-75",true));
 
         /* Productos */
 
-        productoRepository.save(new Producto("berenjenas a la parmesana",40000,"capas de rodajas de berenjena fritas o asadas, alternadas con salsa de tomate, hojas de albahaca fresca, queso mozzarella y queso parmesano","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/2c7fa867-64f4-4fea-af73-98ac6129b3c6.webp",true,entradas));
+        Producto producto1 = productoRepository.save(new Producto("berenjenas a la parmesana",40000,"capas de rodajas de berenjena fritas o asadas, alternadas con salsa de tomate, hojas de albahaca fresca, queso mozzarella y queso parmesano","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/2c7fa867-64f4-4fea-af73-98ac6129b3c6.webp",true,entradas));
 
-        productoRepository.save(new Producto("Burrata",45000,"Saco exterior de queso mozzarella bañado en su propio suero para conservar la frescura, el cual contiene un relleno de hilos de queso stracciatella mezclados con crema de leche fresca, cortado al momento de servir y presentado sobre una base de hojas verdes con tomates frescos.","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/3a57d222-27b7-4a96-b6e7-e30ae4839110.webp",true,entradas));
+        Producto producto2 = productoRepository.save(new Producto("Burrata",45000,"Saco exterior de queso mozzarella bañado en su propio suero para conservar la frescura, el cual contiene un relleno de hilos de queso stracciatella mezclados con crema de leche fresca, cortado al momento de servir y presentado sobre una base de hojas verdes con tomates frescos.","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/3a57d222-27b7-4a96-b6e7-e30ae4839110.webp",true,entradas));
 
-        productoRepository.save(new Producto("carpaccio di salmone",60000,"Láminas finas de salmón fresco crudo dispuestas en una base circular, bañadas con una emulsión de jugo de limón y aceite de oliva virgen extra","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/0ce8ec33-3420-48cd-9b57-e5a58ddc0765.webp",true,pescados_y_Mariscos));
+        Producto producto3 = productoRepository.save(new Producto("carpaccio di salmone",60000,"Láminas finas de salmón fresco crudo dispuestas en una base circular, bañadas con una emulsión de jugo de limón y aceite de oliva virgen extra","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/0ce8ec33-3420-48cd-9b57-e5a58ddc0765.webp",true,pescados_y_Mariscos));
 
-        productoRepository.save(new Producto("papas a la Francesa",25000,"Bowl de papas a la francesa cubiertas de queso parmesano, champiñones y salsa de la casa","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/73a7ec70-a935-4173-96d8-33c1f7482eda.webp",true,entradas));
+        Producto producto4 = productoRepository.save(new Producto("papas a la Francesa",25000,"Bowl de papas a la francesa cubiertas de queso parmesano, champiñones y salsa de la casa","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/73a7ec70-a935-4173-96d8-33c1f7482eda.webp",true,entradas));
 
-        productoRepository.save(new Producto("pasta gratinada del chef",50000,"Pasta con queso gratinado mozzarella y acompañada de un pan en forma de estrella bañado en salsa","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/579c0e8e-d7e1-4b91-8874-c09b9966d142.webp",true,pastas));
+        Producto producto5 = productoRepository.save(new Producto("pasta gratinada del chef",50000,"Pasta con queso gratinado mozzarella y acompañada de un pan en forma de estrella bañado en salsa","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/579c0e8e-d7e1-4b91-8874-c09b9966d142.webp",true,pastas));
 
-        productoRepository.save(new Producto("polpo alla griglia",50000,"Tentáculo de pulpo cocido y sellado a la parrilla, bañado en un aderezo de aceite de oliva con ajo y perejil, el cual contiene un toque de pimentón ahumado y sal marina, cortado en rodajas gruesas y servido sobre una cama de papas rústicas con una guarnición de vegetales asados.","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/a3263a03-04f8-42c0-8b09-c150f1fef7dd.webp",true,pescados_y_Mariscos));
+        Producto producto6 = productoRepository.save(new Producto("polpo alla griglia",50000,"Tentáculo de pulpo cocido y sellado a la parrilla, bañado en un aderezo de aceite de oliva con ajo y perejil, el cual contiene un toque de pimentón ahumado y sal marina, cortado en rodajas gruesas y servido sobre una cama de papas rústicas con una guarnición de vegetales asados.","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/a3263a03-04f8-42c0-8b09-c150f1fef7dd.webp",true,pescados_y_Mariscos));
 
         productoRepository.save(new Producto("Fiori di Zucca",32000, "Flores de calabacín rellenas de queso ricota, fritas y servidas crujientes.","https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/6bb40637-870d-4e7e-923f-19e03a950a50.webp",true,entradas));
 
@@ -136,7 +183,78 @@ public class DataLoader implements CommandLineRunner{
         productoRepository.save(new Producto("Jugo de fresa",14000,"Jugo natural de fresa preparado con fruta fresca y servido frío.","https://images.pexels.com/photos/31578583/pexels-photo-31578583/free-photo-of-coctel-refrescante-de-fresa-con-cubitos-de-hielo.jpeg?cs=tinysrgb&dpr=1&w=500",true,bebidas));
 
         productoRepository.save(new Producto("Jugo de lulo",14000,"Jugo natural de lulo con sabor tropical y refrescante.","https://img.postershop.me/22622/a972bd6a-1273-4ae2-9850-d40848dda99a_image.jpeg",true,bebidas));
+
+
+        /* Adicionales */
+
+        Adicional adicional1 = adicionalRepository.save(new Adicional("Queso Extra",5.500,true));
+        Adicional adicional2 = adicionalRepository.save(new Adicional("Aros de cebolla",10.500,true));
+        Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta",8.500,true));
+        Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz",3.500,true));
+        Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa",4.500,true));
+
+        /* Operadores */
+
+        Operador operador1 = operadorRepository.save(new Operador("Kika Nieto","KikaNieto_","1234"));
+        Operador operador2 = operadorRepository.save(new Operador("Nicolas Almendra","NicoAla_08","4322"));
+        Operador operador3 = operadorRepository.save(new Operador("Mafe Cruz","Mafecruz_0909","0987"));
+        Operador operador4 = operadorRepository.save(new Operador("Samuel Corredor","SamCor__","6392"));
+        Operador operador5 = operadorRepository.save(new Operador("Operador1234","Operador1234","0000"));
+
+        /* Domiciliarios */
+
+        Domiciliario domiciliario1 = domiciliarioRepository.save(new Domiciliario("Juls Caicedo","3056677848","0000238282",true,operador1));
+        Domiciliario domiciliario2 = domiciliarioRepository.save(new Domiciliario("Juancho rodriguez","3234560090","0000129393",true,operador2));
+        Domiciliario domiciliario3 = domiciliarioRepository.save(new Domiciliario("Esteban Bogotá","3223388848","0000443382",true,operador3));
+        Domiciliario domiciliario4 = domiciliarioRepository.save(new Domiciliario("Pablo Rincón","3056677859","0000255722",true,operador4));
+        Domiciliario domiciliario5 = domiciliarioRepository.save(new Domiciliario("Julian España","3056637890","0000123321",true,operador5));
+
+        /* Carritos */
+
+        Carrito carrito1 = carritoRepository.save(new Carrito(cliente1));
+        Carrito carrito2 = carritoRepository.save(new Carrito(cliente2));
+        Carrito carrito3 = carritoRepository.save(new Carrito(cliente3));
+        Carrito carrito4 = carritoRepository.save(new Carrito(cliente4));
+        Carrito carrito5 = carritoRepository.save(new Carrito(cliente5));
+
+        /* Pedidos */
+
+        Pedido pedido1 = pedidoRepository.save(new Pedido("Entregado", LocalDateTime.now().minusMinutes(30), LocalDateTime.now(), cliente1, operador1, domiciliario1));
+
+        Pedido pedido2 = pedidoRepository.save(new Pedido("Cocinando", LocalDateTime.now().minusMinutes(50), LocalDateTime.now(), cliente2, operador2, domiciliario2));
+
+        Pedido pedido3 = pedidoRepository.save(new Pedido("Enviado", LocalDateTime.now().minusMinutes(20), LocalDateTime.now(), cliente3, operador3, domiciliario3));
+
+        Pedido pedido4 = pedidoRepository.save(new Pedido("Recibido", LocalDateTime.now().minusMinutes(40), LocalDateTime.now(), cliente4, operador4, domiciliario4));
+
+        Pedido pedido5 = pedidoRepository.save(new Pedido("Recibido", LocalDateTime.now().minusMinutes(50), LocalDateTime.now(), cliente5, operador5, domiciliario5));
+
+        /* DetallePedidos */
+
+        detallePedidoRepository.save(new DetallePedido(2, producto1, pedido1, adicional1));
+        detallePedidoRepository.save(new DetallePedido(1, producto2, pedido2, adicional2));
+        detallePedidoRepository.save(new DetallePedido(3, producto3, pedido3, adicional3));
+        detallePedidoRepository.save(new DetallePedido(2, producto4, pedido4, adicional4));
+        detallePedidoRepository.save(new DetallePedido(1, producto5, pedido5, adicional5));
+
+        /* ProductoAdicionales */
+
+        productoAdicionalRepository.save(new ProductoAdicional(producto1, adicional1));
+        productoAdicionalRepository.save(new ProductoAdicional(producto2, adicional2));
+        productoAdicionalRepository.save(new ProductoAdicional(producto3, adicional3));
+        productoAdicionalRepository.save(new ProductoAdicional(producto4, adicional4));
+        productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional5));
+
+        /* ProductoCarrito */
+
+        productoCarritoRepository.save(new ProductoCarrito(2, producto1, carrito1));
+        productoCarritoRepository.save(new ProductoCarrito(1, producto2, carrito2));
+        productoCarritoRepository.save(new ProductoCarrito(3, producto3, carrito3));
+        productoCarritoRepository.save(new ProductoCarrito(2, producto4, carrito4));
+        productoCarritoRepository.save(new ProductoCarrito(1, producto5, carrito5));
+        productoCarritoRepository.save(new ProductoCarrito(4, producto6, carrito1));
+
     }
-    
+
 }
  

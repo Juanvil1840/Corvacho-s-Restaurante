@@ -26,4 +26,9 @@ public class ProductoAdicional {
     @ManyToOne
     @JoinColumn(name = "id_adicional")
     private Adicional adicional;
+
+    public ProductoAdicional(Producto producto, Adicional adicional){
+    this.producto = producto;
+    this.adicional = adicional;
+    }
 }

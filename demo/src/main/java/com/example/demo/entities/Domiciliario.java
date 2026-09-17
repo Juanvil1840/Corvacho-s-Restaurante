@@ -38,11 +38,12 @@ public class Domiciliario {
     @OneToMany(mappedBy = "domiciliario")
     private List<Pedido> pedidos;
 
-    public Domiciliario(String nombre, String celular, String cedula, boolean informaciondisp){
-        this.nombre = nombre;
-        this.celular = celular;
-        this.cedula = cedula;
-        this.informaciondisp = informaciondisp;
+    public Domiciliario(String nombre, String celular, String cedula, boolean informaciondisp, Operador operador){
+    this.nombre = nombre;
+    this.celular = celular;
+    this.cedula = cedula;
+    this.informaciondisp = informaciondisp;
+    this.operador = operador;
     }
 
 }

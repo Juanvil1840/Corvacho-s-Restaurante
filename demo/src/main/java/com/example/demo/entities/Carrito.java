@@ -30,4 +30,7 @@ public class Carrito {
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
     private List<ProductoCarrito> productoCarritos;
 
+    public Carrito(Cliente cliente){
+    this.cliente = cliente;
+    }
 }

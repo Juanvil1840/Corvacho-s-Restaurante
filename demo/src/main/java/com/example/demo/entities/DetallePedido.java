@@ -34,7 +34,10 @@ public class DetallePedido {
     @JoinColumn(name = "id_adicional")
     private Adicional adicional;
 
-    public DetallePedido(int cantidad){
-        this.cantidad = cantidad;
+    public DetallePedido(int cantidad, Producto producto, Pedido pedido, Adicional adicional){
+    this.cantidad = cantidad;
+    this.producto = producto;
+    this.pedido = pedido;
+    this.adicional = adicional;
     }
 }

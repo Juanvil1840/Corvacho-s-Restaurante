@@ -46,9 +46,12 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detallePedidos;
 
-    public Pedido(String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega){
-        this.estado = estado;
-        this.fechaCreacion = fechaCreacion;
-        this.fechaEntrega = fechaEntrega;
+    public Pedido(String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega, Cliente cliente, Operador operador, Domiciliario domiciliario){
+    this.estado = estado;
+    this.fechaCreacion = fechaCreacion;
+    this.fechaEntrega = fechaEntrega;
+    this.cliente = cliente;
+    this.operador = operador;
+    this.domiciliario = domiciliario;
     }
 }

@@ -30,8 +30,9 @@ public class ProductoCarrito {
     @JoinColumn(name = "id_carrito")
     private Carrito carrito;
 
-    public ProductoCarrito(int cantidadP){
-        this.cantidadP = cantidadP;
+    public ProductoCarrito(int cantidadP, Producto producto, Carrito carrito){
+    this.cantidadP = cantidadP;
+    this.producto = producto;
+    this.carrito = carrito;
     }
-    
 }
