@@ -11,9 +11,7 @@
 </head>
 <body class="body-perfil">
 
-    <!-- ============================================ -->
-    <!-- 1. HEADER (Navbar) -->
-    <!-- ============================================ -->
+    <!-- HEADER (Navbar) -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
@@ -23,52 +21,48 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENU</a></li>
                     <li class="nav-item"><a class="nav-link" href="/perfil/ver/1">PERFIL</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- ============================================ -->
-    <!-- 2. SECCIÓN 1: Información Personal + Avatar -->
-    <!-- ============================================ -->
-    <section class="perfil-seccion-info">
+    <!-- SECCION 1: Informacion Personal + Avatar + Botones -->
+<section class="perfil-seccion-info">
+    <div class="perfil-fondo-info"
+         th:style="'background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
+        
         <div class="perfil-contenedor-info">
 
-            <!-- Columna izquierda: solo Avatar -->
+            <!-- Columna izquierda: Avatar -->
             <div class="perfil-avatar-col">
                 <div class="perfil-avatar-cuadrado">
                     <img th:src="@{/Images/perfil.PNG}" alt="Foto de perfil" class="perfil-avatar-img">
                 </div>
             </div>
 
-            <!-- Columna derecha: Información Personal -->
+            <!-- Columna central: Informacion Personal -->
             <div class="perfil-datos-col">
-
-                <!-- Bienvenida alineada a la derecha -->
                 <p class="perfil-bienvenida">Bienvenido a tu casa</p>
 
-                <!-- Título con línea -->
                 <div class="perfil-titulo-row">
-                    <h2 class="perfil-titulo-info">Información Personal</h2>
+                    <h2 class="perfil-titulo-info">Informacion Personal</h2>
                 </div>
 
-                <!-- Nombre -->
-                <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Méndez</p>
+                <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Mendez</p>
 
-                <!-- Datos con etiquetas -->
                 <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Correo electrónico</span>
+                    <span class="perfil-dato-label">Correo electronico</span>
                     <p class="perfil-dato"><i class="bi bi-envelope"></i> <span th:text="${cliente.correo}">camilo@gmail.com</span></p>
                 </div>
                 <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Teléfono</span>
+                    <span class="perfil-dato-label">Telefono</span>
                     <p class="perfil-dato"><i class="bi bi-telephone"></i> <span th:text="${cliente.telefono}">3011234567</span></p>
                 </div>
                 <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Dirección</span>
-                    <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogotá</span></p>
+                    <span class="perfil-dato-label">Direccion</span>
+                    <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogota</span></p>
                 </div>
                 <div class="perfil-dato-item">
                     <span class="perfil-dato-label">Estado de cuenta</span>
@@ -78,57 +72,79 @@
                         <span th:unless="${cliente.activo}" style="color: #e57373;">Inactivo</span>
                     </p>
                 </div>
-
             </div>
+
+            <!-- Columna derecha: Botones verticales -->
+            <div class="perfil-botones-col">
+                <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
+                   class="perfil-btn-editar">Editar Perfil</a>
+                <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
+                   class="perfil-btn-cerrar perfil-btn-eliminar"
+                   onclick="return confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')">
+                    Eliminar Cuenta
+                </a>
+                <a href="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
+            </div>
+
         </div>
+    </div>
+</section>
 
-        <!-- Fila de botones debajo del avatar, todos a la misma altura -->
-        <div class="perfil-botones-section">
-            <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
-               class="perfil-btn-editar">Editar Perfil</a>
-            <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
-               class="perfil-btn-cerrar perfil-btn-eliminar"
-               onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')">
-                Eliminar Cuenta
-            </a>
-            <a href="/" class="perfil-btn-cerrar">Cerrar Sesión</a>
-        </div>
-
-    </section>
-
-    <!-- ============================================ -->
-    <!-- 3. SECCIÓN 2: Historial de Reservas con Fondo -->
-    <!-- ============================================ -->
+    <!-- SECCION 2: Historial de Pedidos -->
     <section class="perfil-seccion-reservas">
-        <div class="perfil-fondo-reservas" 
+        <div class="perfil-fondo-reservas"
              th:style="'background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
-            
+
             <div class="perfil-contenido-reservas">
-                <h2 class="perfil-titulo-reservas">Historial de Reservas</h2>
-                <div class="perfil-mensaje-vacio">
-                    <i class="bi bi-calendar2-plus" style="font-size: 3rem; color: #6f8896;"></i>
-                    <p>No tienes reservas registradas aún.</p>
+                <h2 class="perfil-titulo-reservas">Historial de Pedidos</h2>
+
+                <!-- Si NO hay pedidos, mostrar mensaje -->
+                <div th:if="${#lists.isEmpty(cliente.pedidos)}" class="perfil-mensaje-vacio">
+                    <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
+                    <p>No tienes pedidos registrados aun.</p>
+                </div>
+
+                <!-- Si hay pedidos, mostrarlos -->
+                <div th:if="${not #lists.isEmpty(cliente.pedidos)}">
+                    <div th:each="pedido : ${cliente.pedidos}" class="perfil-pedido-item">
+                        <p><strong>Pedido #</strong> <span th:text="${pedido.id_Pedido}">1</span></p>
+                        <p><strong>Estado:</strong> <span th:text="${pedido.estado}">En preparacion</span></p>
+                        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">20/08/2026 19:30</span></p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================ -->
-    <!-- 4. FOOTER -->
-    <!-- ============================================ -->
+    <!-- SECCION 3: Historial de Reservas -->
+    <section class="perfil-seccion-reservas">
+        <div class="perfil-fondo-reservas"
+             th:style="'background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
+
+            <div class="perfil-contenido-reservas">
+                <h2 class="perfil-titulo-reservas">Historial de Reservas</h2>
+                <div class="perfil-mensaje-vacio">
+                    <i class="bi bi-calendar2-plus" style="font-size: 3rem; color: #6f8896;"></i>
+                    <p>No tienes reservas registradas aun.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer class="footer-perfil">
         <div class="footer-main">
             <div class="footer-col">
                 <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
             </div>
             <div class="footer-col">
-                <h4>CONTÁCTANOS</h4>
-                <p>&#128205; Calle 40 #7-60 Bogotá</p>
+                <h4>CONTACTANOS</h4>
+                <p>&#128205; Calle 40 #7-60 Bogota</p>
                 <p>&#9993; administrativo@corvachos.com</p>
                 <p>&#128222; +300 913 4441</p>
             </div>
             <div class="footer-col">
-                <h4>SÍGUENOS</h4>
+                <h4>SIGUENOS</h4>
                 <div class="footer-iconos">
                     <span><i class="bi bi-instagram"></i></span>
                     <span><i class="bi bi-facebook"></i></span>
