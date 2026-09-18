@@ -44,7 +44,7 @@
 
 .login-form input:focus {
     outline: none;
-    border-color: #ca8a04;
+    border-color: #cd9e46;
 }
 
 /* Mensaje de error */
@@ -70,8 +70,8 @@
 }
 
 .login-btn:hover {
-    background-color: #b45309;
-    border-color: #b45309;
+    background-color: #cd9e46;
+    border-color: #cd9e46;
 }
 
 /* Link Registrate */
