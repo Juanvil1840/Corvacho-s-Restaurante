@@ -1,0 +1,336 @@
+/* ============================================
+   ESTILOS PARA PEDIDOS (Corvacho's)
+   Lista y Detalle de Pedidos
+   ============================================ */
+
+.pedidos-body {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.pedidos-container {
+    max-width: 1200px;
+    margin: 100px auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+.pedidos-titulo {
+    color: #cd9e46;
+    font-size: 2.2rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 0.3rem;
+}
+
+.pedidos-subtitulo {
+    color: #6f8896;
+    font-size: 0.95rem;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 1.5rem;
+}
+
+/* === LISTA DE PEDIDOS === */
+.pedidos-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pedido-card {
+    background: #013741;
+    border-radius: 12px;
+    padding: 1.2rem 1.8rem;
+    border: 1px solid #1a3040;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease;
+}
+
+.pedido-card:hover {
+    border-color: #cd9e46;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pedido-card-id {
+    color: #cd9e46;
+    font: 600 0.75rem 'Montserrat', sans-serif;
+    min-width: 70px;
+}
+
+.pedido-card-id span {
+    display: block;
+    font-size: 1.6rem;
+    color: #fcfafa;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.pedido-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pedido-card-cliente {
+    color: #fcfafa;
+    font: 500 1.2rem 'Cormorant Garamond', serif;
+}
+
+.pedido-card-meta {
+    color: #6f8896;
+    font: 0.85rem 'Montserrat', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pedido-card-meta i { color: #cd9e46; margin-right: 4px; }
+.pedido-card-acciones { display: flex; align-items: center; gap: 10px; }
+
+/* === BADGES DE ESTADO === */
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font: 600 0.75rem 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+
+.estado-recibido  { background: rgba(33, 150, 243, 0.15); color: #64b5f6; border: 1px solid rgba(33, 150, 243, 0.3); }
+.estado-cocinando { background: rgba(255, 152, 0, 0.15); color: #ffb74d; border: 1px solid rgba(255, 152, 0, 0.3); }
+.estado-enviado   { background: rgba(205, 158, 70, 0.15); color: #cd9e46; border: 1px solid rgba(205, 158, 70, 0.3); }
+.estado-entregado { background: rgba(76, 175, 80, 0.15); color: #81c784; border: 1px solid rgba(76, 175, 80, 0.3); }
+
+/* === BOTONES === */
+.btn-ver-detalle {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    border: 2px solid #cd9e46;
+    border-radius: 6px;
+    color: #cd9e46;
+    background: transparent;
+    text-decoration: none;
+    font: 600 0.8rem 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-ver-detalle:hover { background: #cd9e46; color: #001c2a; }
+
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid #6f8896;
+    border-radius: 6px;
+    color: #a0b8bf;
+    background: transparent;
+    text-decoration: none;
+    font: 0.85rem 'Montserrat', sans-serif;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-volver:hover { background: #6f8896; color: #001c2a; }
+
+/* === MENSAJE VACÍO === */
+.pedidos-vacio {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: #013741;
+    border-radius: 12px;
+    border: 1px solid #1a3040;
+    color: #a0b8bf;
+}
+
+.pedidos-vacio i { font-size: 3rem; color: #6f8896; display: block; margin-bottom: 0.8rem; }
+
+/* === DETALLE DE PEDIDO === */
+.detalle-header {
+    background: #013741;
+    border-radius: 12px;
+    padding: 1.8rem 2rem;
+    border: 1px solid #1a3040;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.detalle-header-left h2 {
+    color: #cd9e46;
+    font: 500 1.8rem 'Cormorant Garamond', serif;
+    margin-bottom: 0.4rem;
+}
+
+.detalle-fechas { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.85rem; color: #a0b8bf; }
+.detalle-fecha-item i { color: #cd9e46; margin-right: 4px; }
+.detalle-fecha-item span { color: #fcfafa; }
+
+/* === TIMELINE DE ESTADO === */
+.detalle-timeline {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 28, 42, 0.5);
+    border-radius: 10px;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.timeline-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #1a3040;
+    border: 2px solid #334955;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #6f8896;
+}
+
+.timeline-step.activo .timeline-dot { background: #cd9e46; border-color: #cd9e46; color: #001c2a; }
+.timeline-step.completado .timeline-dot { background: #4caf50; border-color: #4caf50; color: #fff; }
+
+.timeline-label {
+    margin-top: 6px;
+    font: 600 0.7rem 'Montserrat', sans-serif;
+    color: #6f8896;
+    text-transform: uppercase;
+}
+
+.timeline-step.activo .timeline-label,
+.timeline-step.completado .timeline-label { color: #fcfafa; }
+.timeline-line { flex: 1; height: 2px; background: #334955; margin: 0 -6px 20px; }
+.timeline-line.completada { background: #4caf50; }
+
+/* === INFO CLIENTE Y DOMICILIARIO === */
+.detalle-info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 1.5rem;
+}
+
+.detalle-info-card {
+    background: #013741;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #1a3040;
+}
+
+.detalle-info-card h3,
+.detalle-productos h3 {
+    color: #cd9e46;
+    font: 500 1.3rem 'Cormorant Garamond', serif;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #1a3040;
+    padding-bottom: 0.4rem;
+}
+
+.detalle-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+    color: #a0b8bf;
+    font-size: 0.9rem;
+}
+
+.detalle-info-item i { color: #cd9e46; width: 20px; text-align: center; }
+.detalle-info-item span { color: #fcfafa; }
+
+/* === TABLA DE PRODUCTOS === */
+.detalle-productos {
+    background: #013741;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #1a3040;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-productos th {
+    color: #cd9e46;
+    font: 600 0.75rem 'Montserrat', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #1a3040;
+    text-align: left;
+}
+
+.tabla-productos td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid rgba(26, 48, 64, 0.5);
+    color: #fcfafa;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.tabla-productos tr:last-child td { border-bottom: none; }
+.tabla-productos tr:hover { background: rgba(205, 158, 70, 0.05); }
+
+.producto-img-cell img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.producto-nombre-cell { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; }
+.producto-desc-cell { color: #6f8896; font-size: 0.8rem; }
+.adicional-cell { font-size: 0.8rem; color: #a0b8bf; }
+.adicional-precio, .adicional-gratis { color: #81c784; font-weight: 600; }
+.precio-cell, .cantidad-cell, .subtotal-cell { font-family: 'Montserrat', sans-serif; font-weight: 600; }
+.subtotal-cell { color: #cd9e46; }
+
+/* === TOTAL DEL PEDIDO === */
+.detalle-total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 1.8rem;
+    background: #013741;
+    border-radius: 12px;
+    border: 1px solid #cd9e46;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.detalle-total-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #a0b8bf;
+    margin-right: 1rem;
+    text-transform: uppercase;
+}
+
+.detalle-total-valor {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #cd9e46;
+}
