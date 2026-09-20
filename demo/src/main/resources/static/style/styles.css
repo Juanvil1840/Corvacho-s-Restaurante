@@ -31,9 +31,14 @@ body {
     z-index: 1000; /* esté por encima del contenido */
 }
 .navbar .nav-link,
-.navbar .navbar-brand .nav-link.active {
+.navbar-nav .nav-link,
+.navbar-nav .nav-link.active {
     color: white;
     transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link.active {
+    color: #cd9e46;
 }
 
 .navbar-nav {

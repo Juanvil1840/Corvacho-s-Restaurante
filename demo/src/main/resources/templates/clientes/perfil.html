@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/style/styles.css}">
     <link rel="stylesheet" th:href="@{/style/landing.css}">
     <link rel="stylesheet" th:href="@{/style/perfil.css}">
+    <link rel="stylesheet" th:href="@{/style/pedidos.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="body-perfil">
@@ -24,7 +25,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
                     <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/perfil/ver/1">PERFIL</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/perfil/ver/{id}(id=${cliente.clienteId})}">PERFIL</a></li>
                 </ul>
             </div>
         </div>
@@ -97,18 +98,64 @@
     </section>
 
     <!-- ============================================ -->
-    <!-- 3. SECCIÓN 2: Historial de Reservas con Fondo -->
+    <!-- 3. SECCIÓN 2: Historial de Pedidos -->
     <!-- ============================================ -->
     <section class="perfil-seccion-reservas">
         <div class="perfil-fondo-reservas" 
              th:style="'background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
             
             <div class="perfil-contenido-reservas">
-                <h2 class="perfil-titulo-reservas">Historial de Reservas</h2>
-                <div class="perfil-mensaje-vacio">
-                    <i class="bi bi-calendar2-plus" style="font-size: 3rem; color: #6f8896;"></i>
-                    <p>No tienes reservas registradas aún.</p>
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h2 class="perfil-titulo-reservas mb-0">Historial de Pedidos</h2>
+                    <a th:if="${!#lists.isEmpty(pedidos)}" th:href="@{/pedidos/cliente/{id}(id=${cliente.clienteId})}" class="btn-ver-detalle" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                        Ver todos &rarr;
+                    </a>
                 </div>
+
+                <!-- Mensaje vacío si no tiene pedidos -->
+                <div class="perfil-mensaje-vacio" th:if="${#lists.isEmpty(pedidos)}">
+                    <i class="bi bi-bag-x" style="font-size: 3rem; color: #6f8896;"></i>
+                    <p>No tienes pedidos registrados aún.</p>
+                    <a href="/menu" class="btn-ver-detalle mt-3" style="display: inline-block;">Ver Menú y Ordenar</a>
+                </div>
+
+                <!-- Grid de pedidos del cliente -->
+                <div class="pedidos-grid" th:if="${!#lists.isEmpty(pedidos)}">
+                    <div class="pedido-card" th:each="pedido : ${pedidos}">
+                        <div class="pedido-card-id">
+                            PEDIDO
+                            <span th:text="'#' + ${pedido.id_Pedido}">#1</span>
+                        </div>
+
+                        <div class="pedido-card-info">
+                            <div class="pedido-card-meta">
+                                <span>
+                                    <i class="bi bi-calendar3"></i>
+                                    <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+                                </span>
+                                <span th:if="${pedido.domiciliario != null}">
+                                    <i class="bi bi-bicycle"></i>
+                                    <span th:text="${pedido.domiciliario.nombre}">Domiciliario</span>
+                                </span>
+                                <span>
+                                    <i class="bi bi-box"></i>
+                                    <span th:text="${#lists.size(pedido.detallePedidos)} + ' producto(s)'">0 productos</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pedido-card-acciones">
+                            <span class="estado-badge"
+                                  th:classappend="${pedido.estado == 'Recibido'} ? 'estado-recibido' : (${pedido.estado == 'Cocinando'} ? 'estado-cocinando' : (${pedido.estado == 'Enviado'} ? 'estado-enviado' : 'estado-entregado'))">
+                                <i class="bi" 
+                                   th:classappend="${pedido.estado == 'Recibido'} ? 'bi-inbox' : (${pedido.estado == 'Cocinando'} ? 'bi-fire' : (${pedido.estado == 'Enviado'} ? 'bi-truck' : 'bi-check-circle'))"></i>
+                                <span th:text="${pedido.estado}">Estado</span>
+                            </span>
+                            <a th:href="@{/pedidos/{id}(id=${pedido.id_Pedido})}" class="btn-ver-detalle">Ver detalle</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
