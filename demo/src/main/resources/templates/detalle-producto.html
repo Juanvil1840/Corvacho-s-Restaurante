@@ -1,14 +1,11 @@
-<!--Página de detalle de producto-->
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${producto.nombre} + ' | Corvacho\'s'">Detalle | Corvacho's</title>
-    <!-- Para bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
-    rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
-    crossorigin="anonymous">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
     <link rel="stylesheet" th:href="@{/style/styles.css}">
     <link rel="stylesheet" th:href="@{/style/detalle.css}">
@@ -16,28 +13,26 @@
 <body>
 
     <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <!--logo en navbar-->
-        <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <!--links navbar-->
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-            <a class="nav-link" href="#">BEBIDAS</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">COMIDAS</a>
-            </li>
-        </ul>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">BEBIDAS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">COMIDAS</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
     </nav>
 
     <main class="detalle-container">
-        <!-- Lado izquierdo: información -->
+        
         <section class="detalle-info">
             <a th:href="@{/menu}" class="btn-volver">&#8592; Volver al menú</a>
             <h1 class="detalle-nombre" th:text="${producto.nombre}">Nombre del plato</h1>
@@ -48,21 +43,24 @@
                 Descripción del producto
             </p>
 
+            <div th:if="${not #lists.isEmpty(producto.productoAdicionales)}" class="adicionales-container">
+                <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
+                <ul class="adicionales-lista">
+                    <li class="adicional-item" th:each="pa : ${producto.productoAdicionales}" th:if="${pa.adicional.disponible}">
+                        <span class="adicional-nombre" th:text="${pa.adicional.nombre}">Nombre del adicional</span>
+                        <span class="adicional-precio" th:text="'+ $ ' + ${#numbers.formatDecimal(pa.adicional.precio, 1, 'POINT', 0, 'COMMA')}">Precio</span>
+                    </li>
+                </ul>
+            </div>
+
         </section>
 
-        <!-- Lado derecho: imagen -->
         <section class="detalle-imagen-container">
             <img th:src="${producto.imagen}" th:alt="${producto.nombre}" class="detalle-imagen">
         </section>
 
-        
     </main>
 
-
-
-<!--Para Bootstrap-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" 
-integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
-crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
