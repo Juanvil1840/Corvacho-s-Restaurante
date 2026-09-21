@@ -7,6 +7,7 @@
     <link rel="stylesheet" th:href="@{/style/styles.css}">
     <link rel="stylesheet" th:href="@{/style/landing.css}">
     <link rel="stylesheet" th:href="@{/style/perfil.css}">
+    <link rel="stylesheet" th:href="@{/style/pedidos.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 <body class="body-perfil">
@@ -21,74 +22,74 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/menu">MENU</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/perfil/ver/1">PERFIL</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/perfil/ver/{id}(id=${cliente.clienteId})}">PERFIL</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- SECCION 1: Informacion Personal + Avatar + Botones -->
-<section class="perfil-seccion-info">
-    <div class="perfil-fondo-info"
-         th:style="'background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
-        
-        <div class="perfil-contenedor-info">
+    <section class="perfil-seccion-info">
+        <div class="perfil-fondo-info"
+             th:style="'background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
 
-            <!-- Columna izquierda: Avatar -->
-            <div class="perfil-avatar-col">
-                <div class="perfil-avatar-cuadrado">
-                    <img th:src="@{/Images/perfil.PNG}" alt="Foto de perfil" class="perfil-avatar-img">
+            <div class="perfil-contenedor-info">
+
+                <!-- Columna izquierda: Avatar -->
+                <div class="perfil-avatar-col">
+                    <div class="perfil-avatar-cuadrado">
+                        <img th:src="@{/Images/perfil.PNG}" alt="Foto de perfil" class="perfil-avatar-img">
+                    </div>
                 </div>
+
+                <!-- Columna central: Informacion Personal -->
+                <div class="perfil-datos-col">
+                    <p class="perfil-bienvenida">Bienvenido a tu casa</p>
+
+                    <div class="perfil-titulo-row">
+                        <h2 class="perfil-titulo-info">Informacion Personal</h2>
+                    </div>
+
+                    <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Mendez</p>
+
+                    <div class="perfil-dato-item">
+                        <span class="perfil-dato-label">Correo electronico</span>
+                        <p class="perfil-dato"><i class="bi bi-envelope"></i> <span th:text="${cliente.correo}">camilo@gmail.com</span></p>
+                    </div>
+                    <div class="perfil-dato-item">
+                        <span class="perfil-dato-label">Telefono</span>
+                        <p class="perfil-dato"><i class="bi bi-telephone"></i> <span th:text="${cliente.telefono}">3011234567</span></p>
+                    </div>
+                    <div class="perfil-dato-item">
+                        <span class="perfil-dato-label">Direccion</span>
+                        <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogota</span></p>
+                    </div>
+                    <div class="perfil-dato-item">
+                        <span class="perfil-dato-label">Estado de cuenta</span>
+                        <p class="perfil-dato">
+                            <i class="bi bi-check-circle"></i>
+                            <span th:if="${cliente.activo}" style="color: #4caf50;">Activo</span>
+                            <span th:unless="${cliente.activo}" style="color: #e57373;">Inactivo</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Columna derecha: Botones verticales -->
+                <div class="perfil-botones-col">
+                    <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
+                       class="perfil-btn-editar">Editar Perfil</a>
+                    <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
+                       class="perfil-btn-cerrar perfil-btn-eliminar"
+                       onclick="return confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')">
+                        Eliminar Cuenta
+                    </a>
+                    <a href="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
+                </div>
+
             </div>
-
-            <!-- Columna central: Informacion Personal -->
-            <div class="perfil-datos-col">
-                <p class="perfil-bienvenida">Bienvenido a tu casa</p>
-
-                <div class="perfil-titulo-row">
-                    <h2 class="perfil-titulo-info">Informacion Personal</h2>
-                </div>
-
-                <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Mendez</p>
-
-                <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Correo electronico</span>
-                    <p class="perfil-dato"><i class="bi bi-envelope"></i> <span th:text="${cliente.correo}">camilo@gmail.com</span></p>
-                </div>
-                <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Telefono</span>
-                    <p class="perfil-dato"><i class="bi bi-telephone"></i> <span th:text="${cliente.telefono}">3011234567</span></p>
-                </div>
-                <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Direccion</span>
-                    <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogota</span></p>
-                </div>
-                <div class="perfil-dato-item">
-                    <span class="perfil-dato-label">Estado de cuenta</span>
-                    <p class="perfil-dato">
-                        <i class="bi bi-check-circle"></i>
-                        <span th:if="${cliente.activo}" style="color: #4caf50;">Activo</span>
-                        <span th:unless="${cliente.activo}" style="color: #e57373;">Inactivo</span>
-                    </p>
-                </div>
-            </div>
-
-            <!-- Columna derecha: Botones verticales -->
-            <div class="perfil-botones-col">
-                <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
-                   class="perfil-btn-editar">Editar Perfil</a>
-                <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
-                   class="perfil-btn-cerrar perfil-btn-eliminar"
-                   onclick="return confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')">
-                    Eliminar Cuenta
-                </a>
-                <a href="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
-            </div>
-
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- SECCION 2: Historial de Pedidos -->
     <section class="perfil-seccion-reservas">
@@ -96,22 +97,57 @@
              th:style="'background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
 
             <div class="perfil-contenido-reservas">
-                <h2 class="perfil-titulo-reservas">Historial de Pedidos</h2>
-
-                <!-- Si NO hay pedidos, mostrar mensaje -->
-                <div th:if="${#lists.isEmpty(cliente.pedidos)}" class="perfil-mensaje-vacio">
-                    <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
-                    <p>No tienes pedidos registrados aun.</p>
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h2 class="perfil-titulo-reservas mb-0">Historial de Pedidos</h2>
+                    <a th:if="${!#lists.isEmpty(pedidos)}" th:href="@{/pedidos/cliente/{id}(id=${cliente.clienteId})}" class="btn-ver-detalle" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                        Ver todos &rarr;
+                    </a>
                 </div>
 
-                <!-- Si hay pedidos, mostrarlos -->
-                <div th:if="${not #lists.isEmpty(cliente.pedidos)}">
-                    <div th:each="pedido : ${cliente.pedidos}" class="perfil-pedido-item">
-                        <p><strong>Pedido #</strong> <span th:text="${pedido.id_Pedido}">1</span></p>
-                        <p><strong>Estado:</strong> <span th:text="${pedido.estado}">En preparacion</span></p>
-                        <p><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">20/08/2026 19:30</span></p>
+                <!-- Mensaje vacío si no tiene pedidos -->
+                <div class="perfil-mensaje-vacio" th:if="${#lists.isEmpty(pedidos)}">
+                    <i class="bi bi-bag-x" style="font-size: 3rem; color: #6f8896;"></i>
+                    <p>No tienes pedidos registrados aún.</p>
+                    <a href="/menu" class="btn-ver-detalle mt-3" style="display: inline-block;">Ver Menú y Ordenar</a>
+                </div>
+
+                <!-- Grid de pedidos del cliente -->
+                <div class="pedidos-grid" th:if="${!#lists.isEmpty(pedidos)}">
+                    <div class="pedido-card" th:each="pedido : ${pedidos}">
+                        <div class="pedido-card-id">
+                            PEDIDO
+                            <span th:text="'#' + ${pedido.id_Pedido}">#1</span>
+                        </div>
+
+                        <div class="pedido-card-info">
+                            <div class="pedido-card-meta">
+                                <span>
+                                    <i class="bi bi-calendar3"></i>
+                                    <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+                                </span>
+                                <span th:if="${pedido.domiciliario != null}">
+                                    <i class="bi bi-bicycle"></i>
+                                    <span th:text="${pedido.domiciliario.nombre}">Domiciliario</span>
+                                </span>
+                                <span>
+                                    <i class="bi bi-box"></i>
+                                    <span th:text="${#lists.size(pedido.detallePedidos)} + ' producto(s)'">0 productos</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="pedido-card-acciones">
+                            <span class="estado-badge"
+                                  th:classappend="${pedido.estado == 'Recibido'} ? 'estado-recibido' : (${pedido.estado == 'Cocinando'} ? 'estado-cocinando' : (${pedido.estado == 'Enviado'} ? 'estado-enviado' : 'estado-entregado'))">
+                                <i class="bi" 
+                                   th:classappend="${pedido.estado == 'Recibido'} ? 'bi-inbox' : (${pedido.estado == 'Cocinando'} ? 'bi-fire' : (${pedido.estado == 'Enviado'} ? 'bi-truck' : 'bi-check-circle'))"></i>
+                                <span th:text="${pedido.estado}">Estado</span>
+                            </span>
+                            <a th:href="@{/pedidos/{id}(id=${pedido.id_Pedido})}" class="btn-ver-detalle">Ver detalle</a>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' - Corvacho\'s Restaurante'">Pedidos - Corvacho's Restaurante</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos del proyecto -->
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+    <link rel="stylesheet" th:href="@{/style/pedidos.css}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="pedidos-body">
+
+    <!-- ============================================ -->
+    <!-- NAVBAR -->
+    <!-- ============================================ -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                    <li class="nav-item" th:if="${cliente != null}"><a class="nav-link" th:href="@{/perfil/ver/{id}(id=${cliente.clienteId})}">PERFIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ============================================ -->
+    <main class="pedidos-container">
+
+        <h1 class="pedidos-titulo" th:text="${titulo}">Historial de Pedidos</h1>
+        <p class="pedidos-subtitulo" th:text="${#lists.size(pedidos)} + ' pedido(s) encontrado(s)'">0 pedidos</p>
+
+        <!-- Lista de pedidos -->
+        <div class="pedidos-grid" th:if="${!#lists.isEmpty(pedidos)}">
+
+            <div class="pedido-card" th:each="pedido : ${pedidos}">
+
+                <!-- ID del pedido -->
+                <div class="pedido-card-id">
+                    PEDIDO
+                    <span th:text="'#' + ${pedido.id_Pedido}">#1</span>
+                </div>
+
+                <!-- Info principal -->
+                <div class="pedido-card-info">
+                    <div class="pedido-card-cliente" th:text="${pedido.cliente.nombre} + ' ' + ${pedido.cliente.apellido}">
+                        Nombre Cliente
+                    </div>
+                    <div class="pedido-card-meta">
+                        <span>
+                            <i class="bi bi-calendar3"></i>
+                            <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2026 12:00</span>
+                        </span>
+                        <span>
+                            <i class="bi bi-geo-alt"></i>
+                            <span th:text="${pedido.cliente.direccion}">Dirección</span>
+                        </span>
+                        <span th:if="${pedido.domiciliario != null}">
+                            <i class="bi bi-bicycle"></i>
+                            <span th:text="${pedido.domiciliario.nombre}">Domiciliario</span>
+                        </span>
+                        <span>
+                            <i class="bi bi-box"></i>
+                            <span th:text="${#lists.size(pedido.detallePedidos)} + ' producto(s)'">0 productos</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Estado + botón -->
+                <div class="pedido-card-acciones">
+                    <!-- Badge de estado -->
+                    <span class="estado-badge"
+                          th:classappend="${pedido.estado == 'Recibido'} ? 'estado-recibido' : (${pedido.estado == 'Cocinando'} ? 'estado-cocinando' : (${pedido.estado == 'Enviado'} ? 'estado-enviado' : 'estado-entregado'))">
+                        <i class="bi" 
+                           th:classappend="${pedido.estado == 'Recibido'} ? 'bi-inbox' : (${pedido.estado == 'Cocinando'} ? 'bi-fire' : (${pedido.estado == 'Enviado'} ? 'bi-truck' : 'bi-check-circle'))"></i>
+                        <span th:text="${pedido.estado}">Estado</span>
+                    </span>
+                    <a th:href="@{/pedidos/{id}(id=${pedido.id_Pedido})}" class="btn-ver-detalle">Ver detalle</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Mensaje vacío -->
+        <div class="pedidos-vacio" th:if="${#lists.isEmpty(pedidos)}">
+            <i class="bi bi-bag-x"></i>
+            <p>No se encontraron pedidos registrados.</p>
+        </div>
+
+    </main>
+
+    <!-- ============================================ -->
+    <!-- FOOTER (MISMO DE LOGIN) -->
+    <!-- ============================================ -->
+    <footer id="footer">
+        <div id="footer-main">
+            <section id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's" id="footer-logo">
+            </section>
+
+            <section id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </section>
+
+            <section id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </section>
+        </div>
+
+        <div id="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
