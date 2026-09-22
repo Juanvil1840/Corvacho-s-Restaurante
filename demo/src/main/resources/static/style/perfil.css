@@ -196,6 +196,26 @@
     color: #fff;
 }
 
+/* Botón "Ver detalle" dentro del historial de pedidos en perfil */
+.perfil-btn-pedido {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.35rem 1rem;
+    background: transparent;
+    border: 1px solid #c8962e;
+    color: #c8962e;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.perfil-btn-pedido:hover {
+    background: #c8962e;
+    color: #0a0a0a;
+}
+
 /* ============================================
    SECCION 2 y 3: PEDIDOS Y RESERVAS
    ============================================ */

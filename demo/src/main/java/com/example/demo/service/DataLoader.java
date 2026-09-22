@@ -315,11 +315,11 @@ public class DataLoader implements CommandLineRunner {
 
                 /* Adicionales */
 
-                Adicional adicional1 = adicionalRepository.save(new Adicional("Queso Extra", 5.500, true));
-                Adicional adicional2 = adicionalRepository.save(new Adicional("Aros de cebolla", 10.500, true));
-                Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta", 8.500, true));
-                Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz", 3.500, true));
-                Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa", 4.500, true));
+                Adicional adicional1 = adicionalRepository.save(new Adicional("Queso Extra", 5500, true));
+                Adicional adicional2 = adicionalRepository.save(new Adicional("Aros de cebolla", 10500, true));
+                Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta", 8500, true));
+                Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz", 3500, true));
+                Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa", 4500, true));
 
                 /* Operadores */
 

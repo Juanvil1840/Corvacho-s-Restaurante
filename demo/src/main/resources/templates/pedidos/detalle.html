@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Pedido #' + ${pedido.id_Pedido} + ' - Corvacho\'s Restaurante'">Detalle Pedido</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos del proyecto -->
+    <link rel="stylesheet" th:href="@{/style/styles.css}">
+    <link rel="stylesheet" th:href="@{/style/landing.css}">
+    <link rel="stylesheet" th:href="@{/style/pedidos.css}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body class="pedidos-body">
+
+    <!-- ============================================ -->
+    <!-- NAVBAR -->
+    <!-- ============================================ -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><img th:src="@{/Images/logo-simple.png}" height="60px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/pedidos">PEDIDOS</a></li>
+                    <li class="nav-item" th:if="${pedido.cliente != null}"><a class="nav-link" th:href="@{/perfil/ver/{id}(id=${pedido.cliente.clienteId})}">PERFIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ============================================ -->
+    <main class="pedidos-container">
+
+        <!-- Botón volver -->
+        <a href="javascript:history.back()" class="btn-volver">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+
+        <!-- ============================================ -->
+        <!-- HEADER DEL PEDIDO -->
+        <!-- ============================================ -->
+        <div class="detalle-header">
+            <div class="detalle-header-left">
+                <h2 th:text="'Pedido #' + ${pedido.id_Pedido}">Pedido #1</h2>
+                <div class="detalle-fechas">
+                    <div class="detalle-fecha-item">
+                        <i class="bi bi-calendar-plus"></i> Creado: 
+                        <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+                    </div>
+                    <div class="detalle-fecha-item">
+                        <i class="bi bi-calendar-check"></i> Entrega: 
+                        <span th:if="${pedido.fechaEntrega != null}" th:text="${#temporals.format(pedido.fechaEntrega, 'dd/MM/yyyy HH:mm')}">01/01/2026</span>
+                        <span th:if="${pedido.fechaEntrega == null}" style="color: #6f8896; font-style: italic;">Pendiente</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badge de estado grande -->
+            <span class="estado-badge"
+                  th:classappend="${pedido.estado == 'Recibido'} ? 'estado-recibido' : (${pedido.estado == 'Cocinando'} ? 'estado-cocinando' : (${pedido.estado == 'Enviado'} ? 'estado-enviado' : 'estado-entregado'))"
+                  style="font-size: 0.85rem; padding: 0.4rem 1.2rem;">
+                <i class="bi" 
+                   th:classappend="${pedido.estado == 'Recibido'} ? 'bi-inbox' : (${pedido.estado == 'Cocinando'} ? 'bi-fire' : (${pedido.estado == 'Enviado'} ? 'bi-truck' : 'bi-check-circle'))"></i>
+                <span th:text="${pedido.estado}">Estado</span>
+            </span>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TIMELINE DE ESTADO -->
+        <!-- ============================================ -->
+        <!--/* Variables para determinar estado del timeline */-->
+        <th:block th:with="esRecibido=${pedido.estado == 'Recibido'}, 
+                           esCocinando=${pedido.estado == 'Cocinando'}, 
+                           esEnviado=${pedido.estado == 'Enviado'}, 
+                           esEntregado=${pedido.estado == 'Entregado'}">
+            <div class="detalle-timeline">
+                <!-- Paso 1: Recibido -->
+                <div class="timeline-step" 
+                     th:classappend="${esRecibido} ? 'activo' : (${esCocinando || esEnviado || esEntregado} ? 'completado' : '')">
+                    <div class="timeline-dot">
+                        <i class="bi bi-inbox"></i>
+                    </div>
+                    <span class="timeline-label">Recibido</span>
+                </div>
+                <div class="timeline-line" th:classappend="${esCocinando || esEnviado || esEntregado} ? 'completada' : ''"></div>
+
+                <!-- Paso 2: Cocinando -->
+                <div class="timeline-step" 
+                     th:classappend="${esCocinando} ? 'activo' : (${esEnviado || esEntregado} ? 'completado' : '')">
+                    <div class="timeline-dot">
+                        <i class="bi bi-fire"></i>
+                    </div>
+                    <span class="timeline-label">Cocinando</span>
+                </div>
+                <div class="timeline-line" th:classappend="${esEnviado || esEntregado} ? 'completada' : ''"></div>
+
+                <!-- Paso 3: Enviado -->
+                <div class="timeline-step" 
+                     th:classappend="${esEnviado} ? 'activo' : (${esEntregado} ? 'completado' : '')">
+                    <div class="timeline-dot">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <span class="timeline-label">Enviado</span>
+                </div>
+                <div class="timeline-line" th:classappend="${esEntregado} ? 'completada' : ''"></div>
+
+                <!-- Paso 4: Entregado -->
+                <div class="timeline-step" 
+                     th:classappend="${esEntregado} ? 'activo' : ''">
+                    <div class="timeline-dot">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <span class="timeline-label">Entregado</span>
+                </div>
+            </div>
+        </th:block>
+
+        <!-- ============================================ -->
+        <!-- INFO DEL CLIENTE Y DOMICILIARIO -->
+        <!-- ============================================ -->
+        <div class="detalle-info-row">
+
+            <!-- Info del cliente -->
+            <div class="detalle-info-card">
+                <h3><i class="bi bi-person"></i> Información del Cliente</h3>
+                <div class="detalle-info-item">
+                    <i class="bi bi-person-fill"></i>
+                    <span th:text="${pedido.cliente.nombre} + ' ' + ${pedido.cliente.apellido}">Nombre</span>
+                </div>
+                <div class="detalle-info-item">
+                    <i class="bi bi-envelope"></i>
+                    <span th:text="${pedido.cliente.correo}">correo@email.com</span>
+                </div>
+                <div class="detalle-info-item">
+                    <i class="bi bi-telephone"></i>
+                    <span th:text="${pedido.cliente.telefono}">3001234567</span>
+                </div>
+                <div class="detalle-info-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <span th:text="${pedido.cliente.direccion}">Dirección</span>
+                </div>
+            </div>
+
+            <!-- Info del domiciliario -->
+            <div class="detalle-info-card">
+                <h3><i class="bi bi-bicycle"></i> Domiciliario Asignado</h3>
+                <div th:if="${pedido.domiciliario != null}">
+                    <div class="detalle-info-item">
+                        <i class="bi bi-person-fill"></i>
+                        <span th:text="${pedido.domiciliario.nombre}">Nombre</span>
+                    </div>
+                    <div class="detalle-info-item">
+                        <i class="bi bi-phone"></i>
+                        <span th:text="${pedido.domiciliario.celular}">3001234567</span>
+                    </div>
+                    <div class="detalle-info-item">
+                        <i class="bi bi-card-text"></i>
+                        Cédula: <span th:text="${pedido.domiciliario.cedula}">0000000000</span>
+                    </div>
+                </div>
+                <div th:if="${pedido.domiciliario == null}" style="color: #6f8896; text-align: center; padding: 1rem 0;">
+                    <i class="bi bi-clock" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                    <p>Aún no se ha asignado un domiciliario</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TABLA DE PRODUCTOS -->
+        <!-- ============================================ -->
+        <div class="detalle-productos">
+            <h3><i class="bi bi-basket"></i> Productos del Pedido</h3>
+
+            <table class="tabla-productos" th:if="${pedido.detallePedidos != null && !pedido.detallePedidos.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Descripción</th>
+                        <th>Adicional</th>
+                        <th>Precio Unit.</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detalle : ${pedido.detallePedidos}">
+                        <td class="producto-img-cell" data-label="Imagen">
+                            <img th:src="${detalle.producto.imagen}" th:alt="${detalle.producto.nombre}">
+                        </td>
+                        <td class="producto-nombre-cell" data-label="Producto" th:text="${detalle.producto.nombre}">
+                            Producto
+                        </td>
+                        <td class="producto-desc-cell" data-label="Descripción" th:text="${detalle.producto.descripcion}">
+                            Descripción del producto
+                        </td>
+                        <td class="adicional-cell" data-label="Adicional">
+                            <div th:if="${detalle.adicional != null}">
+                                <span class="adicional-nombre" th:text="${detalle.adicional.nombre}">Adicional</span><br>
+                                <span th:if="${detalle.adicional.precio > 0}" class="adicional-precio" 
+                                      th:text="'+ $' + ${#numbers.formatDecimal(detalle.adicional.precio, 1, 'POINT', 0, 'COMMA')}">+$0</span>
+                                <span th:if="${detalle.adicional.precio == 0}" class="adicional-gratis">Gratis</span>
+                            </div>
+                            <span th:if="${detalle.adicional == null}" style="color: #6f8896;">—</span>
+                        </td>
+                        <td class="precio-cell" data-label="Precio Unit." 
+                            th:text="'$' + ${#numbers.formatDecimal(detalle.producto.precio, 1, 'POINT', 0, 'COMMA')}">
+                            $0
+                        </td>
+                        <td class="cantidad-cell" data-label="Cantidad" th:text="${detalle.cantidad}">
+                            1
+                        </td>
+                        <td class="subtotal-cell" data-label="Subtotal"
+                            th:text="'$' + ${#numbers.formatDecimal((detalle.producto.precio + (detalle.adicional != null ? detalle.adicional.precio : 0)) * detalle.cantidad, 1, 'POINT', 0, 'COMMA')}">
+                            $0
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Sin productos -->
+            <div th:if="${pedido.detallePedidos == null || pedido.detallePedidos.isEmpty()}" style="text-align: center; padding: 1.5rem; color: #6f8896;">
+                <i class="bi bi-bag-x" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                <p>Este pedido no tiene productos registrados.</p>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- TOTAL DEL PEDIDO -->
+        <!-- ============================================ -->
+        <div class="detalle-total" th:if="${pedido.detallePedidos != null && !pedido.detallePedidos.isEmpty()}">
+            <span class="detalle-total-label">Total del Pedido:</span>
+            <span class="detalle-total-valor"
+                  th:with="total=${0}"
+                  th:text="'$' + ${#numbers.formatDecimal(
+                      #aggregates.sum(pedido.detallePedidos.![
+                          (producto.precio + (adicional != null ? adicional.precio : 0)) * cantidad
+                      ]), 1, 'POINT', 0, 'COMMA')}">
+                $0
+            </span>
+        </div>
+
+    </main>
+
+    <!-- ============================================ -->
+    <!-- FOOTER (MISMO DE LOGIN) -->
+    <!-- ============================================ -->
+    <footer id="footer">
+        <div id="footer-main">
+            <section id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's" id="footer-logo">
+            </section>
+
+            <section id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
+                <p>&#9993; administrativo@corvachos.com</p>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </section>
+
+            <section id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
+                </div>
+            </section>
+        </div>
+
+        <div id="footer-bottom">
+            <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

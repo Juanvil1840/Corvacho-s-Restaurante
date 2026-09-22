@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,11 @@ public class PedidoServiceImpl implements PedidoService {
 	public void deleteById(Long id) {
 		pedidoRepository.deleteById(id);
 	}
+
+    @Override
+    public List<Pedido> findByClienteId(Long clienteId) {
+        // Obtiene todos los pedidos que pertenecen al cliente con ese ID
+        return pedidoRepository.findByClienteClienteId(clienteId);
+    }
     
 }

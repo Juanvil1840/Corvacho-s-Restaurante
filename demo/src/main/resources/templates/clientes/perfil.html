@@ -22,7 +22,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
                     <li class="nav-item"><a class="nav-link" href="/menu">MENU</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/perfil/ver/1">PERFIL</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/pedidos}">PEDIDOS</a></li>
                 </ul>
             </div>
         </div>
@@ -99,60 +99,54 @@
                 <h2 class="perfil-titulo-reservas">Historial de Pedidos</h2>
 
                 <!-- Si NO hay pedidos, mostrar mensaje -->
-                <div th:if="${#lists.isEmpty(cliente.pedidos)}" class="perfil-mensaje-vacio">
+                <div th:if="${cliente.pedidos == null or cliente.pedidos.isEmpty()}" class="perfil-mensaje-vacio">
                     <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
                     <p>No tienes pedidos registrados aun.</p>
                 </div>
 
                 <!-- Si hay pedidos, mostrarlos -->
-                <div th:if="${not #lists.isEmpty(cliente.pedidos)}">
+                <div th:if="${cliente.pedidos != null and !cliente.pedidos.isEmpty()}">
                     <div th:each="pedido : ${cliente.pedidos}" class="perfil-pedido-item">
                         <p><strong>Pedido #</strong> <span th:text="${pedido.id_Pedido}">1</span></p>
                         <p><strong>Estado:</strong> <span th:text="${pedido.estado}">En preparacion</span></p>
                         <p><strong>Fecha:</strong> <span th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">20/08/2026 19:30</span></p>
+                        <!-- Enlace directo al detalle del pedido desde el perfil -->
+                        <a th:href="@{/pedidos/{id}(id=${pedido.id_Pedido})}" class="perfil-btn-pedido">Ver detalle</a>
+                    </div>
+                    <!-- Botón para ver todos los pedidos -->
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <a th:href="@{/pedidos/cliente/{id}(id=${cliente.clienteId})}" class="perfil-btn-editar">Ver todos mis pedidos</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECCION 3: Historial de Reservas -->
-    <section class="perfil-seccion-reservas">
-        <div class="perfil-fondo-reservas"
-             th:style="'background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
+    <footer id="footer">
+        <div id="footer-main">
+            <section id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
+            </section>
 
-            <div class="perfil-contenido-reservas">
-                <h2 class="perfil-titulo-reservas">Historial de Reservas</h2>
-                <div class="perfil-mensaje-vacio">
-                    <i class="bi bi-calendar2-plus" style="font-size: 3rem; color: #6f8896;"></i>
-                    <p>No tienes reservas registradas aun.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer-perfil">
-        <div class="footer-main">
-            <div class="footer-col">
-                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
-            </div>
-            <div class="footer-col">
-                <h4>CONTACTANOS</h4>
-                <p>&#128205; Calle 40 #7-60 Bogota</p>
+            <section id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
                 <p>&#9993; administrativo@corvachos.com</p>
-                <p>&#128222; +300 913 4441</p>
-            </div>
-            <div class="footer-col">
-                <h4>SIGUENOS</h4>
-                <div class="footer-iconos">
-                    <span><i class="bi bi-instagram"></i></span>
-                    <span><i class="bi bi-facebook"></i></span>
-                    <span><i class="bi bi-whatsapp"></i></span>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </section>
+
+            <section id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
-            </div>
+            </section>
         </div>
-        <div class="footer-bottom">
+
+        <div id="footer-bottom">
             <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
         </div>
     </footer>
