@@ -13,71 +13,51 @@ import com.example.demo.entities.Producto;
 import com.example.demo.service.CategoriaService;
 import com.example.demo.service.ProductoService;
 
-@Controller // Controlador
-@RequestMapping("/productos") // Cuando se baya a hacer una peticion de este controlador las url deben tener
-                              // un /producto
+@Controller
+@RequestMapping("/productos")
 public class ProductoController {
 
-    @Autowired // Inyeccion de dependencias
-    private ProductoService productoService; // Utiilizaremos esta variable para llamar a los metodos del servicio
+    @Autowired
+    private ProductoService productoService;
 
     @Autowired
-    private CategoriaService categoriaService; // Utilizamos la variable para llamar a todos los metodos de
-                                               // CategoriaService
+    private CategoriaService categoriaService;
 
-    // Mostrar la ista con los productos
-    // Mostrar la ista con los productos
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("productos", productoService.obtenerTodos()); // Llama al servicio de productoService, a la
-                                                                         // funcion obtener todos
-        return "productos/lista"; // Retornamos productos/lista para que se vean (lista.html)
+        model.addAttribute("productos", productoService.obtenerTodos());
+        return "productos/lista";
     }
 
-    // Nuevo producto: Cuando se quiera agregar un nuevo plato
     @GetMapping("/nuevo")
-    public String mostrarFormularioNuevo(Model model) { // mostramos el formulario para el nuevo producto
-        model.addAttribute("producto", new Producto()); // Crea un producto vacio y lo agrega al moedlo
-        model.addAttribute("categorias", categoriaService.findAll()); // Cuando creemos un nuevo plato lo tenemos que
-                                                                      // clasificar en una nueva categoria, llamamos a
-                                                                      // categoriaService para que nos muestre todas
-        return "productos/formulario"; // Retornamos el formulario.hmtl
-    }
-
-    // Formulario para editar un producto ya existente
-    // Formulario para editar un producto ya existente
-    @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) { // Extrae el valor del id de la URL y
-                                                                                   // lo convierte en un integer
-        Producto producto = productoService.obtenerPorId(id); // LLamammos a productosSevice para que obtenga el
-                                                              // producto por su id
-        if (producto == null) { // Si el producto es null se velve a redirigir
-            return "redirect:/productos";
-        }
-        model.addAttribute("producto", producto); // Si el producto existe lo agrega al modelo para que el formulario
-                                                  // muestre sus datos actuales
-        model.addAttribute("categorias", categoriaService.findAll()); // Mostramos la categoria en la que esta
+    public String mostrarFormularioNuevo(Model model) {
+        model.addAttribute("producto", new Producto());
+        model.addAttribute("categorias", categoriaService.findAll());
         return "productos/formulario";
     }
 
-    // Guardar: Puede que sea guardar un nuevo propducto o guardar los cambios
-    // (actualizar) de uno que ya existe
-    @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Producto producto) { // Convierte los datos en un objeto producto
-        if (producto.getId() != null && productoService.existe(producto.getId())) {
-            productoService.actualizar(producto); // conserva las relaciones existentes si el formulario no las envía
-        } else {
-            productoService.guardar(producto); // guarda un producto nuevo
-        }
-        return "redirect:/productos"; // Redirigimos a productos.html
+    // ✅ Sin validación manual
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+        Producto producto = productoService.obtenerPorId(id);
+        model.addAttribute("producto", producto);
+        model.addAttribute("categorias", categoriaService.findAll());
+        return "productos/formulario";
     }
 
-    // Eliminar un producto
-    // Eliminar un producto
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute Producto producto) {
+        if (producto.getId() != null && productoService.existe(producto.getId())) {
+            productoService.actualizar(producto);
+        } else {
+            productoService.guardar(producto);
+        }
+        return "redirect:/productos";
+    }
+
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) { // Obtenemos el id
-        productoService.eliminar(id); // Con ayuda del productoSerice, usamos la funcion eliminar y le pasamos por
-                                      // parametro el id
-        return "redirect:/productos"; // Despues lo redirigimos a productos.html
+    public String eliminar(@PathVariable Long id) {
+        productoService.eliminar(id);
+        return "redirect:/productos";
     }
 }

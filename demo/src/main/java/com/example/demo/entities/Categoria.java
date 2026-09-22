@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class Categoria{
     @Column( length = 80, nullable = false)
     private String nombre;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Producto> productos;
 

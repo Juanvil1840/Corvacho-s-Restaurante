@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/menu">MENÚ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/menu">MENU</a></li>
                 </ul>
             </div>
         </div>
@@ -29,7 +29,7 @@
 
     <!-- Contenido principal -->
     <div class="producto-form-contenedor">
-        <h1 class="producto-form-titulo" th:text="${producto.id} ? ' Editar Producto' : ' Nuevo Producto'"></h1>
+        <h1 class="producto-form-titulo" th:text="${producto.id} ? 'Editar Producto' : 'Nuevo Producto'"></h1>
 
         <div class="producto-form-tarjeta">
             <form th:action="@{/productos/guardar}" th:object="${producto}" method="post">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="producto-form-grupo">
-                    <label>Descripción</label>
+                    <label>Descripcion</label>
                     <textarea th:field="*{descripcion}" rows="3"></textarea>
                 </div>
 
@@ -55,19 +55,14 @@
                     <input type="url" th:field="*{imagen}">
                 </div>
 
+                <!-- ✅ CAMBIO: idCategoria → categoria -->
                 <div class="producto-form-grupo">
-                    <label>Ingredientes</label>
-                    <input type="text" th:field="*{ingredientes}" placeholder="Tomate, Queso, Albahaca">
-                    <small>Separa los ingredientes con comas</small>
-                </div>
-
-                <div class="producto-form-grupo">
-                    <label>Categoría</label>
-                    <select th:field="*{idCategoria}" required>
-                        <option value="">-- Seleccionar categoría --</option>
-                        <option th:each="cat : ${categorias}" 
-                                th:value="${cat.id}" 
-                                th:text="${cat.nombre}">Categoría</option>
+                    <label>Categoria</label>
+                    <select th:field="*{categoria}" required>
+                        <option value="">-- Seleccionar categoria --</option>
+                        <option th:each="cat : ${categorias}"
+                                th:value="${cat.id}"
+                                th:text="${cat.nombre}">Categoria</option>
                     </select>
                 </div>
 
@@ -93,13 +88,13 @@
                 <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
             </div>
             <div class="footer-col">
-                <h4>CONTÁCTANOS</h4>
-                <p>&#128205; Calle 40 #7-60 Bogotá</p>
+                <h4>CONTACTANOS</h4>
+                <p>&#128205; Calle 40 #7-60 Bogota</p>
                 <p>&#9993; administrativo@corvachos.com</p>
                 <p>&#128222; +300 913 4441</p>
             </div>
             <div class="footer-col">
-                <h4>SÍGUENOS</h4>
+                <h4>SIGUENOS</h4>
                 <div class="footer-iconos">
                     <span><i class="bi bi-instagram"></i></span>
                     <span><i class="bi bi-facebook"></i></span>
