@@ -32,6 +32,33 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public Producto actualizar(Producto producto) {
+        if (producto == null || producto.getId() == null) {
+            return productoRepository.save(producto);
+        }
+
+        Producto existente = productoRepository.findById(producto.getId()).orElse(null);
+        if (existente == null) {
+            return productoRepository.save(producto);
+        }
+
+        if (producto.getCategoria() == null) {
+            producto.setCategoria(existente.getCategoria());
+        }
+        if (producto.getProductoCarritos() == null) {
+            producto.setProductoCarritos(existente.getProductoCarritos());
+        }
+        if (producto.getProductoAdicionales() == null) {
+            producto.setProductoAdicionales(existente.getProductoAdicionales());
+        }
+        if (producto.getDetallePedidos() == null) {
+            producto.setDetallePedidos(existente.getDetallePedidos());
+        }
+
+        return productoRepository.save(producto);
+    }
+
+    @Override
     public void eliminar(Long id) {
         productoRepository.deleteById(id);
     }

@@ -50,13 +50,26 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente actualizar(Cliente cliente) {
+        Cliente existente = clienteRepository.findById(cliente.getClienteId()).orElse(null);
+
         // Si la contraseña del cliente esta vacia o es null buscamos su antigua contraseña y la conservamos
         if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) {
-            Cliente existente = clienteRepository.findById(cliente.getClienteId()).orElse(null); // Buscamos al cliente actual en el repositorio
             if (existente != null) {
                 cliente.setContraseña(existente.getContraseña()); // Le asignamos la contraseña que ya tenia guardada
             }
         }
+
+        // Mantener las relaciones existentes si no vienen en la solicitud
+        if (existente != null) {
+            if (cliente.getCarrito() == null) {
+                cliente.setCarrito(existente.getCarrito());
+            }
+            if (cliente.getPedidos() == null) {
+                cliente.setPedidos(existente.getPedidos());
+            }
+            cliente.setActivo(existente.isActivo());
+        }
+
         return clienteRepository.save(cliente); // Guardamos el cliente actualizado con los cambios que haya realizado
     }
 
