@@ -64,11 +64,8 @@ public class ProductoController {
     // (actualizar) de uno que ya existe
     @PostMapping("/guardar")
     public String guardar(@ModelAttribute Producto producto) { // Convierte los datos en un objeto producto
-        if (producto.getId() != null && productoService.existe(producto.getId())) {
-            productoService.actualizar(producto); // conserva las relaciones existentes si el formulario no las envía
-        } else {
-            productoService.guardar(producto); // guarda un producto nuevo
-        }
+        productoService.guardar(producto); // Luego con ayuda de productoService guardamos ese objeto con la nueva
+                                           // informacion del formulario
         return "redirect:/productos"; // Redirigimos a productos.html
     }
 

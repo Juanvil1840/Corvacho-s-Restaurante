@@ -1,17 +1,13 @@
 .menu-grid {
     margin-top: 100px;
     padding-top: 50px;
-    max-width: 900px;
+    max-width: 900px;      /* controla el ancho del recuadro que rodea todo */
     margin-left: auto;
-    margin-right: auto;
+    margin-right: auto;    /*centra el bloque completo en la página */
     padding: 30px;
     border: 20px solid #d4af6a; 
     background-color: white;
     border-radius: 8px;
-}
-
-main {
-    margin-bottom: 80px; 
 }
 
 .tarjetas {
@@ -24,7 +20,6 @@ main {
     width: 100% !important; 
     align-items: center;
 }
-
 .card-body {
     text-align: center;
     display: flex;
@@ -32,50 +27,25 @@ main {
     align-items: center;
 }
 
+
 .card img {
     width: 100%;
     height: 250px;
-    object-fit: cover;
+    object-fit: cover; /* evita que las imágenes se vean deformadas */
 }
-
-.menu-text1 {
-    color: #003741;
+.menu-text1{
+    color:#003741;
     text-align: center;
 }
 
-.btn {
+.btn{
     background-color: #cd9e46;
-    border: none;
+    border:none;
 }
-
-.btn:hover {
+.btn:hover{
     background-color: #d4af6a;
 }
 
-.card-title {
-    color: #003741;
-}
-
-.categoria-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0 30px 0; 
-}
-
-.linea-divisoria {
-    flex-grow: 1; 
-    height: 2px;
-    background-color: #003741; 
-    border: none;
-    margin: 0 20px; 
-}
-
-.categoria-header .menu-text1 {
-    margin: 0;
-    white-space: nowrap; 
-}
-
-.categoria-seccion {
-    margin-bottom: 50px; 
+.card-tittle{
+    color:#003741;
 }

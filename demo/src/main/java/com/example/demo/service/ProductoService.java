@@ -11,7 +11,6 @@ public interface ProductoService {
 
     // === NUEVOS MÉTODOS PARA CRUD ===
     Producto guardar(Producto producto);
-    Producto actualizar(Producto producto);
     void eliminar(Long id);
     boolean existe(Long id);
 }

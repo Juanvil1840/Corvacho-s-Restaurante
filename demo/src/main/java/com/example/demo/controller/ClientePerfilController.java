@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.entities.Cliente;
-import com.example.demo.entities.Pedido;
 import com.example.demo.service.ClienteService;
-import com.example.demo.service.PedidoService;
 
 @Controller
 @RequestMapping("/perfil") // Todas las url del controlador empiezan con perfil
@@ -22,9 +18,6 @@ public class ClientePerfilController {
 
     @Autowired // Inyeccion de dependencias de Spring
     private ClienteService clienteService; // Utilizamos esta variable para llamar a los metodos del ClienteService
-
-    @Autowired
-    private PedidoService pedidoService; // Para cargar los pedidos del cliente en su perfil
 
     // Registro del usuario: Cuando el usuario entre a /registro se ejecuta este
     // metodo
@@ -55,9 +48,6 @@ public class ClientePerfilController {
         }
         model.addAttribute("cliente", cliente); // Guardamos el cliente en el modelo para que la vista pueda mostrar los
                                                 // datos del cliente
-        // Cargamos los pedidos del cliente para mostrar su historial
-        List<Pedido> pedidos = pedidoService.findByClienteId(id);
-        model.addAttribute("pedidos", pedidos);
         return "clientes/perfil"; // Mostramos el perfil
     }
 
