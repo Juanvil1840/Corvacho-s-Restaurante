@@ -30,66 +30,66 @@
     </nav>
 
     <!-- SECCION 1: Informacion Personal + Avatar + Botones -->
-    <section class="perfil-seccion-info">
-        <div class="perfil-fondo-info"
-             th:style="'background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
+<section class="perfil-seccion-info">
+    <div class="perfil-fondo-info"
+         th:style="'background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url(' + @{/Images/Edificio.jpeg} + ');'">
+        
+        <div class="perfil-contenedor-info">
 
-            <div class="perfil-contenedor-info">
-
-                <!-- Columna izquierda: Avatar -->
-                <div class="perfil-avatar-col">
-                    <div class="perfil-avatar-cuadrado">
-                        <img th:src="@{/Images/perfil.PNG}" alt="Foto de perfil" class="perfil-avatar-img">
-                    </div>
+            <!-- Columna izquierda: Avatar -->
+            <div class="perfil-avatar-col">
+                <div class="perfil-avatar-cuadrado">
+                    <img th:src="@{/Images/perfil.PNG}" alt="Foto de perfil" class="perfil-avatar-img">
                 </div>
-
-                <!-- Columna central: Informacion Personal -->
-                <div class="perfil-datos-col">
-                    <p class="perfil-bienvenida">Bienvenido a tu casa</p>
-
-                    <div class="perfil-titulo-row">
-                        <h2 class="perfil-titulo-info">Informacion Personal</h2>
-                    </div>
-
-                    <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Mendez</p>
-
-                    <div class="perfil-dato-item">
-                        <span class="perfil-dato-label">Correo electronico</span>
-                        <p class="perfil-dato"><i class="bi bi-envelope"></i> <span th:text="${cliente.correo}">camilo@gmail.com</span></p>
-                    </div>
-                    <div class="perfil-dato-item">
-                        <span class="perfil-dato-label">Telefono</span>
-                        <p class="perfil-dato"><i class="bi bi-telephone"></i> <span th:text="${cliente.telefono}">3011234567</span></p>
-                    </div>
-                    <div class="perfil-dato-item">
-                        <span class="perfil-dato-label">Direccion</span>
-                        <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogota</span></p>
-                    </div>
-                    <div class="perfil-dato-item">
-                        <span class="perfil-dato-label">Estado de cuenta</span>
-                        <p class="perfil-dato">
-                            <i class="bi bi-check-circle"></i>
-                            <span th:if="${cliente.activo}" style="color: #4caf50;">Activo</span>
-                            <span th:unless="${cliente.activo}" style="color: #e57373;">Inactivo</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Columna derecha: Botones verticales -->
-                <div class="perfil-botones-col">
-                    <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
-                       class="perfil-btn-editar">Editar Perfil</a>
-                    <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
-                       class="perfil-btn-cerrar perfil-btn-eliminar"
-                       onclick="return confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')">
-                        Eliminar Cuenta
-                    </a>
-                    <a href="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
-                </div>
-
             </div>
+
+            <!-- Columna central: Informacion Personal -->
+            <div class="perfil-datos-col">
+                <p class="perfil-bienvenida">Bienvenido a tu casa</p>
+
+                <div class="perfil-titulo-row">
+                    <h2 class="perfil-titulo-info">Informacion Personal</h2>
+                </div>
+
+                <p class="perfil-nombre" th:text="${cliente.nombre} + ' ' + ${cliente.apellido}">Camilo Mendez</p>
+
+                <div class="perfil-dato-item">
+                    <span class="perfil-dato-label">Correo electronico</span>
+                    <p class="perfil-dato"><i class="bi bi-envelope"></i> <span th:text="${cliente.correo}">camilo@gmail.com</span></p>
+                </div>
+                <div class="perfil-dato-item">
+                    <span class="perfil-dato-label">Telefono</span>
+                    <p class="perfil-dato"><i class="bi bi-telephone"></i> <span th:text="${cliente.telefono}">3011234567</span></p>
+                </div>
+                <div class="perfil-dato-item">
+                    <span class="perfil-dato-label">Direccion</span>
+                    <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span th:text="${cliente.direccion}">Calle 40 #7-60 Bogota</span></p>
+                </div>
+                <div class="perfil-dato-item">
+                    <span class="perfil-dato-label">Estado de cuenta</span>
+                    <p class="perfil-dato">
+                        <i class="bi bi-check-circle"></i>
+                        <span th:if="${cliente.activo}" style="color: #4caf50;">Activo</span>
+                        <span th:unless="${cliente.activo}" style="color: #e57373;">Inactivo</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Botones verticales -->
+            <div class="perfil-botones-col">
+                <a th:href="@{/perfil/editar/{id}(id=${cliente.clienteId})}"
+                   class="perfil-btn-editar">Editar Perfil</a>
+                <a th:href="@{/perfil/eliminar/{id}(id=${cliente.clienteId})}"
+                   class="perfil-btn-cerrar perfil-btn-eliminar"
+                   onclick="return confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')">
+                    Eliminar Cuenta
+                </a>
+                <a href="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- SECCION 2: Historial de Pedidos -->
     <section class="perfil-seccion-reservas">
