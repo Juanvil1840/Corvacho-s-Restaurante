@@ -1,13 +1,14 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Pedido;
+import com.example.demo.errors.PedidoNotFoundException;
 import com.example.demo.repository.PedidoRepository;
-import com.example.demo.service.PedidoService;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
@@ -22,7 +23,8 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Pedido findById(Long id) {
-        return pedidoRepository.findById(id).orElse(null);
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNotFoundException(id));
     }
 
     @Override
@@ -33,5 +35,10 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void deleteById(Long id) {
         pedidoRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Pedido> findByClienteId(Long clienteId) {
+        return pedidoRepository.findByClienteClienteId(clienteId);
     }
 }

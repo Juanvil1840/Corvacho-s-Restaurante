@@ -47,22 +47,22 @@
 
                 <div class="producto-form-grupo">
                     <label>Descripcion</label>
-                    <textarea th:field="*{descripcion}" rows="3"></textarea>
+                    <textarea th:field="*{descripcion}" rows="3" required></textarea>
                 </div>
 
                 <div class="producto-form-grupo">
-                    <label>URL de Imagen</label>
-                    <input type="url" th:field="*{imagen}">
+                    <label>URL o Ruta de Imagen</label>
+                    <input type="text" th:field="*{imagen}" placeholder="https://... o /Images/comida.png" required>
                 </div>
 
-                <!-- ✅ CAMBIO: idCategoria → categoria -->
                 <div class="producto-form-grupo">
                     <label>Categoria</label>
-                    <select th:field="*{categoria}" required>
+                    <select name="categoriaId" id="categoriaId" required>
                         <option value="">-- Seleccionar categoria --</option>
                         <option th:each="cat : ${categorias}"
                                 th:value="${cat.id}"
-                                th:text="${cat.nombre}">Categoria</option>
+                                th:text="${cat.nombre}"
+                                th:selected="${producto.categoria != null and producto.categoria.id == cat.id}">Categoria</option>
                     </select>
                 </div>
 
@@ -82,27 +82,30 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-producto-form">
-        <div class="footer-main">
-            <div class="footer-col">
-                <img th:src="@{/Images/logo-completo.png}" alt="Logo Corvacho's">
-            </div>
-            <div class="footer-col">
-                <h4>CONTACTANOS</h4>
-                <p>&#128205; Calle 40 #7-60 Bogota</p>
+    <footer id="footer">
+        <div id="footer-main">
+            <section id="footer-logo-col">
+                <img th:src="@{/Images/logo-completo.png}" src="/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
+            </section>
+
+            <section id="footer-contacto-col">
+                <h4 id="footer-contacto-titulo">CONTÁCTANOS</h4>
+                <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogotá Colombia</p>
                 <p>&#9993; administrativo@corvachos.com</p>
-                <p>&#128222; +300 913 4441</p>
-            </div>
-            <div class="footer-col">
-                <h4>SIGUENOS</h4>
-                <div class="footer-iconos">
-                    <span><i class="bi bi-instagram"></i></span>
-                    <span><i class="bi bi-facebook"></i></span>
-                    <span><i class="bi bi-whatsapp"></i></span>
+                <p>&#128222; CEL: +300 913 4441</p>
+            </section>
+
+            <section id="footer-redes-col">
+                <h4 id="footer-redes-titulo">SÍGUENOS</h4>
+                <hr id="footer-redes-divider">
+                <div id="footer-redes-iconos">
+                    <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+                    <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+                    <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
-            </div>
+            </section>
         </div>
-        <div class="footer-bottom">
+        <div id="footer-bottom">
             <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
         </div>
     </footer>

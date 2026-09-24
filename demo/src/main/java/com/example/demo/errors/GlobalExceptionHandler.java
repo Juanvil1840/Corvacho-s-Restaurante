@@ -1,7 +1,5 @@
 package com.example.demo.errors;
 
-import com.example.demo.errors.ClienteNotFoundException;
-import com.example.demo.errors.ProductoNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,9 +17,16 @@ public class GlobalExceptionHandler {
     // Maneja cuando un producto no se encuentra
     @ExceptionHandler(ProductoNotFoundException.class)
     public String handleProductoNotFound(ProductoNotFoundException ex, Model model) {
-    model.addAttribute("mensaje", ex.getMessage());
-    return "errors/error";
-}
+        model.addAttribute("mensaje", ex.getMessage());
+        return "errors/error";
+    }
+
+    // Maneja cuando un pedido no se encuentra
+    @ExceptionHandler(PedidoNotFoundException.class)
+    public String handlePedidoNotFound(PedidoNotFoundException ex, Model model) {
+        model.addAttribute("mensaje", ex.getMessage());
+        return "errors/error";
+    }
 
     // Maneja cualquier otro error inesperado
     @ExceptionHandler(Exception.class)

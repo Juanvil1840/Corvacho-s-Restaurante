@@ -1,29 +1,40 @@
-// Validacion y envio del formulario de contacto
-document.getElementById('formulario-contacto').addEventListener('submit', function(e) {
-    e.preventDefault();
+const formularioContacto = document.getElementById('formulario-contacto');
+const telefono = document.getElementById('telefono');
+const telefonoError = document.getElementById('telefono-error');
+const respuestaFormulario = document.getElementById('respuesta-form');
 
-    var nombre   = document.getElementById('nombre').value.trim();
-    var apellido = document.getElementById('apellido').value.trim();
-    var correo   = document.getElementById('correo').value.trim();
-    var telefono = document.getElementById('telefono').value.trim();
-    var asunto   = document.getElementById('asunto').value.trim();
-    var mensaje  = document.getElementById('mensaje').value.trim();
-    var respuesta = document.getElementById('respuesta-form');
+function mostrarErrorTelefono() {
+	telefonoError.textContent = 'El problema fue el teléfono: solo se permiten números.';
+	telefonoError.style.display = 'block';
+	telefono.setCustomValidity('El teléfono solo puede contener números.');
+}
 
-    // Validar que todos los campos esten llenos
-    if (!nombre || !apellido || !correo || !telefono || !asunto || !mensaje) {
-        respuesta.textContent = 'Por favor, completa todos los campos.';
-        return;
-    }
+function limpiarErrorTelefono() {
+	telefonoError.textContent = '';
+	telefonoError.style.display = 'none';
+	telefono.setCustomValidity('');
+}
 
-    // Validar formato de correo
-    var regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!regexCorreo.test(correo)) {
-        respuesta.textContent = 'Por favor, ingresa un correo electronico valido.';
-        return;
-    }
+telefono.addEventListener('input', () => {
+	const valorNumerico = telefono.value.replace(/[^0-9]/g, '');
 
-    // Si todo esta bien
-    respuesta.textContent = 'Mensaje enviado correctamente';
-    this.reset();
+	if (telefono.value !== valorNumerico) {
+		telefono.value = valorNumerico;
+		mostrarErrorTelefono();
+	} else if (telefono.value) {
+		limpiarErrorTelefono();
+	}
+});
+
+telefono.addEventListener('invalid', () => {
+	mostrarErrorTelefono();
+});
+
+formularioContacto.addEventListener('submit', (evento) => {
+	if (!telefono.value || !/^[0-9]+$/.test(telefono.value)) {
+		evento.preventDefault();
+		mostrarErrorTelefono();
+		respuestaFormulario.textContent = 'No se pudo enviar el formulario. El problema fue el teléfono: solo se permiten números.';
+		telefono.focus();
+	}
 });

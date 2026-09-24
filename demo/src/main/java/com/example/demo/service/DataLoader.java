@@ -154,7 +154,7 @@ public class DataLoader implements CommandLineRunner {
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/927627df-b178-41f8-a7de-edeb7192d7ed.webp",
                                 true, entradas));
 
-                productoRepository.save(new Producto("Ensalada mediterranea", 28000,
+                Producto producto7 =productoRepository.save(new Producto("Ensalada mediterranea", 28000,
                                 "Mezcla fresca de vegetales, aceitunas y queso feta con aderezo de oliva.",
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/a20878dc-3bd0-47a8-a694-fff42b7f8416.webp",
                                 true, ensaladas));
@@ -194,7 +194,7 @@ public class DataLoader implements CommandLineRunner {
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/1a785034-0061-414d-ae92-a3cfcf1e82f0.webp",
                                 true, pescados_y_Mariscos));
 
-                productoRepository.save(new Producto("Milanesa gratinada", 44000,
+                Producto producto8 = productoRepository.save(new Producto("Milanesa gratinada", 44000,
                                 "Milanesa de carne crujiente, cubierta con salsa de tomate y queso mozzarella derretido.",
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/b1213c5b-3392-49f4-9bbb-92ce62f76fa9.webp",
                                 true, carnes));
@@ -204,7 +204,7 @@ public class DataLoader implements CommandLineRunner {
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/58c9310d-98ff-4fa4-82c2-f2d16105d2e0.webp",
                                 true, carnes));
 
-                productoRepository.save(new Producto("Pepperoni", 38000,
+                Producto producto9 = productoRepository.save(new Producto("Pepperoni", 38000,
                                 "Pizza crujiente cubierta de salsa de tomate, mozzarella y rodajas de pepperoni dorado.",
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/7332ac88-b5da-4eea-b349-91b49579d9dd.webp",
                                 true, pizzas));
@@ -239,7 +239,7 @@ public class DataLoader implements CommandLineRunner {
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/2768426a-3626-44bd-86f8-cd68df1d433b.webp",
                                 true, pescados_y_Mariscos));
 
-                productoRepository.save(new Producto("Besos al chef", 45000,
+                Producto producto10 = productoRepository.save(new Producto("Besos al chef", 45000,
                                 "Preparación especial de la casa creada con una combinación de sabores dulces y presentación elegante.",
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/d60f4ece-0e17-428f-8666-cd4d564bd973.webp",
                                 true, postres));
@@ -289,7 +289,7 @@ public class DataLoader implements CommandLineRunner {
                                 "https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/c823653f-d363-4c8f-844e-a26365786a10.webp",
                                 true, postres));
 
-                productoRepository.save(new Producto("Coca Cola", 8000,
+                Producto producto11 = productoRepository.save(new Producto("Coca Cola", 8000,
                                 "Bebida gaseosa fría ideal para acompañar cualquier plato del menú.",
                                 "https://i.pinimg.com/736x/b8/c9/35/b8c93542014b2d12d4f778ef312e2bf3.jpg", true,
                                 bebidas));
@@ -320,6 +320,23 @@ public class DataLoader implements CommandLineRunner {
                 Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta", 8500, true));
                 Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz", 3500, true));
                 Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa", 4500, true));
+                Adicional adicional6 = adicionalRepository.save(new Adicional("Salsa gratinada",4800,true));
+                Adicional adicional7 = adicionalRepository.save(new Adicional("ázucar",1000,true));
+                Adicional adicional8 = adicionalRepository.save(new Adicional("Helado",6000,true));
+                Adicional adicional9 = adicionalRepository.save(new Adicional("Pan de la casa",500,true));
+                Adicional adicional10 = adicionalRepository.save(new Adicional("BBQ",1000,true));
+                Adicional adicional11 = adicionalRepository.save(new Adicional("Queso parmesano",5800,true));
+                Adicional adicional12 = adicionalRepository.save(new Adicional("chiles",7000,true));
+                Adicional adicional13 = adicionalRepository.save(new Adicional("Vinagreta",2000,true));
+
+
+                /* Administradores */
+
+                Administrador administrador1 = administradorRepository.save(new Administrador("Administrador 1"));
+                Administrador administrador2 = administradorRepository.save(new Administrador("Administrador 2"));
+                Administrador administrador3 = administradorRepository.save(new Administrador("Administrador 3"));
+                Administrador administrador4 = administradorRepository.save(new Administrador("Administrador 4"));
+                Administrador administrador5 = administradorRepository.save(new Administrador("Administrador 5"));
 
                 /* Operadores */
 
@@ -367,6 +384,8 @@ public class DataLoader implements CommandLineRunner {
                 Pedido pedido5 = pedidoRepository.save(new Pedido("Recibido", LocalDateTime.now().minusMinutes(50),
                                 LocalDateTime.now(), cliente5, operador5, domiciliario5));
 
+                Pedido pedido6 = pedidoRepository.save(new Pedido("Cocinando",LocalDateTime.now().minusMinutes(50),LocalDateTime.now(), cliente3, operador5, domiciliario5));
+
                 /* DetallePedidos */
 
                 detallePedidoRepository.save(new DetallePedido(2, producto1, pedido1, adicional1));
@@ -374,14 +393,24 @@ public class DataLoader implements CommandLineRunner {
                 detallePedidoRepository.save(new DetallePedido(3, producto3, pedido3, adicional3));
                 detallePedidoRepository.save(new DetallePedido(2, producto4, pedido4, adicional4));
                 detallePedidoRepository.save(new DetallePedido(1, producto5, pedido5, adicional5));
+                detallePedidoRepository.save(new DetallePedido(1, producto5, pedido6, adicional1));
 
                 /* ProductoAdicionales */
 
                 productoAdicionalRepository.save(new ProductoAdicional(producto1, adicional1));
-                productoAdicionalRepository.save(new ProductoAdicional(producto2, adicional2));
-                productoAdicionalRepository.save(new ProductoAdicional(producto3, adicional3));
                 productoAdicionalRepository.save(new ProductoAdicional(producto4, adicional4));
                 productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional5));
+                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional1));
+                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional2));
+                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional3));
+                productoAdicionalRepository.save(new ProductoAdicional(producto7, adicional13));
+                productoAdicionalRepository.save(new ProductoAdicional(producto8, adicional10));
+                productoAdicionalRepository.save(new ProductoAdicional(producto9, adicional11));
+                productoAdicionalRepository.save(new ProductoAdicional(producto9, adicional12));
+                productoAdicionalRepository.save(new ProductoAdicional(producto10, adicional8));
+                productoAdicionalRepository.save(new ProductoAdicional(producto11, adicional7));
+                productoAdicionalRepository.save(new ProductoAdicional(producto1, adicional9));
+                productoAdicionalRepository.save(new ProductoAdicional(producto3, adicional6));
 
                 /* ProductoCarrito */
 
@@ -393,5 +422,4 @@ public class DataLoader implements CommandLineRunner {
                 productoCarritoRepository.save(new ProductoCarrito(4, producto6, carrito1));
 
         }
-
 }

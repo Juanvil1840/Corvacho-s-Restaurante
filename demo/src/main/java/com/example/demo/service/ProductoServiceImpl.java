@@ -4,9 +4,13 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entities.Producto;
 import com.example.demo.errors.ProductoNotFoundException;
+import com.example.demo.repository.DetallePedidoRepository;
+import com.example.demo.repository.ProductoAdicionalRepository;
+import com.example.demo.repository.ProductoCarritoRepository;
 import com.example.demo.repository.ProductoRepository;
 
 @Service
@@ -14,6 +18,15 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
+
+    @Autowired
+    private ProductoCarritoRepository productoCarritoRepository;
+
+    @Autowired
+    private ProductoAdicionalRepository productoAdicionalRepository;
 
     @Override
     public Collection<Producto> obtenerTodos() {
@@ -42,25 +55,35 @@ public class ProductoServiceImpl implements ProductoService {
             return productoRepository.save(producto);
         }
 
-        if (producto.getCategoria() == null) {
-            producto.setCategoria(existente.getCategoria());
-        }
-        if (producto.getProductoCarritos() == null) {
-            producto.setProductoCarritos(existente.getProductoCarritos());
-        }
-        if (producto.getProductoAdicionales() == null) {
-            producto.setProductoAdicionales(existente.getProductoAdicionales());
-        }
-        if (producto.getDetallePedidos() == null) {
-            producto.setDetallePedidos(existente.getDetallePedidos());
+        existente.setNombre(producto.getNombre());
+        existente.setPrecio(producto.getPrecio());
+        existente.setDescripcion(producto.getDescripcion());
+        existente.setImagen(producto.getImagen());
+        existente.setDisponible(producto.isDisponible());
+
+        if (producto.getCategoria() != null) {
+            existente.setCategoria(producto.getCategoria());
         }
 
-        return productoRepository.save(producto);
+        return productoRepository.save(existente);
     }
 
     @Override
+    @Transactional
     public void eliminar(Long id) {
-        productoRepository.deleteById(id);
+        Producto producto = productoRepository.findById(id).orElse(null);
+        if (producto != null) {
+            if (producto.getDetallePedidos() != null && !producto.getDetallePedidos().isEmpty()) {
+                detallePedidoRepository.deleteAll(producto.getDetallePedidos());
+            }
+            if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
+                productoCarritoRepository.deleteAll(producto.getProductoCarritos());
+            }
+            if (producto.getProductoAdicionales() != null && !producto.getProductoAdicionales().isEmpty()) {
+                productoAdicionalRepository.deleteAll(producto.getProductoAdicionales());
+            }
+            productoRepository.delete(producto);
+        }
     }
 
     @Override

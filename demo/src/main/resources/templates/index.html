@@ -11,7 +11,7 @@
  
     <link rel="stylesheet" th:href="@{/style/styles.css}" href="/style/styles.css">
     <link rel="stylesheet" th:href="@{/style/landing.css}" href="/style/landing.css">
-    <!-- Bootstrap Icons -->
+    <!-- Bootstrap iconos -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
 
@@ -141,7 +141,8 @@
 
             <div>
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="ej. 300 000 0000"/>
+                <input type="tel" id="telefono" name="telefono" placeholder="ej. 3000000000" inputmode="numeric" pattern="[0-9]+" required aria-describedby="telefono-error"/>
+                <small id="telefono-error" style="display: none; color: #ff6b6b; font-size: 0.95rem; margin-top: 6px; font-weight: 500;"></small>
             </div>
 
             <div>
@@ -155,7 +156,7 @@
             </div>
 
             <button type="submit" id="contacto-btn">Enviar</button>
-            <p id="respuesta-form"></p>
+            <p id="respuesta-form" aria-live="polite"></p>
         </form>
     </section>
 
@@ -172,7 +173,7 @@
                 <p>&#128222; CEL: +300 913 4441</p>
             </section>
 
-            <section id="footer-redes-col">
+         <section id="footer-redes-col">
                 <h4 id="footer-redes-titulo">SÍGUENOS</h4>
                 <hr id="footer-redes-divider">
                 <div id="footer-redes-iconos">
@@ -181,7 +182,7 @@
                     <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
                 </div>
             </section>
-        </div>
+        </div>   
 
         <div id="footer-bottom">
             <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>

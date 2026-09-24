@@ -40,24 +40,23 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente actualizar(Cliente cliente) {
         Cliente existente = clienteRepository.findById(cliente.getClienteId()).orElse(null);
+        if (existente == null) {
+            return clienteRepository.save(cliente);
+        }
 
         if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) {
-            if (existente != null) {
-                cliente.setContraseña(existente.getContraseña());
-            }
+            cliente.setContraseña(existente.getContraseña());
         }
 
-        if (existente != null) {
-            if (cliente.getCarrito() == null) {
-                cliente.setCarrito(existente.getCarrito());
-            }
-            if (cliente.getPedidos() == null) {
-                cliente.setPedidos(existente.getPedidos());
-            }
-            cliente.setActivo(existente.isActivo());
-        }
+        existente.setNombre(cliente.getNombre());
+        existente.setApellido(cliente.getApellido());
+        existente.setCorreo(cliente.getCorreo());
+        existente.setContraseña(cliente.getContraseña());
+        existente.setTelefono(cliente.getTelefono());
+        existente.setDireccion(cliente.getDireccion());
+        existente.setActivo(existente.isActivo());
 
-        return clienteRepository.save(cliente);
+        return clienteRepository.save(existente);
     }
 
     @Override

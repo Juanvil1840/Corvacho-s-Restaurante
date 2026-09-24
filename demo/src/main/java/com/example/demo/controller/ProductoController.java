@@ -36,7 +36,7 @@ public class ProductoController {
         return "productos/formulario";
     }
 
-    // ✅ Sin validación manual
+    
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
         Producto producto = productoService.obtenerPorId(id);
@@ -46,7 +46,14 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Producto producto) {
+    public String guardar(@ModelAttribute Producto producto,
+                          @org.springframework.web.bind.annotation.RequestParam(value = "categoriaId", required = false) Long categoriaId) {
+        if (categoriaId != null) {
+            producto.setCategoria(categoriaService.findById(categoriaId));
+        } else if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
+            producto.setCategoria(categoriaService.findById(producto.getCategoria().getId()));
+        }
+
         if (producto.getId() != null && productoService.existe(producto.getId())) {
             productoService.actualizar(producto);
         } else {
