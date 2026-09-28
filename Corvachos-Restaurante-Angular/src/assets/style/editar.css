@@ -1,0 +1,248 @@
+/* ============================================
+   ESTILOS EXCLUSIVOS PARA EDITAR PERFIL (Corvacho's)
+   ============================================ */
+
+.body-editar {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.editar-contenedor {
+    max-width: 500px;
+    margin: 6rem auto 2rem;
+    padding: 0 20px;
+    flex: 1;
+}
+
+/* Título */
+.editar-titulo {
+    color: #cd9e46;
+    font-size: 2.2rem;
+    font-weight: 500;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 0.5rem;
+}
+
+.editar-titulo::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: #cd9e46;
+    margin: 10px auto 0;
+    border-radius: 4px;
+}
+
+/* Tarjeta del formulario */
+.editar-tarjeta {
+    background: #013741;
+    border-radius: 12px;
+    padding: 2rem 1.8rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    border: 1px solid #1a3040;
+}
+
+/* Grupos del formulario */
+.editar-grupo {
+    margin-bottom: 1.1rem;
+}
+
+.editar-grupo label {
+    display: block;
+    color: #a0b8bf;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.editar-grupo input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #334955;
+    border-radius: 6px;
+    background: #022c38;
+    color: #fcfafa;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.editar-grupo input::placeholder {
+    color: #4a6a7a;
+}
+
+.editar-grupo input:focus {
+    border-color: #cd9e46;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(205, 158, 70, 0.15);
+    background: #013741;
+}
+
+/* Grupo de botones */
+.editar-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+.editar-btn {
+    display: inline-block;
+    padding: 0.6rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.editar-btn-guardar {
+    background: transparent;
+    color: #cd9e46;
+    border: 2px solid #cd9e46;
+}
+
+.editar-btn-guardar:hover {
+    background: #cd9e46;
+    color: #001c2a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(205, 158, 70, 0.25);
+}
+
+.editar-btn-cancelar {
+    background: transparent;
+    color: #6f8896;
+    border: 2px solid #334955;
+}
+
+.editar-btn-cancelar:hover {
+    background: #334955;
+    color: #fcfafa;
+}
+
+/* Footer ajustado */
+.footer-editar {
+    background-color: #010f14;
+    color: #a0b8bf;
+    padding: 20px 80px 0 80px;
+    margin-top: auto;
+}
+
+.footer-editar .footer-main {
+    display: flex;
+    gap: 60px;
+    padding-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.footer-editar .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.footer-editar .footer-col img {
+    height: 60px;
+    object-fit: contain;
+}
+
+.footer-editar .footer-col h4 {
+    color: #a0b8bf;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer-editar .footer-col p {
+    font-size: 0.8rem;
+    color: #6f8896;
+    margin: 0;
+}
+
+.footer-editar .footer-iconos {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.footer-editar .footer-iconos span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #334955;
+    color: #6f8896;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.footer-editar .footer-iconos span:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+}
+
+.footer-editar .footer-bottom {
+    border-top: 1px solid #1a3040;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #6f8896;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .editar-contenedor {
+        margin: 5rem auto 1.5rem;
+    }
+    
+    .editar-titulo {
+        font-size: 1.8rem;
+    }
+    
+    .editar-tarjeta {
+        padding: 1.5rem;
+    }
+
+    .editar-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .editar-acciones .editar-btn {
+        text-align: center;
+    }
+
+    .footer-editar {
+        padding: 15px 20px 0 20px;
+    }
+
+    .footer-editar .footer-main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .footer-editar .footer-col {
+        align-items: center;
+    }
+
+    .footer-editar .footer-iconos {
+        justify-content: center;
+    }
+}

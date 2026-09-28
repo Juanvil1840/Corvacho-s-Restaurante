@@ -1,0 +1,666 @@
+/* ============================================
+   PEDIDOS.CSS — Lista y Detalle de Pedidos
+   Corvacho's Restaurante
+   ============================================ */
+
+/* ---- BODY / FONDO ---- */
+.pedidos-body {
+    background-color: #001c2a;
+    color: #fcfafa;
+    min-height: 100vh;
+}
+
+/* ---- CONTENEDOR PRINCIPAL ---- */
+.pedidos-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 120px 24px 60px;
+}
+
+/* ---- TÍTULO DE LA PÁGINA ---- */
+.pedidos-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    color: #cd9e46;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.pedidos-subtitulo {
+    font-size: 0.9rem;
+    color: #6f8896;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+}
+
+/* ============================================
+   GRID DE TARJETAS (lista.html)
+   ============================================ */
+.pedidos-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ---- TARJETA DE PEDIDO ---- */
+.pedido-card {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: linear-gradient(135deg, #022c38 0%, #013741 100%);
+    border: 1px solid #1a3040;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+}
+
+.pedido-card:hover {
+    border-color: #cd9e46;
+    box-shadow: 0 6px 28px rgba(205, 158, 70, 0.12);
+    transform: translateY(-2px);
+}
+
+/* ID del pedido — columna izquierda dorada */
+.pedido-card-id {
+    background-color: rgba(205, 158, 70, 0.08);
+    border-right: 1px solid #1a3040;
+    padding: 24px 20px;
+    min-width: 110px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6f8896;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-self: stretch;
+    justify-content: center;
+}
+
+.pedido-card-id span {
+    font-size: 1.6rem;
+    font-family: 'Cormorant Garamond', serif;
+    color: #cd9e46;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+/* Info principal — columna central */
+.pedido-card-info {
+    flex: 1;
+    padding: 20px 24px;
+}
+
+.pedido-card-cliente {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    color: #e8d9b4;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.pedido-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 0.82rem;
+    color: #6f8896;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.pedido-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.pedido-card-meta i {
+    color: #cd9e46;
+    font-size: 0.9rem;
+}
+
+/* Acciones — columna derecha */
+.pedido-card-acciones {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    min-width: 180px;
+}
+
+/* ============================================
+   BADGES DE ESTADO
+   ============================================ */
+.estado-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+}
+
+.estado-recibido {
+    background: rgba(100, 181, 246, 0.1);
+    border-color: rgba(100, 181, 246, 0.3);
+    color: #64b5f6;
+}
+
+.estado-cocinando {
+    background: rgba(255, 183, 77, 0.1);
+    border-color: rgba(255, 183, 77, 0.3);
+    color: #ffb74d;
+}
+
+.estado-enviado {
+    background: rgba(129, 212, 250, 0.1);
+    border-color: rgba(129, 212, 250, 0.3);
+    color: #81d4fa;
+}
+
+.estado-entregado {
+    background: rgba(129, 199, 132, 0.1);
+    border-color: rgba(129, 199, 132, 0.3);
+    color: #81c784;
+}
+
+/* ---- BOTÓN VER DETALLE (lista) ---- */
+.btn-ver-detalle {
+    display: inline-block;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid #cd9e46;
+    color: #cd9e46;
+    border-radius: 7px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-ver-detalle:hover {
+    background: #cd9e46;
+    color: #001c2a;
+}
+
+/* ---- ESTADO VACÍO ---- */
+.pedidos-vacio {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6f8896;
+}
+
+.pedidos-vacio i {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 16px;
+    color: #1a3040;
+}
+
+.pedidos-vacio p {
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+/* ============================================
+   BOTÓN VOLVER (detalle.html)
+   ============================================ */
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 18px;
+    background: transparent;
+    border: 1px solid #1a3040;
+    color: #6f8896;
+    border-radius: 7px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-volver:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+}
+
+/* ============================================
+   DETALLE — HEADER DEL PEDIDO
+   ============================================ */
+.detalle-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #1a3040;
+}
+
+.detalle-header-left h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: #cd9e46;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.detalle-fechas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.detalle-fecha-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #6f8896;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.detalle-fecha-item i {
+    color: #cd9e46;
+}
+
+/* ============================================
+   TIMELINE DE ESTADO
+   ============================================ */
+.detalle-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 28px 0 36px;
+    flex-wrap: wrap;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.35;
+    transition: opacity 0.3s;
+}
+
+.timeline-step.activo {
+    opacity: 1;
+}
+
+.timeline-step.completado {
+    opacity: 0.75;
+}
+
+.timeline-dot {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #013741;
+    border: 2px solid #1a3040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #6f8896;
+    transition: all 0.3s;
+}
+
+.timeline-step.activo .timeline-dot {
+    background: rgba(205, 158, 70, 0.15);
+    border-color: #cd9e46;
+    color: #cd9e46;
+    box-shadow: 0 0 16px rgba(205, 158, 70, 0.25);
+}
+
+.timeline-step.completado .timeline-dot {
+    background: rgba(129, 199, 132, 0.1);
+    border-color: #81c784;
+    color: #81c784;
+}
+
+.timeline-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6f8896;
+}
+
+.timeline-step.activo .timeline-label {
+    color: #cd9e46;
+    font-weight: 600;
+}
+
+.timeline-step.completado .timeline-label {
+    color: #81c784;
+}
+
+.timeline-line {
+    flex: 1;
+    min-width: 40px;
+    height: 2px;
+    background: #1a3040;
+    margin-bottom: 22px;
+    transition: background 0.3s;
+}
+
+.timeline-line.completada {
+    background: #81c784;
+}
+
+/* ============================================
+   DETALLE — TARJETAS DE INFO (cliente / domiciliario)
+   ============================================ */
+.detalle-info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.detalle-info-card {
+    background: linear-gradient(135deg, #022c38 0%, #013741 100%);
+    border: 1px solid #1a3040;
+    border-radius: 12px;
+    padding: 22px 26px;
+}
+
+.detalle-info-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: #cd9e46;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1a3040;
+}
+
+.detalle-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 0.92rem;
+    color: #a0b8bf;
+    border-bottom: 1px solid #0c2430;
+}
+
+.detalle-info-item:last-child {
+    border-bottom: none;
+}
+
+.detalle-info-item i {
+    color: #cd9e46;
+    font-size: 0.95rem;
+    width: 18px;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   TABLA DE PRODUCTOS
+   ============================================ */
+.detalle-productos {
+    background: linear-gradient(135deg, #022c38 0%, #013741 100%);
+    border: 1px solid #1a3040;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.detalle-productos h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    color: #cd9e46;
+    font-weight: 500;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1a3040;
+}
+
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.tabla-productos thead tr {
+    border-bottom: 2px solid #1a3040;
+}
+
+.tabla-productos th {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6f8896;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.tabla-productos tbody tr {
+    border-bottom: 1px solid #0c2430;
+    transition: background 0.15s;
+}
+
+.tabla-productos tbody tr:hover {
+    background: rgba(205, 158, 70, 0.04);
+}
+
+.tabla-productos td {
+    padding: 14px 12px;
+    color: #a0b8bf;
+    vertical-align: middle;
+}
+
+/* Celda de imagen */
+.producto-img-cell img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #1a3040;
+}
+
+/* Celda de nombre */
+.producto-nombre-cell {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #e8d9b4 !important;
+    font-weight: 500;
+}
+
+/* Celda de descripción */
+.producto-desc-cell {
+    color: #6f8896 !important;
+    font-size: 0.82rem;
+    max-width: 200px;
+}
+
+/* Celda de adicional */
+.adicional-cell {
+    font-size: 0.82rem;
+}
+
+.adicional-nombre {
+    color: #a0b8bf;
+}
+
+.adicional-precio {
+    color: #cd9e46;
+    font-weight: 600;
+    font-size: 0.78rem;
+}
+
+.adicional-gratis {
+    color: #81c784;
+    font-size: 0.78rem;
+}
+
+/* Celda de precio */
+.precio-cell {
+    color: #cd9e46 !important;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+}
+
+/* Celda de cantidad */
+.cantidad-cell {
+    text-align: center;
+    font-weight: 600;
+    color: #e8d9b4 !important;
+}
+
+/* Celda de subtotal */
+.subtotal-cell {
+    color: #e8d9b4 !important;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   TOTAL DEL PEDIDO
+   ============================================ */
+.detalle-total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #022c38 0%, #013741 100%);
+    border: 1px solid #cd9e46;
+    border-radius: 12px;
+    padding: 18px 28px;
+}
+
+.detalle-total-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #6f8896;
+}
+
+.detalle-total-valor {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: #cd9e46;
+    font-weight: 500;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .pedidos-container {
+        padding: 100px 16px 40px;
+    }
+
+    .pedidos-titulo {
+        font-size: 2rem;
+    }
+
+    .pedido-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pedido-card-id {
+        flex-direction: row;
+        border-right: none;
+        border-bottom: 1px solid #1a3040;
+        padding: 14px 20px;
+        min-width: unset;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .pedido-card-id span {
+        font-size: 1.2rem;
+    }
+
+    .pedido-card-acciones {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #1a3040;
+        padding-top: 14px;
+    }
+
+    .detalle-info-row {
+        grid-template-columns: 1fr;
+    }
+
+    .detalle-timeline {
+        gap: 0;
+    }
+
+    .timeline-line {
+        min-width: 20px;
+    }
+
+    .detalle-total {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .tabla-productos thead {
+        display: none;
+    }
+
+    .tabla-productos tbody tr {
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        gap: 6px 12px;
+        padding: 12px;
+        border-bottom: 1px solid #1a3040;
+    }
+
+    .tabla-productos td {
+        padding: 2px 4px;
+    }
+
+    .tabla-productos td::before {
+        content: attr(data-label);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #6f8896;
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .producto-img-cell {
+        grid-row: span 4;
+    }
+}

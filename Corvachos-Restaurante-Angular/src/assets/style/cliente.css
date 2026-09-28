@@ -1,0 +1,287 @@
+/* ============================================
+   ESTILOS PARA PÁGINAS DE CLIENTES (Corvacho's)
+   Basado en los colores del index: 
+   - Fondo: #faf8f5 (beige claro)
+   - Principal: #1a0f0a (casi negro)
+   - Acentos: #d4a574 (dorado/cobre)
+   - Texto: #2c1810 (marrón oscuro)
+   ============================================ */
+
+/*===Contenedor Principal==*/
+.cliente-contenedor {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+/*===Tarjeta perfil===*/
+.tarjeta-perfil {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(26, 15, 10, 0.10);
+    border-left: 6px solid #d4a574;
+}
+
+/*===Titulos===*/
+.titulo-principal {
+    color: #1a0f0a;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.titulo-principal::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #d4a574;
+    margin: 10px auto 0;
+    border-radius: 4px;
+}
+
+/*===Etiquetas===*/
+.etiqueta-campo {
+    font-weight: 600;
+    color: #2c1810;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.valor-campo {
+    color: #4a3328;
+    font-size: 1.1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #e8ddd0;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/*===Formularios===*/
+.formulario-corvacho .grupo-campo {
+    margin-bottom: 1rem;
+}
+
+.formulario-corvacho .grupo-campo label {
+    font-weight: 600;
+    color: #2c1810;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.formulario-corvacho .grupo-campo input,
+.formulario-corvacho .grupo-campo textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid #e8ddd0;
+    border-radius: 10px;
+    background: #fefcf9;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+
+.formulario-corvacho .grupo-campo input:focus,
+.formulario-corvacho .grupo-campo textarea:focus {
+    border-color: #d4a574;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.12);
+    background: #ffffff;
+}
+
+/*===Boton===*/
+.btn-corvacho-outline {
+    display: inline-block;
+    padding: 0.6rem 2.5rem;
+    border: 3px solid #d4a574;
+    border-radius: 30px;
+    background: transparent;
+    color: #1a0f0a;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+}
+
+.btn-corvacho-outline:hover {
+    background: #d4a574;
+    color: #1a0f0a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+}
+
+/*===Contenedor del boton===*/
+.accion-centrada {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+/*===Botones perfil===*/
+.btn-corvacho {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-corvacho-secundario {
+    background: transparent;
+    color: #1a0f0a;
+    border: 1.5px solid #1a0f0a;
+}
+
+.btn-corvacho-secundario:hover {
+    background: #1a0f0a;
+    color: #f5d6b3;
+}
+
+.btn-corvacho-peligro {
+    background: #9e2a2b;
+    color: #fff;
+}
+
+.btn-corvacho-peligro:hover {
+    background: #7a2021;
+}
+
+.btn-corvacho-exito {
+    background: #2d6a4f;
+    color: #fff;
+}
+
+.btn-corvacho-exito:hover {
+    background: #1e4d38;
+}
+
+/*===Gupo de Botones===*/
+.grupo-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+/*===Enlaces===*/
+.enlace-corvacho {
+    color: #8b5e3c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.enlace-corvacho:hover {
+    color: #1a0f0a;
+    text-decoration: underline;
+}
+
+/*===Estado*/
+.estado-activo {
+    color: #2d6a4f;
+    font-weight: 600;
+}
+
+.estado-inactivo {
+    color: #9e2a2b;
+    font-weight: 600;
+}
+
+/*===RESPONSIVE===*/
+@media (max-width: 600px) {
+    .cliente-contenedor {
+        margin: 1rem auto;
+        padding: 0 15px;
+    }
+    
+    .titulo-principal {
+        font-size: 1.6rem;
+    }
+    
+    .tarjeta-perfil {
+        padding: 1.2rem;
+    }
+    
+    .grupo-acciones {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-corvacho-outline {
+        padding: 0.5rem 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+/*===Footer===*/
+.footer-corvacho {
+    background-color: #1a0f0a;
+    color: #d4a574;
+    padding: 1.5rem 0 0.8rem;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+}
+
+.footer-corvacho .footer-main {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 1.5rem;
+}
+
+.footer-corvacho .footer-col {
+    min-width: 150px;
+}
+
+.footer-corvacho .footer-col img {
+    max-height: 50px;
+}
+
+.footer-corvacho .footer-col h4 {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    color: #f5d6b3;
+}
+
+.footer-corvacho .footer-col p {
+    margin: 0.15rem 0;
+    font-size: 0.8rem;
+    color: #c4a88a;
+}
+
+.footer-corvacho .footer-bottom {
+    text-align: center;
+    padding-top: 0.8rem;
+    margin-top: 0.8rem;
+    border-top: 1px solid #2c1810;
+    font-size: 0.7rem;
+    color: #8b6d55;
+}
+
+.footer-corvacho .footer-iconos {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.footer-corvacho .footer-iconos span {
+    color: #d4a574;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.footer-corvacho .footer-iconos span:hover {
+    color: #f5d6b3;
+}

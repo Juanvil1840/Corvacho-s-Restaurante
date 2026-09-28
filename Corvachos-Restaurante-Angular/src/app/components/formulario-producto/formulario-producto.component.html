@@ -1,0 +1,104 @@
+<div class="body-producto-form">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="assets/Images/logo-simple.png" height="60px">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/productos">PRODUCTOS</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="producto-form-contenedor">
+    <h1 class="producto-form-titulo">{{ editando ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
+
+    <div class="producto-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <div class="producto-form-grupo">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="producto.nombre" name="nombre" required>
+        </div>
+
+        <div class="producto-form-grupo">
+          <label>Precio</label>
+          <input type="number" step="0.01" [(ngModel)]="producto.precio" name="precio" required>
+        </div>
+
+        <div class="producto-form-grupo">
+          <label>Descripcion</label>
+          <textarea [(ngModel)]="producto.descripcion" name="descripcion" rows="3" required></textarea>
+        </div>
+
+        <div class="producto-form-grupo">
+          <label>URL o Ruta de Imagen</label>
+          <input type="text" [(ngModel)]="producto.imagen" name="imagen"
+                 placeholder="https://... o /Images/comida.png" required>
+        </div>
+
+        <div class="producto-form-grupo">
+          <label>Categoria</label>
+          <select [(ngModel)]="producto.categoria.id" name="categoriaId" required>
+            <option [ngValue]="0">-- Seleccionar categoria --</option>
+            <option *ngFor="let cat of categorias" [ngValue]="cat.id">
+              {{ cat.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="producto-form-grupo">
+          <label class="checkbox-label">
+            <input type="checkbox" [(ngModel)]="producto.disponible" name="disponible">
+            Disponible
+          </label>
+        </div>
+
+        <div class="producto-form-acciones">
+          <button type="submit" class="producto-form-btn-guardar">Guardar</button>
+          <button type="button" class="producto-form-btn-cancelar" (click)="cancelar()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div id="footer-main">
+      <section id="footer-logo-col">
+        <img src="assets/Images/logo-completo.png" alt="Logo Corvacho's" id="footer-logo">
+      </section>
+
+      <section id="footer-contacto-col">
+        <h4 id="footer-contacto-titulo">CONTACTANOS</h4>
+        <p>&#128205; Sede Administrativa: Calle 40 #7-60 Bogota Colombia</p>
+        <p>&#9993; administrativo&#64;corvachos.com</p>
+        <p>&#128222; CEL: +300 913 4441</p>
+      </section>
+
+      <section id="footer-redes-col">
+        <h4 id="footer-redes-titulo">SIGUENOS</h4>
+        <hr id="footer-redes-divider">
+        <div id="footer-redes-iconos">
+          <span class="footer-icono"><i class="bi bi-instagram"></i></span>
+          <span class="footer-icono"><i class="bi bi-facebook"></i></span>
+          <span class="footer-icono"><i class="bi bi-whatsapp"></i></span>
+        </div>
+      </section>
+    </div>
+
+    <div id="footer-bottom">
+      <small>&copy; 2026 Corvacho's Restaurante. Todos los derechos reservados.</small>
+    </div>
+  </footer>
+
+</div>

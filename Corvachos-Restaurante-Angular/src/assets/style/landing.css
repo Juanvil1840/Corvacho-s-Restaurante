@@ -1,0 +1,363 @@
+/*css landing page*/
+/*Barra de navegación*/
+
+.navbar .nav-link {
+    font-size: 1.2rem;
+}
+
+/*boton signup*/
+.navbar .nav-link.signup{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 47px;
+    width: 130px;
+    border-radius: 7px;
+    border: none;
+    background-color: #cd9e46;
+    color: #001c2a;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.navbar .nav-link.signup:hover{
+    background-color: #ac7e33;
+    color: white;
+}
+
+
+/*boton login*/
+.login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 47px;
+    width: 130px;
+    border-radius: 7px;
+    border: 2px solid #334955;
+    background-color: #001c2a;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.login:hover{
+    border: 2px solid #6f8896;
+    color: #adb7bd;
+}
+
+/*Hero Page*/
+.hero {
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 15, 20, 0.70), rgba(0, 15, 20, 0.80)), url('../images/fondo-main.jpeg');        
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+}
+
+.hero-content {
+    padding-top: 40px; 
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding-left: 130px;
+}
+
+/* Columna del logo */
+.hero-logo {
+    flex-shrink: 0; /* que no se achique cuando falte espacio */
+    text-align: center;
+}
+
+.hero-logo img{
+    height: 350px;
+}
+
+/* Línea divisoria vertical */
+.hero-divider {
+    width: 1px;
+    height: 350px;
+    background-color: rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+/* Columna de texto */
+.hero-text {
+    max-width: 650px;
+}
+
+.hero-label {
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 3px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.hero-label span {
+    color: #cd9e46; /* dorado para la segunda parte del texto */
+}
+
+.hero-text h1 {
+    font-family: Cormorant Garamond;
+    font-size: 4.5rem;
+    line-height: 1.2;
+    font-weight: 500;
+    margin-bottom: 32px;
+    color: white;
+}
+
+.btn-hero-outline {
+    display: inline-block;
+    padding: 14px 32px;
+    border: 1px solid #cd9e46;
+    border-radius: 7px;
+    color: #cd9e46;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.btn-hero-outline:hover {
+    background-color: #cd9e46;
+    color: #001c2a;
+}
+
+/*About Page*/
+.about{
+    height: 100vh;
+    color:white;
+    background-color: #013741;
+}
+
+.about-tittle{
+    text-align: center;
+    padding-bottom: 40px;
+    font-size: 3.5rem;
+}
+
+.about-content{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+    gap:20px;
+}
+
+.about-content p{
+    line-height: 2;
+    font-size: 1.4rem;
+}
+
+.about-content img{
+    border-radius: 8px;
+}
+
+/*imagenes seccion nuestra especialidad*/
+
+.especialidad .especialidad-tittle{
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    font-size: 3.5rem;
+}
+
+.especialidad-content{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    width: 100%;
+}
+
+.especialidad-content .especialidad-plato {
+    width: calc(50% - 100px);  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.especialidad-content .especialidad-plato img{
+    height: 300px;
+    width: 450px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.especialidad-content .especialidad-plato p {
+    font-size: 1.4rem;
+    margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    /*hero*/
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+
+    .hero-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding-left: 20px;
+        padding-right: 20px;
+        gap: 24px;
+    }
+
+    .hero-logo img {
+        max-width: 500px;
+    }
+
+    .hero-divider {
+        display: none;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-text .hero-h1 {
+        font-size: 3.8rem;
+        line-height: 1.3;
+        color:white;
+    }
+
+    .hero-label {
+        font-size: 1rem;
+    }
+
+    /* About  */
+    .about {
+        height: auto;
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .about-content {
+        flex-direction: column;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+    }
+
+    .about-content img {
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+    }
+
+    /* Especialidad */
+    .especialidad {
+        height: auto;
+        padding-bottom: 60px;
+    }
+
+    .especialidad-content .especialidad-plato {
+        width: 100%;
+        max-width: 350px; 
+    }
+
+    .especialidad-content .especialidad-plato img {
+        width: 100%;
+        height: auto;
+        max-height: 250px;
+    }
+}
+
+/* FORMULARIO DE CONTACTO */
+
+#contacto {
+    background-color: #013741;
+    padding: 60px 20px;
+}
+
+#contacto-titulo {
+    text-align: center;
+    color: #cd9e46;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+#formulario-contacto {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+#contacto-fila-nombre {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#contacto-fila-nombre > div {
+    flex: 1;
+}
+
+#formulario-contacto > div {
+    margin-bottom: 20px;
+}
+
+#formulario-contacto label {
+    color: #a0b8bf;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+}
+
+#formulario-contacto input,
+#formulario-contacto textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #022c38;
+    border: 1px solid #334955;
+    color: white;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font-size: 1.1rem;
+}
+
+#asunto {
+    border: 1px solid #cd9e46;
+}
+
+#mensaje {
+    resize: vertical;
+}
+
+#contacto-btn {
+    background-color: #cd9e46;
+    color: #001c2a;
+    border: none;
+    padding: 14px 40px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+#contacto-btn:hover {
+    background-color: #ac7e33;
+    color: white;
+}
+
+#respuesta-form {
+    margin-top: 14px;
+    color: #cd9e46;
+    font-size: 1.2rem;
+}

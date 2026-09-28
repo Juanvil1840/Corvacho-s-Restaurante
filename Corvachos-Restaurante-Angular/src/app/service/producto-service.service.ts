@@ -494,4 +494,29 @@ export class ProductoServiceService {
   getProductos(): Producto[] {
     return this.productos;
   }
+    //Obtener uno por ID
+  getProductoById(id: number): Producto | undefined {
+    return this.productos.find(p => p.id === id);
+  }
+
+  //Agregar
+  agregarProducto(producto: Producto): void {
+    const nuevoId = Math.max(...this.productos.map(p => p.id), 0) + 1;
+    producto.id = nuevoId;
+    this.productos.push(producto);
+  }
+
+  //Actualizar
+  actualizarProducto(producto: Producto): void {
+    const index = this.productos.findIndex(p => p.id === producto.id);
+    if (index !== -1) {
+      this.productos[index] = producto;
+    }
+  }
+
+  //Eliminar
+  eliminarProducto(id: number): void {
+  this.productos = this.productos.filter(p => p.id !== id);
 }
+}
+
