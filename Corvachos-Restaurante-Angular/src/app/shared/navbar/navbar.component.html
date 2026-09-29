@@ -1,29 +1,27 @@
-    <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-        <!--logo en navbar-->
-        <a class="navbar-brand" href="#"><img src="/Images/logo-simple.png" alt="Logo" height="60px"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <!--links navbar-->
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-            <a class="nav-link" href="#hero">INICIO</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#about">NOSOTROS</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#contacto">CONTACTO</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link login" th:href="@{/login}" href="/login">LOG IN</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link signup" th:href="@{/perfil/registro}" href="/perfil/registro">SIGN UP</a>
-            </li>
-        </ul>
-        </div>
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/Images/logo-simple.png" alt="Logo" height="60px">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/">INICIO</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/menu">MENU</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link login" routerLink="/login">LOG IN</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link signup" routerLink="/registro">SIGN UP</a>
+        </li>
+      </ul>
     </div>
-    </nav>
+  </div>
+</nav>
