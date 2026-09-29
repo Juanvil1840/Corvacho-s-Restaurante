@@ -2,9 +2,7 @@
 /* Sección principal del login */
 .login-section {
     min-height: 100vh;
-    background-image: linear-gradient(rgba(0, 15, 20, 0.55), rgba(0, 15, 20, 0.55)), url('../Images/Edificio.jpeg');
-    background-size: cover;
-    background-position: center;
+background-image: linear-gradient(rgba(0, 15, 20, 0.55), rgba(0, 15, 20, 0.55)), url('/assets/Images/Edificio.jpeg');    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;

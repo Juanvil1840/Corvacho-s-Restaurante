@@ -6,11 +6,12 @@ import { ProductoServiceService } from '../../service/producto-service.service';
 import { CategoriaServiceService } from '../../service/categoria-service.service';
 import { Producto } from '../../models/producto.model';
 import { Categoria } from '../../models/categoria.model';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-formulario-producto',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, FooterComponent],
   templateUrl: './formulario-producto.component.html',
   styleUrl: './formulario-producto.component.scss'
 })

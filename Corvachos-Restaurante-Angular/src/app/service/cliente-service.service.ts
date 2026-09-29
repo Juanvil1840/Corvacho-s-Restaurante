@@ -114,5 +114,28 @@ export class ClienteServiceService {
   getClientes(): Cliente[] {
     return this.clientes;
   }
+  // READ - Obtener uno por ID
+  getClienteById(id: number): Cliente | undefined {
+    return this.clientes.find(c => c.clienteId === id);
+  }
 
+  // CREATE - Agregar
+  agregarCliente(cliente: Cliente): void {
+    const nuevoId = Math.max(...this.clientes.map(c => c.clienteId), 0) + 1;
+    cliente.clienteId = nuevoId;
+    this.clientes.push(cliente);
+  }
+
+  // UPDATE - Actualizar
+  actualizarCliente(cliente: Cliente): void {
+    const index = this.clientes.findIndex(c => c.clienteId === cliente.clienteId);
+    if (index !== -1) {
+      this.clientes[index] = cliente;
+    }
+  }
+
+  // DELETE - Eliminar
+  eliminarCliente(id: number): void {
+    this.clientes = this.clientes.filter(c => c.clienteId !== id);
+  }
 }

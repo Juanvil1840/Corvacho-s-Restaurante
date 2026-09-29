@@ -11,6 +11,7 @@
 
 /* Fondo con imagen del edificio */
 .registro-fondo {
+    background-image: linear-gradient(rgba(0, 15, 20, 0.80), rgba(0, 15, 20, 0.85)), url('/assets/Images/Edificio.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -37,6 +38,7 @@
     border: 1px solid rgba(26, 48, 64, 0.8);
     backdrop-filter: blur(2px);
 }
+
 
 /* Título */
 .registro-titulo {

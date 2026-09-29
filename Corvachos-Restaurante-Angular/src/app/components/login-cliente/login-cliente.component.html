@@ -1,0 +1,46 @@
+<div class="body-login">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="assets/Images/logo-simple.png" height="60px">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/productos">PRODUCTOS</a></li>
+          <li class="nav-item"><a class="nav-link login" routerLink="/login">LOG IN</a></li>
+          <li class="nav-item"><a class="nav-link signup" routerLink="/registro">SIGN UP</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Seccion Login -->
+  <section class="login-section">
+    <form class="login-form" (ngSubmit)="iniciarSesion()">
+
+      <p *ngIf="error" class="login-error">{{ error }}</p>
+
+      <label for="correo">Correo Electronico</label>
+      <input type="text" id="correo" [(ngModel)]="correo" name="correo" placeholder="camilo&#64;gmail.com" required>
+
+      <label for="contrasena">Contrasena</label>
+      <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" placeholder="**********" required>
+
+      <button type="submit" class="login-btn">INGRESAR</button>
+
+      <p class="login-registrate">
+        No tienes una cuenta aun?
+        <a routerLink="/registro">Registrate</a>
+      </p>
+    </form>
+  </section>
+
+  <app-footer></app-footer>
+
+</div>

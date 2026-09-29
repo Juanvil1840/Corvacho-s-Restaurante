@@ -20,15 +20,18 @@
             "outputPath": "dist/corvachos-restaurante",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
               }
             ],
             "styles": [
@@ -36,7 +39,14 @@
   "src/assets/style/styles.css",
   "src/assets/style/landing.css",
   "src/assets/style/productos.css",
-  "src/assets/style/producto-formulario.css"
+  "src/assets/style/producto-formulario.css",
+  "src/assets/style/cliente.css",
+  "src/assets/style/editar.css",
+  "src/assets/style/perfil.css",
+  "src/assets/style/registro.css",
+  "src/assets/style/detalle.css",
+  "src/assets/style/login.css",
+  "src/assets/style/menu.css"
 ],
             "scripts": []
           },
@@ -82,26 +92,34 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-  {
-    "glob": "**/*",
-    "input": "public"
-  },
-  {
-    "glob": "**/*",
-    "input": "src/assets",
-    "output": "assets"
-  }
-],
-            "styles": [
-              "src/styles.scss"
+              {
+                "glob": "**/*",
+                "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              }
             ],
+            "styles": [
+  "src/styles.scss",
+  "src/assets/style/styles.css",
+  "src/assets/style/landing.css",
+  "src/assets/style/productos.css",
+  "src/assets/style/producto-formulario.css",
+  "src/assets/style/cliente.css",
+  "src/assets/style/editar.css",
+  "src/assets/style/perfil.css",
+  "src/assets/style/registro.css",
+  "src/assets/style/detalle.css",
+  "src/assets/style/login.css",
+  "src/assets/style/menu.css"
+],
             "scripts": []
           }
         }

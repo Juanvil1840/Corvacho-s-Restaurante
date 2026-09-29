@@ -1,0 +1,78 @@
+<div class="body-registro">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="assets/Images/logo-simple.png" height="60px">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/productos">PRODUCTOS</a></li>
+          <li class="nav-item"><a class="nav-link login" routerLink="/login">LOG IN</a></li>
+          <li class="nav-item"><a class="nav-link signup" routerLink="/registro">SIGN UP</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Seccion Registro -->
+  <section class="registro-fondo">
+    <div class="registro-contenedor">
+      <div class="registro-tarjeta">
+
+        <h1 class="registro-titulo">Crear Cuenta</h1>
+
+        <form (ngSubmit)="registrar()">
+
+          <p *ngIf="error" style="color: #ef4444; text-align: center;">{{ error }}</p>
+
+          <div class="registro-grupo">
+            <label>Nombre</label>
+            <input type="text" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Tu nombre" required>
+          </div>
+
+          <div class="registro-grupo">
+            <label>Apellido</label>
+            <input type="text" [(ngModel)]="cliente.apellido" name="apellido" placeholder="Tu apellido" required>
+          </div>
+
+          <div class="registro-grupo">
+            <label>Correo Electronico</label>
+            <input type="email" [(ngModel)]="cliente.correo" name="correo" placeholder="ej. correo&#64;corvachos.com" required>
+          </div>
+
+          <div class="registro-grupo">
+            <label>Contrasena</label>
+            <input type="password" [(ngModel)]="cliente.contrasena" name="contrasena" placeholder="********" required>
+          </div>
+
+          <div class="registro-grupo">
+            <label>Telefono</label>
+            <input type="tel" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+57 300 000 0000">
+          </div>
+
+          <div class="registro-grupo">
+            <label>Direccion</label>
+            <input type="text" [(ngModel)]="cliente.direccion" name="direccion" placeholder="Calle 40 #7-60 Bogota">
+          </div>
+
+          <button type="submit" class="registro-btn">REGISTRARSE</button>
+
+          <p class="registro-enlace">
+            Ya tienes una cuenta?
+            <a routerLink="/login">Inicia sesion</a>
+          </p>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <app-footer></app-footer>
+
+</div>
