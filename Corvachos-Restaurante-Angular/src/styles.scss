@@ -1,3 +1,19 @@
-/* Estilos globales de Corvacho's */
+/*CSS GENERAL PARA LA PÁGINA*/
+/*letra de texto*/
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+/*letra de titulos y encabezado*/
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; 
+    line-height: 1.5;
+    color: #fcfafa; 
+    background-color: #001c2a; 
+}

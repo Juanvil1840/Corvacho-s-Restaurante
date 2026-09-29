@@ -1,0 +1,52 @@
+.about {
+    height: 100vh;
+    color: white;
+    background-color: #013741;
+}
+
+.about-tittle {
+    text-align: center;
+    padding-bottom: 40px;
+    font-size: 3.5rem;
+}
+
+.about-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 20%;
+    padding-right: 20%;
+    gap: 20px;
+
+    p {
+        line-height: 2;
+        font-size: 1.4rem;
+    }
+
+    img {
+        border-radius: 8px;
+        height: 500px;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 768px) {
+    .about {
+        height: auto;
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .about-content {
+        flex-direction: column;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: center;
+
+        img {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+        }
+    }
+}
