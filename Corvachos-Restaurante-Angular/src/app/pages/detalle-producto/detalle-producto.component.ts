@@ -1,0 +1,41 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ProductoServiceService } from '../../service/producto-service.service';
+import { AdicionalServiceService } from '../../service/adicional-service.service';
+import { Producto } from '../../models/producto.model';
+import { Adicional } from '../../models/adicional.model';
+
+@Component({
+  selector: 'app-detalle-producto',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './detalle-producto.component.html',
+  styleUrl: './detalle-producto.component.scss'
+})
+export class DetalleProductoComponent implements OnInit {
+
+  producto: Producto | undefined;
+  adicionales: Adicional[] = [];
+
+  constructor(
+    private productoService: ProductoServiceService,
+    private adicionalService: AdicionalServiceService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.producto = this.productoService.getProductoById(Number(id));
+
+      // Cargar adicionales de la MISMA categoria del producto
+      if (this.producto && this.producto.categoria) {
+        const categoriaId = this.producto.categoria.id;
+        this.adicionales = this.adicionalService.getAdicionales().filter(
+          a => a.categoria && a.categoria.id === categoriaId && a.disponible
+        );
+      }
+    }
+  }
+}

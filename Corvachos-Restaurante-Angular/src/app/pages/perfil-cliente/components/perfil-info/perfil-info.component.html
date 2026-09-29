@@ -1,0 +1,55 @@
+<section class="perfil-seccion-info">
+  <div class="perfil-fondo-info"
+       style="background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url('assets/Images/Edificio.jpeg');">
+
+    <div class="perfil-contenedor-info">
+
+      <!-- Columna izquierda: Avatar -->
+      <div class="perfil-avatar-col">
+        <div class="perfil-avatar-cuadrado">
+          <img src="assets/Images/perfil.PNG" alt="Foto de perfil" class="perfil-avatar-img">
+        </div>
+      </div>
+
+      <!-- Columna central: Informacion Personal -->
+      <div class="perfil-datos-col">
+        <p class="perfil-bienvenida">Bienvenido a tu casa</p>
+
+        <div class="perfil-titulo-row">
+          <h2 class="perfil-titulo-info">Informacion Personal</h2>
+        </div>
+
+        <p class="perfil-nombre">{{ cliente.nombre }} {{ cliente.apellido }}</p>
+
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Correo electronico</span>
+          <p class="perfil-dato"><i class="bi bi-envelope"></i> <span>{{ cliente.correo }}</span></p>
+        </div>
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Telefono</span>
+          <p class="perfil-dato"><i class="bi bi-telephone"></i> <span>{{ cliente.telefono }}</span></p>
+        </div>
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Direccion</span>
+          <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span>{{ cliente.direccion }}</span></p>
+        </div>
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Estado de cuenta</span>
+          <p class="perfil-dato">
+            <i class="bi bi-check-circle"></i>
+            <span *ngIf="cliente.activo" style="color: #4caf50;">Activo</span>
+            <span *ngIf="!cliente.activo" style="color: #e57373;">Inactivo</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Botones -->
+      <div class="perfil-botones-col">
+        <a [routerLink]="['/clientes/editar', cliente.clienteId]" class="perfil-btn-editar">Editar Perfil</a>
+        <button (click)="eliminarCuenta()" class="perfil-btn-cerrar perfil-btn-eliminar">Eliminar Cuenta</button>
+        <a routerLink="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
+      </div>
+
+    </div>
+  </div>
+</section>

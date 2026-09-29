@@ -1,0 +1,16 @@
+<div class="categoria-seccion">
+
+  <div class="categoria-header">
+    <hr class="linea-divisoria">
+    <h1 class="menu-text1">{{ categoria }}</h1>
+    <hr class="linea-divisoria">
+  </div>
+
+  <section class="tarjetas">
+    <app-producto-card
+      *ngFor="let producto of productos"
+      [producto]="producto">
+    </app-producto-card>
+  </section>
+
+</div>

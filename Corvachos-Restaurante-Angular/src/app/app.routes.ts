@@ -1,9 +1,7 @@
 import { Routes } from '@angular/router';
 
-// Landing page (de tu amigo)
-import { LandingComponent } from './pages/landing/landing.component';
 
-// Tus páginas (las vamos a mover a pages/ después)
+import { LandingComponent } from './pages/landing/landing.component';
 import { ListaProductosComponent } from './pages/lista-productos/lista-productos.component';
 import { FormularioProductoComponent } from './pages/formulario-producto/formulario-producto.component';
 import { ListaClientesComponent } from './pages/lista-clientes/lista-clientes.component';
@@ -15,10 +13,8 @@ import { MenuComponent } from './pages/menu/menu.component';
 import { DetalleProductoComponent } from './pages/detalle-producto/detalle-producto.component';
 
 export const routes: Routes = [
-    // Landing page (de tu amigo)
+    
     { path: '', component: LandingComponent },
-
-    // Tus rutas
     { path: 'productos', component: ListaProductosComponent },
     { path: 'productos/nuevo', component: FormularioProductoComponent },
     { path: 'productos/editar/:id', component: FormularioProductoComponent },

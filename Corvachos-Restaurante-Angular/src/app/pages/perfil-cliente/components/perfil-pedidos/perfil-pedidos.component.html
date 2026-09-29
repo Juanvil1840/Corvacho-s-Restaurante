@@ -1,0 +1,35 @@
+<section class="perfil-seccion-reservas">
+  <div class="perfil-fondo-reservas"
+       style="background-image: linear-gradient(rgba(0,15,20,0.75), rgba(0,15,20,0.85)), url('assets/Images/Edificio.jpeg');">
+
+    <div class="perfil-contenido-reservas">
+      <h2 class="perfil-titulo-reservas">Historial de Pedidos</h2>
+
+      <!-- Si NO hay pedidos -->
+      <div *ngIf="pedidos.length === 0" class="perfil-mensaje-vacio">
+        <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
+        <p>No tienes pedidos registrados aun.</p>
+      </div>
+
+      <!-- Si hay pedidos -->
+      <div *ngIf="pedidos.length > 0">
+        <div *ngFor="let pedido of pedidos" class="perfil-pedido-item">
+          <p><strong>Pedido #</strong> <span>{{ pedido.id_Pedido }}</span></p>
+          <p><strong>Estado:</strong> <span>{{ pedido.estado }}</span></p>
+          <p><strong>Fecha:</strong> <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
+          <p><strong>Total:</strong> <span>$ {{ calcularTotal(pedido.id_Pedido) }}</span></p>
+
+          <!-- Detalles del pedido -->
+          <div *ngIf="getDetallesDelPedido(pedido.id_Pedido).length > 0">
+            <p><strong>Productos:</strong></p>
+            <ul>
+              <li *ngFor="let detalle of getDetallesDelPedido(pedido.id_Pedido)">
+                {{ detalle.cantidad }}x {{ detalle.producto.nombre }} - $ {{ detalle.producto.precio * detalle.cantidad }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
