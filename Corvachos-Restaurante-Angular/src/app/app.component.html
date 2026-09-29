@@ -1,3 +1,30 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+
+<h1>Productos</h1>
+
+@for (producto of productos; track producto.id) {
+  <div>
+    <h2>{{ producto.nombre }}</h2>
+    <p>Precio: ${{ producto.precio }}</p>
+    <p>{{ producto.descripcion }}</p>
+    <img [src]="producto.imagen" [alt]="producto.nombre" width="200">
+  </div>
+}
+
+<h1>Categorías</h1>
+
+@for (categoria of categorias; track categoria.id) {
+  <p>{{ categoria.id }} - {{ categoria.nombre }}</p>
+}
+
+<h1>Adicionales</h1>
+
+@for (adicional of adicionales; track adicional.id_adicional) {
+  <p>
+    {{ adicional.nombre }} -
+    ${{ adicional.precio }} -
+    {{ adicional.categoria.nombre }}
+  </p>
+}
