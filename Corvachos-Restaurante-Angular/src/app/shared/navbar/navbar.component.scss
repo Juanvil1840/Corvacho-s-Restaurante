@@ -1,0 +1,41 @@
+/*Barra de navegación*/
+.navbar {
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); /*sombra nav bar*/
+    background-color: #001c2a; /*color de fondo*/
+    font-family: montserrat;
+    letter-spacing: 3px;
+    padding-left:50px;
+    padding-right:50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* esté por encima del contenido */
+}
+.navbar .nav-link,
+.navbar-nav .nav-link,
+.navbar-nav .nav-link.active {
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link.active {
+    color: #cd9e46;
+}
+
+.navbar-nav {
+    gap: 20px;
+}
+
+.nav-link:hover{
+    color: #6f8896;
+}
+
+h1{
+    font-size: 65px;
+    color:#cd9e46;
+}
+
+p{
+    font-size: 20px;
+}

@@ -1,0 +1,59 @@
+.especialidad {
+    .especialidad-tittle {
+        text-align: center;
+        padding-bottom: 40px;
+        padding-top: 40px;
+        font-size: 3.5rem;
+        color: #cd9e46;
+    }
+}
+
+.especialidad-content {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px;
+
+    .especialidad-plato {
+        width: calc(50% - 100px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            height: 300px;
+            width: 450px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        p {
+            font-size: 1.4rem;
+            margin-top: 15px;
+            color: #fcfafa;
+            text-transform: capitalize;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .especialidad {
+        height: auto;
+        padding-bottom: 60px;
+    }
+
+    .especialidad-content {
+        .especialidad-plato {
+            width: 100%;
+            max-width: 350px;
+
+            img {
+                width: 100%;
+                height: auto;
+                max-height: 250px;
+            }
+        }
+    }
+}

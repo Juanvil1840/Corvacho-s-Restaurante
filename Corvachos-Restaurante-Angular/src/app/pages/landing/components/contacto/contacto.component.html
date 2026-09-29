@@ -1,0 +1,53 @@
+<section id="contacto">
+    <h2 id="contacto-titulo">Formulario de Contacto</h2>
+    <form id="formulario-contacto" (ngSubmit)="enviarMensaje()">
+        <div id="contacto-fila-nombre">
+            <div>
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Nombre" [(ngModel)]="contacto.nombre" required />
+            </div>
+            <div>
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Apellido" [(ngModel)]="contacto.apellido" required />
+            </div>
+        </div>
+
+        <div>
+            <label for="correo">Tu Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="ej. hola@corvachos.com" [(ngModel)]="contacto.correo" required />
+        </div>
+
+        <div>
+            <label for="telefono">Teléfono</label>
+            <input 
+                type="tel" 
+                id="telefono" 
+                name="telefono" 
+                placeholder="ej. 3000000000" 
+                inputmode="numeric" 
+                pattern="[0-9]+" 
+                required 
+                [(ngModel)]="contacto.telefono"
+                (input)="onTelefonoInput()"
+                #telefonoInput
+                aria-describedby="telefono-error"
+            />
+            <small id="telefono-error" [style.display]="telefonoErrorVisible ? 'block' : 'none'" style="color: #ff6b6b; font-size: 0.95rem; margin-top: 6px; font-weight: 500;">
+                {{ telefonoErrorMsg }}
+            </small>
+        </div>
+
+        <div>
+            <label for="asunto">Asunto del Mensaje</label>
+            <input type="text" id="asunto" name="asunto" placeholder="Escribe el asunto de tu mensaje..." [(ngModel)]="contacto.asunto" />
+        </div>
+
+        <div>
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." [(ngModel)]="contacto.mensaje"></textarea>
+        </div>
+
+        <button type="submit" id="contacto-btn">Enviar</button>
+        <p id="respuesta-form" aria-live="polite">{{ respuestaForm }}</p>
+    </form>
+</section>

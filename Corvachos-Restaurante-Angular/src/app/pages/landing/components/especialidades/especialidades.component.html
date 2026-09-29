@@ -1,0 +1,13 @@
+<section class="especialidad d-flex align-items-center">
+    <div class="container-fluid">
+        <h1 class="especialidad-tittle">Nuestras Especialidades</h1>
+        <div class="especialidad-content">
+            @for (plato of platos; track plato.nombre) {
+                <article class="especialidad-plato">
+                    <img [src]="plato.imagen" [alt]="plato.nombre" height="300px">
+                    <p>{{ plato.nombre }}</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>
