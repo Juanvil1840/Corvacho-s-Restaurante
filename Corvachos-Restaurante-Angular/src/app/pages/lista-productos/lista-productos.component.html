@@ -1,61 +1,16 @@
 <div class="body-productos">
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        <img src="assets/Images/logo-simple.png" height="60px">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/productos">PRODUCTOS</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
   <!-- Contenido principal -->
   <div class="productos-contenedor">
     <h1 class="productos-titulo"><i class="bi bi-grid-3x3-gap-fill"></i> Gestion de Productos</h1>
 
     <a routerLink="/productos/nuevo" class="productos-btn-nuevo">+ Nuevo Producto</a>
 
-    <div class="productos-tabla">
-      <table>
-        <thead>
-          <tr>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Disponible</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let producto of productos">
-            <td><img [src]="producto.imagen" [alt]="producto.nombre"></td>
-            <td>{{ producto.nombre }}</td>
-            <td>$ {{ producto.precio }}</td>
-            <td>
-              <span *ngIf="producto.disponible" class="productos-disponible">Disponible</span>
-              <span *ngIf="!producto.disponible" class="productos-no-disponible">No disponible</span>
-            </td>
-            <td>
-              <div class="productos-acciones">
-                <a [routerLink]="['/productos/editar', producto.id]" class="productos-btn-editar">Editar</a>
-                <button (click)="eliminarProducto(producto.id)" class="productos-btn-eliminar">Eliminar</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <app-producto-tabla
+      [productos]="productos"
+      (eliminar)="eliminarProducto($event)">
+    </app-producto-tabla>
+
   </div>
-
-
 
 </div>

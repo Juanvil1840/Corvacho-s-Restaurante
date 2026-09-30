@@ -1,0 +1,41 @@
+<form (ngSubmit)="onSubmit()">
+
+  <p *ngIf="error" style="color: #ef4444; text-align: center;">{{ error }}</p>
+
+  <div class="registro-grupo">
+    <label>Nombre</label>
+    <input type="text" [(ngModel)]="cliente.nombre" name="nombre" placeholder="Tu nombre" required>
+  </div>
+
+  <div class="registro-grupo">
+    <label>Apellido</label>
+    <input type="text" [(ngModel)]="cliente.apellido" name="apellido" placeholder="Tu apellido" required>
+  </div>
+
+  <div class="registro-grupo">
+    <label>Correo Electronico</label>
+    <input type="email" [(ngModel)]="cliente.correo" name="correo" placeholder="ej. correo&#64;corvachos.com" required>
+  </div>
+
+  <div class="registro-grupo">
+    <label>Contrasena</label>
+    <input type="password" [(ngModel)]="cliente.contrasena" name="contrasena" placeholder="********" required>
+  </div>
+
+  <div class="registro-grupo">
+    <label>Telefono</label>
+    <input type="tel" [(ngModel)]="cliente.telefono" name="telefono" placeholder="+57 300 000 0000">
+  </div>
+
+  <div class="registro-grupo">
+    <label>Direccion</label>
+    <input type="text" [(ngModel)]="cliente.direccion" name="direccion" placeholder="Calle 40 #7-60 Bogota">
+  </div>
+
+  <button type="submit" class="registro-btn">REGISTRARSE</button>
+
+  <p class="registro-enlace">
+    Ya tienes una cuenta?
+    <a routerLink="/login">Inicia sesion</a>
+  </p>
+</form>

@@ -1,0 +1,30 @@
+<div class="productos-tabla">
+  <table>
+    <thead>
+      <tr>
+        <th>Imagen</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Disponible</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td><img [src]="producto.imagen" [alt]="producto.nombre"></td>
+        <td>{{ producto.nombre }}</td>
+        <td>$ {{ producto.precio }}</td>
+        <td>
+          <span *ngIf="producto.disponible" class="productos-disponible">Disponible</span>
+          <span *ngIf="!producto.disponible" class="productos-no-disponible">No disponible</span>
+        </td>
+        <td>
+          <div class="productos-acciones">
+            <a [routerLink]="['/productos/editar', producto.id]" class="productos-btn-editar">Editar</a>
+            <button (click)="eliminarProducto(producto.id)" class="productos-btn-eliminar">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

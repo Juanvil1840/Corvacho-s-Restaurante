@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ClienteServiceService } from '../../service/cliente-service.service';
 import { Cliente } from '../../models/cliente.model';
-import { FooterComponent } from '../../shared/footer/footer.component';
+import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.component';
 
 @Component({
   selector: 'app-lista-clientes',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ClienteTablaComponent],
   templateUrl: './lista-clientes.component.html',
   styleUrl: './lista-clientes.component.scss'
 })
@@ -28,4 +28,5 @@ export class ListaClientesComponent implements OnInit {
       this.clientes = this.clienteService.getClientes();
     }
   }
+
 }

@@ -1,0 +1,24 @@
+<section class="detalle-info">
+  <a routerLink="/menu" class="btn-volver">&#8592; Volver al menu</a>
+  <h1 class="detalle-nombre">{{ producto.nombre }}</h1>
+  <p class="detalle-categoria">Categoria: <span>{{ producto.categoria.nombre }}</span></p>
+
+  <h3 class="detalle-subtitulo">Descripcion</h3>
+  <p>{{ producto.descripcion }}</p>
+
+  <div class="adicionales-container">
+    <h3 class="detalle-subtitulo">Precio</h3>
+    <p class="detalle-precio">$ {{ producto.precio }}</p>
+  </div>
+
+  <!-- Adicionales disponibles -->
+  <div class="adicionales-container" *ngIf="adicionales.length > 0">
+    <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
+    <ul class="adicionales-lista">
+      <li class="adicional-item" *ngFor="let adicional of adicionales">
+        <span class="adicional-nombre">{{ adicional.nombre }}</span>
+        <span class="adicional-precio">+ $ {{ adicional.precio }}</span>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -1,23 +1,5 @@
 <div class="body-producto-form">
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        <img src="assets/Images/logo-simple.png" height="60px">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/productos">PRODUCTOS</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
   <!-- Contenido principal -->
   <div class="producto-form-contenedor">
     <h1 class="producto-form-titulo">{{ editando ? 'Editar Producto' : 'Nuevo Producto' }}</h1>
@@ -25,44 +7,9 @@
     <div class="producto-form-tarjeta">
       <form (ngSubmit)="guardar()">
 
-        <div class="producto-form-grupo">
-          <label>Nombre</label>
-          <input type="text" [(ngModel)]="producto.nombre" name="nombre" required>
-        </div>
+        <app-producto-campos [producto]="producto" [categorias]="categorias"></app-producto-campos>
 
-        <div class="producto-form-grupo">
-          <label>Precio</label>
-          <input type="number" step="0.01" [(ngModel)]="producto.precio" name="precio" required>
-        </div>
-
-        <div class="producto-form-grupo">
-          <label>Descripcion</label>
-          <textarea [(ngModel)]="producto.descripcion" name="descripcion" rows="3" required></textarea>
-        </div>
-
-        <div class="producto-form-grupo">
-          <label>URL o Ruta de Imagen</label>
-          <input type="text" [(ngModel)]="producto.imagen" name="imagen"
-                 placeholder="https://... o /Images/comida.png" required>
-        </div>
-
-        <div class="producto-form-grupo">
-          <label>Categoria</label>
-          <select [(ngModel)]="producto.categoria.id" name="categoriaId" required>
-            <option [ngValue]="0">-- Seleccionar categoria --</option>
-            <option *ngFor="let cat of categorias" [ngValue]="cat.id">
-              {{ cat.nombre }}
-            </option>
-          </select>
-        </div>
-
-        <div class="producto-form-grupo">
-          <label class="checkbox-label">
-            <input type="checkbox" [(ngModel)]="producto.disponible" name="disponible">
-            Disponible
-          </label>
-        </div>
-
+        <!-- Botones -->
         <div class="producto-form-acciones">
           <button type="submit" class="producto-form-btn-guardar">Guardar</button>
           <button type="button" class="producto-form-btn-cancelar" (click)="cancelar()">Cancelar</button>
@@ -70,6 +17,5 @@
       </form>
     </div>
   </div>
-
 
 </div>

@@ -1,48 +1,7 @@
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><img src="assets/Images/logo-simple.png" height="60px"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/menu">COMIDAS</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
 <main class="detalle-container" *ngIf="producto">
 
-  <section class="detalle-info">
-    <a routerLink="/menu" class="btn-volver">&#8592; Volver al menu</a>
-    <h1 class="detalle-nombre">{{ producto.nombre }}</h1>
-    <p class="detalle-categoria">Categoria: <span>{{ producto.categoria.nombre }}</span></p>
+  <app-detalle-info [producto]="producto" [adicionales]="adicionales"></app-detalle-info>
 
-    <h3 class="detalle-subtitulo">Descripcion</h3>
-    <p>{{ producto.descripcion }}</p>
-
-    <div class="adicionales-container">
-      <h3 class="detalle-subtitulo">Precio</h3>
-      <p class="detalle-precio">$ {{ producto.precio }}</p>
-    </div>
-
-    <div class="adicionales-container" *ngIf="adicionales.length > 0">
-      <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
-      <ul class="adicionales-lista">
-        <li class="adicional-item" *ngFor="let adicional of adicionales">
-          <span class="adicional-nombre">{{ adicional.nombre }}</span>
-          <span class="adicional-precio">+ $ {{ adicional.precio }}</span>
-        </li>
-      </ul>
-    </div>
-
-  </section>
-
-  <section class="detalle-imagen-container">
-    <img [src]="producto.imagen" [alt]="producto.nombre" class="detalle-imagen">
-  </section>
+  <app-detalle-imagen [producto]="producto"></app-detalle-imagen>
 
 </main>

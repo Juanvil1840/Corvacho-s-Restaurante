@@ -1,0 +1,33 @@
+<div class="productos-tabla">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Telefono</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cliente of clientes">
+        <td>{{ cliente.clienteId }}</td>
+        <td>{{ cliente.nombre }} {{ cliente.apellido }}</td>
+        <td>{{ cliente.correo }}</td>
+        <td>{{ cliente.telefono }}</td>
+        <td>
+          <span *ngIf="cliente.activo" class="productos-disponible">Activo</span>
+          <span *ngIf="!cliente.activo" class="productos-no-disponible">Inactivo</span>
+        </td>
+        <td>
+          <div class="productos-acciones">
+            <a [routerLink]="['/clientes/perfil', cliente.clienteId]" class="productos-btn-editar">Ver</a>
+            <a [routerLink]="['/clientes/editar', cliente.clienteId]" class="productos-btn-editar">Editar</a>
+            <button (click)="eliminarCliente(cliente.clienteId)" class="productos-btn-eliminar">Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

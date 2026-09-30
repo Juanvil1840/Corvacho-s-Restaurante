@@ -1,37 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ClienteServiceService } from '../../service/cliente-service.service';
-import { FooterComponent } from '../../shared/footer/footer.component';
+import { LoginFormularioComponent } from './components/login-formulario/login-formulario.component';
 
 @Component({
   selector: 'app-login-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, LoginFormularioComponent],
   templateUrl: './login-cliente.component.html',
   styleUrl: './login-cliente.component.scss'
 })
 export class LoginClienteComponent {
 
-  correo: string = '';
-  contrasena: string = '';
-  error: string = '';
+  @ViewChild(LoginFormularioComponent) formulario!: LoginFormularioComponent;
 
   constructor(
     private clienteService: ClienteServiceService,
     private router: Router
   ) {}
 
-  iniciarSesion(): void {
+  onIniciarSesion(datos: { correo: string, contrasena: string }): void {
     const clienteEncontrado = this.clienteService.getClientes().find(
-      c => c.correo === this.correo && c.contrasena === this.contrasena
+      c => c.correo === datos.correo && c.contrasena === datos.contrasena
     );
 
     if (clienteEncontrado) {
       this.router.navigate(['/clientes/perfil', clienteEncontrado.clienteId]);
     } else {
-      this.error = 'Usuario o contrasena incorrectos';
+      this.formulario.setError('Usuario o contrasena incorrectos');
     }
   }
+
 }

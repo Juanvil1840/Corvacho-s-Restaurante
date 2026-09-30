@@ -6,12 +6,12 @@ import { ProductoServiceService } from '../../service/producto-service.service';
 import { CategoriaServiceService } from '../../service/categoria-service.service';
 import { Producto } from '../../models/producto.model';
 import { Categoria } from '../../models/categoria.model';
-import { FooterComponent } from '../../shared/footer/footer.component';
+import { ProductoCamposComponent } from './components/producto-campos/producto-campos.component';
 
 @Component({
   selector: 'app-formulario-producto',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ProductoCamposComponent],
   templateUrl: './formulario-producto.component.html',
   styleUrl: './formulario-producto.component.scss'
 })
@@ -38,10 +38,8 @@ export class FormularioProductoComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Cargar todas las categorias
     this.categorias = this.categoriaService.getCategorias();
 
-    // Verificar si estamos editando
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.editando = true;
@@ -51,14 +49,16 @@ export class FormularioProductoComponent implements OnInit {
       }
     }
   }
+
   actualizarCategoria(): void {
     const catSeleccionada = this.categorias.find(c => c.id === Number(this.producto.categoria.id));
     if (catSeleccionada) {
       this.producto.categoria = catSeleccionada;
     }
   }
-    guardar(): void {
-    this.actualizarCategoria(); 
+
+  guardar(): void {
+    this.actualizarCategoria();
     if (this.editando) {
       this.productoService.actualizarProducto(this.producto);
     } else {
@@ -70,4 +70,5 @@ export class FormularioProductoComponent implements OnInit {
   cancelar(): void {
     this.router.navigate(['/productos']);
   }
+
 }

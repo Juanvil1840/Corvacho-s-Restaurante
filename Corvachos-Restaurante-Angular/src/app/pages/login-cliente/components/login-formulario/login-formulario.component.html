@@ -1,0 +1,17 @@
+<form class="login-form" (ngSubmit)="onSubmit()">
+
+  <p *ngIf="error" class="login-error">{{ error }}</p>
+
+  <label for="correo">Correo Electronico</label>
+  <input type="text" id="correo" [(ngModel)]="correo" name="correo" placeholder="camilo&#64;gmail.com" required>
+
+  <label for="contrasena">Contrasena</label>
+  <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" placeholder="**********" required>
+
+  <button type="submit" class="login-btn">INGRESAR</button>
+
+  <p class="login-registrate">
+    No tienes una cuenta aun?
+    <a routerLink="/registro">Registrate</a>
+  </p>
+</form>

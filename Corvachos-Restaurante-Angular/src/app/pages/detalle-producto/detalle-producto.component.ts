@@ -5,11 +5,13 @@ import { ProductoServiceService } from '../../service/producto-service.service';
 import { AdicionalServiceService } from '../../service/adicional-service.service';
 import { Producto } from '../../models/producto.model';
 import { Adicional } from '../../models/adicional.model';
+import { DetalleInfoComponent } from './components/detalle-info/detalle-info.component';
+import { DetalleImagenComponent } from './components/detalle-imagen/detalle-imagen.component';
 
 @Component({
   selector: 'app-detalle-producto',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DetalleInfoComponent, DetalleImagenComponent],
   templateUrl: './detalle-producto.component.html',
   styleUrl: './detalle-producto.component.scss'
 })
@@ -29,7 +31,6 @@ export class DetalleProductoComponent implements OnInit {
     if (id) {
       this.producto = this.productoService.getProductoById(Number(id));
 
-      // Cargar adicionales de la MISMA categoria del producto
       if (this.producto && this.producto.categoria) {
         const categoriaId = this.producto.categoria.id;
         this.adicionales = this.adicionalService.getAdicionales().filter(
@@ -38,4 +39,5 @@ export class DetalleProductoComponent implements OnInit {
       }
     }
   }
+
 }
