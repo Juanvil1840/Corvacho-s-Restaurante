@@ -40,15 +40,26 @@
                 Descripción del producto
             </p>
 
-            <div th:if="${not #lists.isEmpty(adicionales)}" class="adicionales-container">
-                <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
-                <ul class="adicionales-lista">
-                    <li class="adicional-item" th:each="pa : ${adicionales}" th:if="${pa.adicional.disponible}">
-                        <span class="adicional-nombre" th:text="${pa.adicional.nombre}">Nombre del adicional</span>
-                        <span class="adicional-precio" th:text="'+ $ ' + ${#numbers.formatDecimal(pa.adicional.precio, 1, 'POINT', 0, 'COMMA')}">Precio</span>
-                    </li>
-                </ul>
-            </div>
+  
+        <div th:if="${not #lists.isEmpty(adicionales)}" class="adicionales-container">
+            <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
+            <ul class="adicionales-lista">
+                <li class="adicional-item"
+                th:each="adicional : ${adicionales}"
+                th:if="${adicional.disponible}">
+
+                <span class="adicional-nombre"
+                  th:text="${adicional.nombre}">
+                Nombre del adicional
+                </span>
+
+            <span class="adicional-precio"
+                  th:text="'+ $ ' + ${#numbers.formatDecimal(adicional.precio, 1, 'POINT', 0, 'COMMA')}">
+                Precio
+            </span>
+                </li>
+            </ul>
+        </div>
 
         </section>
 

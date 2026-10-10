@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.entities.Producto;
 import com.example.demo.errors.ProductoNotFoundException;
 import com.example.demo.repository.DetallePedidoRepository;
-import com.example.demo.repository.ProductoAdicionalRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
 import com.example.demo.repository.ProductoRepository;
 
@@ -24,9 +23,6 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoCarritoRepository productoCarritoRepository;
-
-    @Autowired
-    private ProductoAdicionalRepository productoAdicionalRepository;
 
     @Override
     public Collection<Producto> obtenerTodos() {
@@ -78,9 +74,6 @@ public class ProductoServiceImpl implements ProductoService {
             }
             if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
                 productoCarritoRepository.deleteAll(producto.getProductoCarritos());
-            }
-            if (producto.getProductoAdicionales() != null && !producto.getProductoAdicionales().isEmpty()) {
-                productoAdicionalRepository.deleteAll(producto.getProductoAdicionales());
             }
             productoRepository.delete(producto);
         }

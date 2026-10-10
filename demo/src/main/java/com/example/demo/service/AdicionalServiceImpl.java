@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,11 @@ public class AdicionalServiceImpl implements AdicionalService {
 	@Override
 	public void deleteById(Long id) {
         adicionalRepository.deleteById(id);
+	}
+
+	@Override
+	public List<Adicional> buscarPorCategoria(Long categoriaId) {
+		return adicionalRepository.findByCategoriaId(categoriaId);
 	}
     
 }

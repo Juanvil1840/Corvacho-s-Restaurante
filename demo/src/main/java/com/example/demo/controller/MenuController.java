@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.entities.Producto;
 import com.example.demo.service.CategoriaService;
 import com.example.demo.service.ProductoService;
-import com.example.demo.entities.ProductoAdicional;
-import com.example.demo.service.ProductoAdicionalService;
+import com.example.demo.entities.Adicional;
+import com.example.demo.service.AdicionalService;
 
 @Controller
 public class MenuController {
@@ -27,7 +27,7 @@ public class MenuController {
     private CategoriaService categoriaService;
 
     @Autowired
-    private ProductoAdicionalService productoAdicionalService;
+    private AdicionalService adicionalService;
 
     @GetMapping("/menu")
     public String menu(Model model) {
@@ -51,7 +51,7 @@ public class MenuController {
 
     Long categoriaId = producto.getCategoria().getId();
 
-    List<ProductoAdicional> adicionales = productoAdicionalService.buscarPorCategoria(categoriaId);
+    List<Adicional> adicionales = adicionalService.buscarPorCategoria(categoriaId);
 
     model.addAttribute("producto", producto);
     model.addAttribute("categoria", producto.getCategoria());

@@ -44,9 +44,6 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<ProductoCarrito> productoCarritos;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
-    private List<ProductoAdicional> productoAdicionales;
-
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detallePedidos;
 

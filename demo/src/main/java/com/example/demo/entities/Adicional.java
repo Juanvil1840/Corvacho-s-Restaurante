@@ -11,6 +11,8 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 
 
 @Data
@@ -28,8 +30,9 @@ public class Adicional{
     @Column( nullable = false)
     private boolean disponible;
 
-    @OneToMany(mappedBy = "adicional")
-    private List<ProductoAdicional> productoAdicionales;
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 
     @OneToMany(mappedBy = "adicional")
     private List<DetallePedido> detallePedidos;
@@ -38,5 +41,12 @@ public class Adicional{
         this.nombre = nombre;
         this.precio = precio;
         this.disponible = disponible;
+    }
+
+    public Adicional(String nombre, double precio, boolean disponible, Categoria categoria){
+        this.nombre = nombre;
+        this.precio = precio;
+        this.disponible = disponible;
+        this.categoria = categoria;
     }
 }

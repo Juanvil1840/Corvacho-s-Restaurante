@@ -16,7 +16,6 @@ import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.DomiciliarioRepository;
 import com.example.demo.repository.OperadorRepository;
 import com.example.demo.repository.PedidoRepository;
-import com.example.demo.repository.ProductoAdicionalRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,7 +30,6 @@ import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
-import com.example.demo.entities.ProductoAdicional;
 import com.example.demo.entities.ProductoCarrito;
 
 @Component
@@ -68,9 +66,6 @@ public class DataLoader implements CommandLineRunner {
 
         @Autowired
         private PedidoRepository pedidoRepository;
-
-        @Autowired
-        private ProductoAdicionalRepository productoAdicionalRepository;
 
         @Autowired
         private ProductoCarritoRepository productoCarritoRepository;
@@ -315,19 +310,19 @@ public class DataLoader implements CommandLineRunner {
 
                 /* Adicionales */
 
-                Adicional adicional1 = adicionalRepository.save(new Adicional("Queso Extra", 5500, true));
-                Adicional adicional2 = adicionalRepository.save(new Adicional("Aros de cebolla", 10500, true));
-                Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta", 8500, true));
-                Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz", 3500, true));
-                Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa", 4500, true));
-                Adicional adicional6 = adicionalRepository.save(new Adicional("Salsa gratinada",4800,true));
-                Adicional adicional7 = adicionalRepository.save(new Adicional("ázucar",1000,true));
-                Adicional adicional8 = adicionalRepository.save(new Adicional("Helado",6000,true));
-                Adicional adicional9 = adicionalRepository.save(new Adicional("Pan de la casa",500,true));
-                Adicional adicional10 = adicionalRepository.save(new Adicional("BBQ",1000,true));
-                Adicional adicional11 = adicionalRepository.save(new Adicional("Queso parmesano",5800,true));
-                Adicional adicional12 = adicionalRepository.save(new Adicional("chiles",7000,true));
-                Adicional adicional13 = adicionalRepository.save(new Adicional("Vinagreta",2000,true));
+                Adicional adicional1 = adicionalRepository.save(new Adicional("Queso Extra", 5500, true,pastas));
+                Adicional adicional2 = adicionalRepository.save(new Adicional("Aros de cebolla", 10500, true,pastas));
+                Adicional adicional3 = adicionalRepository.save(new Adicional("Tocineta", 8500, true,pastas));
+                Adicional adicional4 = adicionalRepository.save(new Adicional("Huevos de codorniz", 3500, true,entradas));
+                Adicional adicional5 = adicionalRepository.save(new Adicional("Salsa de la casa", 4500, true,pastas));
+                Adicional adicional6 = adicionalRepository.save(new Adicional("Salsa gratinada",4800,true,pescados_y_Mariscos));
+                Adicional adicional7 = adicionalRepository.save(new Adicional("ázucar",1000,true,bebidas));
+                Adicional adicional8 = adicionalRepository.save(new Adicional("Helado",6000,true,postres));
+                Adicional adicional9 = adicionalRepository.save(new Adicional("Pan de la casa",500,true,entradas));
+                Adicional adicional10 = adicionalRepository.save(new Adicional("BBQ",1000,true,carnes));
+                Adicional adicional11 = adicionalRepository.save(new Adicional("Queso parmesano",5800,true,pizzas));
+                Adicional adicional12 = adicionalRepository.save(new Adicional("chiles",7000,true,pizzas));
+                Adicional adicional13 = adicionalRepository.save(new Adicional("Vinagreta",2000,true,ensaladas));
 
 
                 /* Administradores */
@@ -394,23 +389,6 @@ public class DataLoader implements CommandLineRunner {
                 detallePedidoRepository.save(new DetallePedido(2, producto4, pedido4, adicional4));
                 detallePedidoRepository.save(new DetallePedido(1, producto5, pedido5, adicional5));
                 detallePedidoRepository.save(new DetallePedido(1, producto5, pedido6, adicional1));
-
-                /* ProductoAdicionales */
-
-                productoAdicionalRepository.save(new ProductoAdicional(producto1, adicional1));
-                productoAdicionalRepository.save(new ProductoAdicional(producto4, adicional4));
-                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional5));
-                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional1));
-                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional2));
-                productoAdicionalRepository.save(new ProductoAdicional(producto5, adicional3));
-                productoAdicionalRepository.save(new ProductoAdicional(producto7, adicional13));
-                productoAdicionalRepository.save(new ProductoAdicional(producto8, adicional10));
-                productoAdicionalRepository.save(new ProductoAdicional(producto9, adicional11));
-                productoAdicionalRepository.save(new ProductoAdicional(producto9, adicional12));
-                productoAdicionalRepository.save(new ProductoAdicional(producto10, adicional8));
-                productoAdicionalRepository.save(new ProductoAdicional(producto11, adicional7));
-                productoAdicionalRepository.save(new ProductoAdicional(producto1, adicional9));
-                productoAdicionalRepository.save(new ProductoAdicional(producto3, adicional6));
 
                 /* ProductoCarrito */
 

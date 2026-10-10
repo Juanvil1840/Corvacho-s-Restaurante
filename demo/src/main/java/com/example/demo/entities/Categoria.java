@@ -30,8 +30,11 @@ public class Categoria{
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Producto> productos;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "categoria")
+    private List<Adicional> adicionales;
+
     public Categoria(String nombre) {
     this.nombre = nombre;
     }
-
 }
