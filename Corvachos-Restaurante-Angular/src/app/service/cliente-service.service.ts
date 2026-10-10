@@ -23,7 +23,7 @@ export class ClienteServiceService {
       apellido: "Pulido",
       correo: "jose.p@javeriana.edu.co",
       contrasena: "5678923",
-      telefono: "3113479585",
+      telefono: "3115679585",
       direccion: "Calle 98 #8-45",
       activo: true
     },
