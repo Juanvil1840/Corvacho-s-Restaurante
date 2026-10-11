@@ -14,17 +14,33 @@ import { Producto } from '../../models/producto.model';
 export class MenuComponent implements OnInit {
 
   productosPorCategoria: { [categoria: string]: Producto[] } = {};
+  cargando = true;
+  error = '';
 
   constructor(private productoService: ProductoServiceService) {}
 
   ngOnInit(): void {
-    const productos = this.productoService.getProductos();
-    productos.forEach(p => {
-      const cat = p.categoria?.nombre || 'Sin categoria';
-      if (!this.productosPorCategoria[cat]) {
-        this.productosPorCategoria[cat] = [];
+    this.productoService.getProductos().subscribe({
+      next: (productos) => {
+        this.productosPorCategoria = {};
+
+        productos.forEach((p) => {
+          const cat = p.categoria?.nombre || 'Sin categoria';
+
+          if (!this.productosPorCategoria[cat]) {
+            this.productosPorCategoria[cat] = [];
+          }
+
+          this.productosPorCategoria[cat].push(p);
+        });
+
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar el menú:', err);
+        this.error = 'No fue posible cargar el menú. Intenta nuevamente.';
+        this.cargando = false;
       }
-      this.productosPorCategoria[cat].push(p);
     });
   }
 
