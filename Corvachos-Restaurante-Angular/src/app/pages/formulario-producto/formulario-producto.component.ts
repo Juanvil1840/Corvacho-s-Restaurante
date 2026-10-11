@@ -28,7 +28,9 @@ export class FormularioProductoComponent implements OnInit {
   };
 
   categorias: Categoria[] = [];
-  editando: boolean = false;
+  editando = false;
+  guardando = false;
+  error = '';
 
   constructor(
     private productoService: ProductoServiceService,
@@ -41,34 +43,56 @@ export class FormularioProductoComponent implements OnInit {
     this.categorias = this.categoriaService.getCategorias();
 
     const id = this.route.snapshot.paramMap.get('id');
+
     if (id) {
       this.editando = true;
-      const productoExistente = this.productoService.getProductoById(Number(id));
-      if (productoExistente) {
-        this.producto = { ...productoExistente };
-      }
+
+      this.productoService.getProductoById(Number(id)).subscribe({
+        next: (producto) => {
+          this.producto = { ...producto };
+        },
+        error: (error) => {
+          console.error('Error al cargar el producto:', error);
+          this.error = 'No fue posible cargar el producto.';
+        }
+      });
     }
   }
 
   actualizarCategoria(): void {
-    const catSeleccionada = this.categorias.find(c => c.id === Number(this.producto.categoria.id));
-    if (catSeleccionada) {
-      this.producto.categoria = catSeleccionada;
+    const categoriaId = Number(this.producto.categoria.id);
+    const categoriaSeleccionada = this.categorias.find(
+      categoria => categoria.id === categoriaId
+    );
+
+    if (categoriaSeleccionada) {
+      this.producto.categoria = categoriaSeleccionada;
     }
   }
 
   guardar(): void {
     this.actualizarCategoria();
-    if (this.editando) {
-      this.productoService.actualizarProducto(this.producto);
-    } else {
-      this.productoService.agregarProducto(this.producto);
-    }
-    this.router.navigate(['/productos']);
+    this.guardando = true;
+    this.error = '';
+
+    const peticion = this.editando
+      ? this.productoService.actualizarProducto(this.producto)
+      : this.productoService.agregarProducto(this.producto);
+
+    peticion.subscribe({
+      next: () => {
+        this.guardando = false;
+        this.router.navigate(['/productos']);
+      },
+      error: (error) => {
+        console.error('Error al guardar el producto:', error);
+        this.guardando = false;
+        this.error = 'No fue posible guardar el producto. Intenta nuevamente.';
+      }
+    });
   }
 
   cancelar(): void {
     this.router.navigate(['/productos']);
   }
-
 }
