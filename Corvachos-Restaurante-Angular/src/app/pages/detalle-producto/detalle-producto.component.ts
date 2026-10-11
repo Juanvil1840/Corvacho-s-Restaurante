@@ -19,6 +19,7 @@ export class DetalleProductoComponent implements OnInit {
 
   producto: Producto | undefined;
   adicionales: Adicional[] = [];
+  error = '';
 
   constructor(
     private productoService: ProductoServiceService,
@@ -28,16 +29,30 @@ export class DetalleProductoComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.producto = this.productoService.getProductoById(Number(id));
 
-      if (this.producto && this.producto.categoria) {
-        const categoriaId = this.producto.categoria.id;
-        this.adicionales = this.adicionalService.getAdicionales().filter(
-          a => a.categoria && a.categoria.id === categoriaId && a.disponible
-        );
-      }
+    if (!id) {
+      this.error = 'No se encontró el identificador del producto.';
+      return;
     }
-  }
 
+    this.productoService.getProductoById(Number(id)).subscribe({
+      next: (producto) => {
+        this.producto = producto;
+
+        const categoriaId = producto.categoria?.id;
+
+        if (categoriaId !== undefined) {
+          this.adicionales = this.adicionalService.getAdicionales().filter(
+            adicional =>
+              adicional.categoria?.id === categoriaId &&
+              adicional.disponible
+          );
+        }
+      },
+      error: (error) => {
+        console.error('Error al consultar el producto:', error);
+        this.error = 'No fue posible cargar el detalle del producto.';
+      }
+    });
+  }
 }

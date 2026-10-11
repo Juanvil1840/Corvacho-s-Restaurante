@@ -15,18 +15,43 @@ import { ProductoTablaComponent } from './components/producto-tabla/producto-tab
 export class ListaProductosComponent implements OnInit {
 
   productos: Producto[] = [];
+  cargando = false;
+  error = '';
 
   constructor(private productoService: ProductoServiceService) {}
 
   ngOnInit(): void {
-    this.productos = this.productoService.getProductos();
+    this.cargarProductos();
+  }
+
+  cargarProductos(): void {
+    this.cargando = true;
+    this.error = '';
+
+    this.productoService.getProductos().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+        this.cargando = false;
+      },
+      error: (error) => {
+        console.error('Error al cargar los productos:', error);
+        this.error = 'No fue posible cargar los productos. Intenta nuevamente.';
+        this.cargando = false;
+      }
+    });
   }
 
   eliminarProducto(id: number): void {
     if (confirm('¿Eliminar este producto?')) {
-      this.productoService.eliminarProducto(id);
-      this.productos = this.productoService.getProductos();
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          this.cargarProductos();
+        },
+        error: (error) => {
+          console.error('Error al eliminar el producto:', error);
+          this.error = 'No fue posible eliminar el producto.';
+        }
+      });
     }
   }
-
 }
