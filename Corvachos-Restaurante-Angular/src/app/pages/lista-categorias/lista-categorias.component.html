@@ -1,0 +1,26 @@
+<div class="body-categoria-lista">
+  <div class="categoria-lista-contenedor">
+    <h1 class="categoria-lista-titulo">Categorías</h1>
+
+    <div class="categoria-lista-acciones">
+      <a routerLink="/categorias/nuevo" class="categoria-lista-btn-nuevo">
+        + Nueva Categoría
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="categoria-lista-mensaje">Cargando categorías...</p>
+    }
+
+    @if (error) {
+      <p class="categoria-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-categoria-tabla
+        [categorias]="categorias"
+        (eliminar)="eliminarCategoria($event)">
+      </app-categoria-tabla>
+    }
+  </div>
+</div>

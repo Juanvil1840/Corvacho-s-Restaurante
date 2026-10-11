@@ -1,0 +1,55 @@
+<div class="adicional-campos">
+
+  <div class="adicional-campo">
+    <label for="nombre">Nombre</label>
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      [(ngModel)]="adicional.nombre"
+      placeholder="Ej: Queso extra"
+      required
+    />
+  </div>
+
+  <div class="adicional-campo">
+    <label for="precio">Precio (COP)</label>
+    <input
+      id="precio"
+      name="precio"
+      type="number"
+      min="0"
+      step="100"
+      [(ngModel)]="adicional.precio"
+      placeholder="Ej: 5000"
+      required
+    />
+  </div>
+
+  <div class="adicional-campo">
+    <label for="categoria">Categoría</label>
+    <select
+      id="categoria"
+      name="categoria"
+      [(ngModel)]="adicional.categoria.id"
+      required>
+      <option [ngValue]="0" disabled>Selecciona una categoría</option>
+      @for (categoria of categorias; track categoria.id) {
+        <option [ngValue]="categoria.id">{{ categoria.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="adicional-campo adicional-campo-check">
+    <label for="disponible">
+      <input
+        id="disponible"
+        name="disponible"
+        type="checkbox"
+        [(ngModel)]="adicional.disponible"
+      />
+      Disponible
+    </label>
+  </div>
+
+</div>

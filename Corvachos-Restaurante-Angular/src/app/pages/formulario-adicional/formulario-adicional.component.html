@@ -1,0 +1,30 @@
+<div class="body-adicional-form">
+  <div class="adicional-form-contenedor">
+    <h1 class="adicional-form-titulo">
+      {{ editando ? 'Editar Adicional' : 'Nuevo Adicional' }}
+    </h1>
+
+    <div class="adicional-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <app-adicional-campos
+          [adicional]="adicional"
+          [categorias]="categorias">
+        </app-adicional-campos>
+
+        @if (error) {
+          <p class="adicional-form-error">{{ error }}</p>
+        }
+
+        <div class="adicional-form-acciones">
+          <button type="submit" class="adicional-form-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" class="adicional-form-btn-cancelar" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

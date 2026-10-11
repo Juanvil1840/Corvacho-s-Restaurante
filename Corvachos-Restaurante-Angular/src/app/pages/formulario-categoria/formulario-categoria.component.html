@@ -1,0 +1,27 @@
+<div class="body-categoria-form">
+  <div class="categoria-form-contenedor">
+    <h1 class="categoria-form-titulo">
+      {{ editando ? 'Editar Categoría' : 'Nueva Categoría' }}
+    </h1>
+
+    <div class="categoria-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <app-categoria-campos [categoria]="categoria"></app-categoria-campos>
+
+        @if (error) {
+          <p class="categoria-form-error">{{ error }}</p>
+        }
+
+        <div class="categoria-form-acciones">
+          <button type="submit" class="categoria-form-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" class="categoria-form-btn-cancelar" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

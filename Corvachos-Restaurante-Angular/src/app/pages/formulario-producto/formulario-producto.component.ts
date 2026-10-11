@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductoServiceService } from '../../service/producto-service.service';
-import { CategoriaServiceService } from '../../service/categoria-service.service';
 import { Producto } from '../../models/producto.model';
 import { Categoria } from '../../models/categoria.model';
+import { CategoriaService } from '../../service/categoria.service';
 import { ProductoCamposComponent } from './components/producto-campos/producto-campos.component';
 
 @Component({
@@ -34,13 +34,21 @@ export class FormularioProductoComponent implements OnInit {
 
   constructor(
     private productoService: ProductoServiceService,
-    private categoriaService: CategoriaServiceService,
+    private categoriaService: CategoriaService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.categorias = this.categoriaService.getCategorias();
+    this.categoriaService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+      },
+      error: (error) => {
+        console.error('Error al cargar las categorías:', error);
+        this.error = 'No fue posible cargar las categorías.';
+      }
+    });
 
     const id = this.route.snapshot.paramMap.get('id');
 

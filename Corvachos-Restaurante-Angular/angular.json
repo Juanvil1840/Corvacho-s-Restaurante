@@ -50,7 +50,11 @@
   "src/assets/style/registro.css",
   "src/assets/style/detalle.css",
   "src/assets/style/login.css",
-  "src/assets/style/menu.css"
+  "src/assets/style/menu.css",
+  "src/assets/style/categorias.css",
+"src/assets/style/categoria-formulario.css",
+"src/assets/style/adicionales.css",
+"src/assets/style/adicional-formulario.css"
 ],
             "scripts": []
           },
@@ -122,7 +126,11 @@
   "src/assets/style/registro.css",
   "src/assets/style/detalle.css",
   "src/assets/style/login.css",
-  "src/assets/style/menu.css"
+  "src/assets/style/menu.css",
+  "src/assets/style/categorias.css",
+"src/assets/style/categoria-formulario.css",
+"src/assets/style/adicionales.css",
+"src/assets/style/adicional-formulario.css"
 ],
             "scripts": []
           }

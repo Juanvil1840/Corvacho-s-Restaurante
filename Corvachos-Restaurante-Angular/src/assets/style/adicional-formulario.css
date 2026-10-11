@@ -1,0 +1,184 @@
+/* ============================================
+   ESTILOS PARA FORMULARIO DE ADICIONAL (Corvacho's)
+   ============================================ */
+
+.body-adicional-form {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.adicional-form-contenedor {
+    max-width: 600px;
+    margin: 100px auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+.adicional-form-titulo {
+    color: #cd9e46;
+    font-size: 2.2rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #1a3040;
+    padding-bottom: 0.5rem;
+}
+
+.adicional-form-tarjeta {
+    background: #013741;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid #1a3040;
+}
+
+/* Campos */
+.adicional-campos {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.adicional-campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.adicional-campo label {
+    color: #a0b8bf;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.adicional-campo input[type="text"],
+.adicional-campo input[type="number"],
+.adicional-campo select {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #334955;
+    border-radius: 6px;
+    background: #001c2a;
+    color: #fcfafa;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.adicional-campo input::placeholder {
+    color: #6f8896;
+}
+
+.adicional-campo input:focus,
+.adicional-campo select:focus {
+    outline: none;
+    border-color: #cd9e46;
+    box-shadow: 0 0 0 3px rgba(205, 158, 70, 0.2);
+}
+
+.adicional-campo select option {
+    background: #001c2a;
+    color: #fcfafa;
+}
+
+/* Checkbox disponible */
+.adicional-campo-check label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fcfafa;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: normal;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.adicional-campo-check input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #cd9e46;
+    cursor: pointer;
+}
+
+/* Acciones */
+.adicional-form-acciones {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+}
+
+.adicional-form-btn-guardar {
+    padding: 0.6rem 2rem;
+    border: 2px solid #cd9e46;
+    border-radius: 6px;
+    background: #cd9e46;
+    color: #001c2a;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.adicional-form-btn-guardar:hover:not(:disabled) {
+    background: transparent;
+    color: #cd9e46;
+}
+
+.adicional-form-btn-guardar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.adicional-form-btn-cancelar {
+    padding: 0.6rem 2rem;
+    border: 2px solid #334955;
+    border-radius: 6px;
+    background: transparent;
+    color: #a0b8bf;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.adicional-form-btn-cancelar:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+}
+
+.adicional-form-error {
+    color: #e57373;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .adicional-form-contenedor {
+        margin: 90px auto 1.5rem;
+        padding: 0 15px;
+    }
+    .adicional-form-titulo {
+        font-size: 1.6rem;
+    }
+    .adicional-form-tarjeta {
+        padding: 1.5rem;
+    }
+    .adicional-form-acciones {
+        flex-direction: column;
+    }
+}

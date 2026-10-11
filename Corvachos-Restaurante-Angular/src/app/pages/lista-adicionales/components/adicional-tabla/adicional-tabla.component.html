@@ -1,0 +1,49 @@
+<div class="adicional-tabla">
+<table class="adicional-tabla">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Precio</th>
+      <th>Categoría</th>
+      <th>Disponible</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (adicional of adicionales; track adicional.id_adicional) {
+      <tr>
+        <td>{{ adicional.id_adicional }}</td>
+        <td>{{ adicional.nombre }}</td>
+<td>{{ adicional.precio | currency:'COP ':'symbol':'1.0-0' }}</td>        <td>{{ adicional.categoria?.nombre }}</td>
+        <td>
+          <span [class.estado-activo]="adicional.disponible"
+                [class.estado-inactivo]="!adicional.disponible">
+            {{ adicional.disponible ? 'Sí' : 'No' }}
+          </span>
+        </td>
+        <td>
+          <a
+            [routerLink]="['/adicionales/editar', adicional.id_adicional]"
+            class="adicional-tabla-btn-editar">
+            Editar
+          </a>
+          <button
+            type="button"
+            class="adicional-tabla-btn-eliminar"
+            (click)="onEliminar(adicional.id_adicional)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+    @if (adicionales.length === 0) {
+      <tr>
+        <td colspan="6" class="adicional-tabla-vacio">
+          No hay adicionales registrados.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductoServiceService } from '../../service/producto-service.service';
-import { AdicionalServiceService } from '../../service/adicional-service.service';
+import { AdicionalService } from '../../service/adicional.service';
 import { Producto } from '../../models/producto.model';
 import { Adicional } from '../../models/adicional.model';
 import { DetalleInfoComponent } from './components/detalle-info/detalle-info.component';
@@ -23,7 +23,7 @@ export class DetalleProductoComponent implements OnInit {
 
   constructor(
     private productoService: ProductoServiceService,
-    private adicionalService: AdicionalServiceService,
+    private adicionalService: AdicionalService,
     private route: ActivatedRoute
   ) {}
 
@@ -42,11 +42,17 @@ export class DetalleProductoComponent implements OnInit {
         const categoriaId = producto.categoria?.id;
 
         if (categoriaId !== undefined) {
-          this.adicionales = this.adicionalService.getAdicionales().filter(
-            adicional =>
-              adicional.categoria?.id === categoriaId &&
-              adicional.disponible
-          );
+          this.adicionalService.getAdicionalesPorCategoria(categoriaId).subscribe({
+            next: (adicionales) => {
+              this.adicionales = adicionales.filter(
+                adicional => adicional.disponible
+              );
+            },
+            error: (error) => {
+              console.error('Error al consultar los adicionales:', error);
+              this.adicionales = [];
+            }
+          });
         }
       },
       error: (error) => {

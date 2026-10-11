@@ -1,0 +1,26 @@
+<div class="body-adicional-lista">
+  <div class="adicional-lista-contenedor">
+    <h1 class="adicional-lista-titulo">Adicionales</h1>
+
+    <div class="adicional-lista-acciones">
+      <a routerLink="/adicionales/nuevo" class="adicional-lista-btn-nuevo">
+        + Nuevo Adicional
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="adicional-lista-mensaje">Cargando adicionales...</p>
+    }
+
+    @if (error) {
+      <p class="adicional-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-adicional-tabla
+        [adicionales]="adicionales"
+        (eliminar)="eliminarAdicional($event)">
+      </app-adicional-tabla>
+    }
+  </div>
+</div>

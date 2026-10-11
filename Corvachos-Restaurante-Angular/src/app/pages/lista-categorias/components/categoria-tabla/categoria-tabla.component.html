@@ -1,0 +1,39 @@
+<div class="categoria-tabla">
+<table class="categoria-tabla">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (categoria of categorias; track categoria.id) {
+      <tr>
+        <td>{{ categoria.id }}</td>
+        <td>{{ categoria.nombre }}</td>
+        <td>
+          <a
+            [routerLink]="['/categorias/editar', categoria.id]"
+            class="categoria-tabla-btn-editar">
+            Editar
+          </a>
+          <button
+            type="button"
+            class="categoria-tabla-btn-eliminar"
+            (click)="onEliminar(categoria.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+    @if (categorias.length === 0) {
+      <tr>
+        <td colspan="3" class="categoria-tabla-vacio">
+          No hay categorías registradas.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>
