@@ -73,6 +73,10 @@ public class DataLoader implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
 
+                if (categoriaRepository.count() > 0) {
+                        return;
+                }
+
                 /* Categorias */
 
                 Categoria entradas = categoriaRepository.save(new Categoria("Entradas"));
