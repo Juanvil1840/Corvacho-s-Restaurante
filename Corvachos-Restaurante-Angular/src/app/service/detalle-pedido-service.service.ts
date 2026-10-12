@@ -1,80 +1,27 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 import { DetallePedido } from '../models/detallePedido.model';
-import { ProductoServiceService } from './producto-service.service';
-import { PedidoServiceService } from './pedido-service.service';
-import { AdicionalServiceService } from './adicional-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DetallePedidoServiceService {
 
+  private apiUrl = 'http://localhost:8090/api/detalles-pedido';
   private detallesPedidos: DetallePedido[] = [];
 
-  constructor(
-    private productoService: ProductoServiceService,
-    private pedidoService: PedidoServiceService,
-    private adicionalService: AdicionalServiceService
-  ) {
+  constructor(private http: HttpClient) {
+    this.cargarDetalles();
+  }
 
-    const pedidos = this.pedidoService.getPedidos();
-    const adicionales = this.adicionalService.getAdicionales();
-
-    this.productoService.getProductos().subscribe({
-      next: (productos) => {
-
-        if (productos.length === 0) {
-          this.detallesPedidos = [];
-          return;
-        }
-
-        this.detallesPedidos = [
-          {
-            id_DetallePedido: 1,
-            cantidad: 2,
-            producto: productos[0],
-            pedido: pedidos[0],
-            adicional: adicionales[0]
-          },
-          {
-            id_DetallePedido: 2,
-            cantidad: 1,
-            producto: productos[1 % productos.length],
-            pedido: pedidos[1],
-            adicional: adicionales[1]
-          },
-          {
-            id_DetallePedido: 3,
-            cantidad: 3,
-            producto: productos[2 % productos.length],
-            pedido: pedidos[2],
-            adicional: adicionales[2]
-          },
-          {
-            id_DetallePedido: 4,
-            cantidad: 2,
-            producto: productos[3 % productos.length],
-            pedido: pedidos[3],
-            adicional: adicionales[3]
-          },
-          {
-            id_DetallePedido: 5,
-            cantidad: 1,
-            producto: productos[4 % productos.length],
-            pedido: pedidos[4],
-            adicional: adicionales[4]
-          },
-          {
-            id_DetallePedido: 6,
-            cantidad: 1,
-            producto: productos[4 % productos.length],
-            pedido: pedidos[5],
-            adicional: adicionales[0]
-          }
-        ];
+  cargarDetalles(): void {
+    this.http.get<DetallePedido[]>(this.apiUrl).subscribe({
+      next: (detalles) => {
+        this.detallesPedidos = detalles;
       },
       error: (error) => {
-        console.error('Error al cargar productos para los detalles del pedido:', error);
+        console.error('Error al cargar detalles del pedido:', error);
         this.detallesPedidos = [];
       }
     });
@@ -82,5 +29,26 @@ export class DetallePedidoServiceService {
 
   getDetallesPedidos(): DetallePedido[] {
     return this.detallesPedidos;
+  }
+
+  obtenerTodos(): Observable<DetallePedido[]> {
+    return this.http.get<DetallePedido[]>(this.apiUrl).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
+  obtenerPorPedido(pedidoId: number): Observable<DetallePedido[]> {
+    return this.http.get<DetallePedido[]>(`${this.apiUrl}/pedido/${pedidoId}`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
+  private manejarError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('Error de conexión con Spring Boot', error);
+    } else {
+      console.error(`Error HTTP ${error.status}: ${error.message}`);
+    }
+    return throwError(() => error);
   }
 }

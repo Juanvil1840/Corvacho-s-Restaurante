@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ClienteServiceService } from '../../service/cliente-service.service';
+import { ClienteService } from '../../service/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { PerfilInfoComponent } from './components/perfil-info/perfil-info.component';
 import { PerfilPedidosComponent } from './components/perfil-pedidos/perfil-pedidos.component';
@@ -18,7 +18,7 @@ export class PerfilClienteComponent implements OnInit {
   cliente: Cliente | undefined;
 
   constructor(
-    private clienteService: ClienteServiceService,
+    private clienteService: ClienteService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -26,15 +26,29 @@ export class PerfilClienteComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.cliente = this.clienteService.getClienteById(Number(id));
+      this.clienteService.getClienteById(Number(id)).subscribe({
+        next: (cliente) => {
+          this.cliente = cliente;
+        },
+        error: (err) => {
+          console.error('Error al cargar el perfil del cliente:', err);
+          this.cliente = undefined;
+        }
+      });
     }
   }
 
   eliminarCuenta(): void {
     if (confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')) {
       if (this.cliente) {
-        this.clienteService.eliminarCliente(this.cliente.clienteId);
-        this.router.navigate(['/']);
+        this.clienteService.eliminarCliente(this.cliente.clienteId).subscribe({
+          next: () => {
+            this.router.navigate(['/']);
+          },
+          error: (err) => {
+            console.error('Error al eliminar la cuenta:', err);
+          }
+        });
       }
     }
   }

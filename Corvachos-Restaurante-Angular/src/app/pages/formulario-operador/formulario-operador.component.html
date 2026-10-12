@@ -1,0 +1,28 @@
+<div class="body-operador-form">
+  <div class="operador-form-contenedor">
+    <h1 class="operador-form-titulo">
+      {{ editando ? 'Editar Operador' : 'Nuevo Operador' }}
+    </h1>
+
+    <div class="operador-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <app-operador-campos [operador]="operador"></app-operador-campos>
+
+        @if (error) {
+          <p class="operador-form-error">{{ error }}</p>
+        }
+
+        <div class="operador-form-acciones">
+          <button type="submit" class="operador-form-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" class="operador-form-btn-cancelar" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -6,10 +6,20 @@
 
     <a routerLink="/clientes/nuevo" class="productos-btn-nuevo">+ Nuevo Cliente</a>
 
-    <app-cliente-tabla
-      [clientes]="clientes"
-      (eliminar)="eliminarCliente($event)">
-    </app-cliente-tabla>
+    @if (cargando) {
+      <p style="color: #a0b8bf; text-align: center; padding: 2rem;">Cargando clientes...</p>
+    }
+
+    @if (error) {
+      <p style="color: #e57373; font-weight: 600; text-align: center; padding: 1rem;">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-cliente-tabla
+        [clientes]="clientes"
+        (eliminar)="eliminarCliente($event)">
+      </app-cliente-tabla>
+    }
   </div>
 
 </div>

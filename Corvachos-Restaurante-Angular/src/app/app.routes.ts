@@ -23,6 +23,14 @@ import { FormularioPedidoComponent } from './pages/formulario-pedido/formulario-
 import { ListaDomiciliariosComponent } from './pages/lista-domiciliarios/lista-domiciliarios.component';
 import { FormularioDomiciliarioComponent } from './pages/formulario-domiciliario/formulario-domiciliario.component';
 
+// CRUD Operador, Administrador y páginas pendientes
+import { ListaOperadoresComponent } from './pages/lista-operadores/lista-operadores.component';
+import { FormularioOperadorComponent } from './pages/formulario-operador/formulario-operador.component';
+import { ListaAdministradoresComponent } from './pages/lista-administradores/lista-administradores.component';
+import { FormularioAdministradorComponent } from './pages/formulario-administrador/formulario-administrador.component';
+import { DetallePedidoComponent } from './pages/detalle-pedido/detalle-pedido.component';
+import { PaginaErrorComponent } from './pages/pagina-error/pagina-error.component';
+
 export const routes: Routes = [
 
     { path: '', component: LandingComponent },
@@ -42,9 +50,18 @@ export const routes: Routes = [
     { path: 'pedidos', component: ListaPedidosComponent },
     { path: 'pedidos/nuevo', component: FormularioPedidoComponent },
     { path: 'pedidos/editar/:id', component: FormularioPedidoComponent },
+    { path: 'pedidos/detalle/:id', component: DetallePedidoComponent },
     { path: 'domiciliarios', component: ListaDomiciliariosComponent },
     { path: 'domiciliarios/nuevo', component: FormularioDomiciliarioComponent },
     { path: 'domiciliarios/editar/:id', component: FormularioDomiciliarioComponent },
+
+    // CRUD Operador y Administrador
+    { path: 'operadores', component: ListaOperadoresComponent },
+    { path: 'operadores/nuevo', component: FormularioOperadorComponent },
+    { path: 'operadores/editar/:id', component: FormularioOperadorComponent },
+    { path: 'administradores', component: ListaAdministradoresComponent },
+    { path: 'administradores/nuevo', component: FormularioAdministradorComponent },
+    { path: 'administradores/editar/:id', component: FormularioAdministradorComponent },
 
     { path: 'clientes', component: ListaClientesComponent },
     { path: 'clientes/nuevo', component: FormularioClienteComponent },
@@ -54,4 +71,6 @@ export const routes: Routes = [
     { path: 'registro', component: RegistroClienteComponent },
     { path: 'menu', component: MenuComponent },
     { path: 'menu/detalle/:id', component: DetalleProductoComponent },
+    { path: 'error', component: PaginaErrorComponent },
+    { path: '**', component: PaginaErrorComponent },
 ];

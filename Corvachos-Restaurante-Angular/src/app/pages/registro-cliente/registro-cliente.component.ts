@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ClienteServiceService } from '../../service/cliente-service.service';
+import { ClienteService } from '../../service/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { RegistroFormularioComponent } from './components/registro-formulario/registro-formulario.component';
 
@@ -17,22 +17,20 @@ export class RegistroClienteComponent {
   @ViewChild(RegistroFormularioComponent) formulario!: RegistroFormularioComponent;
 
   constructor(
-    private clienteService: ClienteServiceService,
+    private clienteService: ClienteService,
     private router: Router
   ) {}
 
   onRegistrar(cliente: Cliente): void {
-    const existente = this.clienteService.getClientes().find(
-      c => c.correo === cliente.correo
-    );
-
-    if (existente) {
-      this.formulario.setError('Este correo ya esta registrado');
-      return;
-    }
-
-    this.clienteService.agregarCliente(cliente);
-    this.router.navigate(['/clientes/perfil', cliente.clienteId]);
+    this.clienteService.agregarCliente(cliente).subscribe({
+      next: (guardado) => {
+        this.router.navigate(['/clientes/perfil', guardado.clienteId]);
+      },
+      error: (err) => {
+        const msg = err?.error?.message || 'Este correo ya esta registrado o los datos son invalidos';
+        this.formulario.setError(msg);
+      }
+    });
   }
 
 }

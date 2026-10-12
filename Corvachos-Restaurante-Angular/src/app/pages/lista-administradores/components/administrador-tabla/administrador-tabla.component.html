@@ -1,0 +1,40 @@
+<div class="administrador-tabla">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (administrador of administradores; track administrador.id_administrador) {
+        <tr>
+          <td>{{ administrador.id_administrador }}</td>
+          <td>{{ administrador.nombre }}</td>
+          <td>
+            <a
+              [routerLink]="['/administradores/editar', administrador.id_administrador]"
+              class="administrador-tabla-btn-editar">
+              Editar
+            </a>
+            <button
+              type="button"
+              class="administrador-tabla-btn-eliminar"
+              (click)="onEliminar(administrador.id_administrador)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      }
+      @if (administradores.length === 0) {
+        <tr>
+          <td colspan="3" class="administrador-tabla-vacio">
+            No hay administradores registrados.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+

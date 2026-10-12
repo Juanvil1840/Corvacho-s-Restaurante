@@ -1,0 +1,27 @@
+<div class="body-administrador-lista">
+  <div class="administrador-lista-contenedor">
+    <h1 class="administrador-lista-titulo">Administradores</h1>
+
+    <div class="administrador-lista-acciones">
+      <a routerLink="/administradores/nuevo" class="administrador-lista-btn-nuevo">
+        + Nuevo Administrador
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="administrador-lista-mensaje">Cargando administradores...</p>
+    }
+
+    @if (error) {
+      <p class="administrador-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-administrador-tabla
+        [administradores]="administradores"
+        (eliminar)="eliminarAdministrador($event)">
+      </app-administrador-tabla>
+    }
+  </div>
+</div>
+

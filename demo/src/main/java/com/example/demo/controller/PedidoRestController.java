@@ -161,12 +161,15 @@ public class PedidoRestController {
         map.put("fechaEntrega", pedido.getFechaEntrega());
 
         if (pedido.getCliente() != null) {
-            map.put("cliente", Map.of(
-                    "clienteId", pedido.getCliente().getClienteId(),
-                    "nombre", pedido.getCliente().getNombre(),
-                    "apellido", pedido.getCliente().getApellido(),
-                    "direccion", pedido.getCliente().getDireccion() != null ? pedido.getCliente().getDireccion() : ""
-            ));
+            Map<String, Object> cliMap = new LinkedHashMap<>();
+            cliMap.put("clienteId", pedido.getCliente().getClienteId());
+            cliMap.put("nombre", pedido.getCliente().getNombre());
+            cliMap.put("apellido", pedido.getCliente().getApellido());
+            cliMap.put("correo", pedido.getCliente().getCorreo() != null ? pedido.getCliente().getCorreo() : "");
+            cliMap.put("telefono", pedido.getCliente().getTelefono() != null ? pedido.getCliente().getTelefono() : "");
+            cliMap.put("direccion", pedido.getCliente().getDireccion() != null ? pedido.getCliente().getDireccion() : "");
+            cliMap.put("activo", pedido.getCliente().isActivo());
+            map.put("cliente", cliMap);
         } else {
             map.put("cliente", null);
         }
@@ -181,10 +184,13 @@ public class PedidoRestController {
         }
 
         if (pedido.getDomiciliario() != null) {
-            map.put("domiciliario", Map.of(
-                    "id_domiciliario", pedido.getDomiciliario().getId_domiciliario(),
-                    "nombre", pedido.getDomiciliario().getNombre()
-            ));
+            Map<String, Object> domMap = new LinkedHashMap<>();
+            domMap.put("id_domiciliario", pedido.getDomiciliario().getId_domiciliario());
+            domMap.put("nombre", pedido.getDomiciliario().getNombre());
+            domMap.put("celular", pedido.getDomiciliario().getCelular() != null ? pedido.getDomiciliario().getCelular() : "");
+            domMap.put("cedula", pedido.getDomiciliario().getCedula() != null ? pedido.getDomiciliario().getCedula() : "");
+            domMap.put("informaciondisp", pedido.getDomiciliario().isInformaciondisp());
+            map.put("domiciliario", domMap);
         } else {
             map.put("domiciliario", null);
         }

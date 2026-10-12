@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DomiciliarioService } from '../../service/domiciliario.service';
-import { OperadorServiceService } from '../../service/operador-service.service';
+import { OperadorService } from '../../service/operador.service';
 import { Domiciliario } from '../../models/domiciliario.model';
 import { Operador } from '../../models/operador.model';
 import { DomiciliarioCamposComponent } from './components/domiciliario-campos/domiciliario-campos.component';
@@ -33,13 +33,16 @@ export class FormularioDomiciliarioComponent implements OnInit {
 
   constructor(
     private domiciliarioService: DomiciliarioService,
-    private operadorService: OperadorServiceService,
+    private operadorService: OperadorService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.operadores = this.operadorService.getOperadores();
+    this.operadorService.getOperadores().subscribe({
+      next: (ops) => this.operadores = ops,
+      error: (e) => console.error('Error al cargar operadores:', e)
+    });
 
     const id = this.route.snapshot.paramMap.get('id');
 

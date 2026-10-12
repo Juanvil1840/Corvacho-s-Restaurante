@@ -1,0 +1,27 @@
+<div class="body-operador-lista">
+  <div class="operador-lista-contenedor">
+    <h1 class="operador-lista-titulo">Operadores</h1>
+
+    <div class="operador-lista-acciones">
+      <a routerLink="/operadores/nuevo" class="operador-lista-btn-nuevo">
+        + Nuevo Operador
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="operador-lista-mensaje">Cargando operadores...</p>
+    }
+
+    @if (error) {
+      <p class="operador-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-operador-tabla
+        [operadores]="operadores"
+        (eliminar)="eliminarOperador($event)">
+      </app-operador-tabla>
+    }
+  </div>
+</div>
+
