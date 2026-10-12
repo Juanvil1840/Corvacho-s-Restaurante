@@ -1,0 +1,49 @@
+<div class="pedido-tabla">
+<table class="pedido-tabla">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Estado</th>
+      <th>Cliente</th>
+      <th>Operador</th>
+      <th>Domiciliario</th>
+      <th>Fecha Creación</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (pedido of pedidos; track pedido.id_Pedido) {
+      <tr>
+        <td>{{ pedido.id_Pedido }}</td>
+        <td>
+          <span class="pedido-estado-badge">{{ pedido.estado }}</span>
+        </td>
+        <td>{{ pedido.cliente ? (pedido.cliente.nombre + ' ' + pedido.cliente.apellido) : '—' }}</td>
+        <td>{{ pedido.operador?.nombre ?? '—' }}</td>
+        <td>{{ pedido.domiciliario?.nombre ?? 'Sin asignar' }}</td>
+        <td>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>
+          <a
+            [routerLink]="['/pedidos/editar', pedido.id_Pedido]"
+            class="pedido-tabla-btn-editar">
+            Editar
+          </a>
+          <button
+            type="button"
+            class="pedido-tabla-btn-eliminar"
+            (click)="onEliminar(pedido.id_Pedido)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+    @if (pedidos.length === 0) {
+      <tr>
+        <td colspan="7" class="pedido-tabla-vacio">
+          No hay pedidos registrados.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

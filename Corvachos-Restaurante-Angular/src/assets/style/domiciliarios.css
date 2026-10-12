@@ -1,0 +1,180 @@
+/* ============================================
+   ESTILOS PARA LISTA DE DOMICILIARIOS (Corvacho's)
+   ============================================ */
+
+.body-domiciliario-lista {
+    background-color: #001c2a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.domiciliario-lista-contenedor {
+    max-width: 1200px;
+    margin: 100px auto 2rem;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+.domiciliario-lista-titulo {
+    color: #cd9e46;
+    font-size: 2.2rem;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #1a3040;
+    padding-bottom: 0.5rem;
+}
+
+.domiciliario-lista-acciones {
+    text-align: right;
+    margin-bottom: 1.5rem;
+}
+
+.domiciliario-lista-btn-nuevo {
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    border: 2px solid #cd9e46;
+    border-radius: 6px;
+    color: #cd9e46;
+    background: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.domiciliario-lista-btn-nuevo:hover {
+    background: #cd9e46;
+    color: #001c2a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(205, 158, 70, 0.25);
+}
+
+/* Tabla */
+.domiciliario-tabla {
+    background: #013741;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid #1a3040;
+    width: 100%;
+}
+
+.domiciliario-tabla table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #fcfafa;
+}
+
+.domiciliario-tabla thead {
+    background: #022c38;
+}
+
+.domiciliario-tabla th {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    color: #cd9e46;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #1a3040;
+}
+
+.domiciliario-tabla td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid #1a3040;
+    vertical-align: middle;
+    color: #fcfafa;
+}
+
+.domiciliario-tabla tr:hover {
+    background: #022c38;
+}
+
+.domiciliario-tabla-btn-editar {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border: 1.5px solid #cd9e46;
+    border-radius: 4px;
+    color: #cd9e46;
+    background: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    margin-right: 6px;
+}
+
+.domiciliario-tabla-btn-editar:hover {
+    background: #cd9e46;
+    color: #001c2a;
+}
+
+.domiciliario-tabla-btn-eliminar {
+    display: inline-block;
+    padding: 0.3rem 1rem;
+    border: 1.5px solid #9e2a2b;
+    border-radius: 4px;
+    color: #e57373;
+    background: transparent;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.domiciliario-tabla-btn-eliminar:hover {
+    background: #9e2a2b;
+    color: #fff;
+}
+
+.domiciliario-lista-mensaje {
+    color: #a0b8bf;
+    font-size: 1rem;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.domiciliario-lista-error {
+    color: #e57373;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: center;
+}
+
+.domiciliario-tabla-vacio {
+    color: #6f8896;
+    text-align: center;
+    padding: 2rem 1rem;
+    font-style: italic;
+}
+
+.estado-activo {
+    color: #81c784;
+}
+
+.estado-inactivo {
+    color: #e57373;
+}
+
+@media (max-width: 992px) {
+    .domiciliario-lista-contenedor {
+        margin: 90px auto 1.5rem;
+        padding: 0 15px;
+    }
+    .domiciliario-tabla {
+        overflow-x: auto;
+    }
+    .domiciliario-tabla th,
+    .domiciliario-tabla td {
+        padding: 0.5rem 0.6rem;
+        white-space: nowrap;
+    }
+}

@@ -1,0 +1,26 @@
+<div class="body-pedido-lista">
+  <div class="pedido-lista-contenedor">
+    <h1 class="pedido-lista-titulo">Pedidos</h1>
+
+    <div class="pedido-lista-acciones">
+      <a routerLink="/pedidos/nuevo" class="pedido-lista-btn-nuevo">
+        + Nuevo Pedido
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="pedido-lista-mensaje">Cargando pedidos...</p>
+    }
+
+    @if (error) {
+      <p class="pedido-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-pedido-tabla
+        [pedidos]="pedidos"
+        (eliminar)="eliminarPedido($event)">
+      </app-pedido-tabla>
+    }
+  </div>
+</div>

@@ -5,9 +5,9 @@ import { Operador } from "./operador.model";
 export interface Pedido {
     id_Pedido: number;
     estado: string;
-    fechaCreacion: Date;
-    fechaEntrega: Date;
+    fechaCreacion: Date | string;
+    fechaEntrega?: Date | string | null;
     cliente: Cliente;
-    operador: Operador;
-    domiciliario: Domiciliario;
+    operador?: Operador | null;
+    domiciliario?: Domiciliario | null;
 }

@@ -17,6 +17,12 @@ import { FormularioCategoriaComponent } from './pages/formulario-categoria/formu
 import { ListaAdicionalesComponent } from './pages/lista-adicionales/lista-adicionales.component';
 import { FormularioAdicionalComponent } from './pages/formulario-adicional/formulario-adicional.component';
 
+// CRUD Pedido y Domiciliario
+import { ListaPedidosComponent } from './pages/lista-pedidos/lista-pedidos.component';
+import { FormularioPedidoComponent } from './pages/formulario-pedido/formulario-pedido.component';
+import { ListaDomiciliariosComponent } from './pages/lista-domiciliarios/lista-domiciliarios.component';
+import { FormularioDomiciliarioComponent } from './pages/formulario-domiciliario/formulario-domiciliario.component';
+
 export const routes: Routes = [
 
     { path: '', component: LandingComponent },
@@ -31,6 +37,14 @@ export const routes: Routes = [
     { path: 'adicionales', component: ListaAdicionalesComponent },
     { path: 'adicionales/nuevo', component: FormularioAdicionalComponent },
     { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent },
+
+    // CRUD Pedido y Domiciliario
+    { path: 'pedidos', component: ListaPedidosComponent },
+    { path: 'pedidos/nuevo', component: FormularioPedidoComponent },
+    { path: 'pedidos/editar/:id', component: FormularioPedidoComponent },
+    { path: 'domiciliarios', component: ListaDomiciliariosComponent },
+    { path: 'domiciliarios/nuevo', component: FormularioDomiciliarioComponent },
+    { path: 'domiciliarios/editar/:id', component: FormularioDomiciliarioComponent },
 
     { path: 'clientes', component: ListaClientesComponent },
     { path: 'clientes/nuevo', component: FormularioClienteComponent },

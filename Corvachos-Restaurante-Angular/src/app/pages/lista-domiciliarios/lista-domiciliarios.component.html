@@ -1,0 +1,26 @@
+<div class="body-domiciliario-lista">
+  <div class="domiciliario-lista-contenedor">
+    <h1 class="domiciliario-lista-titulo">Domiciliarios</h1>
+
+    <div class="domiciliario-lista-acciones">
+      <a routerLink="/domiciliarios/nuevo" class="domiciliario-lista-btn-nuevo">
+        + Nuevo Domiciliario
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="domiciliario-lista-mensaje">Cargando domiciliarios...</p>
+    }
+
+    @if (error) {
+      <p class="domiciliario-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <app-domiciliario-tabla
+        [domiciliarios]="domiciliarios"
+        (eliminar)="eliminarDomiciliario($event)">
+      </app-domiciliario-tabla>
+    }
+  </div>
+</div>

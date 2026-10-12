@@ -1,0 +1,52 @@
+<div class="domiciliario-tabla">
+<table class="domiciliario-tabla">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Cédula</th>
+      <th>Celular</th>
+      <th>Operador</th>
+      <th>Disponible</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (domiciliario of domiciliarios; track domiciliario.id_domiciliario) {
+      <tr>
+        <td>{{ domiciliario.id_domiciliario }}</td>
+        <td>{{ domiciliario.nombre }}</td>
+        <td>{{ domiciliario.cedula }}</td>
+        <td>{{ domiciliario.celular }}</td>
+        <td>{{ domiciliario.operador ? domiciliario.operador.nombre : '—' }}</td>
+        <td>
+          <span [class.estado-activo]="domiciliario.informaciondisp"
+                [class.estado-inactivo]="!domiciliario.informaciondisp">
+            {{ domiciliario.informaciondisp ? 'Sí' : 'No' }}
+          </span>
+        </td>
+        <td>
+          <a
+            [routerLink]="['/domiciliarios/editar', domiciliario.id_domiciliario]"
+            class="domiciliario-tabla-btn-editar">
+            Editar
+          </a>
+          <button
+            type="button"
+            class="domiciliario-tabla-btn-eliminar"
+            (click)="onEliminar(domiciliario.id_domiciliario)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    }
+    @if (domiciliarios.length === 0) {
+      <tr>
+        <td colspan="7" class="domiciliario-tabla-vacio">
+          No hay domiciliarios registrados.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

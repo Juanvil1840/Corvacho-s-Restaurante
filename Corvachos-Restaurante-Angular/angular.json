@@ -54,7 +54,11 @@
   "src/assets/style/categorias.css",
 "src/assets/style/categoria-formulario.css",
 "src/assets/style/adicionales.css",
-"src/assets/style/adicional-formulario.css"
+"src/assets/style/adicional-formulario.css",
+              "src/assets/style/pedidos.css",
+              "src/assets/style/pedido-formulario.css",
+              "src/assets/style/domiciliarios.css",
+              "src/assets/style/domiciliario-formulario.css"
 ],
             "scripts": []
           },
@@ -130,7 +134,11 @@
   "src/assets/style/categorias.css",
 "src/assets/style/categoria-formulario.css",
 "src/assets/style/adicionales.css",
-"src/assets/style/adicional-formulario.css"
+"src/assets/style/adicional-formulario.css",
+              "src/assets/style/pedidos.css",
+              "src/assets/style/pedido-formulario.css",
+              "src/assets/style/domiciliarios.css",
+              "src/assets/style/domiciliario-formulario.css"
 ],
             "scripts": []
           }

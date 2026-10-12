@@ -1,0 +1,65 @@
+<div class="domiciliario-campos">
+
+  <div class="domiciliario-campo">
+    <label for="nombre">Nombre Completo</label>
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      [(ngModel)]="domiciliario.nombre"
+      placeholder="Ej: Juan Pérez"
+      required
+    />
+  </div>
+
+  <div class="domiciliario-campo">
+    <label for="cedula">Cédula</label>
+    <input
+      id="cedula"
+      name="cedula"
+      type="text"
+      [(ngModel)]="domiciliario.cedula"
+      placeholder="Ej: 1020304050"
+      required
+    />
+  </div>
+
+  <div class="domiciliario-campo">
+    <label for="celular">Celular</label>
+    <input
+      id="celular"
+      name="celular"
+      type="text"
+      [(ngModel)]="domiciliario.celular"
+      placeholder="Ej: 3001234567"
+      required
+    />
+  </div>
+
+  <div class="domiciliario-campo">
+    <label for="operador">Operador a cargo</label>
+    <select
+      id="operador"
+      name="operador"
+      [(ngModel)]="domiciliario.operador.id_operador"
+      required>
+      <option [ngValue]="0" disabled>Selecciona un operador</option>
+      @for (operador of operadores; track operador.id_operador) {
+        <option [ngValue]="operador.id_operador">{{ operador.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="domiciliario-campo domiciliario-campo-check">
+    <label for="disponible">
+      <input
+        id="disponible"
+        name="disponible"
+        type="checkbox"
+        [(ngModel)]="domiciliario.informaciondisp"
+      />
+      Disponible para entregas
+    </label>
+  </div>
+
+</div>

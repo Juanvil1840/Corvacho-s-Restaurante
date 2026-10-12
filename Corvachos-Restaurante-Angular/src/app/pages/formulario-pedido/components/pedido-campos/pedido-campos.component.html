@@ -1,0 +1,78 @@
+<div class="pedido-campos">
+
+  <div class="pedido-campo">
+    <label for="estado">Estado</label>
+    <select
+      id="estado"
+      name="estado"
+      [(ngModel)]="pedido.estado"
+      required>
+      @for (estado of estados; track estado) {
+        <option [ngValue]="estado">{{ estado }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="pedido-campo">
+    <label for="cliente">Cliente</label>
+    <select
+      id="cliente"
+      name="cliente"
+      [(ngModel)]="pedido.cliente.clienteId"
+      required>
+      <option [ngValue]="0" disabled>Selecciona un cliente</option>
+      @for (cliente of clientes; track cliente.clienteId) {
+        <option [ngValue]="cliente.clienteId">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="pedido-campo">
+    <label for="operador">Operador (opcional)</label>
+    <select
+      id="operador"
+      name="operador"
+      [(ngModel)]="pedido.operador!.id_operador">
+      <option [ngValue]="0">Sin operador</option>
+      @for (operador of operadores; track operador.id_operador) {
+        <option [ngValue]="operador.id_operador">{{ operador.nombre }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="pedido-campo">
+    <label for="domiciliario">Domiciliario (opcional)</label>
+    <select
+      id="domiciliario"
+      name="domiciliario"
+      [(ngModel)]="pedido.domiciliario!.id_domiciliario">
+      <option [ngValue]="0">Sin domiciliario</option>
+      @for (domiciliario of domiciliarios; track domiciliario.id_domiciliario) {
+        <option [ngValue]="domiciliario.id_domiciliario">
+          {{ domiciliario.nombre }} {{ domiciliario.informaciondisp ? '' : '(No disponible)' }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="pedido-campo">
+    <label for="fechaCreacion">Fecha de Creación</label>
+    <input
+      id="fechaCreacion"
+      name="fechaCreacion"
+      type="datetime-local"
+      [(ngModel)]="pedido.fechaCreacion"
+    />
+  </div>
+
+  <div class="pedido-campo">
+    <label for="fechaEntrega">Fecha de Entrega (opcional)</label>
+    <input
+      id="fechaEntrega"
+      name="fechaEntrega"
+      type="datetime-local"
+      [(ngModel)]="pedido.fechaEntrega"
+    />
+  </div>
+
+</div>

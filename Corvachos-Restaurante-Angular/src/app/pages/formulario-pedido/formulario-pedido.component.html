@@ -1,0 +1,32 @@
+<div class="body-pedido-form">
+  <div class="pedido-form-contenedor">
+    <h1 class="pedido-form-titulo">
+      {{ editando ? 'Editar Pedido' : 'Nuevo Pedido' }}
+    </h1>
+
+    <div class="pedido-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <app-pedido-campos
+          [pedido]="pedido"
+          [clientes]="clientes"
+          [operadores]="operadores"
+          [domiciliarios]="domiciliarios">
+        </app-pedido-campos>
+
+        @if (error) {
+          <p class="pedido-form-error">{{ error }}</p>
+        }
+
+        <div class="pedido-form-acciones">
+          <button type="submit" class="pedido-form-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" class="pedido-form-btn-cancelar" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

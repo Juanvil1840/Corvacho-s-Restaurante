@@ -1,0 +1,30 @@
+<div class="body-domiciliario-form">
+  <div class="domiciliario-form-contenedor">
+    <h1 class="domiciliario-form-titulo">
+      {{ editando ? 'Editar Domiciliario' : 'Nuevo Domiciliario' }}
+    </h1>
+
+    <div class="domiciliario-form-tarjeta">
+      <form (ngSubmit)="guardar()">
+
+        <app-domiciliario-campos
+          [domiciliario]="domiciliario"
+          [operadores]="operadores">
+        </app-domiciliario-campos>
+
+        @if (error) {
+          <p class="domiciliario-form-error">{{ error }}</p>
+        }
+
+        <div class="domiciliario-form-acciones">
+          <button type="submit" class="domiciliario-form-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" class="domiciliario-form-btn-cancelar" (click)="cancelar()">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
