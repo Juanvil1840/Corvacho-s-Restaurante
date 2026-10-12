@@ -1,0 +1,40 @@
+<div class="operador-campos">
+
+  <div class="operador-campo">
+    <label for="nombre">Nombre Completo</label>
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      [(ngModel)]="operador.nombre"
+      placeholder="Ej: Kika Nieto"
+      required
+    />
+  </div>
+
+  <div class="operador-campo">
+    <label for="usuario">Usuario</label>
+    <input
+      id="usuario"
+      name="usuario"
+      type="text"
+      [(ngModel)]="operador.usuario"
+      placeholder="Ej: KikaNieto_"
+      required
+    />
+  </div>
+
+  <div class="operador-campo">
+    <label for="contrasena">Contraseña</label>
+    <input
+      id="contrasena"
+      name="contrasena"
+      type="password"
+      [(ngModel)]="operador.contrasena"
+      placeholder="Ingresa la contraseña"
+      required
+    />
+  </div>
+
+</div>
+

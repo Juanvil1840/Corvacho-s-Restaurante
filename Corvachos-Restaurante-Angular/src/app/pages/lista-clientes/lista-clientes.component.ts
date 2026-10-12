@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ClienteServiceService } from '../../service/cliente-service.service';
+import { ClienteService } from '../../service/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.component';
 
@@ -15,17 +15,43 @@ import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.
 export class ListaClientesComponent implements OnInit {
 
   clientes: Cliente[] = [];
+  cargando = false;
+  error = '';
 
-  constructor(private clienteService: ClienteServiceService) {}
+  constructor(private clienteService: ClienteService) {}
 
   ngOnInit(): void {
-    this.clientes = this.clienteService.getClientes();
+    this.cargarClientes();
+  }
+
+  cargarClientes(): void {
+    this.cargando = true;
+    this.error = '';
+
+    this.clienteService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar los clientes:', err);
+        this.error = 'No fue posible cargar los clientes. Intenta nuevamente.';
+        this.cargando = false;
+      }
+    });
   }
 
   eliminarCliente(id: number): void {
     if (confirm('¿Estas seguro de eliminar este cliente?')) {
-      this.clienteService.eliminarCliente(id);
-      this.clientes = this.clienteService.getClientes();
+      this.clienteService.eliminarCliente(id).subscribe({
+        next: () => {
+          this.cargarClientes();
+        },
+        error: (err) => {
+          console.error('Error al eliminar cliente:', err);
+          this.error = 'No fue posible eliminar el cliente.';
+        }
+      });
     }
   }
 

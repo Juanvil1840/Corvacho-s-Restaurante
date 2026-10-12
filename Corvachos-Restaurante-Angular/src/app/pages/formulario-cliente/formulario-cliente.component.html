@@ -9,12 +9,49 @@
 
         <app-cliente-campos [cliente]="cliente"></app-cliente-campos>
 
+        @if (error) {
+          <p style="color: #e57373; font-weight: 600; text-align: center; margin-top: 1rem;">{{ error }}</p>
+        }
+
         <!-- Botones -->
         <div class="editar-acciones">
-          <button type="submit" class="editar-btn editar-btn-guardar">Guardar</button>
+          <button type="submit" class="editar-btn editar-btn-guardar" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : (editando ? 'Actualizar' : 'Guardar') }}
+          </button>
           <button type="button" class="editar-btn editar-btn-cancelar" (click)="cancelar()">Cancelar</button>
         </div>
       </form>
+
+      @if (editando) {
+        <hr style="border-color: #334955; margin: 1.8rem 0;">
+
+        <div class="editar-zona-seguridad">
+          <h4 style="color: #e57373; font-size: 1rem; font-family: 'Montserrat', sans-serif; display: flex; align-items: center; gap: 8px;">
+            <i class="bi bi-shield-lock"></i> Zona de Seguridad
+          </h4>
+          <p style="color: #a0b8bf; font-size: 0.85rem; margin-bottom: 1rem;">
+            Si desactivas tu cuenta, no podrás iniciar sesión hasta que la reactives.
+            Tus datos se conservarán por si decides volver.
+          </p>
+
+          @if (cliente.activo) {
+            <div>
+              <button type="button" class="editar-btn editar-btn-peligro" (click)="desactivarCuenta()">
+                <i class="bi bi-person-x"></i> Desactivar Cuenta
+              </button>
+            </div>
+          } @else {
+            <div>
+              <p style="color: #4caf50; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                <i class="bi bi-check-circle"></i> Tu cuenta está actualmente inactiva.
+              </p>
+              <button type="button" class="editar-btn editar-btn-reactivar" (click)="reactivarCuenta()">
+                <i class="bi bi-arrow-counterclockwise"></i> Reactivar Cuenta
+              </button>
+            </div>
+          }
+        </div>
+      }
     </div>
   </div>
 

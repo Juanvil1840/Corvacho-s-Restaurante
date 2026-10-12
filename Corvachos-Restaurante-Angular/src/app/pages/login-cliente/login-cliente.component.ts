@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ClienteServiceService } from '../../service/cliente-service.service';
+import { ClienteService } from '../../service/cliente.service';
 import { LoginFormularioComponent } from './components/login-formulario/login-formulario.component';
 
 @Component({
@@ -16,20 +16,23 @@ export class LoginClienteComponent {
   @ViewChild(LoginFormularioComponent) formulario!: LoginFormularioComponent;
 
   constructor(
-    private clienteService: ClienteServiceService,
+    private clienteService: ClienteService,
     private router: Router
   ) {}
 
   onIniciarSesion(datos: { correo: string, contrasena: string }): void {
-    const clienteEncontrado = this.clienteService.getClientes().find(
-      c => c.correo === datos.correo && c.contrasena === datos.contrasena
-    );
-
-    if (clienteEncontrado) {
-      this.router.navigate(['/clientes/perfil', clienteEncontrado.clienteId]);
-    } else {
-      this.formulario.setError('Usuario o contrasena incorrectos');
-    }
+    this.clienteService.login(datos.correo, datos.contrasena).subscribe({
+      next: (clienteEncontrado) => {
+        this.router.navigate(['/clientes/perfil', clienteEncontrado.clienteId]);
+      },
+      error: (err) => {
+        if (err.status === 403) {
+          this.formulario.setError('Tu cuenta se encuentra desactivada.');
+        } else {
+          this.formulario.setError('Usuario o contrasena incorrectos');
+        }
+      }
+    });
   }
 
 }

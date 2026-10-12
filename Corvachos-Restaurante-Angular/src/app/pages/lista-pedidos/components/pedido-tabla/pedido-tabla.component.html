@@ -24,6 +24,11 @@
         <td>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <a
+            [routerLink]="['/pedidos/detalle', pedido.id_Pedido]"
+            class="pedido-tabla-btn-editar">
+            Ver
+          </a>
+          <a
             [routerLink]="['/pedidos/editar', pedido.id_Pedido]"
             class="pedido-tabla-btn-editar">
             Editar

@@ -1,0 +1,42 @@
+<div class="operador-tabla">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (operador of operadores; track operador.id_operador) {
+        <tr>
+          <td>{{ operador.id_operador }}</td>
+          <td>{{ operador.nombre }}</td>
+          <td>{{ operador.usuario }}</td>
+          <td>
+            <a
+              [routerLink]="['/operadores/editar', operador.id_operador]"
+              class="operador-tabla-btn-editar">
+              Editar
+            </a>
+            <button
+              type="button"
+              class="operador-tabla-btn-eliminar"
+              (click)="onEliminar(operador.id_operador)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      }
+      @if (operadores.length === 0) {
+        <tr>
+          <td colspan="4" class="operador-tabla-vacio">
+            No hay operadores registrados.
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+

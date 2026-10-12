@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
-import { ClienteServiceService } from '../../service/cliente-service.service';
-import { OperadorServiceService } from '../../service/operador-service.service';
+import { ClienteService } from '../../service/cliente.service';
+import { OperadorService } from '../../service/operador.service';
 import { DomiciliarioService } from '../../service/domiciliario.service';
 import { Pedido } from '../../models/pedido.model';
 import { Cliente } from '../../models/cliente.model';
@@ -41,16 +41,22 @@ export class FormularioPedidoComponent implements OnInit {
 
   constructor(
     private pedidoService: PedidoService,
-    private clienteService: ClienteServiceService,
-    private operadorService: OperadorServiceService,
+    private clienteService: ClienteService,
+    private operadorService: OperadorService,
     private domiciliarioService: DomiciliarioService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.clientes = this.clienteService.getClientes();
-    this.operadores = this.operadorService.getOperadores();
+    this.clienteService.getClientes().subscribe({
+      next: (clis) => this.clientes = clis,
+      error: (e) => console.error('Error al cargar clientes:', e)
+    });
+    this.operadorService.getOperadores().subscribe({
+      next: (ops) => this.operadores = ops,
+      error: (e) => console.error('Error al cargar operadores:', e)
+    });
     this.domiciliarioService.getDomiciliarios().subscribe({
       next: (doms) => this.domiciliarios = doms,
       error: (e) => console.error('Error al cargar domiciliarios:', e)
