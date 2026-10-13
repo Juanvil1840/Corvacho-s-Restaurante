@@ -14,4 +14,5 @@ public interface ProductoService {
     Producto actualizar(Producto producto);
     void eliminar(Long id);
     boolean existe(Long id);
+    boolean tienePedidos(Long id);
 }

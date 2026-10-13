@@ -86,10 +86,18 @@ public class ProductoRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Long id) {
 
         if (!productoService.existe(id)) {
             return ResponseEntity.notFound().build();
+        }
+
+        // Solo se permite eliminar si el producto no aparece en ningún pedido
+        if (productoService.tienePedidos(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of(
+                            "mensaje",
+                            "No se puede eliminar el producto porque está asociado a uno o más pedidos."));
         }
 
         productoService.eliminar(id);
