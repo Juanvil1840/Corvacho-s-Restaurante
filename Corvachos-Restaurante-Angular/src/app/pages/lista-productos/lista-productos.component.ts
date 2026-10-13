@@ -42,20 +42,25 @@ export class ListaProductosComponent implements OnInit {
   }
 
   eliminarProducto(id: number): void {
-    if (confirm('¿Eliminar este producto?')) {
-      this.productoService.eliminarProducto(id).subscribe({
-        next: () => {
-          this.cargarProductos();
-        },
-        error: (error) => {
-          console.error('Error al eliminar el producto:', error);
-          if (error.status === 409 && error.error?.mensaje) {
-            this.error = error.error.mensaje;
-          } else {
-            this.error = 'No fue posible eliminar el producto.';
-          }
-        }
-      });
+    if (!confirm('¿Eliminar este producto?')) {
+      return;
     }
+
+    this.error = '';
+
+    this.productoService.eliminarProducto(id).subscribe({
+      next: () => {
+        this.cargarProductos();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el producto:', error);
+
+        if (error.status === 409 && error.error?.mensaje) {
+          this.error = error.error.mensaje;
+        } else {
+          this.error = 'No fue posible eliminar el producto.';
+        }
+      }
+    });
   }
 }
