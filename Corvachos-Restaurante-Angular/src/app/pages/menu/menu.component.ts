@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
       next: (productos) => {
         this.productosPorCategoria = {};
 
-        productos.forEach((p) => {
+        productos.filter((p) => p.disponible).forEach((p) => {
           const cat = p.categoria?.nombre || 'Sin categoria';
 
           if (!this.productosPorCategoria[cat]) {
