@@ -49,7 +49,11 @@ export class ListaProductosComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al eliminar el producto:', error);
-          this.error = 'No fue posible eliminar el producto.';
+          if (error.status === 409 && error.error?.mensaje) {
+            this.error = error.error.mensaje;
+          } else {
+            this.error = 'No fue posible eliminar el producto.';
+          }
         }
       });
     }

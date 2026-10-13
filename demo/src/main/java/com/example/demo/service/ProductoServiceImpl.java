@@ -69,8 +69,11 @@ public class ProductoServiceImpl implements ProductoService {
     public void eliminar(Long id) {
         Producto producto = productoRepository.findById(id).orElse(null);
         if (producto != null) {
-            if (producto.getDetallePedidos() != null && !producto.getDetallePedidos().isEmpty()) {
-                detallePedidoRepository.deleteAll(producto.getDetallePedidos());
+            // Regla de negocio: no se elimina un producto que aparezca en algún pedido
+            // (para no perder el historial de pedidos).
+            if (tienePedidos(id)) {
+                throw new IllegalStateException(
+                        "No se puede eliminar el producto porque está asociado a pedidos");
             }
             if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
                 productoCarritoRepository.deleteAll(producto.getProductoCarritos());
@@ -82,5 +85,10 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public boolean existe(Long id) {
         return productoRepository.existsById(id);
+    }
+
+    @Override
+    public boolean tienePedidos(Long id) {
+        return detallePedidoRepository.existsByProducto_Id(id);
     }
 }
