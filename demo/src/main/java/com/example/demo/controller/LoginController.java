@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +12,11 @@ import com.example.demo.service.LoginService;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private LoginService loginService;
+    private final LoginService loginService;
+
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
     @GetMapping("/login")
     public String login() {
@@ -22,13 +24,14 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String procesarLogin(@RequestParam String correo,
-                                @RequestParam String contraseña,
-                                Model model) {
+    public String procesarLogin( @RequestParam String correo, @RequestParam String contraseña,Model model) {
+
         Cliente cliente = loginService.autenticar(correo, contraseña);
+
         if (cliente != null) {
             return "redirect:/perfil/ver/" + cliente.getClienteId();
         }
+
         model.addAttribute("error", true);
         return "login";
     }

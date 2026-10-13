@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +17,14 @@ import com.example.demo.service.PedidoService;
 @RequestMapping("/pedidos")
 public class PedidoController {
 
-    @Autowired
-    private PedidoService pedidoService;
+    private final PedidoService pedidoService;
+    private final ClienteService clienteService;
 
-    @Autowired
-    private ClienteService clienteService;
+    public PedidoController( PedidoService pedidoService, ClienteService clienteService) {
+        this.pedidoService = pedidoService;
+        this.clienteService = clienteService;
+    }
 
- 
     @GetMapping
     public String listarTodos(Model model) {
         model.addAttribute("pedidos", pedidoService.findAll());
@@ -32,20 +32,23 @@ public class PedidoController {
         return "pedidos/lista";
     }
 
-    // Muestra los pedidos de un cliente específico
     @GetMapping("/cliente/{clienteId}")
-    public String listarPorCliente(@PathVariable Long clienteId, Model model) {
+    public String listarPorCliente(
+            @PathVariable Long clienteId,
+            Model model) {
         Cliente cliente = clienteService.obtenerPorId(clienteId);
 
         List<Pedido> pedidos = pedidoService.findByClienteId(clienteId);
 
         model.addAttribute("pedidos", pedidos);
         model.addAttribute("cliente", cliente);
-        model.addAttribute("titulo", "Mis Pedidos — " + cliente.getNombre() + " " + cliente.getApellido());
+        model.addAttribute(
+                "titulo",
+                "Mis Pedidos — " + cliente.getNombre() + " " + cliente.getApellido());
+
         return "pedidos/lista";
     }
 
-    // Muestra el detalle de un pedido por su ID
     @GetMapping("/{id}")
     public String verDetalle(@PathVariable Long id, Model model) {
         Pedido pedido = pedidoService.findById(id);

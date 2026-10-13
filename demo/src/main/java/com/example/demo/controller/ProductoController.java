@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entities.Producto;
 import com.example.demo.service.CategoriaService;
@@ -17,11 +17,13 @@ import com.example.demo.service.ProductoService;
 @RequestMapping("/productos")
 public class ProductoController {
 
-    @Autowired
-    private ProductoService productoService;
+    private final ProductoService productoService;
+    private final CategoriaService categoriaService;
 
-    @Autowired
-    private CategoriaService categoriaService;
+    public ProductoController( ProductoService productoService, CategoriaService categoriaService) {
+        this.productoService = productoService;
+        this.categoriaService = categoriaService;
+    }
 
     @GetMapping
     public String listar(Model model) {
@@ -36,9 +38,10 @@ public class ProductoController {
         return "productos/formulario";
     }
 
-    
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model model) {
+    public String mostrarFormularioEditar(
+            @PathVariable Long id,
+            Model model) {
         Producto producto = productoService.obtenerPorId(id);
         model.addAttribute("producto", producto);
         model.addAttribute("categorias", categoriaService.findAll());
@@ -46,12 +49,16 @@ public class ProductoController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Producto producto,
-                          @org.springframework.web.bind.annotation.RequestParam(value = "categoriaId", required = false) Long categoriaId) {
+    public String guardar(
+            @ModelAttribute Producto producto,
+            @RequestParam(value = "categoriaId", required = false) Long categoriaId) {
+
         if (categoriaId != null) {
             producto.setCategoria(categoriaService.findById(categoriaId));
-        } else if (producto.getCategoria() != null && producto.getCategoria().getId() != null) {
-            producto.setCategoria(categoriaService.findById(producto.getCategoria().getId()));
+        } else if (producto.getCategoria() != null
+                && producto.getCategoria().getId() != null) {
+            producto.setCategoria(
+                    categoriaService.findById(producto.getCategoria().getId()));
         }
 
         if (producto.getId() != null && productoService.existe(producto.getId())) {
@@ -59,6 +66,7 @@ public class ProductoController {
         } else {
             productoService.guardar(producto);
         }
+
         return "redirect:/productos";
     }
 
