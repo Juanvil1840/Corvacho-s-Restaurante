@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.DomiciliarioDTO;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.repository.OperadorRepository;
@@ -38,32 +37,32 @@ public class DomiciliarioRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<DomiciliarioDTO> listar() {
         return domiciliarioService.findAll()
                 .stream()
-                .map(this::convertirDomiciliario)
+                .map(DomiciliarioDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<DomiciliarioDTO> buscarPorId(@PathVariable Long id) {
         Domiciliario domiciliario = domiciliarioService.findById(id);
         if (domiciliario == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(convertirDomiciliario(domiciliario));
+        return ResponseEntity.ok(DomiciliarioDTO.fromEntity(domiciliario));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Domiciliario domiciliario) {
+    public ResponseEntity<DomiciliarioDTO> crear(@RequestBody Domiciliario domiciliario) {
         domiciliario.setId_domiciliario(null);
         domiciliario.setOperador(buscarOperador(domiciliario));
         Domiciliario guardado = domiciliarioService.guardar(domiciliario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirDomiciliario(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(DomiciliarioDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<DomiciliarioDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Domiciliario domiciliario) {
         if (domiciliarioService.findById(id) == null) {
@@ -72,7 +71,7 @@ public class DomiciliarioRestController {
         domiciliario.setId_domiciliario(id);
         domiciliario.setOperador(buscarOperador(domiciliario));
         Domiciliario actualizado = domiciliarioService.guardar(domiciliario);
-        return ResponseEntity.ok(convertirDomiciliario(actualizado));
+        return ResponseEntity.ok(DomiciliarioDTO.fromEntity(actualizado));
     }
 
     @DeleteMapping("/{id}")
@@ -94,23 +93,5 @@ public class DomiciliarioRestController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
                         "El operador seleccionado no existe"));
-    }
-
-    private Map<String, Object> convertirDomiciliario(Domiciliario d) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id_domiciliario", d.getId_domiciliario());
-        map.put("nombre", d.getNombre());
-        map.put("celular", d.getCelular());
-        map.put("cedula", d.getCedula());
-        map.put("informaciondisp", d.isInformaciondisp());
-        if (d.getOperador() != null) {
-            map.put("operador", Map.of(
-                    "id_operador", d.getOperador().getId_operador(),
-                    "nombre", d.getOperador().getNombre()
-            ));
-        } else {
-            map.put("operador", null);
-        }
-        return map;
     }
 }

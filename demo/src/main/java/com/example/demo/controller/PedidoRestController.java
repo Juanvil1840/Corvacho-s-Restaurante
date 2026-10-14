@@ -2,8 +2,6 @@ package com.example.demo.controller;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.PedidoDTO;
 import com.example.demo.entities.Cliente;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
@@ -59,7 +58,7 @@ public class PedidoRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<PedidoDTO> listar() {
         return pedidoService.findAll()
                 .stream()
                 .map(this::convertirPedido)
@@ -67,7 +66,7 @@ public class PedidoRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         try {
             Pedido pedido = pedidoService.findById(id);
             if (pedido == null) {
@@ -80,7 +79,7 @@ public class PedidoRestController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Pedido pedido) {
+    public ResponseEntity<PedidoDTO> crear(@RequestBody Pedido pedido) {
         pedido.setId_Pedido(null);
         pedido.setCliente(buscarCliente(pedido));
         pedido.setOperador(buscarOperador(pedido));
@@ -112,7 +111,7 @@ public class PedidoRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<PedidoDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Pedido pedido) {
         Pedido existente;
@@ -173,7 +172,8 @@ public class PedidoRestController {
     }
 
     private Cliente buscarCliente(Pedido pedido) {
-        if (pedido.getCliente() == null || pedido.getCliente().getClienteId() == null || pedido.getCliente().getClienteId() <= 0) {
+        if (pedido.getCliente() == null || pedido.getCliente().getClienteId() == null
+                || pedido.getCliente().getClienteId() <= 0) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Debe seleccionar un cliente");
@@ -185,7 +185,8 @@ public class PedidoRestController {
     }
 
     private Operador buscarOperador(Pedido pedido) {
-        if (pedido.getOperador() == null || pedido.getOperador().getId_operador() == null || pedido.getOperador().getId_operador() <= 0) {
+        if (pedido.getOperador() == null || pedido.getOperador().getId_operador() == null
+                || pedido.getOperador().getId_operador() <= 0) {
             return null;
         }
         return operadorRepository.findById(pedido.getOperador().getId_operador())
@@ -193,74 +194,18 @@ public class PedidoRestController {
     }
 
     private Domiciliario buscarDomiciliario(Pedido pedido) {
-        if (pedido.getDomiciliario() == null || pedido.getDomiciliario().getId_domiciliario() == null || pedido.getDomiciliario().getId_domiciliario() <= 0) {
+        if (pedido.getDomiciliario() == null || pedido.getDomiciliario().getId_domiciliario() == null
+                || pedido.getDomiciliario().getId_domiciliario() <= 0) {
             return null;
         }
         return domiciliarioRepository.findById(pedido.getDomiciliario().getId_domiciliario())
                 .orElse(null);
     }
 
-    private Map<String, Object> convertirPedido(Pedido pedido) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id_Pedido", pedido.getId_Pedido());
-        map.put("estado", pedido.getEstado());
-        map.put("fechaCreacion", pedido.getFechaCreacion());
-        map.put("fechaEntrega", pedido.getFechaEntrega());
-
-        if (pedido.getCliente() != null) {
-            Map<String, Object> cliMap = new LinkedHashMap<>();
-            cliMap.put("clienteId", pedido.getCliente().getClienteId());
-            cliMap.put("nombre", pedido.getCliente().getNombre());
-            cliMap.put("apellido", pedido.getCliente().getApellido());
-            cliMap.put("correo", pedido.getCliente().getCorreo() != null ? pedido.getCliente().getCorreo() : "");
-            cliMap.put("telefono", pedido.getCliente().getTelefono() != null ? pedido.getCliente().getTelefono() : "");
-            cliMap.put("direccion", pedido.getCliente().getDireccion() != null ? pedido.getCliente().getDireccion() : "");
-            cliMap.put("activo", pedido.getCliente().isActivo());
-            map.put("cliente", cliMap);
-        } else {
-            map.put("cliente", null);
-        }
-
-        if (pedido.getOperador() != null) {
-            map.put("operador", Map.of(
-                    "id_operador", pedido.getOperador().getId_operador(),
-                    "nombre", pedido.getOperador().getNombre()
-            ));
-        } else {
-            map.put("operador", null);
-        }
-
-        if (pedido.getDomiciliario() != null) {
-            Map<String, Object> domMap = new LinkedHashMap<>();
-            domMap.put("id_domiciliario", pedido.getDomiciliario().getId_domiciliario());
-            domMap.put("nombre", pedido.getDomiciliario().getNombre());
-            domMap.put("celular", pedido.getDomiciliario().getCelular() != null ? pedido.getDomiciliario().getCelular() : "");
-            domMap.put("cedula", pedido.getDomiciliario().getCedula() != null ? pedido.getDomiciliario().getCedula() : "");
-            domMap.put("informaciondisp", pedido.getDomiciliario().isInformaciondisp());
-            map.put("domiciliario", domMap);
-        } else {
-            map.put("domiciliario", null);
-        }
-
-        // Agregar lista de comidas/productos asociadas
-        java.util.List<Map<String, Object>> listaDetalles = detallePedidoRepository.findByPedido_Id_Pedido(pedido.getId_Pedido())
-                .stream()
-                .map(d -> {
-                    Map<String, Object> dm = new LinkedHashMap<>();
-                    dm.put("id_DetallePedido", d.getId_DetallePedido());
-                    dm.put("cantidad", d.getCantidad());
-                    if (d.getProducto() != null) {
-                        Map<String, Object> pm = new LinkedHashMap<>();
-                        pm.put("id", d.getProducto().getId());
-                        pm.put("nombre", d.getProducto().getNombre());
-                        pm.put("precio", d.getProducto().getPrecio());
-                        dm.put("producto", pm);
-                    }
-                    return dm;
-                })
-                .toList();
-        map.put("detallePedidos", listaDetalles);
-
-        return map;
+    private PedidoDTO convertirPedido(Pedido pedido) {
+        java.util.List<DetallePedido> detalles = pedido.getId_Pedido() != null
+                ? detallePedidoRepository.findByPedido_Id_Pedido(pedido.getId_Pedido())
+                : java.util.Collections.emptyList();
+        return PedidoDTO.fromEntity(pedido, detalles);
     }
 }
