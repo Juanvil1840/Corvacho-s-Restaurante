@@ -1,1 +1,156 @@
-/* Estilos en src/assets/style/pedido-formulario.css */
+.pedido-seccion-comidas {
+  margin-top: 0.5rem;
+  border-top: 1px solid #1a3040;
+  padding-top: 1.2rem;
+}
+
+.pedido-agregar-comida-fila {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.8rem;
+
+  select {
+    flex: 1;
+  }
+
+  .input-cant-nueva {
+    width: 75px !important;
+    text-align: center;
+  }
+
+  .btn-agregar-comida {
+    background: #cd9e46;
+    color: #001c2a;
+    border: none;
+    border-radius: 6px;
+    padding: 0.7rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #e0b45c;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.pedido-lista-comidas {
+  background: #001c2a;
+  border: 1px solid #1a3040;
+  border-radius: 8px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pedido-comida-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  gap: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+
+  .comida-item-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    .comida-item-nombre {
+      color: #fcfafa;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .comida-item-precio {
+      color: #a0b8bf;
+      font-size: 0.8rem;
+    }
+  }
+
+  .comida-item-cantidades {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    .btn-cant-ctrl {
+      background: #1a3040;
+      color: #cd9e46;
+      border: 1px solid #334955;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background: #cd9e46;
+        color: #001c2a;
+      }
+    }
+
+    .comida-cant-val {
+      color: #fcfafa;
+      font-weight: 600;
+      min-width: 20px;
+      text-align: center;
+    }
+  }
+
+  .comida-item-subtotal {
+    color: #cd9e46;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 90px;
+    text-align: right;
+  }
+
+  .btn-quitar-comida {
+    background: transparent;
+    border: none;
+    color: #e57373;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.4rem;
+    line-height: 1;
+
+    &:hover {
+      color: #ff5252;
+    }
+  }
+}
+
+.pedido-comidas-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #334955;
+  color: #a0b8bf;
+  font-size: 0.95rem;
+
+  strong {
+    color: #cd9e46;
+    font-size: 1.15rem;
+  }
+}
+
+.pedido-sin-comidas {
+  color: #a0b8bf;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0.3rem 0;
+}

@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
+import com.example.demo.entities.Producto;
 import com.example.demo.repository.ClienteRepository;
+import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.DomiciliarioRepository;
 import com.example.demo.repository.OperadorRepository;
+import com.example.demo.repository.ProductoRepository;
 import com.example.demo.service.PedidoService;
 
 @RestController
@@ -36,16 +40,22 @@ public class PedidoRestController {
     private final ClienteRepository clienteRepository;
     private final OperadorRepository operadorRepository;
     private final DomiciliarioRepository domiciliarioRepository;
+    private final ProductoRepository productoRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
 
     public PedidoRestController(
             PedidoService pedidoService,
             ClienteRepository clienteRepository,
             OperadorRepository operadorRepository,
-            DomiciliarioRepository domiciliarioRepository) {
+            DomiciliarioRepository domiciliarioRepository,
+            ProductoRepository productoRepository,
+            DetallePedidoRepository detallePedidoRepository) {
         this.pedidoService = pedidoService;
         this.clienteRepository = clienteRepository;
         this.operadorRepository = operadorRepository;
         this.domiciliarioRepository = domiciliarioRepository;
+        this.productoRepository = productoRepository;
+        this.detallePedidoRepository = detallePedidoRepository;
     }
 
     @GetMapping
@@ -78,7 +88,26 @@ public class PedidoRestController {
         if (pedido.getFechaCreacion() == null) {
             pedido.setFechaCreacion(LocalDateTime.now());
         }
+
+        java.util.List<DetallePedido> detallesRecibidos = pedido.getDetallePedidos();
+        pedido.setDetallePedidos(null);
+
         Pedido guardado = pedidoService.guardar(pedido);
+
+        if (detallesRecibidos != null && !detallesRecibidos.isEmpty()) {
+            for (DetallePedido d : detallesRecibidos) {
+                if (d.getProducto() != null && d.getProducto().getId() != null) {
+                    productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
+                        DetallePedido nuevo = new DetallePedido();
+                        nuevo.setPedido(guardado);
+                        nuevo.setProducto(prod);
+                        nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+                        detallePedidoRepository.save(nuevo);
+                    });
+                }
+            }
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(convertirPedido(guardado));
     }
 
@@ -86,8 +115,9 @@ public class PedidoRestController {
     public ResponseEntity<Map<String, Object>> actualizar(
             @PathVariable Long id,
             @RequestBody Pedido pedido) {
+        Pedido existente;
         try {
-            Pedido existente = pedidoService.findById(id);
+            existente = pedidoService.findById(id);
             if (existente == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -95,14 +125,35 @@ public class PedidoRestController {
             return ResponseEntity.notFound().build();
         }
 
-        pedido.setId_Pedido(id);
-        pedido.setCliente(buscarCliente(pedido));
-        pedido.setOperador(buscarOperador(pedido));
-        pedido.setDomiciliario(buscarDomiciliario(pedido));
-        if (pedido.getFechaCreacion() == null) {
-            pedido.setFechaCreacion(LocalDateTime.now());
+        existente.setEstado(pedido.getEstado() != null ? pedido.getEstado() : existente.getEstado());
+        existente.setCliente(buscarCliente(pedido));
+        existente.setOperador(buscarOperador(pedido));
+        existente.setDomiciliario(buscarDomiciliario(pedido));
+        if (pedido.getFechaCreacion() != null) {
+            existente.setFechaCreacion(pedido.getFechaCreacion());
         }
-        Pedido actualizado = pedidoService.guardar(pedido);
+        existente.setFechaEntrega(pedido.getFechaEntrega());
+
+        Pedido actualizado = pedidoService.guardar(existente);
+
+        if (pedido.getDetallePedidos() != null) {
+            java.util.List<DetallePedido> previos = detallePedidoRepository.findByPedido_Id_Pedido(id);
+            if (!previos.isEmpty()) {
+                detallePedidoRepository.deleteAll(previos);
+            }
+            for (DetallePedido d : pedido.getDetallePedidos()) {
+                if (d.getProducto() != null && d.getProducto().getId() != null) {
+                    productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
+                        DetallePedido nuevo = new DetallePedido();
+                        nuevo.setPedido(actualizado);
+                        nuevo.setProducto(prod);
+                        nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+                        detallePedidoRepository.save(nuevo);
+                    });
+                }
+            }
+        }
+
         return ResponseEntity.ok(convertirPedido(actualizado));
     }
 
@@ -122,7 +173,7 @@ public class PedidoRestController {
     }
 
     private Cliente buscarCliente(Pedido pedido) {
-        if (pedido.getCliente() == null || pedido.getCliente().getClienteId() == null) {
+        if (pedido.getCliente() == null || pedido.getCliente().getClienteId() == null || pedido.getCliente().getClienteId() <= 0) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Debe seleccionar un cliente");
@@ -134,23 +185,19 @@ public class PedidoRestController {
     }
 
     private Operador buscarOperador(Pedido pedido) {
-        if (pedido.getOperador() == null || pedido.getOperador().getId_operador() == null) {
+        if (pedido.getOperador() == null || pedido.getOperador().getId_operador() == null || pedido.getOperador().getId_operador() <= 0) {
             return null;
         }
         return operadorRepository.findById(pedido.getOperador().getId_operador())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "El operador seleccionado no existe"));
+                .orElse(null);
     }
 
     private Domiciliario buscarDomiciliario(Pedido pedido) {
-        if (pedido.getDomiciliario() == null || pedido.getDomiciliario().getId_domiciliario() == null) {
+        if (pedido.getDomiciliario() == null || pedido.getDomiciliario().getId_domiciliario() == null || pedido.getDomiciliario().getId_domiciliario() <= 0) {
             return null;
         }
         return domiciliarioRepository.findById(pedido.getDomiciliario().getId_domiciliario())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "El domiciliario seleccionado no existe"));
+                .orElse(null);
     }
 
     private Map<String, Object> convertirPedido(Pedido pedido) {
@@ -194,6 +241,25 @@ public class PedidoRestController {
         } else {
             map.put("domiciliario", null);
         }
+
+        // Agregar lista de comidas/productos asociadas
+        java.util.List<Map<String, Object>> listaDetalles = detallePedidoRepository.findByPedido_Id_Pedido(pedido.getId_Pedido())
+                .stream()
+                .map(d -> {
+                    Map<String, Object> dm = new LinkedHashMap<>();
+                    dm.put("id_DetallePedido", d.getId_DetallePedido());
+                    dm.put("cantidad", d.getCantidad());
+                    if (d.getProducto() != null) {
+                        Map<String, Object> pm = new LinkedHashMap<>();
+                        pm.put("id", d.getProducto().getId());
+                        pm.put("nombre", d.getProducto().getNombre());
+                        pm.put("precio", d.getProducto().getPrecio());
+                        dm.put("producto", pm);
+                    }
+                    return dm;
+                })
+                .toList();
+        map.put("detallePedidos", listaDetalles);
 
         return map;
     }

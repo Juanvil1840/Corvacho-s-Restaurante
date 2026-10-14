@@ -75,4 +75,72 @@
     />
   </div>
 
+  <!-- SECCIÓN DE COMIDAS / PLATOS -->
+  <div class="pedido-campo pedido-seccion-comidas">
+    <label><i class="bi bi-egg-fried"></i> Comidas / Productos del Pedido</label>
+
+    <div class="pedido-agregar-comida-fila">
+      <select [(ngModel)]="productoSeleccionadoId" name="productoSelect">
+        <option [ngValue]="0" disabled>Selecciona una comida para agregar</option>
+        @for (prod of productos; track prod.id) {
+          <option [ngValue]="prod.id">
+            {{ prod.nombre }} - {{ prod.precio | currency:'USD':'symbol':'1.0-0' }} {{ prod.disponible ? '' : '(Agotado)' }}
+          </option>
+        }
+      </select>
+      <input
+        type="number"
+        [(ngModel)]="cantidadSeleccionada"
+        name="cantidadInput"
+        min="1"
+        max="99"
+        placeholder="Cant."
+        class="input-cant-nueva"
+      />
+      <button
+        type="button"
+        class="btn-agregar-comida"
+        (click)="agregarComida()"
+        [disabled]="!productoSeleccionadoId || productoSeleccionadoId === 0">
+        + Añadir
+      </button>
+    </div>
+
+    @if (comidasSeleccionadas.length > 0) {
+      <div class="pedido-lista-comidas">
+        @for (item of comidasSeleccionadas; track item.producto.id; let idx = $index) {
+          <div class="pedido-comida-item">
+            <div class="comida-item-info">
+              <span class="comida-item-nombre">{{ item.producto.nombre }}</span>
+              <span class="comida-item-precio">{{ item.producto.precio | currency:'USD':'symbol':'1.0-0' }} c/u</span>
+            </div>
+            <div class="comida-item-cantidades">
+              <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, -1)">-</button>
+              <span class="comida-cant-val">{{ item.cantidad }}</span>
+              <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, 1)">+</button>
+            </div>
+            <span class="comida-item-subtotal">
+              {{ (item.producto.precio * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
+            </span>
+            <button
+              type="button"
+              class="btn-quitar-comida"
+              (click)="quitarComida(idx)"
+              title="Quitar comida">
+              &times;
+            </button>
+          </div>
+        }
+        <div class="pedido-comidas-total">
+          <span>Total en productos:</span>
+          <strong>{{ calcularTotal() | currency:'USD':'symbol':'1.0-0' }}</strong>
+        </div>
+      </div>
+    } @else {
+      <p class="pedido-sin-comidas">
+        Aún no has añadido comidas a este pedido. Selecciona una arriba y pulsa "+ Añadir".
+      </p>
+    }
+  </div>
+
 </div>

@@ -29,6 +29,14 @@ public class GlobalExceptionHandler {
         return "errors/error";
     }
 
+    // Maneja ResponseStatusException devolviendo respuesta JSON adecuada
+    @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
+    public org.springframework.http.ResponseEntity<java.util.Map<String, Object>> handleResponseStatus(
+            org.springframework.web.server.ResponseStatusException ex) {
+        return org.springframework.http.ResponseEntity.status(ex.getStatusCode())
+                .body(java.util.Map.of("mensaje", ex.getReason() != null ? ex.getReason() : ex.getMessage()));
+    }
+
     // Maneja cualquier otro error inesperado
     @ExceptionHandler(Exception.class)
     public String handleGenericException(Exception ex, Model model) {

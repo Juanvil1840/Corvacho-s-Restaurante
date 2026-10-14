@@ -6,6 +6,9 @@ import { PedidoService } from '../../service/pedido.service';
 import { ClienteService } from '../../service/cliente.service';
 import { OperadorService } from '../../service/operador.service';
 import { DomiciliarioService } from '../../service/domiciliario.service';
+import { ProductoServiceService } from '../../service/producto-service.service';
+import { DetallePedidoServiceService } from '../../service/detalle-pedido-service.service';
+import { Producto } from '../../models/producto.model';
 import { Pedido } from '../../models/pedido.model';
 import { Cliente } from '../../models/cliente.model';
 import { Operador } from '../../models/operador.model';
@@ -34,6 +37,8 @@ export class FormularioPedidoComponent implements OnInit {
   clientes: Cliente[] = [];
   operadores: Operador[] = [];
   domiciliarios: Domiciliario[] = [];
+  productos: Producto[] = [];
+  comidasSeleccionadas: { producto: Producto; cantidad: number }[] = [];
 
   editando = false;
   guardando = false;
@@ -44,6 +49,8 @@ export class FormularioPedidoComponent implements OnInit {
     private clienteService: ClienteService,
     private operadorService: OperadorService,
     private domiciliarioService: DomiciliarioService,
+    private productoService: ProductoServiceService,
+    private detallePedidoService: DetallePedidoServiceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -60,6 +67,10 @@ export class FormularioPedidoComponent implements OnInit {
     this.domiciliarioService.getDomiciliarios().subscribe({
       next: (doms) => this.domiciliarios = doms,
       error: (e) => console.error('Error al cargar domiciliarios:', e)
+    });
+    this.productoService.getProductos().subscribe({
+      next: (prods) => this.productos = prods,
+      error: (e) => console.error('Error al cargar productos:', e)
     });
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -83,6 +94,17 @@ export class FormularioPedidoComponent implements OnInit {
           this.error = 'No fue posible cargar el pedido.';
         }
       });
+
+      this.detallePedidoService.obtenerPorPedido(Number(id)).subscribe({
+        next: (detalles) => {
+          if (detalles && detalles.length > 0) {
+            this.comidasSeleccionadas = detalles
+              .filter(d => d.producto)
+              .map(d => ({ producto: d.producto, cantidad: d.cantidad || 1 }));
+          }
+        },
+        error: (e) => console.error('Error al cargar comidas del pedido:', e)
+      });
     }
   }
 
@@ -105,10 +127,30 @@ export class FormularioPedidoComponent implements OnInit {
     } else {
       this.pedido.domiciliario = null;
     }
+
+    if (this.pedido.fechaEntrega === '') {
+      this.pedido.fechaEntrega = null;
+    }
   }
 
   guardar(): void {
     this.actualizarRelaciones();
+
+    if (!this.pedido.cliente || !this.pedido.cliente.clienteId || Number(this.pedido.cliente.clienteId) <= 0) {
+      this.error = 'Debe seleccionar un cliente.';
+      return;
+    }
+
+    if (this.comidasSeleccionadas.length === 0) {
+      this.error = 'Debe añadir al menos una comida al pedido.';
+      return;
+    }
+
+    this.pedido.detallePedidos = this.comidasSeleccionadas.map(c => ({
+      cantidad: c.cantidad,
+      producto: { id: c.producto.id }
+    }));
+
     this.guardando = true;
     this.error = '';
 
@@ -124,7 +166,7 @@ export class FormularioPedidoComponent implements OnInit {
       error: (error) => {
         console.error('Error al guardar el pedido:', error);
         this.guardando = false;
-        this.error = 'No fue posible guardar el pedido. Intenta nuevamente.';
+        this.error = error.error?.mensaje || 'No fue posible guardar el pedido. Intenta nuevamente.';
       }
     });
   }

@@ -10,4 +10,5 @@ export interface Pedido {
     cliente: Cliente;
     operador?: Operador | null;
     domiciliario?: Domiciliario | null;
+    detallePedidos?: any[];
 }
