@@ -13,9 +13,16 @@ export class ProductoServiceService {
 
   constructor(private http: HttpClient) { }
 
-  // Consultar todos los productos
-  getProductos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl).pipe(
+  // Consultar productos (por defecto todos=true para ver la lista completa en gestión)
+  getProductos(todos: boolean = true): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}?todos=${todos}`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
+  // Consultar solo productos disponibles
+  getProductosDisponibles(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.apiUrl}?todos=false`).pipe(
       catchError(this.manejarError)
     );
   }

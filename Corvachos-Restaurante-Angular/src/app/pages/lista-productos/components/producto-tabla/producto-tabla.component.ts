@@ -14,9 +14,14 @@ export class ProductoTablaComponent {
 
   @Input() productos!: Producto[];
   @Output() eliminar = new EventEmitter<number>();
+  @Output() toggleDisponible = new EventEmitter<Producto>();
 
   eliminarProducto(id: number): void {
     this.eliminar.emit(id);
+  }
+
+  onToggleDisponible(producto: Producto): void {
+    this.toggleDisponible.emit(producto);
   }
 
 }

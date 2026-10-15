@@ -30,6 +30,11 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    public Collection<Producto> obtenerDisponibles() {
+        return productoRepository.findByDisponibleTrue();
+    }
+
+    @Override
     public Producto obtenerPorId(Long id) {
         return productoRepository.findById(id)
                 .orElseThrow(() -> new ProductoNotFoundException(id));
@@ -73,7 +78,7 @@ public class ProductoServiceImpl implements ProductoService {
             // (para no perder el historial de pedidos).
             if (tienePedidos(id)) {
                 throw new IllegalStateException(
-                        "No se puede eliminar el producto porque está asociado a pedidos");
+                        "Excepción: No se puede eliminar el producto porque está anidado a un pedido.");
             }
             if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
                 productoCarritoRepository.deleteAll(producto.getProductoCarritos());

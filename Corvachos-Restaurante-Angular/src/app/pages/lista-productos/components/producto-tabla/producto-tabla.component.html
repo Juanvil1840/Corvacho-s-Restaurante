@@ -15,8 +15,14 @@
         <td>{{ producto.nombre }}</td>
         <td>$ {{ producto.precio }}</td>
         <td>
-          <span *ngIf="producto.disponible" class="productos-disponible">Disponible</span>
-          <span *ngIf="!producto.disponible" class="productos-no-disponible">No disponible</span>
+          <span 
+            (click)="onToggleDisponible(producto)" 
+            [title]="'Clic para marcar como ' + (producto.disponible ? 'No disponible' : 'Disponible')"
+            style="cursor: pointer; user-select: none;"
+            [class.productos-disponible]="producto.disponible"
+            [class.productos-no-disponible]="!producto.disponible">
+            {{ producto.disponible ? 'Disponible' : 'No disponible' }}
+          </span>
         </td>
         <td>
           <div class="productos-acciones">

@@ -31,7 +31,7 @@ public class MenuController {
 
     @GetMapping("/menu")
     public String menu(Model model) {
-        Collection<Producto> productos = productoService.obtenerTodos();
+        Collection<Producto> productos = productoService.obtenerDisponibles();
 
         Map<String, List<Producto>> productosPorCategoria = productos.stream()
                 .collect(Collectors.groupingBy(
