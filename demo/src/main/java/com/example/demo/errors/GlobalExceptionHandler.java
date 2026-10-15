@@ -31,10 +31,10 @@ public class GlobalExceptionHandler {
 
     // Maneja ResponseStatusException devolviendo respuesta JSON adecuada
     @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
-    public org.springframework.http.ResponseEntity<java.util.Map<String, Object>> handleResponseStatus(
+    public org.springframework.http.ResponseEntity<com.example.demo.dto.MensajeDTO> handleResponseStatus(
             org.springframework.web.server.ResponseStatusException ex) {
         return org.springframework.http.ResponseEntity.status(ex.getStatusCode())
-                .body(java.util.Map.of("mensaje", ex.getReason() != null ? ex.getReason() : ex.getMessage()));
+                .body(new com.example.demo.dto.MensajeDTO(ex.getReason() != null ? ex.getReason() : ex.getMessage()));
     }
 
     // Maneja cualquier otro error inesperado

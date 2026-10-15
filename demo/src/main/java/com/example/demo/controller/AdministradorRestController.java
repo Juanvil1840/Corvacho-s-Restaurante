@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.AdministradorDTO;
 import com.example.demo.entities.Administrador;
 import com.example.demo.service.AdministradorService;
 
@@ -32,34 +31,34 @@ public class AdministradorRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<AdministradorDTO> listar() {
         return administradorService.findAll()
                 .stream()
-                .map(this::convertirAdministrador)
+                .map(AdministradorDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<AdministradorDTO> buscarPorId(@PathVariable Long id) {
         Administrador administrador = administradorService.findById(id);
         if (administrador == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(convertirAdministrador(administrador));
+        return ResponseEntity.ok(AdministradorDTO.fromEntity(administrador));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Administrador administrador) {
+    public ResponseEntity<AdministradorDTO> crear(@RequestBody Administrador administrador) {
         if (administrador.getNombre() == null || administrador.getNombre().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
         }
         administrador.setId_administrador(null);
         Administrador guardado = administradorService.guardar(administrador);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirAdministrador(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AdministradorDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<AdministradorDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Administrador administrador) {
         Administrador existente = administradorService.findById(id);
@@ -71,7 +70,7 @@ public class AdministradorRestController {
         }
         existente.setNombre(administrador.getNombre());
         Administrador actualizado = administradorService.guardar(existente);
-        return ResponseEntity.ok(convertirAdministrador(actualizado));
+        return ResponseEntity.ok(AdministradorDTO.fromEntity(actualizado));
     }
 
     @DeleteMapping("/{id}")
@@ -81,13 +80,6 @@ public class AdministradorRestController {
         }
         administradorService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private Map<String, Object> convertirAdministrador(Administrador admin) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id_administrador", admin.getId_administrador());
-        map.put("nombre", admin.getNombre());
-        return map;
     }
 }
 

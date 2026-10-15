@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.ClienteDTO;
 import com.example.demo.entities.Cliente;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.service.ClienteService;
@@ -41,46 +41,53 @@ public class ClienteRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<ClienteDTO> listar() {
         return clienteService.obtenerTodos()
                 .stream()
-                .map(this::convertirCliente)
+                .map(ClienteDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
         try {
             Cliente cliente = clienteService.obtenerPorId(id);
             if (cliente == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(convertirCliente(cliente));
+            return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Map<String, Object> body) {
-        Cliente cliente = mapearCliente(body, null);
+    public ResponseEntity<ClienteDTO> crear(@RequestBody Cliente cliente) {
+        validarCliente(cliente, null);
         Cliente existenteCorreo = clienteRepository.findByCorreo(cliente.getCorreo());
         if (existenteCorreo != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este correo ya está registrado");
         }
+        cliente.setClienteId(null);
+        if (cliente.getTelefono() == null || cliente.getTelefono().isBlank()) {
+            cliente.setTelefono("Sin teléfono");
+        }
+        if (cliente.getDireccion() == null || cliente.getDireccion().isBlank()) {
+            cliente.setDireccion("Sin dirección");
+        }
         Cliente guardado = clienteService.guardar(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirCliente(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ClienteDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<ClienteDTO> actualizar(
             @PathVariable Long id,
-            @RequestBody Map<String, Object> body) {
+            @RequestBody Cliente datos) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
+        validarCliente(datos, id);
         Cliente existente = clienteService.obtenerPorId(id);
-        Cliente datos = mapearCliente(body, existente);
 
         Cliente correoOtro = clienteRepository.findByCorreo(datos.getCorreo());
         if (correoOtro != null && !correoOtro.getClienteId().equals(id)) {
@@ -90,31 +97,33 @@ public class ClienteRestController {
         existente.setNombre(datos.getNombre());
         existente.setApellido(datos.getApellido());
         existente.setCorreo(datos.getCorreo());
-        existente.setContraseña(datos.getContraseña());
-        existente.setTelefono(datos.getTelefono());
-        existente.setDireccion(datos.getDireccion());
+        if (datos.getContraseña() != null && !datos.getContraseña().isBlank()) {
+            existente.setContraseña(datos.getContraseña());
+        }
+        existente.setTelefono(datos.getTelefono() != null && !datos.getTelefono().isBlank() ? datos.getTelefono() : "Sin teléfono");
+        existente.setDireccion(datos.getDireccion() != null && !datos.getDireccion().isBlank() ? datos.getDireccion() : "Sin dirección");
         existente.setActivo(datos.isActivo());
 
         Cliente actualizado = clienteService.guardar(existente);
-        return ResponseEntity.ok(convertirCliente(actualizado));
+        return ResponseEntity.ok(ClienteDTO.fromEntity(actualizado));
     }
 
     @PutMapping("/{id}/desactivar")
-    public ResponseEntity<Map<String, Object>> desactivar(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> desactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
         clienteService.desactivar(id);
-        return ResponseEntity.ok(convertirCliente(clienteService.obtenerPorId(id)));
+        return ResponseEntity.ok(ClienteDTO.fromEntity(clienteService.obtenerPorId(id)));
     }
 
     @PutMapping("/{id}/reactivar")
-    public ResponseEntity<Map<String, Object>> reactivar(@PathVariable Long id) {
+    public ResponseEntity<ClienteDTO> reactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
         clienteService.reactivar(id);
-        return ResponseEntity.ok(convertirCliente(clienteService.obtenerPorId(id)));
+        return ResponseEntity.ok(ClienteDTO.fromEntity(clienteService.obtenerPorId(id)));
     }
 
     @DeleteMapping("/{id}")
@@ -127,7 +136,7 @@ public class ClienteRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> credenciales) {
+    public ResponseEntity<ClienteDTO> login(@RequestBody Map<String, String> credenciales) {
         String correo = credenciales.get("correo");
         String contrasena = credenciales.getOrDefault("contrasena", credenciales.get("contraseña"));
         if (correo == null || contrasena == null) {
@@ -140,54 +149,22 @@ public class ClienteRestController {
         if (!cliente.isActivo()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Tu cuenta está desactivada.");
         }
-        return ResponseEntity.ok(convertirCliente(cliente));
+        return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
     }
 
-    private Cliente mapearCliente(Map<String, Object> body, Cliente existente) {
-        String nombre = str(body.get("nombre"));
-        String apellido = str(body.get("apellido"));
-        String correo = str(body.get("correo"));
-        String contrasena = str(body.getOrDefault("contrasena", body.get("contraseña")));
-        String telefono = str(body.get("telefono"));
-        String direccion = str(body.get("direccion"));
-        Boolean activo = body.get("activo") instanceof Boolean b ? b : (existente != null ? existente.isActivo() : true);
-
-        if (contrasena.isBlank() && existente != null) {
-            contrasena = existente.getContraseña();
+    private void validarCliente(Cliente cliente, Long idActual) {
+        if (cliente.getNombre() == null || cliente.getNombre().isBlank() ||
+            cliente.getApellido() == null || cliente.getApellido().isBlank() ||
+            cliente.getCorreo() == null || cliente.getCorreo().isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Nombre, apellido y correo son obligatorios");
         }
-
-        if (nombre.isBlank() || apellido.isBlank() || correo.isBlank() || contrasena.isBlank()) {
+        if (idActual == null && (cliente.getContraseña() == null || cliente.getContraseña().isBlank())) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Nombre, apellido, correo y contraseña son obligatorios");
         }
-
-        Cliente c = new Cliente();
-        c.setNombre(nombre);
-        c.setApellido(apellido);
-        c.setCorreo(correo);
-        c.setContraseña(contrasena);
-        c.setTelefono(telefono.isBlank() ? "Sin teléfono" : telefono);
-        c.setDireccion(direccion.isBlank() ? "Sin dirección" : direccion);
-        c.setActivo(activo);
-        return c;
-    }
-
-    private String str(Object val) {
-        return val == null ? "" : val.toString().trim();
-    }
-
-    private Map<String, Object> convertirCliente(Cliente c) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("clienteId", c.getClienteId());
-        map.put("nombre", c.getNombre());
-        map.put("apellido", c.getApellido());
-        map.put("correo", c.getCorreo());
-        map.put("contrasena", c.getContraseña());
-        map.put("telefono", c.getTelefono());
-        map.put("direccion", c.getDireccion());
-        map.put("activo", c.isActivo());
-        return map;
     }
 }
 

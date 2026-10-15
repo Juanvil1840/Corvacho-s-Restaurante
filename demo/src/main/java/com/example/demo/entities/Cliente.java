@@ -16,6 +16,8 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @AllArgsConstructor 
@@ -41,6 +43,8 @@ public class Cliente {
 
     @NotBlank(message = "La contrasena es obligatoria")
     @Column(length = 80, nullable = false)
+    @JsonProperty("contrasena")
+    @JsonAlias({"contrasena", "contraseña"})
     private String contraseña;
 
     @NotBlank(message = "El telefono es obligatorio")

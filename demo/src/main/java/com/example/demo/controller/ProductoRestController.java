@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.MensajeDTO;
+import com.example.demo.dto.ProductoDTO;
 import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Producto;
 import com.example.demo.repository.CategoriaRepository;
@@ -37,57 +38,47 @@ public class ProductoRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<ProductoDTO> listar() {
         return productoService.obtenerTodos()
                 .stream()
-                .map(this::convertirProducto)
+                .map(ProductoDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(
-            @PathVariable Long id) {
+    public ResponseEntity<ProductoDTO> buscarPorId(@PathVariable Long id) {
         try {
             Producto producto = productoService.obtenerPorId(id);
-            return ResponseEntity.ok(convertirProducto(producto));
+            return ResponseEntity.ok(ProductoDTO.fromEntity(producto));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(
-            @RequestBody Producto producto) {
-
+    public ResponseEntity<ProductoDTO> crear(@RequestBody Producto producto) {
         producto.setId(null);
         producto.setCategoria(buscarCategoria(producto));
-
         Producto guardado = productoService.guardar(producto);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(convertirProducto(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ProductoDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<ProductoDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Producto producto) {
-
         if (!productoService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
 
         producto.setId(id);
         producto.setCategoria(buscarCategoria(producto));
-
         Producto actualizado = productoService.actualizar(producto);
-
-        return ResponseEntity.ok(convertirProducto(actualizado));
+        return ResponseEntity.ok(ProductoDTO.fromEntity(actualizado));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> eliminar(@PathVariable Long id) {
-
+    public ResponseEntity<MensajeDTO> eliminar(@PathVariable Long id) {
         if (!productoService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -95,8 +86,7 @@ public class ProductoRestController {
         // Solo se permite eliminar si el producto no aparece en ningún pedido
         if (productoService.tienePedidos(id)) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of(
-                            "mensaje",
+                    .body(new MensajeDTO(
                             "No se puede eliminar el producto porque está asociado a uno o más pedidos."));
         }
 
@@ -118,19 +108,4 @@ public class ProductoRestController {
                         HttpStatus.BAD_REQUEST,
                         "La categoría seleccionada no existe"));
     }
-
-    private Map<String, Object> convertirProducto(Producto producto) {
-        return Map.of(
-                "id", producto.getId(),
-                "nombre", producto.getNombre(),
-                "precio", producto.getPrecio(),
-                "descripcion", producto.getDescripcion(),
-                "imagen", producto.getImagen(),
-                "disponible", producto.isDisponible(),
-                "categoria", Map.of(
-                        "id", producto.getCategoria().getId(),
-                        "nombre", producto.getCategoria().getNombre()
-                )
-        );
-    }
-}
+}

@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.OperadorDTO;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
@@ -45,32 +44,32 @@ public class OperadorRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<OperadorDTO> listar() {
         return operadorService.findAll()
                 .stream()
-                .map(this::convertirOperador)
+                .map(OperadorDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<OperadorDTO> buscarPorId(@PathVariable Long id) {
         Operador operador = operadorService.findById(id);
         if (operador == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(convertirOperador(operador));
+        return ResponseEntity.ok(OperadorDTO.fromEntity(operador));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Operador operador) {
+    public ResponseEntity<OperadorDTO> crear(@RequestBody Operador operador) {
         validarOperador(operador, null);
         operador.setId_operador(null);
         Operador guardado = operadorService.guardar(operador);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirOperador(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(OperadorDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<OperadorDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Operador datos) {
         Operador existente = operadorService.findById(id);
@@ -84,7 +83,7 @@ public class OperadorRestController {
             existente.setContrasena(datos.getContrasena());
         }
         Operador actualizado = operadorService.guardar(existente);
-        return ResponseEntity.ok(convertirOperador(actualizado));
+        return ResponseEntity.ok(OperadorDTO.fromEntity(actualizado));
     }
 
     @DeleteMapping("/{id}")
@@ -132,15 +131,6 @@ public class OperadorRestController {
         if (usuarioDuplicado) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
         }
-    }
-
-    private Map<String, Object> convertirOperador(Operador op) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        map.put("id_operador", op.getId_operador());
-        map.put("nombre", op.getNombre());
-        map.put("usuario", op.getUsuario());
-        map.put("contrasena", op.getContrasena());
-        return map;
     }
 }
 

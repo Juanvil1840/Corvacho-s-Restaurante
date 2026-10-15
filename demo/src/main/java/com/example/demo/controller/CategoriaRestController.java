@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.CategoriaDTO;
 import com.example.demo.entities.Categoria;
 import com.example.demo.service.CategoriaService;
 
@@ -30,31 +30,31 @@ public class CategoriaRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<CategoriaDTO> listar() {
         return categoriaService.findAll()
                 .stream()
-                .map(this::convertirCategoria)
+                .map(CategoriaDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<CategoriaDTO> buscarPorId(@PathVariable Long id) {
         Categoria categoria = categoriaService.findById(id);
         if (categoria == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(convertirCategoria(categoria));
+        return ResponseEntity.ok(CategoriaDTO.fromEntity(categoria));
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Categoria categoria) {
+    public ResponseEntity<CategoriaDTO> crear(@RequestBody Categoria categoria) {
         categoria.setId(null);
         Categoria guardada = categoriaService.guardar(categoria);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirCategoria(guardada));
+        return ResponseEntity.status(HttpStatus.CREATED).body(CategoriaDTO.fromEntity(guardada));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<CategoriaDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Categoria categoria) {
         if (!categoriaService.existsById(id)) {
@@ -62,7 +62,7 @@ public class CategoriaRestController {
         }
         categoria.setId(id);
         Categoria actualizada = categoriaService.guardar(categoria);
-        return ResponseEntity.ok(convertirCategoria(actualizada));
+        return ResponseEntity.ok(CategoriaDTO.fromEntity(actualizada));
     }
 
     @DeleteMapping("/{id}")
@@ -72,12 +72,5 @@ public class CategoriaRestController {
         }
         categoriaService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private Map<String, Object> convertirCategoria(Categoria categoria) {
-        return Map.of(
-                "id", categoria.getId(),
-                "nombre", categoria.getNombre()
-        );
     }
 }

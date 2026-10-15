@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.dto.AdicionalDTO;
 import com.example.demo.entities.Adicional;
 import com.example.demo.entities.Categoria;
 import com.example.demo.repository.CategoriaRepository;
@@ -37,40 +37,40 @@ public class AdicionalRestController {
     }
 
     @GetMapping
-    public Collection<Map<String, Object>> listar() {
+    public Collection<AdicionalDTO> listar() {
         return adicionalService.findAll()
                 .stream()
-                .map(this::convertirAdicional)
+                .map(AdicionalDTO::fromEntity)
                 .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<AdicionalDTO> buscarPorId(@PathVariable Long id) {
         Adicional adicional = adicionalService.findById(id);
         if (adicional == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(convertirAdicional(adicional));
+        return ResponseEntity.ok(AdicionalDTO.fromEntity(adicional));
     }
 
     @GetMapping("/categoria/{categoriaId}")
-    public Collection<Map<String, Object>> buscarPorCategoria(@PathVariable Long categoriaId) {
+    public Collection<AdicionalDTO> buscarPorCategoria(@PathVariable Long categoriaId) {
         return adicionalService.buscarPorCategoria(categoriaId)
                 .stream()
-                .map(this::convertirAdicional)
+                .map(AdicionalDTO::fromEntity)
                 .toList();
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> crear(@RequestBody Adicional adicional) {
+    public ResponseEntity<AdicionalDTO> crear(@RequestBody Adicional adicional) {
         adicional.setId_adicional(null);
         adicional.setCategoria(buscarCategoria(adicional));
         Adicional guardado = adicionalService.guardar(adicional);
-        return ResponseEntity.status(HttpStatus.CREATED).body(convertirAdicional(guardado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(AdicionalDTO.fromEntity(guardado));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizar(
+    public ResponseEntity<AdicionalDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Adicional adicional) {
         if (adicionalService.findById(id) == null) {
@@ -79,7 +79,7 @@ public class AdicionalRestController {
         adicional.setId_adicional(id);
         adicional.setCategoria(buscarCategoria(adicional));
         Adicional actualizado = adicionalService.guardar(adicional);
-        return ResponseEntity.ok(convertirAdicional(actualizado));
+        return ResponseEntity.ok(AdicionalDTO.fromEntity(actualizado));
     }
 
     @DeleteMapping("/{id}")
@@ -101,18 +101,5 @@ public class AdicionalRestController {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
                         "La categoría seleccionada no existe"));
-    }
-
-    private Map<String, Object> convertirAdicional(Adicional adicional) {
-        return Map.of(
-                "id_adicional", adicional.getId_adicional(),
-                "nombre", adicional.getNombre(),
-                "precio", adicional.getPrecio(),
-                "disponible", adicional.isDisponible(),
-                "categoria", Map.of(
-                        "id", adicional.getCategoria().getId(),
-                        "nombre", adicional.getCategoria().getNombre()
-                )
-        );
     }
 }
