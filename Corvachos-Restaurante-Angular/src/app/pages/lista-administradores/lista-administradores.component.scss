@@ -1,2 +1,38 @@
+.administrador-lista-btn-nuevo,
+.administrador-lista-btn-operador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 49px;
+  padding: 12px 24px;
 
+  background-color: transparent;
+  color: #e5a126;
 
+  border: 2px solid #e5a126;
+  border-radius: 6px;
+
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.administrador-lista-btn-nuevo:hover,
+.administrador-lista-btn-operador:hover {
+  background-color: #e5a126;
+  color: #001e29;
+}
+
+.administrador-lista-acciones {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}

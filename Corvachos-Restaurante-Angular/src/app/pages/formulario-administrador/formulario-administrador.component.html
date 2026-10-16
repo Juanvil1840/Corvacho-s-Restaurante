@@ -7,22 +7,31 @@
     <div class="administrador-form-tarjeta">
       <form (ngSubmit)="guardar()">
 
-        <app-administrador-campos [administrador]="administrador"></app-administrador-campos>
+        <app-administrador-campos
+          [administrador]="administrador">
+        </app-administrador-campos>
 
         @if (error) {
           <p class="administrador-form-error">{{ error }}</p>
         }
 
         <div class="administrador-form-acciones">
-          <button type="submit" class="administrador-form-btn-guardar" [disabled]="guardando">
+          <button
+            type="submit"
+            class="administrador-form-btn-guardar"
+            [disabled]="guardando">
             {{ guardando ? 'Guardando...' : 'Guardar' }}
           </button>
-          <button type="button" class="administrador-form-btn-cancelar" (click)="cancelar()">
+
+          <button
+            type="button"
+            class="administrador-form-btn-cancelar"
+            (click)="cancelar()">
             Cancelar
           </button>
         </div>
+
       </form>
     </div>
   </div>
 </div>
-

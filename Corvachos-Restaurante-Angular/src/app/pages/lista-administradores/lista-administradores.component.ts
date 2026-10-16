@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AdministradorService } from '../../service/administrador.service';
 import { Administrador } from '../../models/administrador.model';
 import { AdministradorTablaComponent } from './components/administrador-tabla/administrador-tabla.component';
@@ -18,7 +18,10 @@ export class ListaAdministradoresComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private administradorService: AdministradorService) {}
+  constructor(
+    private administradorService: AdministradorService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cargarAdministradores();
@@ -41,6 +44,10 @@ export class ListaAdministradoresComponent implements OnInit {
     });
   }
 
+  nuevoOperador(): void {
+    this.router.navigate(['/operadores/nuevo']);
+  }
+
   eliminarAdministrador(id: number): void {
     if (confirm('¿Eliminar este administrador?')) {
       this.administradorService.eliminarAdministrador(id).subscribe({
@@ -55,4 +62,3 @@ export class ListaAdministradoresComponent implements OnInit {
     }
   }
 }
-
