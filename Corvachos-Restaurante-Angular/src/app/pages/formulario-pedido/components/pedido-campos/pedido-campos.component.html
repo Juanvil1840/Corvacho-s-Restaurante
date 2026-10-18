@@ -2,15 +2,26 @@
 
   <div class="pedido-campo">
     <label for="estado">Estado</label>
-    <select
-      id="estado"
-      name="estado"
-      [(ngModel)]="pedido.estado"
-      required>
-      @for (estado of estados; track estado) {
-        <option [ngValue]="estado">{{ estado }}</option>
-      }
-    </select>
+    @if (editando) {
+      <select
+        id="estado"
+        name="estado"
+        [(ngModel)]="pedido.estado"
+        required>
+        @for (estado of estados; track estado) {
+          <option [ngValue]="estado">{{ estado }}</option>
+        }
+      </select>
+    } @else {
+      <input
+        id="estado"
+        name="estado"
+        type="text"
+        [value]="pedido.estado || 'Recibido'"
+        disabled
+        readonly
+      />
+    }
   </div>
 
   <div class="pedido-campo">

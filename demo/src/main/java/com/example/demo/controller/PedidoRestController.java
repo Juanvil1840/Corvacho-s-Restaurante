@@ -87,6 +87,9 @@ public class PedidoRestController {
         if (pedido.getFechaCreacion() == null) {
             pedido.setFechaCreacion(LocalDateTime.now());
         }
+        if (pedido.getEstado() == null || pedido.getEstado().trim().isEmpty()) {
+            pedido.setEstado("Recibido");
+        }
 
         java.util.List<DetallePedido> detallesRecibidos = pedido.getDetallePedidos();
         pedido.setDetallePedidos(null);

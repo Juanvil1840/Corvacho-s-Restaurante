@@ -25,7 +25,7 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id_Pedido;
     @Column( length = 50, nullable = false )
-    String estado;
+    String estado = "Recibido";
     @Column( nullable = false)
     LocalDateTime fechaCreacion;
     @Column( nullable = true)   // Puede ser null mientras el pedido no ha sido entregado
@@ -47,7 +47,7 @@ public class Pedido {
     private List<DetallePedido> detallePedidos;
 
     public Pedido(String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega, Cliente cliente, Operador operador, Domiciliario domiciliario){
-    this.estado = estado;
+    this.estado = (estado != null && !estado.trim().isEmpty()) ? estado : "Recibido";
     this.fechaCreacion = fechaCreacion;
     this.fechaEntrega = fechaEntrega;
     this.cliente = cliente;

@@ -23,6 +23,7 @@ export class PedidoCamposComponent {
   @Input() domiciliarios: Domiciliario[] = [];
   @Input() productos: Producto[] = [];
   @Input() comidasSeleccionadas: { producto: Producto; cantidad: number }[] = [];
+  @Input() editando: boolean = false;
 
   readonly estados: string[] = ['Recibido', 'Cocinando', 'Enviado', 'Entregado', 'Cancelado'];
 
