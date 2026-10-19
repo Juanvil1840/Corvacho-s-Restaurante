@@ -7,8 +7,10 @@ import { ClienteService } from '../../service/cliente.service';
 import { OperadorService } from '../../service/operador.service';
 import { DomiciliarioService } from '../../service/domiciliario.service';
 import { ProductoServiceService } from '../../service/producto-service.service';
+import { AdicionalService } from '../../service/adicional.service';
 import { DetallePedidoServiceService } from '../../service/detalle-pedido-service.service';
 import { Producto } from '../../models/producto.model';
+import { Adicional } from '../../models/adicional.model';
 import { Pedido } from '../../models/pedido.model';
 import { Cliente } from '../../models/cliente.model';
 import { Operador } from '../../models/operador.model';
@@ -38,7 +40,8 @@ export class FormularioPedidoComponent implements OnInit {
   operadores: Operador[] = [];
   domiciliarios: Domiciliario[] = [];
   productos: Producto[] = [];
-  comidasSeleccionadas: { producto: Producto; cantidad: number }[] = [];
+  adicionales: Adicional[] = [];
+  comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
 
   editando = false;
   guardando = false;
@@ -50,6 +53,7 @@ export class FormularioPedidoComponent implements OnInit {
     private operadorService: OperadorService,
     private domiciliarioService: DomiciliarioService,
     private productoService: ProductoServiceService,
+    private adicionalService: AdicionalService,
     private detallePedidoService: DetallePedidoServiceService,
     private route: ActivatedRoute,
     private router: Router
@@ -71,6 +75,10 @@ export class FormularioPedidoComponent implements OnInit {
     this.productoService.getProductos().subscribe({
       next: (prods) => this.productos = prods,
       error: (e) => console.error('Error al cargar productos:', e)
+    });
+    this.adicionalService.getAdicionales().subscribe({
+      next: (adics) => this.adicionales = adics,
+      error: (e) => console.error('Error al cargar adicionales:', e)
     });
 
     const id = this.route.snapshot.paramMap.get('id');
@@ -100,7 +108,11 @@ export class FormularioPedidoComponent implements OnInit {
           if (detalles && detalles.length > 0) {
             this.comidasSeleccionadas = detalles
               .filter(d => d.producto)
-              .map(d => ({ producto: d.producto, cantidad: d.cantidad || 1 }));
+              .map(d => ({
+                producto: d.producto,
+                cantidad: d.cantidad || 1,
+                adicional: d.adicional ?? null
+              }));
           }
         },
         error: (e) => console.error('Error al cargar comidas del pedido:', e)
@@ -136,7 +148,7 @@ export class FormularioPedidoComponent implements OnInit {
   guardar(): void {
     this.actualizarRelaciones();
 
-    if (!this.editando) {
+    if (!this.pedido.estado || this.pedido.estado.trim() === '') {
       this.pedido.estado = 'Recibido';
     }
 
@@ -152,7 +164,8 @@ export class FormularioPedidoComponent implements OnInit {
 
     this.pedido.detallePedidos = this.comidasSeleccionadas.map(c => ({
       cantidad: c.cantidad,
-      producto: { id: c.producto.id }
+      producto: { id: c.producto.id },
+      adicional: c.adicional && c.adicional.id_adicional ? { id_adicional: c.adicional.id_adicional } : null
     }));
 
     this.guardando = true;

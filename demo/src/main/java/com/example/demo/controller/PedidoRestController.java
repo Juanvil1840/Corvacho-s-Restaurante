@@ -22,6 +22,7 @@ import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
+import com.example.demo.repository.AdicionalRepository;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.DomiciliarioRepository;
@@ -40,6 +41,7 @@ public class PedidoRestController {
     private final DomiciliarioRepository domiciliarioRepository;
     private final ProductoRepository productoRepository;
     private final DetallePedidoRepository detallePedidoRepository;
+    private final AdicionalRepository adicionalRepository;
 
     public PedidoRestController(
             PedidoService pedidoService,
@@ -47,13 +49,15 @@ public class PedidoRestController {
             OperadorRepository operadorRepository,
             DomiciliarioRepository domiciliarioRepository,
             ProductoRepository productoRepository,
-            DetallePedidoRepository detallePedidoRepository) {
+            DetallePedidoRepository detallePedidoRepository,
+            AdicionalRepository adicionalRepository) {
         this.pedidoService = pedidoService;
         this.clienteRepository = clienteRepository;
         this.operadorRepository = operadorRepository;
         this.domiciliarioRepository = domiciliarioRepository;
         this.productoRepository = productoRepository;
         this.detallePedidoRepository = detallePedidoRepository;
+        this.adicionalRepository = adicionalRepository;
     }
    
     @GetMapping
@@ -103,6 +107,9 @@ public class PedidoRestController {
                         nuevo.setPedido(guardado);
                         nuevo.setProducto(prod);
                         nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+                        if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
+                            adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(nuevo::setAdicional);
+                        }
                         detallePedidoRepository.save(nuevo);
                     });
                 }
@@ -149,6 +156,9 @@ public class PedidoRestController {
                         nuevo.setPedido(actualizado);
                         nuevo.setProducto(prod);
                         nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+                        if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
+                            adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(nuevo::setAdicional);
+                        }
                         detallePedidoRepository.save(nuevo);
                     });
                 }

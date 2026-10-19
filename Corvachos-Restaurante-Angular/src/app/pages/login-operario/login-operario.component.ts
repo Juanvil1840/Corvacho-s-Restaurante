@@ -24,7 +24,7 @@ export class LoginOperarioComponent {
     this.operadorService.login(datos.usuario, datos.contrasena).subscribe({
       next: (operador) => {
         localStorage.setItem('operador', JSON.stringify(operador));
-        this.router.navigate(['/portal-operario']);
+        this.router.navigate(['/pedidos']);
       },
       error: (err) => {
         this.formulario.setError('Usuario o contraseña incorrectos');

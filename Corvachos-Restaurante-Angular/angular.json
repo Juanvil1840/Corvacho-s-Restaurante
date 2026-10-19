@@ -64,7 +64,6 @@
   "src/assets/style/administradores.css",
   "src/assets/style/administrador-formulario.css",
   "src/assets/style/login-operario.css",
-  "src/assets/style/portal-operario.css",
   "src/assets/style/error.css"
 ],
             "scripts": []
@@ -151,7 +150,6 @@
   "src/assets/style/administradores.css",
   "src/assets/style/administrador-formulario.css",
   "src/assets/style/login-operario.css",
-"src/assets/style/portal-operario.css",
   "src/assets/style/error.css"
 ],
             "scripts": []

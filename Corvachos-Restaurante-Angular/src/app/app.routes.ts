@@ -31,7 +31,6 @@ import { FormularioAdministradorComponent } from './pages/formulario-administrad
 import { DetallePedidoComponent } from './pages/detalle-pedido/detalle-pedido.component';
 import { PaginaErrorComponent } from './pages/pagina-error/pagina-error.component';
 import { LoginOperarioComponent } from './pages/login-operario/login-operario.component';
-import { PortalOperarioComponent } from './pages/portal-operario/portal-operario.component';
 
 export const routes: Routes = [
 
@@ -65,7 +64,6 @@ export const routes: Routes = [
     { path: 'administradores/nuevo', component: FormularioAdministradorComponent },
     { path: 'administradores/editar/:id', component: FormularioAdministradorComponent },
     { path: 'login-operario', component: LoginOperarioComponent },
-    { path: 'portal-operario', component: PortalOperarioComponent },
 
     { path: 'clientes', component: ListaClientesComponent },
     { path: 'clientes/nuevo', component: FormularioClienteComponent },

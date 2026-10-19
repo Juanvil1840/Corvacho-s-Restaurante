@@ -2,26 +2,15 @@
 
   <div class="pedido-campo">
     <label for="estado">Estado</label>
-    @if (editando) {
-      <select
-        id="estado"
-        name="estado"
-        [(ngModel)]="pedido.estado"
-        required>
-        @for (estado of estados; track estado) {
-          <option [ngValue]="estado">{{ estado }}</option>
-        }
-      </select>
-    } @else {
-      <input
-        id="estado"
-        name="estado"
-        type="text"
-        [value]="pedido.estado || 'Recibido'"
-        disabled
-        readonly
-      />
-    }
+    <select
+      id="estado"
+      name="estado"
+      [(ngModel)]="pedido.estado"
+      required>
+      @for (estado of estados; track estado) {
+        <option [value]="estado">{{ estado }}</option>
+      }
+    </select>
   </div>
 
   <div class="pedido-campo">
@@ -99,6 +88,16 @@
           </option>
         }
       </select>
+
+      <select [(ngModel)]="adicionalSeleccionadoId" name="adicionalSelect">
+        <option [ngValue]="0">Sin adicional (opcional)</option>
+        @for (adic of adicionalesDisponibles; track adic.id_adicional) {
+          <option [ngValue]="adic.id_adicional">
+            + {{ adic.nombre }} ({{ adic.precio > 0 ? (adic.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
+          </option>
+        }
+      </select>
+
       <input
         type="number"
         [(ngModel)]="cantidadSeleccionada"
@@ -119,11 +118,19 @@
 
     @if (comidasSeleccionadas.length > 0) {
       <div class="pedido-lista-comidas">
-        @for (item of comidasSeleccionadas; track item.producto.id; let idx = $index) {
+        @for (item of comidasSeleccionadas; track item.producto.id + '_' + (item.adicional?.id_adicional ?? 0); let idx = $index) {
           <div class="pedido-comida-item">
             <div class="comida-item-info">
               <span class="comida-item-nombre">{{ item.producto.nombre }}</span>
-              <span class="comida-item-precio">{{ item.producto.precio | currency:'USD':'symbol':'1.0-0' }} c/u</span>
+              @if (item.adicional) {
+                <span class="comida-item-adicional">
+                  <i class="bi bi-plus-circle"></i> Adicional: <strong>{{ item.adicional.nombre }}</strong>
+                  ({{ item.adicional.precio > 0 ? (item.adicional.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
+                </span>
+              }
+              <span class="comida-item-precio">
+                {{ (item.producto.precio + (item.adicional?.precio ?? 0)) | currency:'USD':'symbol':'1.0-0' }} c/u
+              </span>
             </div>
             <div class="comida-item-cantidades">
               <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, -1)">-</button>
@@ -131,7 +138,7 @@
               <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, 1)">+</button>
             </div>
             <span class="comida-item-subtotal">
-              {{ (item.producto.precio * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
+              {{ ((item.producto.precio + (item.adicional?.precio ?? 0)) * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
             </span>
             <button
               type="button"
