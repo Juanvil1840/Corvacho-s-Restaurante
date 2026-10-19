@@ -20,7 +20,7 @@ export class MenuComponent implements OnInit {
   constructor(private productoService: ProductoServiceService) {}
 
   ngOnInit(): void {
-    this.productoService.getProductos().subscribe({
+    this.productoService.getProductosDisponibles().subscribe({
       next: (productos) => {
         this.productosPorCategoria = {};
 

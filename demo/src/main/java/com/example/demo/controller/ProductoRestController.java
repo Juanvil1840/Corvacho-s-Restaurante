@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,8 +39,13 @@ public class ProductoRestController {
     }
 
     @GetMapping
-    public Collection<ProductoDTO> listar() {
-        return productoService.obtenerTodos()
+    public Collection<ProductoDTO> listar(
+            @RequestParam(value = "todos", required = false, defaultValue = "true") boolean todos) {
+        Collection<Producto> productos = todos
+                ? productoService.obtenerTodos()
+                : productoService.obtenerDisponibles();
+
+        return productos
                 .stream()
                 .map(ProductoDTO::fromEntity)
                 .toList();
@@ -85,9 +91,9 @@ public class ProductoRestController {
 
         // Solo se permite eliminar si el producto no aparece en ningún pedido
         if (productoService.tienePedidos(id)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new MensajeDTO(
-                            "No se puede eliminar el producto porque está asociado a uno o más pedidos."));
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Excepción: No se puede eliminar el producto porque está anidado a un pedido.");
         }
 
         productoService.eliminar(id);

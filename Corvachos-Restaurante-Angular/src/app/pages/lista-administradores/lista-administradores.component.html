@@ -6,6 +6,13 @@
       <a routerLink="/administradores/nuevo" class="administrador-lista-btn-nuevo">
         + Nuevo Administrador
       </a>
+
+      <button
+        type="button"
+        class="administrador-lista-btn-operador"
+        (click)="nuevoOperador()">
+        + Nuevo Operador
+      </button>
     </div>
 
     @if (cargando) {
@@ -24,4 +31,3 @@
     }
   </div>
 </div>
-

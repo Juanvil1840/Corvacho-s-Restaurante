@@ -5,12 +5,10 @@
     <h1 class="productos-titulo"><i class="bi bi-grid-3x3-gap-fill"></i> Gestion de Productos</h1>
 
     <a routerLink="/productos/nuevo" class="productos-btn-nuevo">+ Nuevo Producto</a>
-      <div *ngIf="error" class="alerta-error" role="alert">
-        {{ error }}
-      </div>
     <app-producto-tabla
       [productos]="productos"
-      (eliminar)="eliminarProducto($event)">
+      (eliminar)="eliminarProducto($event)"
+      (toggleDisponible)="toggleDisponible($event)">
     </app-producto-tabla>
 
   </div>

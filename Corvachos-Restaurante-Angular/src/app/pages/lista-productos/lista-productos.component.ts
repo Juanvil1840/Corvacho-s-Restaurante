@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductoServiceService } from '../../service/producto-service.service';
 import { Producto } from '../../models/producto.model';
 import { ProductoTablaComponent } from './components/producto-tabla/producto-tabla.component';
@@ -18,7 +18,10 @@ export class ListaProductosComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private productoService: ProductoServiceService) {}
+  constructor(
+    private productoService: ProductoServiceService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -54,12 +57,33 @@ export class ListaProductosComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al eliminar el producto:', error);
+        const mensajeError = error.error?.mensaje 
+          || error.error?.message 
+          || 'Excepción: No se puede eliminar el producto porque está anidado a un pedido.';
+        
+        this.router.navigate(['/error'], {
+          queryParams: { mensaje: mensajeError }
+        });
+      }
+    });
+  }
 
-        if (error.status === 409 && error.error?.mensaje) {
-          this.error = error.error.mensaje;
-        } else {
-          this.error = 'No fue posible eliminar el producto.';
-        }
+  toggleDisponible(producto: Producto): void {
+    const nuevoEstado = !producto.disponible;
+    const productoActualizado: Producto = {
+      ...producto,
+      disponible: nuevoEstado
+    };
+
+    this.error = '';
+
+    this.productoService.actualizarProducto(productoActualizado).subscribe({
+      next: (actualizado) => {
+        producto.disponible = actualizado.disponible;
+      },
+      error: (error) => {
+        console.error('Error al actualizar disponibilidad:', error);
+        this.error = 'No fue posible actualizar la disponibilidad del producto.';
       }
     });
   }

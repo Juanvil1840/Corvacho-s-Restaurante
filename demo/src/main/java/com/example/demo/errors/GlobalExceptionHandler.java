@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
     // Maneja cualquier otro error inesperado
     @ExceptionHandler(Exception.class)
     public String handleGenericException(Exception ex, Model model) {
-        model.addAttribute("mensaje", "Ha ocurrido un error inesperado. Por favor, intentalo de nuevo.");
+        model.addAttribute("mensaje", ex.getMessage() != null ? ex.getMessage() : "Ha ocurrido un error inesperado. Por favor, intentalo de nuevo.");
         return "errors/error";
     }
 }

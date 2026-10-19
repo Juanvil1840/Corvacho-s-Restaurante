@@ -136,6 +136,10 @@ export class FormularioPedidoComponent implements OnInit {
   guardar(): void {
     this.actualizarRelaciones();
 
+    if (!this.editando) {
+      this.pedido.estado = 'Recibido';
+    }
+
     if (!this.pedido.cliente || !this.pedido.cliente.clienteId || Number(this.pedido.cliente.clienteId) <= 0) {
       this.error = 'Debe seleccionar un cliente.';
       return;

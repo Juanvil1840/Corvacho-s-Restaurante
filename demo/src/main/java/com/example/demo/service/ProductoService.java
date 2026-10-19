@@ -6,6 +6,7 @@ import com.example.demo.entities.Producto;
 
 public interface ProductoService {
     Collection<Producto> obtenerTodos();
+    Collection<Producto> obtenerDisponibles();
     Producto obtenerPorId(Long id);
     Producto guardar(Producto producto);
     Producto actualizar(Producto producto);
