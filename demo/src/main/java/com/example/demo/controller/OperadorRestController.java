@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
+import java.util.Map;
+import com.example.demo.dto.LoginOperadorDTO;
+import com.example.demo.dto.MensajeDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,6 +134,29 @@ public class OperadorRestController {
         if (usuarioDuplicado) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
         }
+    }
+            @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
+        String usuario = credenciales.get("usuario");
+        String contrasena = credenciales.get("contrasena");
+
+        if (usuario == null || contrasena == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MensajeDTO("Usuario y contraseña son obligatorios."));
+        }
+
+        Operador operador = operadorService.autenticar(usuario.trim(), contrasena);
+
+        if (operador == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MensajeDTO("Usuario o contraseña incorrectos"));
+        }
+
+        return ResponseEntity.ok(new LoginOperadorDTO(
+                operador.getId_operador(),
+                operador.getNombre(),
+                operador.getUsuario()
+        ));
     }
 }
 

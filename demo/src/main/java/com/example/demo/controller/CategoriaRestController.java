@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.CategoriaDTO;
+import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Categoria;
 import com.example.demo.service.CategoriaService;
+import com.example.demo.dto.MensajeDTO;
 
 @RestController
 @RequestMapping("/api/categorias")
@@ -65,11 +67,18 @@ public class CategoriaRestController {
         return ResponseEntity.ok(CategoriaDTO.fromEntity(actualizada));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+      @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         if (!categoriaService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
+
+        if (categoriaService.tieneProductosOAdicionales(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MensajeDTO(
+                            "No se puede eliminar la categoría porque tiene productos o adicionales asociados."));
+        }
+
         categoriaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

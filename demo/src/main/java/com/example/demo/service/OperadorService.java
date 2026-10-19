@@ -9,4 +9,5 @@ public interface OperadorService {
     Operador findById(Long id);
     Operador guardar(Operador operador);
     void deleteById(Long id);
+Operador autenticar(String usuario, String contrasena);
 }

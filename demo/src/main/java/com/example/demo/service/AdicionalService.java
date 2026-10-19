@@ -11,4 +11,9 @@ public interface AdicionalService {
     Adicional guardar(Adicional adicional);
     void deleteById(Long id);
     List<Adicional> buscarPorCategoria(Long categoriaId);
+
+    
+    List<Adicional> findDisponibles();
+    List<Adicional> buscarDisponiblesPorCategoria(Long categoriaId);
+    boolean tienePedidos(Long id);
 }

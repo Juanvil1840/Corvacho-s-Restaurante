@@ -91,4 +91,8 @@ public class ProductoServiceImpl implements ProductoService {
     public boolean tienePedidos(Long id) {
         return detallePedidoRepository.existsByProducto_Id(id);
     }
+        @Override
+    public Collection<Producto> obtenerDisponibles() {
+        return productoRepository.findByDisponibleTrue();
+    }
 }

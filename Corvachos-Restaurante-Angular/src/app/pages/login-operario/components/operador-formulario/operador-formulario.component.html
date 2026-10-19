@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit()" class="operador-formulario">
+  <h2 class="operador-form-titulo">LOGIN OPERARIO</h2>
+
+  @if (error) {
+    <p class="operador-form-error">{{ error }}</p>
+  }
+
+  <div class="operador-form-campo">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" name="usuario" [(ngModel)]="usuario" placeholder="Tu usuario" required>
+  </div>
+
+  <div class="operador-form-campo">
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" name="contrasena" [(ngModel)]="contrasena" placeholder="**********" required>
+  </div>
+
+  <button type="submit" class="operador-form-btn">INGRESAR</button>
+</form>

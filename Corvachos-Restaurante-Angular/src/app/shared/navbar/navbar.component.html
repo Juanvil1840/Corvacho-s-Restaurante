@@ -15,6 +15,14 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/menu">MENU</a>
         </li>
+        
+        <!-- NUEVO: Solo aparece en la página de Login de Cliente -->
+        @if (esPaginaLogin) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login-operario">OPERARIO</a>
+          </li>
+        }
+
         <li class="nav-item">
           <a class="nav-link login" routerLink="/login">LOG IN</a>
         </li>
