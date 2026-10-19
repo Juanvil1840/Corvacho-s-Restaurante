@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.entities.Operador;
 
 @Repository 
-public interface OperadorRepository extends JpaRepository<Operador,Long>{
+public interface OperadorRepository extends JpaRepository<Operador, Long> {
     
+    Operador findByUsuario(String usuario);
 }

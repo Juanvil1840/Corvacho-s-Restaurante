@@ -33,6 +33,13 @@ public class OperadorServiceImpl implements OperadorService {
 	public void deleteById(Long id) {
 		operadorRepository.deleteById(id);
 	}
-
+    @Override
+    public Operador autenticar(String usuario, String contrasena) {
+        Operador operador = operadorRepository.findByUsuario(usuario);
+        if (operador != null && operador.getContrasena().equals(contrasena)) {
+            return operador;
+        }
+        return null;
+    }
     
 }

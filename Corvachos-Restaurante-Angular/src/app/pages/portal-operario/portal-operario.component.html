@@ -1,0 +1,55 @@
+<div class="body-portal-operario">
+
+  <header class="portal-header">
+    <div class="portal-header-info">
+      <h1 class="portal-titulo">Portal Operario</h1>
+      <p class="portal-bienvenida">Hola, <strong>{{ nombreOperador }}</strong></p>
+    </div>
+    <button class="portal-btn-logout" (click)="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <div class="portal-contenido">
+
+    @if (cargando) {
+      <p class="portal-mensaje">Cargando pedidos...</p>
+    }
+
+    @if (error) {
+      <p class="portal-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+      <div class="portal-tabla-contenedor">
+        <table class="portal-tabla">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Estado</th>
+              <th>Fecha</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (pedido of pedidos; track pedido.id_Pedido) {
+              <tr>
+                <td>{{ pedido.id_Pedido }}</td>
+                <td>{{ pedido.cliente?.nombre }} {{ pedido.cliente?.apellido }}</td>
+                <td><span class="estado-pedido">{{ pedido.estado }}</span></td>
+                <td>{{ pedido.fechaCreacion | date:'short' }}</td>
+                <td>
+                  <a [routerLink]="['/pedidos/detalle', pedido.id_Pedido]" class="portal-btn-ver">Ver Detalle</a>
+                </td>
+              </tr>
+            }
+            @if (pedidos.length === 0) {
+              <tr>
+                <td colspan="5" class="portal-vacio">No hay pedidos registrados.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

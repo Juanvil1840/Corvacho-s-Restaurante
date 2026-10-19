@@ -17,6 +17,11 @@ export class OperadorService {
       catchError(this.manejarError)
     );
   }
+  login(usuario: string, contrasena: string): Observable<Operador> {
+  return this.http.post<Operador>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
+    catchError(this.manejarError)
+  );
+}
 
   getOperadorById(id: number): Observable<Operador> {
     return this.http.get<Operador>(`${this.apiUrl}/${id}`).pipe(
@@ -53,5 +58,6 @@ export class OperadorService {
     }
     return throwError(() => error);
   }
+
 }
 

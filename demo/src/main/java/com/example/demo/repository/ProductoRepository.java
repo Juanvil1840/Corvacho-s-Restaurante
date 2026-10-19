@@ -9,5 +9,8 @@ import com.example.demo.entities.Producto;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
+
     List<Producto> findByDisponibleTrue();
-}
+
+    boolean existsByCategoria_Id(Long categoriaId);
+}

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.AdicionalDTO;
+import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Adicional;
 import com.example.demo.entities.Categoria;
 import com.example.demo.repository.CategoriaRepository;
@@ -82,11 +83,36 @@ public class AdicionalRestController {
         return ResponseEntity.ok(AdicionalDTO.fromEntity(actualizado));
     }
 
+        // ⚠️ NUEVOS endpoints de disponibles
+    @GetMapping("/disponibles")
+    public Collection<AdicionalDTO> listarDisponibles() {
+        return adicionalService.findDisponibles()
+                .stream()
+                .map(AdicionalDTO::fromEntity)
+                .toList();
+    }
+
+    @GetMapping("/categoria/{categoriaId}/disponibles")
+    public Collection<AdicionalDTO> buscarDisponiblesPorCategoria(@PathVariable Long categoriaId) {
+        return adicionalService.buscarDisponiblesPorCategoria(categoriaId)
+                .stream()
+                .map(AdicionalDTO::fromEntity)
+                .toList();
+    }
+
+    // Cambia el eliminar:
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         if (adicionalService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
+
+        if (adicionalService.tienePedidos(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MensajeDTO(
+                            "No se puede eliminar el adicional porque está asociado a uno o más pedidos."));
+        }
+
         adicionalService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

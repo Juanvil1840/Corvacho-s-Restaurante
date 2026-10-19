@@ -55,7 +55,7 @@ public class PedidoRestController {
         this.productoRepository = productoRepository;
         this.detallePedidoRepository = detallePedidoRepository;
     }
-
+   
     @GetMapping
     public Collection<PedidoDTO> listar() {
         return pedidoService.findAll()
@@ -210,4 +210,5 @@ public class PedidoRestController {
                 : java.util.Collections.emptyList();
         return PedidoDTO.fromEntity(pedido, detalles);
     }
+    
 }
