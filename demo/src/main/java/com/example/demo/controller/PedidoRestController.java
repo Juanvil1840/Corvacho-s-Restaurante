@@ -22,7 +22,6 @@ import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
-import com.example.demo.entities.Producto;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.DomiciliarioRepository;
