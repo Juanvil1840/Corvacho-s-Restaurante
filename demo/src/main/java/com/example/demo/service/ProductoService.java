@@ -13,7 +13,4 @@ public interface ProductoService {
     void eliminar(Long id);
     boolean existe(Long id);
     boolean tienePedidos(Long id);
-
-    
-    Collection<Producto> obtenerDisponibles();
 }
