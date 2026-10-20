@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
 import com.example.demo.dto.LoginOperadorDTO;
-import com.example.demo.dto.MensajeDTO;
+import com.example.demo.dto.LoginRequestDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -135,21 +134,19 @@ public class OperadorRestController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
         }
     }
-            @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
-        String usuario = credenciales.get("usuario");
-        String contrasena = credenciales.get("contrasena");
-
-        if (usuario == null || contrasena == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MensajeDTO("Usuario y contraseña son obligatorios."));
+    @PostMapping("/login")
+    public ResponseEntity<LoginOperadorDTO> login(@RequestBody LoginRequestDTO credenciales) {
+        if (credenciales == null || credenciales.getUsuario() == null || credenciales.getContrasena() == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario y contraseña son obligatorios.");
         }
 
-        Operador operador = operadorService.autenticar(usuario.trim(), contrasena);
+        String usuario = credenciales.getUsuario().trim();
+        String contrasena = credenciales.getContrasena();
+
+        Operador operador = operadorService.autenticar(usuario, contrasena);
 
         if (operador == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MensajeDTO("Usuario o contraseña incorrectos"));
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario o contraseña incorrectos");
         }
 
         return ResponseEntity.ok(new LoginOperadorDTO(

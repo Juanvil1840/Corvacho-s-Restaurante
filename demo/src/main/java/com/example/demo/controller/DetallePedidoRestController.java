@@ -32,9 +32,8 @@ public class DetallePedidoRestController {
 
     @GetMapping("/pedido/{pedidoId}")
     public Collection<DetallePedidoDTO> listarPorPedido(@PathVariable Long pedidoId) {
-        return detallePedidoService.findAll()
+        return detallePedidoService.findByPedidoId(pedidoId)
                 .stream()
-                .filter(d -> d.getPedido() != null && pedidoId.equals(d.getPedido().getId_Pedido()))
                 .map(DetallePedidoDTO::fromEntity)
                 .toList();
     }

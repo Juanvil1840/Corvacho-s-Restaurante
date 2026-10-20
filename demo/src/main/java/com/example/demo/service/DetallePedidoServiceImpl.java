@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.DetallePedido;
@@ -11,8 +11,11 @@ import com.example.demo.repository.DetallePedidoRepository;
 @Service
 public class DetallePedidoServiceImpl implements DetallePedidoService {
 
-    @Autowired
-    private DetallePedidoRepository detallePedidoRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
+
+    public DetallePedidoServiceImpl(DetallePedidoRepository detallePedidoRepository) {
+        this.detallePedidoRepository = detallePedidoRepository;
+    }
 
     @Override
     public Collection<DetallePedido> findAll() {
@@ -34,5 +37,8 @@ public class DetallePedidoServiceImpl implements DetallePedidoService {
         detallePedidoRepository.deleteById(id);
     }
 
-    
+    @Override
+    public List<DetallePedido> findByPedidoId(Long pedidoId) {
+        return detallePedidoRepository.findByPedido_Id_Pedido(pedidoId);
+    }
 }

@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
+
+import com.example.demo.dto.LoginClienteDTO;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,12 +137,12 @@ public class ClienteRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ClienteDTO> login(@RequestBody Map<String, String> credenciales) {
-        String correo = credenciales.get("correo");
-        String contrasena = credenciales.getOrDefault("contrasena", credenciales.get("contraseña"));
-        if (correo == null || contrasena == null) {
+    public ResponseEntity<ClienteDTO> login(@RequestBody LoginClienteDTO credenciales) {
+        if (credenciales == null || credenciales.getCorreo() == null || credenciales.getContrasena() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        String correo = credenciales.getCorreo();
+        String contrasena = credenciales.getContrasena();
         Cliente cliente = loginService.autenticar(correo.trim(), contrasena);
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
