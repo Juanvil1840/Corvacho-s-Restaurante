@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
+import { CarritoServiceService } from '../../service/carrito-service.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteCamposComponent } from './components/cliente-campos/cliente-campos.component';
 
@@ -32,6 +33,7 @@ export class FormularioClienteComponent implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
+    private carritoService: CarritoServiceService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -63,6 +65,7 @@ export class FormularioClienteComponent implements OnInit {
     peticion.subscribe({
       next: (guardado) => {
         this.guardando = false;
+        this.carritoService.setClienteLogueado(guardado);
         this.router.navigate(['/clientes/perfil', guardado.clienteId]);
       },
       error: (err) => {
@@ -78,6 +81,7 @@ export class FormularioClienteComponent implements OnInit {
       this.clienteService.desactivarCliente(this.cliente.clienteId).subscribe({
         next: (actualizado) => {
           this.cliente = actualizado;
+          this.carritoService.setClienteLogueado(actualizado);
         },
         error: (err) => {
           console.error('Error al desactivar la cuenta:', err);
@@ -91,6 +95,7 @@ export class FormularioClienteComponent implements OnInit {
     this.clienteService.reactivarCliente(this.cliente.clienteId).subscribe({
       next: (actualizado) => {
         this.cliente = actualizado;
+        this.carritoService.setClienteLogueado(actualizado);
       },
       error: (err) => {
         console.error('Error al reactivar la cuenta:', err);

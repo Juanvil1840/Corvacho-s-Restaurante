@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.AdministradorDTO;
 import com.example.demo.entities.Administrador;
@@ -49,11 +48,7 @@ public class AdministradorRestController {
 
     @PostMapping
     public ResponseEntity<AdministradorDTO> crear(@RequestBody Administrador administrador) {
-        if (administrador.getNombre() == null || administrador.getNombre().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
-        }
-        administrador.setId_administrador(null);
-        Administrador guardado = administradorService.guardar(administrador);
+        Administrador guardado = administradorService.crearAdministrador(administrador);
         return ResponseEntity.status(HttpStatus.CREATED).body(AdministradorDTO.fromEntity(guardado));
     }
 
@@ -61,15 +56,10 @@ public class AdministradorRestController {
     public ResponseEntity<AdministradorDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Administrador administrador) {
-        Administrador existente = administradorService.findById(id);
-        if (existente == null) {
+        Administrador actualizado = administradorService.actualizarAdministrador(id, administrador);
+        if (actualizado == null) {
             return ResponseEntity.notFound().build();
         }
-        if (administrador.getNombre() == null || administrador.getNombre().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
-        }
-        existente.setNombre(administrador.getNombre());
-        Administrador actualizado = administradorService.guardar(existente);
         return ResponseEntity.ok(AdministradorDTO.fromEntity(actualizado));
     }
 
@@ -82,4 +72,3 @@ public class AdministradorRestController {
         return ResponseEntity.noContent().build();
     }
 }
-

@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
 import { DetallePedidoServiceService } from '../../service/detalle-pedido-service.service';
 import { Pedido } from '../../models/pedido.model';
-import { DetallePedido } from '../../models/detallePedido.model';
+import { AdicionalSeleccionadoItem, DetallePedido } from '../../models/detallePedido.model';
 
 @Component({
   selector: 'app-detalle-pedido',
@@ -39,17 +39,22 @@ export class DetallePedidoComponent implements OnInit {
     this.pedidoService.getPedidoById(id).subscribe({
       next: (pedido) => {
         this.pedido = pedido;
-        this.detallePedidoService.obtenerPorPedido(id).subscribe({
-          next: (detalles) => {
-            this.detalles = detalles;
-            this.cargando = false;
-          },
-          error: (err) => {
-            console.error('Error al cargar detalles del pedido:', err);
-            this.detalles = [];
-            this.cargando = false;
-          }
-        });
+        if (pedido.detallePedidos && pedido.detallePedidos.length > 0) {
+          this.detalles = pedido.detallePedidos as DetallePedido[];
+          this.cargando = false;
+        } else {
+          this.detallePedidoService.obtenerPorPedido(id).subscribe({
+            next: (detalles) => {
+              this.detalles = detalles;
+              this.cargando = false;
+            },
+            error: (err) => {
+              console.error('Error al cargar detalles del pedido:', err);
+              this.detalles = [];
+              this.cargando = false;
+            }
+          });
+        }
       },
       error: (err) => {
         console.error('Error al cargar el pedido:', err);
@@ -91,10 +96,28 @@ export class DetallePedidoComponent implements OnInit {
     return actual > despuesDePaso;
   }
 
+  getAdicionales(detalle: DetallePedido): AdicionalSeleccionadoItem[] {
+    if (detalle.adicionales && detalle.adicionales.length > 0) {
+      return detalle.adicionales;
+    }
+    if (detalle.adicional) {
+      return [{
+        id_adicional: detalle.adicional.id_adicional,
+        nombre: detalle.adicional.nombre,
+        precio: detalle.adicional.precio || 0,
+        cantidad: 1
+      }];
+    }
+    return [];
+  }
+
   calcularSubtotal(detalle: DetallePedido): number {
     const precioProducto = detalle.producto?.precio || 0;
-    const precioAdicional = detalle.adicional?.precio || 0;
-    return (precioProducto + precioAdicional) * detalle.cantidad;
+    const precioAdicionales = this.getAdicionales(detalle).reduce(
+      (sum, a) => sum + (a.precio || 0) * (a.cantidad || 1),
+      0
+    );
+    return (precioProducto + precioAdicionales) * detalle.cantidad;
   }
 
   calcularTotal(): number {

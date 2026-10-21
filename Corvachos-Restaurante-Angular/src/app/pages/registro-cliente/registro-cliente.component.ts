@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
+import { CarritoServiceService } from '../../service/carrito-service.service';
 import { Cliente } from '../../models/cliente.model';
 import { RegistroFormularioComponent } from './components/registro-formulario/registro-formulario.component';
 
@@ -18,12 +19,14 @@ export class RegistroClienteComponent {
 
   constructor(
     private clienteService: ClienteService,
+    private carritoService: CarritoServiceService,
     private router: Router
   ) {}
 
   onRegistrar(cliente: Cliente): void {
     this.clienteService.agregarCliente(cliente).subscribe({
       next: (guardado) => {
+        this.carritoService.setClienteLogueado(guardado);
         this.router.navigate(['/clientes/perfil', guardado.clienteId]);
       },
       error: (err) => {

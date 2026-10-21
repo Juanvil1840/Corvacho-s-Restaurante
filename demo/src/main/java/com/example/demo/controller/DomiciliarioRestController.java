@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.DomiciliarioDTO;
 import com.example.demo.entities.Domiciliario;
-import com.example.demo.entities.Operador;
-import com.example.demo.repository.OperadorRepository;
 import com.example.demo.service.DomiciliarioService;
 
 @RestController
@@ -27,13 +24,9 @@ import com.example.demo.service.DomiciliarioService;
 public class DomiciliarioRestController {
 
     private final DomiciliarioService domiciliarioService;
-    private final OperadorRepository operadorRepository;
 
-    public DomiciliarioRestController(
-            DomiciliarioService domiciliarioService,
-            OperadorRepository operadorRepository) {
+    public DomiciliarioRestController(DomiciliarioService domiciliarioService) {
         this.domiciliarioService = domiciliarioService;
-        this.operadorRepository = operadorRepository;
     }
 
     @GetMapping
@@ -55,9 +48,7 @@ public class DomiciliarioRestController {
 
     @PostMapping
     public ResponseEntity<DomiciliarioDTO> crear(@RequestBody Domiciliario domiciliario) {
-        domiciliario.setId_domiciliario(null);
-        domiciliario.setOperador(buscarOperador(domiciliario));
-        Domiciliario guardado = domiciliarioService.guardar(domiciliario);
+        Domiciliario guardado = domiciliarioService.crearDomiciliario(domiciliario);
         return ResponseEntity.status(HttpStatus.CREATED).body(DomiciliarioDTO.fromEntity(guardado));
     }
 
@@ -65,12 +56,10 @@ public class DomiciliarioRestController {
     public ResponseEntity<DomiciliarioDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Domiciliario domiciliario) {
-        if (domiciliarioService.findById(id) == null) {
+        Domiciliario actualizado = domiciliarioService.actualizarDomiciliario(id, domiciliario);
+        if (actualizado == null) {
             return ResponseEntity.notFound().build();
         }
-        domiciliario.setId_domiciliario(id);
-        domiciliario.setOperador(buscarOperador(domiciliario));
-        Domiciliario actualizado = domiciliarioService.guardar(domiciliario);
         return ResponseEntity.ok(DomiciliarioDTO.fromEntity(actualizado));
     }
 
@@ -81,17 +70,5 @@ public class DomiciliarioRestController {
         }
         domiciliarioService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private Operador buscarOperador(Domiciliario domiciliario) {
-        if (domiciliario.getOperador() == null || domiciliario.getOperador().getId_operador() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Debe seleccionar un operador");
-        }
-        return operadorRepository.findById(domiciliario.getOperador().getId_operador())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "El operador seleccionado no existe"));
     }
 }

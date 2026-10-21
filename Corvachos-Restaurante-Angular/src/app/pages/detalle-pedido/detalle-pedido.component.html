@@ -156,7 +156,7 @@
                 <th>Imagen</th>
                 <th>Producto</th>
                 <th>Descripción</th>
-                <th>Adicional</th>
+                <th>Adicionales</th>
                 <th>Precio Unit.</th>
                 <th>Cantidad</th>
                 <th>Subtotal</th>
@@ -174,16 +174,18 @@
                   <td class="producto-desc-cell" data-label="Descripción">
                     {{ detalle.producto.descripcion }}
                   </td>
-                  <td class="adicional-cell" data-label="Adicional">
-                    @if (detalle.adicional) {
-                      <div>
-                        <span class="adicional-nombre">{{ detalle.adicional.nombre }}</span><br>
-                        @if (detalle.adicional.precio > 0) {
-                          <span class="adicional-precio">+ ${{ detalle.adicional.precio | number:'1.0-0' }}</span>
-                        } @else {
-                          <span class="adicional-gratis">Gratis</span>
-                        }
-                      </div>
+                  <td class="adicional-cell" data-label="Adicionales">
+                    @if (getAdicionales(detalle).length > 0) {
+                      @for (adic of getAdicionales(detalle); track adic.id_adicional) {
+                        <div style="margin-bottom: 4px;">
+                          <span class="adicional-nombre">{{ adic.cantidad }}x {{ adic.nombre }}</span><br>
+                          @if (adic.precio > 0) {
+                            <span class="adicional-precio">+ ${{ (adic.precio * adic.cantidad) | number:'1.0-0' }}</span>
+                          } @else {
+                            <span class="adicional-gratis">Gratis</span>
+                          }
+                        </div>
+                      }
                     } @else {
                       <span style="color: #6f8896;">—</span>
                     }
@@ -219,4 +221,3 @@
     }
   </main>
 </div>
-

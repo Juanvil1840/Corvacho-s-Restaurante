@@ -2,34 +2,196 @@
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand" routerLink="/">
-      <img src="assets/Images/logo-simple.png" alt="Logo" height="60px">
+      <img src="assets/Images/logo-simple.png" alt="Logo Corvacho's" height="60px">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button
+      class="navbar-toggler"
+      type="button"
+      aria-label="Abrir menú de navegación"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
           <a class="nav-link" routerLink="/">INICIO</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/menu">MENU</a>
         </li>
-        
-        <!-- NUEVO: Solo aparece en la página de Login de Cliente -->
+
+        <!-- Solo aparece en la página de Login de Cliente -->
         @if (esPaginaLogin) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/login-operario">OPERARIO</a>
           </li>
         }
 
-        <li class="nav-item">
-          <a class="nav-link login" routerLink="/login">LOG IN</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link signup" routerLink="/registro">SIGN UP</a>
-        </li>
+        <!-- Si el cliente está logueado: muestra PERFIL y CARRITO -->
+        @if (clienteLogueado && !esPortalOperario) {
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="['/clientes/perfil', clienteLogueado.clienteId]"
+              (click)="cerrarCarrito()">
+              PERFIL
+            </a>
+          </li>
+          <li class="nav-item">
+            <button
+              type="button"
+              class="nav-link btn-carrito-nav"
+              aria-label="Abrir carrito de compras"
+              (click)="toggleCarrito()">
+              <i class="bi bi-cart3"></i> CARRITO
+              @if (totalCantidad > 0) {
+                <span class="carrito-badge">{{ totalCantidad }}</span>
+              }
+            </button>
+          </li>
+        } @else {
+          @if (totalCantidad > 0 && !esPortalOperario) {
+            <li class="nav-item">
+              <button
+                type="button"
+                class="nav-link btn-carrito-nav"
+                aria-label="Abrir carrito de compras"
+                (click)="toggleCarrito()">
+                <i class="bi bi-cart3"></i> CARRITO
+                <span class="carrito-badge">{{ totalCantidad }}</span>
+              </button>
+            </li>
+          }
+          <li class="nav-item">
+            <a class="nav-link login" routerLink="/login">LOG IN</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link signup" routerLink="/registro">SIGN UP</a>
+          </li>
+        }
       </ul>
     </div>
   </div>
 </nav>
+
+<!-- Drawer / Panel lateral del Carrito -->
+@if (carritoAbierto) {
+  <div class="carrito-backdrop" (click)="cerrarCarrito()"></div>
+  <aside class="carrito-drawer" aria-label="Tu Carrito de Pedido">
+    <header class="carrito-header">
+      <div>
+        <h2 class="carrito-titulo"><i class="bi bi-bag-check"></i> Tu Pedido</h2>
+        @if (clienteLogueado) {
+          <p class="carrito-cliente">Cliente: <strong>{{ clienteLogueado.nombre }} {{ clienteLogueado.apellido }}</strong></p>
+        } @else {
+          <p class="carrito-cliente">Inicia sesión para confirmar tu pedido</p>
+        }
+      </div>
+      <button type="button" class="btn-cerrar-drawer" aria-label="Cerrar carrito" (click)="cerrarCarrito()">
+        &times;
+      </button>
+    </header>
+
+    <div class="carrito-body">
+      @if (exitoPedido) {
+        <div class="carrito-alerta-exito">
+          <i class="bi bi-check-circle-fill"></i>
+          <p>{{ exitoPedido }}</p>
+        </div>
+      }
+
+      @if (errorPedido) {
+        <div class="carrito-alerta-error">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <p>{{ errorPedido }}</p>
+        </div>
+      }
+
+      @if (itemsCarrito.length === 0 && !exitoPedido) {
+        <div class="carrito-vacio">
+          <i class="bi bi-cart-x"></i>
+          <p>Aún no has agregado comidas a tu carrito.</p>
+          <button type="button" class="btn-explorar-menu" (click)="irAlMenu()">
+            Ver Menú y Añadir Comidas
+          </button>
+        </div>
+      }
+
+      @if (itemsCarrito.length > 0) {
+        <ul class="carrito-lista">
+          @for (item of itemsCarrito; track $index; let i = $index) {
+            <li class="carrito-item">
+              <img [src]="item.producto.imagen" [alt]="item.producto.nombre" class="carrito-item-img">
+              <div class="carrito-item-detalles">
+                <h3 class="carrito-item-nombre">{{ item.producto.nombre }}</h3>
+                @if (item.adicionales && item.adicionales.length > 0) {
+                  @for (adic of item.adicionales; track adic.id_adicional) {
+                    <p class="carrito-item-adicional">
+                      + {{ adic.cantidad }}x {{ adic.nombre }} ($ {{ (adic.precio * adic.cantidad) | number }})
+                    </p>
+                  }
+                } @else {
+                  <p class="carrito-item-adicional">Sin adicional</p>
+                }
+                <p class="carrito-item-unitario">
+                  $ {{ calcularUnitario(item) | number }} c/u
+                </p>
+
+                <div class="carrito-item-acciones">
+                  <div class="carrito-cant-controles">
+                    <button type="button" aria-label="Disminuir cantidad" (click)="modificarCantidad(i, -1)">−</button>
+                    <span>{{ item.cantidad }}</span>
+                    <button type="button" aria-label="Aumentar cantidad" (click)="modificarCantidad(i, 1)">+</button>
+                  </div>
+                  <span class="carrito-item-subtotal">
+                    $ {{ (calcularUnitario(item) * item.cantidad) | number }}
+                  </span>
+                  <button
+                    type="button"
+                    class="btn-eliminar-item"
+                    aria-label="Eliminar producto del carrito"
+                    (click)="eliminarItem(i)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    @if (itemsCarrito.length > 0) {
+      <footer class="carrito-footer">
+        <div class="carrito-resumen-fila">
+          <span>Total ({{ totalCantidad }} {{ totalCantidad === 1 ? 'producto' : 'productos' }}):</span>
+          <strong class="carrito-total-valor">$ {{ totalPrecio | number }}</strong>
+        </div>
+
+        <button
+          type="button"
+          class="btn-confirmar-pedido"
+          [disabled]="enviandoPedido"
+          (click)="confirmarPedido()">
+          @if (enviandoPedido) {
+            Enviando pedido...
+          } @else if (clienteLogueado) {
+            <i class="bi bi-send-check-fill"></i> Confirmar y Hacer Pedido
+          } @else {
+            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión para Pedir
+          }
+        </button>
+
+        <div class="carrito-footer-secundario">
+          <button type="button" class="btn-seguir-comprando" (click)="irAlMenu()">
+            + Añadir más comidas del Menú
+          </button>
+          <button type="button" class="btn-vaciar-carrito" (click)="vaciarCarrito()">
+            Vaciar
+          </button>
+        </div>
+      </footer>
+    }
+  </aside>
+}

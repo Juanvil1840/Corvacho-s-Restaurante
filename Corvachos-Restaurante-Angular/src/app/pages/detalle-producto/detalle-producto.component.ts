@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductoServiceService } from '../../service/producto-service.service';
 import { AdicionalService } from '../../service/adicional.service';
 import { Producto } from '../../models/producto.model';
@@ -11,7 +11,7 @@ import { DetalleImagenComponent } from './components/detalle-imagen/detalle-imag
 @Component({
   selector: 'app-detalle-producto',
   standalone: true,
-  imports: [CommonModule, RouterLink, DetalleInfoComponent, DetalleImagenComponent],
+  imports: [CommonModule, DetalleInfoComponent, DetalleImagenComponent],
   templateUrl: './detalle-producto.component.html',
   styleUrl: './detalle-producto.component.scss'
 })
@@ -42,11 +42,9 @@ export class DetalleProductoComponent implements OnInit {
         const categoriaId = producto.categoria?.id;
 
         if (categoriaId !== undefined) {
-          this.adicionalService.getAdicionalesPorCategoria(categoriaId).subscribe({
+          this.adicionalService.getAdicionalesDisponiblesPorCategoria(categoriaId).subscribe({
             next: (adicionales) => {
-              this.adicionales = adicionales.filter(
-                adicional => adicional.disponible
-              );
+              this.adicionales = adicionales;
             },
             error: (error) => {
               console.error('Error al consultar los adicionales:', error);

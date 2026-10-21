@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Cliente;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
@@ -87,23 +89,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setDetallePedidos(null);
 
         Pedido guardado = pedidoRepository.save(pedido);
-
-        if (detallesRecibidos != null && !detallesRecibidos.isEmpty()) {
-            for (DetallePedido d : detallesRecibidos) {
-                if (d.getProducto() != null && d.getProducto().getId() != null) {
-                    productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
-                        DetallePedido nuevo = new DetallePedido();
-                        nuevo.setPedido(guardado);
-                        nuevo.setProducto(prod);
-                        nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
-                        if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
-                            adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(nuevo::setAdicional);
-                        }
-                        detallePedidoRepository.save(nuevo);
-                    });
-                }
-            }
-        }
+        guardarDetallesDelPedido(guardado, detallesRecibidos);
 
         return guardado;
     }
@@ -129,23 +115,60 @@ public class PedidoServiceImpl implements PedidoService {
             if (!previos.isEmpty()) {
                 detallePedidoRepository.deleteAll(previos);
             }
-            for (DetallePedido d : pedido.getDetallePedidos()) {
-                if (d.getProducto() != null && d.getProducto().getId() != null) {
-                    productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
-                        DetallePedido nuevo = new DetallePedido();
-                        nuevo.setPedido(actualizado);
-                        nuevo.setProducto(prod);
-                        nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
-                        if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
-                            adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(nuevo::setAdicional);
-                        }
-                        detallePedidoRepository.save(nuevo);
-                    });
-                }
-            }
+            guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos());
         }
 
         return actualizado;
+    }
+
+    private void guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos) {
+        if (detallesRecibidos == null || detallesRecibidos.isEmpty()) {
+            return;
+        }
+        for (DetallePedido d : detallesRecibidos) {
+            if (d.getProducto() != null && d.getProducto().getId() != null) {
+                productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
+                    DetallePedido nuevo = new DetallePedido();
+                    nuevo.setPedido(pedidoGuardado);
+                    nuevo.setProducto(prod);
+                    nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+
+                    List<AdicionalSeleccionado> listaAdicionales = new ArrayList<>();
+
+                    if (d.getAdicionales() != null && !d.getAdicionales().isEmpty()) {
+                        for (AdicionalSeleccionado as : d.getAdicionales()) {
+                            if (as != null && as.getId_adicional() != null && as.getId_adicional() > 0) {
+                                adicionalRepository.findById(as.getId_adicional()).ifPresent(adic -> {
+                                    int cantAdic = as.getCantidad() > 0 ? as.getCantidad() : 1;
+                                    listaAdicionales.add(new AdicionalSeleccionado(
+                                            adic.getId_adicional(),
+                                            adic.getNombre(),
+                                            adic.getPrecio(),
+                                            cantAdic
+                                    ));
+                                    if (nuevo.getAdicional() == null) {
+                                        nuevo.setAdicional(adic);
+                                    }
+                                });
+                            }
+                        }
+                    } else if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
+                        adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(adic -> {
+                            nuevo.setAdicional(adic);
+                            listaAdicionales.add(new AdicionalSeleccionado(
+                                    adic.getId_adicional(),
+                                    adic.getNombre(),
+                                    adic.getPrecio(),
+                                    1
+                            ));
+                        });
+                    }
+
+                    nuevo.setAdicionales(listaAdicionales);
+                    detallePedidoRepository.save(nuevo);
+                });
+            }
+        }
     }
 
     @Override

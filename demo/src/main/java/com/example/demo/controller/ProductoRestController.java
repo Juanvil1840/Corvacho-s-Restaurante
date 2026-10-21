@@ -14,13 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.MensajeDTO;
 import com.example.demo.dto.ProductoDTO;
-import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Producto;
-import com.example.demo.repository.CategoriaRepository;
 import com.example.demo.service.ProductoService;
 
 @RestController
@@ -29,13 +26,9 @@ import com.example.demo.service.ProductoService;
 public class ProductoRestController {
 
     private final ProductoService productoService;
-    private final CategoriaRepository categoriaRepository;
 
-    public ProductoRestController(
-            ProductoService productoService,
-            CategoriaRepository categoriaRepository) {
+    public ProductoRestController(ProductoService productoService) {
         this.productoService = productoService;
-        this.categoriaRepository = categoriaRepository;
     }
 
     @GetMapping
@@ -63,9 +56,7 @@ public class ProductoRestController {
 
     @PostMapping
     public ResponseEntity<ProductoDTO> crear(@RequestBody Producto producto) {
-        producto.setId(null);
-        producto.setCategoria(buscarCategoria(producto));
-        Producto guardado = productoService.guardar(producto);
+        Producto guardado = productoService.crearProducto(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductoDTO.fromEntity(guardado));
     }
 
@@ -73,13 +64,10 @@ public class ProductoRestController {
     public ResponseEntity<ProductoDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Producto producto) {
-        if (!productoService.existe(id)) {
+        Producto actualizado = productoService.actualizarProducto(id, producto);
+        if (actualizado == null) {
             return ResponseEntity.notFound().build();
         }
-
-        producto.setId(id);
-        producto.setCategoria(buscarCategoria(producto));
-        Producto actualizado = productoService.actualizar(producto);
         return ResponseEntity.ok(ProductoDTO.fromEntity(actualizado));
     }
 
@@ -88,30 +76,7 @@ public class ProductoRestController {
         if (!productoService.existe(id)) {
             return ResponseEntity.notFound().build();
         }
-
-        // Solo se permite eliminar si el producto no aparece en ningún pedido
-        if (productoService.tienePedidos(id)) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Excepción: No se puede eliminar el producto porque está anidado a un pedido.");
-        }
-
         productoService.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
-
-    private Categoria buscarCategoria(Producto producto) {
-        if (producto.getCategoria() == null
-                || producto.getCategoria().getId() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Debe seleccionar una categoría");
-        }
-
-        return categoriaRepository.findById(producto.getCategoria().getId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "La categoría seleccionada no existe"));
-    }
-}
+}

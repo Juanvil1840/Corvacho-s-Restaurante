@@ -8,6 +8,7 @@ public interface AdministradorService {
     Collection<Administrador> findAll();
     Administrador findById(Long id);
     Administrador guardar(Administrador administrador);
+    Administrador crearAdministrador(Administrador administrador);
+    Administrador actualizarAdministrador(Long id, Administrador administrador);
     void deleteById(Long id);
-
 }

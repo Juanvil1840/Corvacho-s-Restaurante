@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.AdicionalDTO;
 import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Adicional;
-import com.example.demo.entities.Categoria;
-import com.example.demo.repository.CategoriaRepository;
 import com.example.demo.service.AdicionalService;
 
 @RestController
@@ -28,13 +25,9 @@ import com.example.demo.service.AdicionalService;
 public class AdicionalRestController {
 
     private final AdicionalService adicionalService;
-    private final CategoriaRepository categoriaRepository;
 
-    public AdicionalRestController(
-            AdicionalService adicionalService,
-            CategoriaRepository categoriaRepository) {
+    public AdicionalRestController(AdicionalService adicionalService) {
         this.adicionalService = adicionalService;
-        this.categoriaRepository = categoriaRepository;
     }
 
     @GetMapping
@@ -62,28 +55,6 @@ public class AdicionalRestController {
                 .toList();
     }
 
-    @PostMapping
-    public ResponseEntity<AdicionalDTO> crear(@RequestBody Adicional adicional) {
-        adicional.setId_adicional(null);
-        adicional.setCategoria(buscarCategoria(adicional));
-        Adicional guardado = adicionalService.guardar(adicional);
-        return ResponseEntity.status(HttpStatus.CREATED).body(AdicionalDTO.fromEntity(guardado));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<AdicionalDTO> actualizar(
-            @PathVariable Long id,
-            @RequestBody Adicional adicional) {
-        if (adicionalService.findById(id) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        adicional.setId_adicional(id);
-        adicional.setCategoria(buscarCategoria(adicional));
-        Adicional actualizado = adicionalService.guardar(adicional);
-        return ResponseEntity.ok(AdicionalDTO.fromEntity(actualizado));
-    }
-
-        // ⚠️ NUEVOS endpoints de disponibles
     @GetMapping("/disponibles")
     public Collection<AdicionalDTO> listarDisponibles() {
         return adicionalService.findDisponibles()
@@ -100,7 +71,23 @@ public class AdicionalRestController {
                 .toList();
     }
 
-    // Cambia el eliminar:
+    @PostMapping
+    public ResponseEntity<AdicionalDTO> crear(@RequestBody Adicional adicional) {
+        Adicional guardado = adicionalService.crearAdicional(adicional);
+        return ResponseEntity.status(HttpStatus.CREATED).body(AdicionalDTO.fromEntity(guardado));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AdicionalDTO> actualizar(
+            @PathVariable Long id,
+            @RequestBody Adicional adicional) {
+        Adicional actualizado = adicionalService.actualizarAdicional(id, adicional);
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(AdicionalDTO.fromEntity(actualizado));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         if (adicionalService.findById(id) == null) {
@@ -115,17 +102,5 @@ public class AdicionalRestController {
 
         adicionalService.deleteById(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private Categoria buscarCategoria(Adicional adicional) {
-        if (adicional.getCategoria() == null || adicional.getCategoria().getId() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Debe seleccionar una categoría");
-        }
-        return categoriaRepository.findById(adicional.getCategoria().getId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "La categoría seleccionada no existe"));
     }
 }

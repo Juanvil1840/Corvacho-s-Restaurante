@@ -3,11 +3,15 @@ package com.example.demo.service;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Producto;
 import com.example.demo.errors.ProductoNotFoundException;
+import com.example.demo.repository.CategoriaRepository;
 import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
 import com.example.demo.repository.ProductoRepository;
@@ -17,6 +21,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Autowired
     private DetallePedidoRepository detallePedidoRepository;
@@ -43,6 +50,23 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Producto guardar(Producto producto) {
         return productoRepository.save(producto);
+    }
+
+    @Override
+    public Producto crearProducto(Producto producto) {
+        producto.setId(null);
+        producto.setCategoria(buscarCategoria(producto));
+        return productoRepository.save(producto);
+    }
+
+    @Override
+    public Producto actualizarProducto(Long id, Producto producto) {
+        if (!existe(id)) {
+            return null;
+        }
+        producto.setId(id);
+        producto.setCategoria(buscarCategoria(producto));
+        return actualizar(producto);
     }
 
     @Override
@@ -74,11 +98,10 @@ public class ProductoServiceImpl implements ProductoService {
     public void eliminar(Long id) {
         Producto producto = productoRepository.findById(id).orElse(null);
         if (producto != null) {
-            // Regla de negocio: no se elimina un producto que aparezca en algún pedido
-            // (para no perder el historial de pedidos).
             if (tienePedidos(id)) {
-                throw new IllegalStateException(
-                        "Excepción: No se puede eliminar el producto porque está anidado a un pedido.");
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Excepción: No se puede eliminar el producto porque está presente en un pedido.");
             }
             if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
                 productoCarritoRepository.deleteAll(producto.getProductoCarritos());
@@ -95,5 +118,17 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public boolean tienePedidos(Long id) {
         return detallePedidoRepository.existsByProducto_Id(id);
+    }
+
+    private Categoria buscarCategoria(Producto producto) {
+        if (producto.getCategoria() == null || producto.getCategoria().getId() == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Debe seleccionar una categoría");
+        }
+        return categoriaRepository.findById(producto.getCategoria().getId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "La categoría seleccionada no existe"));
     }
 }

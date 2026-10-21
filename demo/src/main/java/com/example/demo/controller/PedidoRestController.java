@@ -39,6 +39,14 @@ public class PedidoRestController {
                 .toList();
     }
 
+    @GetMapping("/cliente/{clienteId}")
+    public Collection<PedidoDTO> listarPorCliente(@PathVariable Long clienteId) {
+        return pedidoService.findByClienteId(clienteId)
+                .stream()
+                .map(this::convertirPedido)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         try {

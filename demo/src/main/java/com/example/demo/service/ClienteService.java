@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import java.util.Collection;
 
+import com.example.demo.dto.LoginClienteDTO;
 import com.example.demo.entities.Cliente;
 
 public interface ClienteService {
@@ -11,13 +12,16 @@ public interface ClienteService {
     Cliente obtenerPorId(Long id);
     boolean existe(Long id);
 
-    // === CRUD BÁSICO ===
+    // === CRUD Y LÓGICA DE NEGOCIO ===
     Cliente guardar(Cliente cliente);
+    Cliente crearCliente(Cliente cliente);
+    Cliente actualizarCliente(Long id, Cliente datos);
     void eliminar(Long id);
 
-    // === LÓGICA DE NEGOCIO (antes estaba en el controller) ===
-    Cliente registrar(Cliente cliente);      // guarda un cliente nuevo y lo activa
-    Cliente actualizar(Cliente cliente);     // conserva la contraseña anterior si no se envía una nueva
+    Cliente registrar(Cliente cliente);
+    Cliente actualizar(Cliente cliente);
     void desactivar(Long id);
     void reactivar(Long id);
+
+    Cliente autenticarCliente(LoginClienteDTO credenciales);
 }

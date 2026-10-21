@@ -8,6 +8,7 @@ public interface DomiciliarioService {
     Collection<Domiciliario> findAll();
     Domiciliario findById(Long id);
     Domiciliario guardar(Domiciliario domiciliario);
+    Domiciliario crearDomiciliario(Domiciliario domiciliario);
+    Domiciliario actualizarDomiciliario(Long id, Domiciliario domiciliario);
     void deleteById(Long id);
-    
 }

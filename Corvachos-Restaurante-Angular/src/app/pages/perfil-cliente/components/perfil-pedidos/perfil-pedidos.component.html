@@ -17,16 +17,23 @@
           <p><strong>Pedido #</strong> <span>{{ pedido.id_Pedido }}</span></p>
           <p><strong>Estado:</strong> <span>{{ pedido.estado }}</span></p>
           <p><strong>Fecha:</strong> <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
-          <p><strong>Total:</strong> <span>$ {{ calcularTotal(pedido.id_Pedido) }}</span></p>
+          <p><strong>Total:</strong> <span>$ {{ calcularTotal(pedido) | number }}</span></p>
 
           <!-- Detalles del pedido -->
-          <div *ngIf="getDetallesDelPedido(pedido.id_Pedido).length > 0">
+          <div *ngIf="getDetallesDelPedido(pedido).length > 0">
             <p><strong>Productos:</strong></p>
             <ul>
-              <li *ngFor="let detalle of getDetallesDelPedido(pedido.id_Pedido)">
+              <li *ngFor="let detalle of getDetallesDelPedido(pedido)">
                 {{ detalle.cantidad }}x {{ detalle.producto.nombre }}
-                <span *ngIf="detalle.adicional">(+ {{ detalle.adicional.nombre }})</span>
-                - $ {{ (detalle.producto.precio + (detalle.adicional ? detalle.adicional.precio : 0)) * detalle.cantidad }}
+                <ng-container *ngIf="getAdicionalesDeDetalle(detalle).length > 0">
+                  <span>
+                    (Adicionales:
+                    <ng-container *ngFor="let adic of getAdicionalesDeDetalle(detalle); let last = last">
+                      {{ adic.cantidad }}x {{ adic.nombre }}{{ !last ? ', ' : '' }}
+                    </ng-container>)
+                  </span>
+                </ng-container>
+                - $ {{ calcularSubtotalDetalle(detalle) | number }}
               </li>
             </ul>
           </div>

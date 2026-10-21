@@ -1,26 +1,19 @@
-<div class="body-perfil" *ngIf="cliente">
+<div class="body-perfil">
+  @if (cliente) {
+    <app-perfil-info
+      [cliente]="cliente"
+      (eliminar)="eliminarCuenta()"
+      (cerrar)="cerrarSesion()">
+    </app-perfil-info>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        <img src="assets/Images/logo-simple.png" height="60px">
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-          <li class="nav-item"><a class="nav-link" routerLink="/menu">MENU</a></li>
-          <li class="nav-item"><a class="nav-link" [routerLink]="['/clientes/perfil', cliente.clienteId]">PERFIL</a></li>
-        </ul>
+    <app-perfil-pedidos [clienteId]="cliente.clienteId"></app-perfil-pedidos>
+  } @else if (!cargando) {
+    <section class="perfil-seccion-info" style="text-align: center; padding-top: 60px;">
+      <div class="perfil-fondo-info" style="justify-content: center; flex-direction: column; gap: 16px;">
+        <h2 class="perfil-titulo-info">Sesión no encontrada</h2>
+        <p style="color: #fcfafa;">Por favor inicia sesión nuevamente para acceder a tu perfil y pedidos.</p>
+        <a routerLink="/login" class="perfil-btn-editar" style="max-width: 240px;">Ir a Iniciar Sesión</a>
       </div>
-    </div>
-  </nav>
-
-  <app-perfil-info [cliente]="cliente" (eliminar)="eliminarCuenta()"></app-perfil-info>
-
-  <app-perfil-pedidos [clienteId]="cliente.clienteId"></app-perfil-pedidos>
-
+    </section>
+  }
 </div>

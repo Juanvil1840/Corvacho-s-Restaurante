@@ -18,13 +18,19 @@ export class PedidoService {
     );
   }
 
+  getPedidosPorCliente(clienteId: number): Observable<Pedido[]> {
+    return this.http.get<Pedido[]>(`${this.apiUrl}/cliente/${clienteId}`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
   getPedidoById(id: number): Observable<Pedido> {
     return this.http.get<Pedido>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.manejarError)
     );
   }
 
-  agregarPedido(pedido: Pedido): Observable<Pedido> {
+  agregarPedido(pedido: Partial<Pedido>): Observable<Pedido> {
     return this.http.post<Pedido>(this.apiUrl, pedido).pipe(
       catchError(this.manejarError)
     );

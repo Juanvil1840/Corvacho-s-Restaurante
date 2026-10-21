@@ -30,6 +30,12 @@ export class AdicionalService {
     );
   }
 
+  getAdicionalesDisponiblesPorCategoria(categoriaId: number): Observable<Adicional[]> {
+    return this.http.get<Adicional[]>(`${this.apiUrl}/categoria/${categoriaId}/disponibles`).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
   agregarAdicional(adicional: Adicional): Observable<Adicional> {
     return this.http.post<Adicional>(this.apiUrl, adicional).pipe(
       catchError(this.manejarError)

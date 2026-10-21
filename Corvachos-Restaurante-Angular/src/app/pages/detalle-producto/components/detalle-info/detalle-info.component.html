@@ -7,18 +7,81 @@
   <p>{{ producto.descripcion }}</p>
 
   <div class="adicionales-container">
-    <h3 class="detalle-subtitulo">Precio</h3>
-    <p class="detalle-precio">$ {{ producto.precio }}</p>
+    <h3 class="detalle-subtitulo">Precio Base</h3>
+    <p class="detalle-precio">$ {{ producto.precio | number }}</p>
   </div>
 
-  <!-- Adicionales disponibles -->
+  <!-- Adicionales disponibles (selección múltiple con cantidad) -->
   <div class="adicionales-container" *ngIf="adicionales.length > 0">
-    <h3 class="detalle-subtitulo">Adicionales Disponibles</h3>
+    <h3 class="detalle-subtitulo">Elige Adicionales (Opcional — Puedes elegir varios)</h3>
     <ul class="adicionales-lista">
-      <li class="adicional-item" *ngFor="let adicional of adicionales">
-        <span class="adicional-nombre">{{ adicional.nombre }}</span>
-        <span class="adicional-precio">+ $ {{ adicional.precio }}</span>
+      <li
+        class="adicional-item adicional-seleccionable"
+        [class.adicional-activo]="sinAdicionales"
+        (click)="limpiarAdicionales()">
+        <span class="adicional-nombre">
+          <i class="bi" [ngClass]="sinAdicionales ? 'bi-check-circle-fill' : 'bi-circle'"></i>
+          Sin adicional
+        </span>
+        <span class="adicional-precio">$ 0</span>
+      </li>
+
+      <li
+        class="adicional-item adicional-seleccionable"
+        *ngFor="let adicional of adicionales"
+        [class.adicional-activo]="estaSeleccionado(adicional.id_adicional)"
+        (click)="toggleAdicional(adicional)">
+        <span class="adicional-nombre">
+          <i class="bi" [ngClass]="estaSeleccionado(adicional.id_adicional) ? 'bi-check-square-fill' : 'bi-square'"></i>
+          {{ adicional.nombre }}
+        </span>
+
+        <div class="adicional-derecha">
+          <div
+            class="adicional-cant-stepper"
+            *ngIf="estaSeleccionado(adicional.id_adicional)"
+            (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              aria-label="Disminuir cantidad del adicional"
+              (click)="cambiarCantidadAdicional(adicional, -1, $event)">−</button>
+            <span>{{ obtenerCantidadAdicional(adicional.id_adicional) }}</span>
+            <button
+              type="button"
+              aria-label="Aumentar cantidad del adicional"
+              (click)="cambiarCantidadAdicional(adicional, 1, $event)">+</button>
+          </div>
+          <span class="adicional-precio">+ $ {{ adicional.precio | number }}</span>
+        </div>
       </li>
     </ul>
+  </div>
+
+  <!-- Cantidad y botón de añadir al carrito -->
+  <div class="detalle-compra-box">
+    <div class="detalle-cantidad-fila">
+      <span class="detalle-subtitulo" style="margin-bottom: 0;">Cantidad del plato:</span>
+      <div class="detalle-cantidad-controles">
+        <button type="button" class="btn-cant-detalle" aria-label="Disminuir cantidad del plato" (click)="cambiarCantidad(-1)">−</button>
+        <span class="detalle-cantidad-valor">{{ cantidad }}</span>
+        <button type="button" class="btn-cant-detalle" aria-label="Aumentar cantidad del plato" (click)="cambiarCantidad(1)">+</button>
+      </div>
+    </div>
+
+    <div class="detalle-subtotal-fila">
+      <span>Subtotal:</span>
+      <strong>$ {{ precioTotalSeleccion | number }}</strong>
+    </div>
+
+    <button type="button" class="btn-agregar-carrito-detalle" (click)="agregarAlCarrito()">
+      <i class="bi bi-cart-plus-fill"></i> Añadir al Carrito
+    </button>
+
+    <div class="detalle-alerta-agregado" *ngIf="mensajeAgregado">
+      <span><i class="bi bi-check2-circle"></i> ¡Producto añadido a tu carrito!</span>
+      <button type="button" class="btn-ver-carrito-inline" (click)="abrirCarrito()">
+        Ver Carrito / Pedir
+      </button>
+    </div>
   </div>
 </section>

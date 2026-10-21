@@ -9,7 +9,9 @@ public interface ProductoService {
     Collection<Producto> obtenerDisponibles();
     Producto obtenerPorId(Long id);
     Producto guardar(Producto producto);
+    Producto crearProducto(Producto producto);
     Producto actualizar(Producto producto);
+    Producto actualizarProducto(Long id, Producto producto);
     void eliminar(Long id);
     boolean existe(Long id);
     boolean tienePedidos(Long id);

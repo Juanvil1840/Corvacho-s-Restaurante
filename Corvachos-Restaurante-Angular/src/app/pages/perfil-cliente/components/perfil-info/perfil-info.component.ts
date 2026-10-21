@@ -15,9 +15,14 @@ export class PerfilInfoComponent {
   @Input() cliente!: Cliente;
 
   @Output() eliminar = new EventEmitter<void>();
+  @Output() cerrar = new EventEmitter<void>();
 
   eliminarCuenta(): void {
     this.eliminar.emit();
+  }
+
+  cerrarSesion(): void {
+    this.cerrar.emit();
   }
 
 }

@@ -1,7 +1,12 @@
 package com.example.demo.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,10 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class DetallePedido {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_DetallePedido;
-    @Column( nullable = false)
+
+    @Column(nullable = false)
     int cantidad;
 
     @ManyToOne
@@ -34,10 +40,21 @@ public class DetallePedido {
     @JoinColumn(name = "id_adicional")
     private Adicional adicional;
 
-    public DetallePedido(int cantidad, Producto producto, Pedido pedido, Adicional adicional){
-    this.cantidad = cantidad;
-    this.producto = producto;
-    this.pedido = pedido;
-    this.adicional = adicional;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<AdicionalSeleccionado> adicionales = new ArrayList<>();
+
+    public DetallePedido(int cantidad, Producto producto, Pedido pedido, Adicional adicional) {
+        this.cantidad = cantidad;
+        this.producto = producto;
+        this.pedido = pedido;
+        this.adicional = adicional;
+        if (adicional != null) {
+            this.adicionales.add(new AdicionalSeleccionado(
+                    adicional.getId_adicional(),
+                    adicional.getNombre(),
+                    adicional.getPrecio(),
+                    1
+            ));
+        }
     }
 }

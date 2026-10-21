@@ -45,9 +45,12 @@
 
       <!-- Columna derecha: Botones -->
       <div class="perfil-botones-col">
+        <a routerLink="/menu" class="perfil-btn-editar" style="background-color: #cd9e46; color: #001c2a; font-weight: 600;">
+          <i class="bi bi-cart-plus"></i> Hacer un Pedido
+        </a>
         <a [routerLink]="['/clientes/editar', cliente.clienteId]" class="perfil-btn-editar">Editar Perfil</a>
-        <button (click)="eliminarCuenta()" class="perfil-btn-cerrar perfil-btn-eliminar">Eliminar Cuenta</button>
-        <a routerLink="/" class="perfil-btn-cerrar">Cerrar Sesion</a>
+        <button type="button" (click)="eliminarCuenta()" class="perfil-btn-cerrar perfil-btn-eliminar">Eliminar Cuenta</button>
+        <button type="button" (click)="cerrarSesion()" class="perfil-btn-cerrar">Cerrar Sesion</button>
       </div>
 
     </div>

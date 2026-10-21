@@ -2,7 +2,19 @@
   <img [src]="producto.imagen" class="card-img-top" [alt]="producto.nombre">
   <div class="card-body">
     <h5 class="card-title">{{ producto.nombre }}</h5>
-    <p class="card-text">$ {{ producto.precio }}</p>
-    <a [routerLink]="['/menu/detalle', producto.id]" class="btn btn-primary">Ver descripcion</a>
+    <p class="card-text">$ {{ producto.precio | number }}</p>
+    <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+      <a [routerLink]="['/menu/detalle', producto.id]" class="btn btn-primary">
+        Ver detalle / Adicionales
+      </a>
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="background-color: #cd9e46; color: #001c2a; font-weight: 600; border: none;"
+        (click)="agregarRapido()">
+        <i class="bi" [ngClass]="agregado ? 'bi-check-lg' : 'bi-cart-plus'"></i>
+        {{ agregado ? '¡Añadido!' : 'Añadir al carrito' }}
+      </button>
+    </div>
   </div>
 </article>

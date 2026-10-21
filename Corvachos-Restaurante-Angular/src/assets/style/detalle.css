@@ -92,13 +92,13 @@
 
 /* Adicionales */
 .adicionales-container {
-    margin-top: 30px;
+    margin-top: 24px;
 }
 
 .adicionales-lista {
     list-style: none;
     padding: 0;
-    margin-top: 15px;
+    margin-top: 12px;
     border-top: 1px solid #e0e0e0;
 }
 
@@ -106,14 +106,76 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
+    padding: 12px 10px;
     border-bottom: 1px solid #e0e0e0;
     color: #003741;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.adicional-seleccionable {
+    cursor: pointer;
+}
+
+.adicional-seleccionable:hover {
+    background-color: #fdf8ee;
+}
+
+.adicional-activo {
+    background-color: rgba(205, 158, 70, 0.16);
+    border: 1px solid #cd9e46;
 }
 
 .adicional-nombre {
     font-size: 1.1rem;
     text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adicional-nombre i {
+    color: #cd9e46;
+}
+
+.adicional-derecha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.adicional-cant-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fff;
+    border: 1px solid #cd9e46;
+    border-radius: 6px;
+    padding: 2px 6px;
+}
+
+.adicional-cant-stepper button {
+    background: none;
+    border: none;
+    color: #003741;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+
+.adicional-cant-stepper button:hover {
+    color: #cd9e46;
+}
+
+.adicional-cant-stepper span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+    color: #003741;
 }
 
 .adicional-precio {
@@ -122,10 +184,120 @@
     font-size: 1.1rem;
 }
 
+/* Caja de compra / Añadir al carrito */
+.detalle-compra-box {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid #e8e0d4;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.detalle-cantidad-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detalle-cantidad-controles {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1.5px solid #cd9e46;
+    border-radius: 8px;
+    padding: 4px 10px;
+    background-color: #faf8f5;
+}
+
+.btn-cant-detalle {
+    background: none;
+    border: none;
+    color: #003741;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0 6px;
+}
+
+.btn-cant-detalle:hover {
+    color: #cd9e46;
+}
+
+.detalle-cantidad-valor {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+    color: #003741;
+}
+
+.detalle-subtotal-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.25rem;
+    color: #003741;
+}
+
+.detalle-subtotal-fila strong {
+    color: #cd9e46;
+    font-size: 1.45rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn-agregar-carrito-detalle {
+    background-color: #001c2a;
+    color: #cd9e46;
+    border: 2px solid #cd9e46;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-agregar-carrito-detalle:hover {
+    background-color: #cd9e46;
+    color: #001c2a;
+}
+
+.detalle-alerta-agregado {
+    background-color: #edf7ed;
+    border: 1px solid #4caf50;
+    color: #1e4620;
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+.btn-ver-carrito-inline {
+    background-color: #cd9e46;
+    color: #001c2a;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 /* ============================================
    IMAGEN DEL PRODUCTO
-   Todas del MISMO tamaño (cuadradas 450x450)
-   Se recorta lo sobrante pero se ve parejo
    ============================================ */
 .detalle-imagen-container {
     flex: 1;

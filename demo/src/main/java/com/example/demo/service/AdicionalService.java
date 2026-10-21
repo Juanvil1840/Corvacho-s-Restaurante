@@ -9,10 +9,11 @@ public interface AdicionalService {
     Collection<Adicional> findAll();
     Adicional findById(Long id);
     Adicional guardar(Adicional adicional);
+    Adicional crearAdicional(Adicional adicional);
+    Adicional actualizarAdicional(Long id, Adicional adicional);
     void deleteById(Long id);
     List<Adicional> buscarPorCategoria(Long categoriaId);
 
-    
     List<Adicional> findDisponibles();
     List<Adicional> buscarDisponiblesPorCategoria(Long categoriaId);
     boolean tienePedidos(Long id);
