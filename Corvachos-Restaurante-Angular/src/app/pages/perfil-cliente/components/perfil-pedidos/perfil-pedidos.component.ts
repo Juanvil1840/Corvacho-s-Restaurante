@@ -2,8 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges, OnDestroy } from '@
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Pedido } from '../../../../models/pedido.model';
-import { AdicionalSeleccionadoItem, DetallePedido } from '../../../../models/detallePedido.model';
+import { PedidoHistorial } from '../../../../models/pedidoHistorial.model';
 import { PedidoService } from '../../../../service/pedido.service';
 import { CarritoServiceService } from '../../../../service/carrito-service.service';
 
@@ -18,7 +17,8 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() clienteId!: number;
 
-  pedidos: Pedido[] = [];
+  // El backend ya envía total, subtotales y adicionales listos para mostrar.
+  pedidos: PedidoHistorial[] = [];
   private sub?: Subscription;
 
   constructor(
@@ -52,40 +52,5 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
       },
       error: (err) => console.error('Error al cargar pedidos del cliente:', err)
     });
-  }
-
-  getDetallesDelPedido(pedido: Pedido): DetallePedido[] {
-    return (pedido.detallePedidos as DetallePedido[]) || [];
-  }
-
-  getAdicionalesDeDetalle(detalle: DetallePedido): AdicionalSeleccionadoItem[] {
-    if (detalle.adicionales && detalle.adicionales.length > 0) {
-      return detalle.adicionales;
-    }
-    if (detalle.adicional) {
-      return [{
-        id_adicional: detalle.adicional.id_adicional,
-        nombre: detalle.adicional.nombre,
-        precio: detalle.adicional.precio || 0,
-        cantidad: 1
-      }];
-    }
-    return [];
-  }
-
-  calcularSubtotalDetalle(detalle: DetallePedido): number {
-    const base = detalle.producto?.precio || 0;
-    const extras = this.getAdicionalesDeDetalle(detalle).reduce(
-      (sum, a) => sum + (a.precio || 0) * (a.cantidad || 1),
-      0
-    );
-    return (base + extras) * (detalle.cantidad || 1);
-  }
-
-  calcularTotal(pedido: Pedido): number {
-    return this.getDetallesDelPedido(pedido).reduce(
-      (total, d) => total + this.calcularSubtotalDetalle(d),
-      0
-    );
   }
 }

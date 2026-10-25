@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PedidoDTO;
+import com.example.demo.dto.PedidoHistorialDTO;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
 import com.example.demo.service.PedidoService;
@@ -39,11 +40,12 @@ public class PedidoRestController {
                 .toList();
     }
 
+    // Historial del cliente: devuelve un DTO liviano solo con lo que se muestra en el perfil.
     @GetMapping("/cliente/{clienteId}")
-    public Collection<PedidoDTO> listarPorCliente(@PathVariable Long clienteId) {
+    public Collection<PedidoHistorialDTO> listarPorCliente(@PathVariable Long clienteId) {
         return pedidoService.findByClienteId(clienteId)
                 .stream()
-                .map(this::convertirPedido)
+                .map(p -> PedidoHistorialDTO.fromEntity(p, pedidoService.findDetallesByPedidoId(p.getId_Pedido())))
                 .toList();
     }
 

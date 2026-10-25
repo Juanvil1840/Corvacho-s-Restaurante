@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Pedido } from '../models/pedido.model';
+import { PedidoHistorial } from '../models/pedidoHistorial.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class PedidoService {
     );
   }
 
-  getPedidosPorCliente(clienteId: number): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(`${this.apiUrl}/cliente/${clienteId}`).pipe(
+  getPedidosPorCliente(clienteId: number): Observable<PedidoHistorial[]> {
+    return this.http.get<PedidoHistorial[]>(`${this.apiUrl}/cliente/${clienteId}`).pipe(
       catchError(this.manejarError)
     );
   }
