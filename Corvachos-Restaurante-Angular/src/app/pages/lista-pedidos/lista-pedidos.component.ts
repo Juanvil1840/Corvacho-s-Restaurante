@@ -18,6 +18,11 @@ export class ListaPedidosComponent implements OnInit {
   cargando = false;
   error = '';
 
+  // Detectar si la sesión corresponde a un operario
+  get esOperario(): boolean {
+    return localStorage.getItem('operador') !== null;
+  }
+
   constructor(private pedidoService: PedidoService) {}
 
   ngOnInit(): void {
@@ -30,7 +35,17 @@ export class ListaPedidosComponent implements OnInit {
 
     this.pedidoService.getPedidos().subscribe({
       next: (pedidos) => {
-        this.pedidos = pedidos;
+
+        if (this.esOperario) {
+          // El operario solo ve pedidos sin completar
+          this.pedidos = pedidos.filter(pedido =>
+            pedido.estado?.trim().toLowerCase() !== 'entregado'
+          );
+        } else {
+          // El administrador conserva todos los pedidos
+          this.pedidos = pedidos;
+        }
+
         this.cargando = false;
       },
       error: (error) => {
