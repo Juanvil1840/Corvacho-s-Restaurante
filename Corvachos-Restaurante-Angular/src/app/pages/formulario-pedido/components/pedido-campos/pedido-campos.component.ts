@@ -26,12 +26,18 @@ export class PedidoCamposComponent {
   @Input() adicionales: Adicional[] = [];
   @Input() comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
   @Input() editando: boolean = false;
+  @Input() domiciliarioAsignadoId: number = 0;
 
   readonly estados: string[] = ['Recibido', 'Cocinando', 'Enviado', 'Entregado', 'Cancelado'];
 
   productoSeleccionadoId: number = 0;
   adicionalSeleccionadoId: number = 0;
   cantidadSeleccionada: number = 1;
+
+  // Solo se pueden elegir domiciliarios disponibles (o el que ya tiene asignado el pedido)
+  get domiciliariosDisponibles(): Domiciliario[] {
+    return this.domiciliarios.filter(d => d.informaciondisp || d.id_domiciliario === this.domiciliarioAsignadoId);
+  }
 
   get adicionalesDisponibles(): Adicional[] {
     if (!this.productoSeleccionadoId || Number(this.productoSeleccionadoId) === 0) {

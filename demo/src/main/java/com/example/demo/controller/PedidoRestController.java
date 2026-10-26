@@ -19,6 +19,7 @@ import com.example.demo.dto.PedidoDTO;
 import com.example.demo.dto.PedidoHistorialDTO;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
+import com.example.demo.errors.PedidoNotFoundException;
 import com.example.demo.service.PedidoService;
 
 @RestController
@@ -73,7 +74,7 @@ public class PedidoRestController {
         try {
             Pedido actualizado = pedidoService.actualizarPedido(id, pedido);
             return ResponseEntity.ok(convertirPedido(actualizado));
-        } catch (RuntimeException e) {
+        } catch (PedidoNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

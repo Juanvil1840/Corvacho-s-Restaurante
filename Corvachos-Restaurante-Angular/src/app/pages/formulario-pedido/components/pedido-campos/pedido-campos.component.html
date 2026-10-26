@@ -41,16 +41,14 @@
   </div>
 
   <div class="pedido-campo">
-    <label for="domiciliario">Domiciliario (opcional)</label>
+    <label for="domiciliario">Domiciliario (obligatorio al enviar)</label>
     <select
       id="domiciliario"
       name="domiciliario"
       [(ngModel)]="pedido.domiciliario!.id_domiciliario">
       <option [ngValue]="0">Sin domiciliario</option>
-      @for (domiciliario of domiciliarios; track domiciliario.id_domiciliario) {
-        <option [ngValue]="domiciliario.id_domiciliario">
-          {{ domiciliario.nombre }} {{ domiciliario.informaciondisp ? '' : '(No disponible)' }}
-        </option>
+      @for (domiciliario of domiciliariosDisponibles; track domiciliario.id_domiciliario) {
+        <option [ngValue]="domiciliario.id_domiciliario">{{ domiciliario.nombre }}</option>
       }
     </select>
   </div>

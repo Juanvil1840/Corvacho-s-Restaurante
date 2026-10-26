@@ -44,6 +44,7 @@ export class FormularioPedidoComponent implements OnInit {
   comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
 
   editando = false;
+  domiciliarioAsignadoId = 0;
   guardando = false;
   error = '';
 
@@ -88,6 +89,7 @@ export class FormularioPedidoComponent implements OnInit {
 
       this.pedidoService.getPedidoById(Number(id)).subscribe({
         next: (pedido) => {
+          this.domiciliarioAsignadoId = pedido.domiciliario?.id_domiciliario ?? 0;
           this.pedido = {
             ...pedido,
             cliente: pedido.cliente ?? { clienteId: 0, nombre: '', apellido: '', correo: '', contrasena: '', telefono: '', direccion: '', activo: true },
@@ -146,6 +148,11 @@ export class FormularioPedidoComponent implements OnInit {
   }
 
   guardar(): void {
+    if (this.pedido.estado === 'Enviado' && !Number(this.pedido.domiciliario?.id_domiciliario)) {
+      this.error = 'Para enviar el pedido debe seleccionar un domiciliario disponible.';
+      return;
+    }
+
     this.actualizarRelaciones();
 
     if (!this.pedido.estado || this.pedido.estado.trim() === '') {

@@ -352,7 +352,7 @@ public class DataLoader implements CommandLineRunner {
                 Domiciliario domiciliario2 = domiciliarioRepository.save(
                                 new Domiciliario("Juancho rodriguez", "3234560090", "0000129393", true, operador2));
                 Domiciliario domiciliario3 = domiciliarioRepository
-                                .save(new Domiciliario("Esteban Bogotá", "3223388848", "0000443382", true, operador3));
+                                .save(new Domiciliario("Esteban Bogotá", "3223388848", "0000443382", false, operador3));
                 Domiciliario domiciliario4 = domiciliarioRepository
                                 .save(new Domiciliario("Pablo Rincón", "3056677859", "0000255722", true, operador4));
                 Domiciliario domiciliario5 = domiciliarioRepository

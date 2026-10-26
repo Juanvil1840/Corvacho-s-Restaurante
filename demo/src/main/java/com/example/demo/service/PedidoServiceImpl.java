@@ -78,6 +78,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setCliente(buscarCliente(pedido));
         pedido.setOperador(buscarOperador(pedido));
         pedido.setDomiciliario(buscarDomiciliario(pedido));
+        actualizarDisponibilidadDomiciliario(pedido, null, null);
         if (pedido.getFechaCreacion() == null) {
             pedido.setFechaCreacion(LocalDateTime.now());
         }
@@ -98,6 +99,8 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public Pedido actualizarPedido(Long id, Pedido pedido) {
         Pedido existente = findById(id);
+        String estadoAnterior = existente.getEstado();
+        Domiciliario domiciliarioAnterior = existente.getDomiciliario();
 
         existente.setEstado(pedido.getEstado() != null ? pedido.getEstado() : existente.getEstado());
         existente.setCliente(buscarCliente(pedido));
@@ -107,6 +110,11 @@ public class PedidoServiceImpl implements PedidoService {
             existente.setFechaCreacion(pedido.getFechaCreacion());
         }
         existente.setFechaEntrega(pedido.getFechaEntrega());
+        if ("Entregado".equalsIgnoreCase(existente.getEstado()) && existente.getFechaEntrega() == null) {
+            existente.setFechaEntrega(LocalDateTime.now());
+        }
+
+        actualizarDisponibilidadDomiciliario(existente, estadoAnterior, domiciliarioAnterior);
 
         Pedido actualizado = pedidoRepository.save(existente);
 
@@ -119,6 +127,40 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         return actualizado;
+    }
+
+    // Cuando el pedido pasa a "Enviado" el domiciliario queda ocupado.
+    // Cuando deja de estar "Enviado" (entregado, cancelado...) vuelve a estar disponible.
+    private void actualizarDisponibilidadDomiciliario(Pedido pedido, String estadoAnterior, Domiciliario domiciliarioAnterior) {
+        Domiciliario domiciliario = pedido.getDomiciliario();
+        boolean estabaEnviado = "Enviado".equalsIgnoreCase(estadoAnterior);
+        boolean quedaEnviado = "Enviado".equalsIgnoreCase(pedido.getEstado());
+        boolean mismoDomiciliario = domiciliarioAnterior != null && domiciliario != null
+                && domiciliarioAnterior.getId_domiciliario().equals(domiciliario.getId_domiciliario());
+
+        if (estabaEnviado && quedaEnviado && mismoDomiciliario) {
+            return;
+        }
+
+        if (estabaEnviado && domiciliarioAnterior != null) {
+            domiciliarioAnterior.setInformaciondisp(true);
+            domiciliarioRepository.save(domiciliarioAnterior);
+        }
+
+        if (quedaEnviado) {
+            if (domiciliario == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Para enviar el pedido debe seleccionar un domiciliario");
+            }
+            if (!domiciliario.isInformaciondisp()) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "El domiciliario seleccionado no está disponible");
+            }
+            domiciliario.setInformaciondisp(false);
+            domiciliarioRepository.save(domiciliario);
+        }
     }
 
     private void guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos) {
