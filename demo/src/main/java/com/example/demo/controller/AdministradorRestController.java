@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministradorDTO;
+import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Administrador;
 import com.example.demo.service.AdministradorService;
 
@@ -70,5 +72,24 @@ public class AdministradorRestController {
         }
         administradorService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+        @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
+        String usuario = credenciales.get("usuario");
+        String contrasena = credenciales.get("contrasena");
+
+        if (usuario == null || contrasena == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MensajeDTO("Usuario y contraseña son obligatorios."));
+        }
+
+        Administrador admin = administradorService.autenticar(usuario.trim(), contrasena);
+
+        if (admin == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new MensajeDTO("Usuario o contraseña incorrectos"));
+        }
+
+        return ResponseEntity.ok(AdministradorDTO.fromEntity(admin));
     }
 }

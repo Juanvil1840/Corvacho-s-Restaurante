@@ -18,6 +18,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   esPaginaLogin = false;
   esPortalOperario = false;
+  esPortalAdmin = false; 
+  
+  // 👇 NUEVAS VARIABLES PARA SABER SI ESTÁN LOGUEADOS 👇
+  adminLogueado = false;
+  operarioLogueado = false;
+  
   clienteLogueado: Cliente | null = null;
   itemsCarrito: ItemCarrito[] = [];
   carritoAbierto = false;
@@ -75,57 +81,26 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private actualizarEstadoRuta(url: string): void {
     this.esPaginaLogin = url === '/login' || url.startsWith('/login?');
     this.esPortalOperario = url.startsWith('/portal-operario') || url.startsWith('/login-operario');
+    this.esPortalAdmin = url.startsWith('/login-admin') || url.startsWith('/portal-admin');
+    
+   
+    this.adminLogueado = !!localStorage.getItem('administrador');
+    this.operarioLogueado = !!localStorage.getItem('operador');
+
     this.carritoService.getClienteLogueado();
   }
 
-  get totalCantidad(): number {
-    return this.carritoService.getTotalCantidad();
-  }
-
-  get totalPrecio(): number {
-    return this.carritoService.getTotalPrecio();
-  }
-
-  calcularUnitario(item: ItemCarrito): number {
-    return this.carritoService.calcularPrecioUnitarioItem(item);
-  }
-
-  toggleCarrito(): void {
-    this.exitoPedido = '';
-    this.errorPedido = '';
-    this.carritoService.toggleCarrito();
-  }
-
-  cerrarCarrito(): void {
-    this.carritoService.cerrarCarrito();
-  }
-
-  irAlMenu(): void {
-    this.cerrarCarrito();
-    this.router.navigate(['/menu']);
-  }
-
-  irAlPerfil(): void {
-    this.cerrarCarrito();
-    const cli = this.carritoService.getClienteLogueado();
-    if (cli && cli.clienteId > 0) {
-      this.router.navigate(['/clientes/perfil', cli.clienteId]);
-    } else {
-      this.router.navigate(['/login']);
-    }
-  }
-
-  modificarCantidad(index: number, delta: number): void {
-    this.carritoService.modificarCantidad(index, delta);
-  }
-
-  eliminarItem(index: number): void {
-    this.carritoService.eliminarItem(index);
-  }
-
-  vaciarCarrito(): void {
-    this.carritoService.vaciarCarrito();
-  }
+  // ... (el resto de getters y funciones de carrito quedan igual)
+  get totalCantidad(): number { return this.carritoService.getTotalCantidad(); }
+  get totalPrecio(): number { return this.carritoService.getTotalPrecio(); }
+  calcularUnitario(item: ItemCarrito): number { return this.carritoService.calcularPrecioUnitarioItem(item); }
+  toggleCarrito(): void { this.exitoPedido = ''; this.errorPedido = ''; this.carritoService.toggleCarrito(); }
+  cerrarCarrito(): void { this.carritoService.cerrarCarrito(); }
+  irAlMenu(): void { this.cerrarCarrito(); this.router.navigate(['/menu']); }
+  irAlPerfil(): void { this.cerrarCarrito(); const cli = this.carritoService.getClienteLogueado(); if (cli && cli.clienteId > 0) { this.router.navigate(['/clientes/perfil', cli.clienteId]); } else { this.router.navigate(['/login']); } }
+  modificarCantidad(index: number, delta: number): void { this.carritoService.modificarCantidad(index, delta); }
+  eliminarItem(index: number): void { this.carritoService.eliminarItem(index); }
+  vaciarCarrito(): void { this.carritoService.vaciarCarrito(); }
 
   confirmarPedido(): void {
     this.errorPedido = '';

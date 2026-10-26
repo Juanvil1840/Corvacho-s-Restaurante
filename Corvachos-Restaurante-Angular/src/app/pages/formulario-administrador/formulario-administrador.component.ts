@@ -62,8 +62,25 @@ export class FormularioAdministradorComponent implements OnInit {
       : this.administradorService.agregarAdministrador(this.administrador);
 
     peticion.subscribe({
-      next: () => {
+      next: (adminGuardado) => {
         this.guardando = false;
+
+        const adminLogueadoStr = localStorage.getItem('administrador');
+        
+        if (adminLogueadoStr) {
+          const adminLogueado = JSON.parse(adminLogueadoStr);
+          
+          // Si el ID del que editamos coincide con el del logueado
+          if (adminLogueado.id_administrador === adminGuardado.id_administrador) {
+            // 1. Actualizamos el localStorage con el nombre nuevo
+            localStorage.setItem('administrador', JSON.stringify(adminGuardado));
+            // 2. Lo enviamos de vuelta a su portal
+            this.router.navigate(['/portal-admin']);
+            return; // Terminamos aquí
+          }
+        }
+
+        // Si editamos a otro admin (desde la lista general), volvemos a la lista
         this.router.navigate(['/administradores']);
       },
       error: (error) => {
@@ -75,7 +92,17 @@ export class FormularioAdministradorComponent implements OnInit {
   }
 
   cancelar(): void {
+    // 🛠️ Si cancela, verificamos de dónde vino para devolverlo
+    const adminLogueadoStr = localStorage.getItem('administrador');
+    if (adminLogueadoStr) {
+      const adminLogueado = JSON.parse(adminLogueadoStr);
+      // Si estábamos editando a nuestro propio perfil, volvemos al portal
+      if (adminLogueado.id_administrador === this.administrador.id_administrador) {
+        this.router.navigate(['/portal-admin']);
+        return;
+      }
+    }
+    // Si no, volvemos a la lista
     this.router.navigate(['/administradores']);
   }
 }
-

@@ -10,6 +10,9 @@ import { RegistroClienteComponent } from './pages/registro-cliente/registro-clie
 import { PerfilClienteComponent } from './pages/perfil-cliente/perfil-cliente.component';
 import { MenuComponent } from './pages/menu/menu.component';
 import { DetalleProductoComponent } from './pages/detalle-producto/detalle-producto.component';
+import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
+import { PortalAdminComponent } from './pages/portal-admin/portal-admin.component';
+import { PortalOperarioComponent } from './pages/portal-operario/portal-operario.component';
 
 // NUEVOS
 import { ListaCategoriasComponent } from './pages/lista-categorias/lista-categorias.component';
@@ -46,6 +49,7 @@ export const routes: Routes = [
     { path: 'adicionales', component: ListaAdicionalesComponent },
     { path: 'adicionales/nuevo', component: FormularioAdicionalComponent },
     { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent },
+    { path: 'portal-operario', component: PortalOperarioComponent },
 
     // CRUD Pedido y Domiciliario
     { path: 'pedidos', component: ListaPedidosComponent },
@@ -64,6 +68,8 @@ export const routes: Routes = [
     { path: 'administradores/nuevo', component: FormularioAdministradorComponent },
     { path: 'administradores/editar/:id', component: FormularioAdministradorComponent },
     { path: 'login-operario', component: LoginOperarioComponent },
+    { path: 'login-admin', component: LoginAdminComponent },
+    { path: 'portal-admin', component: PortalAdminComponent },
 
     { path: 'clientes', component: ListaClientesComponent },
     { path: 'clientes/nuevo', component: FormularioClienteComponent },

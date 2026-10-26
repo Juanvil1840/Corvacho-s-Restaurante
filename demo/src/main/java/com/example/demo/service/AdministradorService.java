@@ -11,4 +11,5 @@ public interface AdministradorService {
     Administrador crearAdministrador(Administrador administrador);
     Administrador actualizarAdministrador(Long id, Administrador administrador);
     void deleteById(Long id);
+    Administrador autenticar(String usuario, String contrasena);
 }

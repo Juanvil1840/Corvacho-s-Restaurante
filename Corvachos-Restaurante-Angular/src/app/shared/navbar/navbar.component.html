@@ -18,46 +18,65 @@
           <a class="nav-link" routerLink="/">INICIO</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/menu">MENU</a>
+          <a class="nav-link" routerLink="/menu">MENÚ</a>
         </li>
 
-        <!-- Solo aparece en la página de Login de Cliente -->
+        <!-- LÓGICA PARA OPERARIOS Y ADMINS (SOLO EN LOGIN) -->
         @if (esPaginaLogin) {
           <li class="nav-item">
-            <a class="nav-link" routerLink="/login-operario">OPERARIO</a>
+            @if (!operarioLogueado) {
+              <a class="nav-link" routerLink="/login-operario">OPERARIO</a>
+            } @else {
+              <a class="nav-link text-warning" routerLink="/portal-operario">MI PORTAL (OP)</a>
+            }
+          </li>
+          <li class="nav-item">
+            @if (!adminLogueado) {
+              <a class="nav-link" routerLink="/login-admin">ADMIN</a>
+            } @else {
+              <a class="nav-link text-warning" routerLink="/portal-admin">MI PORTAL (ADM)</a>
+            }
           </li>
         }
 
-        <!-- Si el cliente está logueado: muestra PERFIL y CARRITO -->
-        @if (clienteLogueado && !esPortalOperario) {
+        <!-- LÓGICA DE SESIÓN GLOBAL (Cualquier página) -->
+        
+        <!-- Si es ADMIN -->
+        @if (adminLogueado) {
           <li class="nav-item">
-            <a
-              class="nav-link"
-              [routerLink]="['/clientes/perfil', clienteLogueado.clienteId]"
-              (click)="cerrarCarrito()">
+            <a class="nav-link" routerLink="/portal-admin">PERFIL</a>
+          </li>
+        } 
+        
+        <!-- Si es OPERARIO -->
+        @else if (operarioLogueado) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/portal-operario">PERFIL</a>
+          </li>
+        } 
+        
+        <!-- Si es CLIENTE -->
+        @else if (clienteLogueado && !esPortalOperario && !esPortalAdmin) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/clientes/perfil', clienteLogueado.clienteId]" (click)="cerrarCarrito()">
               PERFIL
             </a>
           </li>
           <li class="nav-item">
-            <button
-              type="button"
-              class="nav-link btn-carrito-nav"
-              aria-label="Abrir carrito de compras"
-              (click)="toggleCarrito()">
+            <button type="button" class="nav-link btn-carrito-nav" aria-label="Abrir carrito de compras" (click)="toggleCarrito()">
               <i class="bi bi-cart3"></i> CARRITO
               @if (totalCantidad > 0) {
                 <span class="carrito-badge">{{ totalCantidad }}</span>
               }
             </button>
           </li>
-        } @else {
-          @if (totalCantidad > 0 && !esPortalOperario) {
+        } 
+        
+        <!-- Si NO hay nadie logueado -->
+        @else if (!esPortalOperario && !esPortalAdmin) {
+          @if (totalCantidad > 0) {
             <li class="nav-item">
-              <button
-                type="button"
-                class="nav-link btn-carrito-nav"
-                aria-label="Abrir carrito de compras"
-                (click)="toggleCarrito()">
+              <button type="button" class="nav-link btn-carrito-nav" (click)="toggleCarrito()">
                 <i class="bi bi-cart3"></i> CARRITO
                 <span class="carrito-badge">{{ totalCantidad }}</span>
               </button>

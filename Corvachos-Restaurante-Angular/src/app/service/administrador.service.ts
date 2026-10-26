@@ -45,6 +45,13 @@ export class AdministradorService {
     );
   }
 
+  // 👇 MÉTODO NUEVO PARA EL LOGIN 👇
+  login(usuario: string, contrasena: string): Observable<Administrador> {
+    return this.http.post<Administrador>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
+      catchError(this.manejarError)
+    );
+  }
+
   private manejarError(error: HttpErrorResponse) {
     if (error.status === 0) {
       console.error('Error de conexión con Spring Boot', error);
@@ -54,4 +61,3 @@ export class AdministradorService {
     return throwError(() => error);
   }
 }
-

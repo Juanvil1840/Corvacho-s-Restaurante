@@ -3,9 +3,7 @@ package com.example.demo.service;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Administrador;
 import com.example.demo.repository.AdministradorRepository;
@@ -25,36 +23,40 @@ public class AdministradorServiceImpl implements AdministradorService {
     public Administrador findById(Long id) {
         return administradorRepository.findById(id).orElse(null);
     }
-
     @Override
     public Administrador guardar(Administrador administrador) {
         return administradorRepository.save(administrador);
     }
-
     @Override
-    public Administrador crearAdministrador(Administrador administrador) {
-        if (administrador.getNombre() == null || administrador.getNombre().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
-        }
-        administrador.setId_administrador(null);
-        return administradorRepository.save(administrador);
+    public Administrador crearAdministrador(Administrador admin) {
+        return administradorRepository.save(admin);
     }
 
     @Override
-    public Administrador actualizarAdministrador(Long id, Administrador administrador) {
-        Administrador existente = findById(id);
-        if (existente == null) {
-            return null;
+    public Administrador actualizarAdministrador(Long id, Administrador admin) {
+        Administrador existente = administradorRepository.findById(id).orElse(null);
+        if (existente != null) {
+            existente.setNombre(admin.getNombre());
+            existente.setUsuario(admin.getUsuario());
+            if (admin.getContrasena() != null && !admin.getContrasena().isBlank()) {
+                existente.setContrasena(admin.getContrasena());
+            }
+            return administradorRepository.save(existente);
         }
-        if (administrador.getNombre() == null || administrador.getNombre().isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
-        }
-        existente.setNombre(administrador.getNombre());
-        return administradorRepository.save(existente);
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
         administradorRepository.deleteById(id);
+    }
+
+    @Override
+    public Administrador autenticar(String usuario, String contrasena) {
+        Administrador admin = administradorRepository.findByUsuario(usuario);
+        if (admin != null && admin.getContrasena().equals(contrasena)) {
+            return admin;
+        }
+        return null;
     }
 }

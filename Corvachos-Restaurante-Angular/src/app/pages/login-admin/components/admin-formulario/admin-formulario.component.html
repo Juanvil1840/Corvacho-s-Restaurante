@@ -1,0 +1,19 @@
+<form (ngSubmit)="onSubmit()" class="admin-formulario">
+  <h2 class="admin-form-titulo">Login Administrador</h2>
+
+  <div class="admin-form-campo">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" name="usuario" [(ngModel)]="usuario" placeholder="Tu usuario" required>
+  </div>
+
+  <div class="admin-form-campo">
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" name="contrasena" [(ngModel)]="contrasena" placeholder="**********" required>
+  </div>
+
+  @if (error) {
+    <p class="admin-form-error">{{ error }}</p>
+  }
+
+  <button type="submit" class="admin-form-btn">INGRESAR</button>
+</form>

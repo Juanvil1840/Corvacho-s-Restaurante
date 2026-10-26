@@ -7,5 +7,5 @@ import com.example.demo.entities.Administrador;
 
 @Repository
 public interface AdministradorRepository extends JpaRepository<Administrador,Long> {
-    
+    Administrador findByUsuario(String usuario);
 }

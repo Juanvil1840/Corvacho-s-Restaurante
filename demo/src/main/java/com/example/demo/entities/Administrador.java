@@ -17,10 +17,19 @@ public class Administrador {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_administrador;
+
     @Column (length = 80, nullable = false)
     private String nombre;
+
+    @Column (unique = true, length = 100, nullable = false)
+    private String usuario;
+
+    @Column (length = 255, nullable = false)
+    private String contrasena;
     
-    public Administrador(String nombre){
+    public Administrador(String nombre, String usuario, String contrasena){
         this.nombre = nombre;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
     }
 }

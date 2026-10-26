@@ -331,11 +331,11 @@ public class DataLoader implements CommandLineRunner {
 
                 /* Administradores */
 
-                Administrador administrador1 = administradorRepository.save(new Administrador("Administrador 1"));
-                Administrador administrador2 = administradorRepository.save(new Administrador("Administrador 2"));
-                Administrador administrador3 = administradorRepository.save(new Administrador("Administrador 3"));
-                Administrador administrador4 = administradorRepository.save(new Administrador("Administrador 4"));
-                Administrador administrador5 = administradorRepository.save(new Administrador("Administrador 5"));
+                administradorRepository.save(new Administrador("Daniel Cedeño", "admin1", "1234"));
+                administradorRepository.save(new Administrador("Juan Mendoza", "admin2", "1234"));
+                administradorRepository.save(new Administrador("Jose Pulido", "admin3", "1234"));
+                administradorRepository.save(new Administrador("Sebastian Rincon", "admin4", "1234"));
+                administradorRepository.save(new Administrador("Juan Angarita", "admin5", "1234"));
 
                 /* Operadores */
 
