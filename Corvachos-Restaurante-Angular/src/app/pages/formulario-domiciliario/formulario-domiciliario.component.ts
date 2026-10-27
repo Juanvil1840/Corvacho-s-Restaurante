@@ -23,6 +23,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     celular: '',
     cedula: '',
     informaciondisp: true,
+    activo: true,
     operador: { id_operador: 0, nombre: '', usuario: '', contrasena: '' }
   };
 
@@ -51,7 +52,15 @@ export class FormularioDomiciliarioComponent implements OnInit {
 
       this.domiciliarioService.getDomiciliarioById(Number(id)).subscribe({
         next: (domiciliario) => {
-          this.domiciliario = { ...domiciliario };
+          this.domiciliario = {
+            ...domiciliario,
+            operador: domiciliario.operador ?? {
+              id_operador: 0,
+              nombre: '',
+              usuario: '',
+              contrasena: ''
+            }
+          };
         },
         error: (error) => {
           console.error('Error al cargar el domiciliario:', error);
@@ -62,6 +71,9 @@ export class FormularioDomiciliarioComponent implements OnInit {
   }
 
   actualizarOperador(): void {
+    if (!this.domiciliario.operador) {
+      return;
+    }
     const operadorId = Number(this.domiciliario.operador.id_operador);
     const operadorSeleccionado = this.operadores.find(
       op => op.id_operador === operadorId

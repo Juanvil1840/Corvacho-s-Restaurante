@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@JsonPropertyOrder({"id_domiciliario", "nombre", "celular", "cedula", "informaciondisp", "operador"})
+@JsonPropertyOrder({"id_domiciliario", "nombre", "celular", "cedula", "informaciondisp", "activo", "operador"})
 public class DomiciliarioDTO {
 
     @JsonProperty("id_domiciliario")
@@ -26,15 +26,20 @@ public class DomiciliarioDTO {
     @JsonProperty("informaciondisp")
     private boolean informaciondisp;
 
+    @JsonProperty("activo")
+    private boolean activo;
+
     @JsonProperty("operador")
     private OperadorPedidoDTO operador;
 
-    public DomiciliarioDTO(Long id_domiciliario, String nombre, String celular, String cedula, boolean informaciondisp, OperadorPedidoDTO operador) {
+    public DomiciliarioDTO(Long id_domiciliario, String nombre, String celular, String cedula,
+            boolean informaciondisp, boolean activo, OperadorPedidoDTO operador) {
         this.id_domiciliario = id_domiciliario;
         this.nombre = nombre;
         this.celular = celular;
         this.cedula = cedula;
         this.informaciondisp = informaciondisp;
+        this.activo = activo;
         this.operador = operador;
     }
 
@@ -48,6 +53,7 @@ public class DomiciliarioDTO {
                 domiciliario.getCelular(),
                 domiciliario.getCedula(),
                 domiciliario.isInformaciondisp(),
+                domiciliario.isActivo(),
                 OperadorPedidoDTO.fromEntity(domiciliario.getOperador())
         );
     }

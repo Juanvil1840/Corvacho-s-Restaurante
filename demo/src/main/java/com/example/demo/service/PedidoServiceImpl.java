@@ -78,6 +78,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setCliente(buscarCliente(pedido));
         pedido.setOperador(buscarOperador(pedido));
         pedido.setDomiciliario(buscarDomiciliario(pedido));
+        validarDomiciliarioActivo(pedido.getDomiciliario());
         actualizarDisponibilidadDomiciliario(pedido, null, null);
         if (pedido.getFechaCreacion() == null) {
             pedido.setFechaCreacion(LocalDateTime.now());
@@ -105,7 +106,15 @@ public class PedidoServiceImpl implements PedidoService {
         existente.setEstado(pedido.getEstado() != null ? pedido.getEstado() : existente.getEstado());
         existente.setCliente(buscarCliente(pedido));
         existente.setOperador(buscarOperador(pedido));
-        existente.setDomiciliario(buscarDomiciliario(pedido));
+        Domiciliario domiciliarioSolicitado = buscarDomiciliario(pedido);
+        boolean conservaDomiciliarioActual = existente.getDomiciliario() != null
+                && domiciliarioSolicitado != null
+                && existente.getDomiciliario().getId_domiciliario()
+                        .equals(domiciliarioSolicitado.getId_domiciliario());
+        if (!conservaDomiciliarioActual) {
+            validarDomiciliarioActivo(domiciliarioSolicitado);
+        }
+        existente.setDomiciliario(domiciliarioSolicitado);
         if (pedido.getFechaCreacion() != null) {
             existente.setFechaCreacion(pedido.getFechaCreacion());
         }
@@ -143,7 +152,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         if (estabaEnviado && domiciliarioAnterior != null) {
-            domiciliarioAnterior.setInformaciondisp(true);
+            domiciliarioAnterior.setInformaciondisp(domiciliarioAnterior.isActivo());
             domiciliarioRepository.save(domiciliarioAnterior);
         }
 
@@ -261,5 +270,13 @@ public class PedidoServiceImpl implements PedidoService {
         }
         return domiciliarioRepository.findById(pedido.getDomiciliario().getId_domiciliario())
                 .orElse(null);
+    }
+
+    private void validarDomiciliarioActivo(Domiciliario domiciliario) {
+        if (domiciliario != null && !domiciliario.isActivo()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El domiciliario seleccionado está inactivo");
+        }
     }
 }

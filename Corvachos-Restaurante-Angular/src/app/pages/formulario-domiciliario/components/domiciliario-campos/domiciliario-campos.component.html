@@ -41,13 +41,27 @@
     <select
       id="operador"
       name="operador"
-      [(ngModel)]="domiciliario.operador.id_operador"
-      required>
+      [(ngModel)]="domiciliario.operador!.id_operador"
+      [required]="domiciliario.activo !== false"
+      [disabled]="domiciliario.activo === false">
       <option [ngValue]="0" disabled>Selecciona un operador</option>
       @for (operador of operadores; track operador.id_operador) {
         <option [ngValue]="operador.id_operador">{{ operador.nombre }}</option>
       }
     </select>
+  </div>
+
+  <div class="domiciliario-campo domiciliario-campo-check">
+    <label for="activo">
+      <input
+        id="activo"
+        name="activo"
+        type="checkbox"
+        [(ngModel)]="domiciliario.activo"
+      />
+      Domiciliario activo
+    </label>
+    <small>Al desactivarlo, se quitará el operador asignado.</small>
   </div>
 
   <div class="domiciliario-campo domiciliario-campo-check">
