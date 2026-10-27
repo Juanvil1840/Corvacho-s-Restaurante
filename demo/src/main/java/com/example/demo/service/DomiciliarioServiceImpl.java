@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.Collection;
+import java.util.List; // 👈 AGREGAR ESTO
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,11 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
     @Override
     public void deleteById(Long id) {
         domiciliarioRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Domiciliario> obtenerDisponibles() {
+        return domiciliarioRepository.findByInformaciondispTrue();
     }
 
     private Operador buscarOperador(Domiciliario domiciliario) {

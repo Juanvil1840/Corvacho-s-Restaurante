@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   esPortalOperario = false;
   esPortalAdmin = false; 
   
-  // 👇 NUEVAS VARIABLES PARA SABER SI ESTÁN LOGUEADOS 👇
+ 
   adminLogueado = false;
   operarioLogueado = false;
   

@@ -13,7 +13,7 @@ import { Administrador } from '../../models/administrador.model';
 export class PortalAdminComponent implements OnInit {
 
   nombreAdmin = '';
-  idAdmin = 0; // 👈 NUEVA VARIABLE
+  idAdmin = 0; 
 
   constructor(private router: Router) {}
 
