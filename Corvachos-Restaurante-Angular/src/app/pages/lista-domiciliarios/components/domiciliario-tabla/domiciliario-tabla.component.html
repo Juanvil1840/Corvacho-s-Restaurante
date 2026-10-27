@@ -7,6 +7,7 @@
       <th>Cédula</th>
       <th>Celular</th>
       <th>Operador</th>
+      <th>Activo</th>
       <th>Disponible</th>
       <th>Acciones</th>
     </tr>
@@ -19,6 +20,12 @@
         <td>{{ domiciliario.cedula }}</td>
         <td>{{ domiciliario.celular }}</td>
         <td>{{ domiciliario.operador ? domiciliario.operador.nombre : '—' }}</td>
+        <td>
+          <span [class.estado-activo]="domiciliario.activo !== false"
+                [class.estado-inactivo]="domiciliario.activo === false">
+            {{ domiciliario.activo === false ? 'No' : 'Sí' }}
+          </span>
+        </td>
         <td>
           <span [class.estado-activo]="domiciliario.informaciondisp"
                 [class.estado-inactivo]="!domiciliario.informaciondisp">
@@ -42,7 +49,7 @@
     }
     @if (domiciliarios.length === 0) {
       <tr>
-        <td colspan="7" class="domiciliario-tabla-vacio">
+        <td colspan="8" class="domiciliario-tabla-vacio">
           No hay domiciliarios registrados.
         </td>
       </tr>

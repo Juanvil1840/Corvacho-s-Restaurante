@@ -31,6 +31,9 @@ public class Domiciliario {
     @Column( nullable = false)
     private boolean informaciondisp;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean activo = true;
+
     @ManyToOne
     @JoinColumn(name = "id_operador")
     private Operador operador;

@@ -6,5 +6,6 @@ export interface Domiciliario {
     celular: string;
     cedula: string;
     informaciondisp: boolean;
-    operador: Operador;
+    activo?: boolean;
+    operador: Operador | null;
 }

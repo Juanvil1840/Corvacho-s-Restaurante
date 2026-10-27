@@ -27,8 +27,8 @@ public class Carrito {
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL)
-    private List<ProductoCarrito> productoCarritos;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoCarrito> productoCarritos = new java.util.ArrayList<>();
 
     public Carrito(Cliente cliente){
     this.cliente = cliente;

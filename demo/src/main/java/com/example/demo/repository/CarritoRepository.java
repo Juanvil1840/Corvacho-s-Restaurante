@@ -7,5 +7,5 @@ import com.example.demo.entities.Carrito;
 
 @Repository
 public interface CarritoRepository extends JpaRepository<Carrito, Long>{
-    
+    java.util.Optional<Carrito> findByClienteClienteId(Long clienteId);
 }

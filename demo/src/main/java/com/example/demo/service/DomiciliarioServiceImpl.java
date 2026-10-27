@@ -6,12 +6,14 @@ import java.util.List; // 👈 AGREGAR ESTO
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.repository.DomiciliarioRepository;
 import com.example.demo.repository.OperadorRepository;
+import com.example.demo.repository.PedidoRepository;
 
 @Service
 public class DomiciliarioServiceImpl implements DomiciliarioService {
@@ -21,6 +23,9 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
 
     @Autowired
     private OperadorRepository operadorRepository;
+
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
     @Override
     public Collection<Domiciliario> findAll() {
@@ -40,6 +45,7 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
     @Override
     public Domiciliario crearDomiciliario(Domiciliario domiciliario) {
         domiciliario.setId_domiciliario(null);
+        domiciliario.setActivo(true);
         domiciliario.setOperador(buscarOperador(domiciliario));
         return domiciliarioRepository.save(domiciliario);
     }
@@ -50,13 +56,33 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
             return null;
         }
         domiciliario.setId_domiciliario(id);
-        domiciliario.setOperador(buscarOperador(domiciliario));
+        if (domiciliario.isActivo()) {
+            domiciliario.setOperador(buscarOperador(domiciliario));
+        } else {
+            domiciliario.setOperador(null);
+            domiciliario.setInformaciondisp(false);
+        }
         return domiciliarioRepository.save(domiciliario);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        domiciliarioRepository.deleteById(id);
+        Domiciliario domiciliario = domiciliarioRepository.findById(id).orElse(null);
+        if (domiciliario == null) {
+            return;
+        }
+
+        if (domiciliario.getPedidos() != null) {
+            domiciliario.getPedidos().forEach(pedido -> {
+                pedido.setDomiciliario(null);
+                pedidoRepository.save(pedido);
+            });
+        }
+
+        domiciliario.setOperador(null);
+        domiciliarioRepository.save(domiciliario);
+        domiciliarioRepository.delete(domiciliario);
     }
 
     @Override
