@@ -13,6 +13,7 @@ import com.example.demo.entities.Producto;
 import com.example.demo.service.CategoriaService;
 import com.example.demo.service.ProductoService;
 
+// Controlador para las vistas de Productos
 @Controller
 @RequestMapping("/productos")
 public class ProductoController {
@@ -25,12 +26,14 @@ public class ProductoController {
         this.categoriaService = categoriaService;
     }
 
+    // Muestra la lista de todos los productos
     @GetMapping
     public String listar(Model model) {
         model.addAttribute("productos", productoService.obtenerTodos());
         return "productos/lista";
     }
 
+    // Muestra el formulario para crear un nuevo producto
     @GetMapping("/nuevo")
     public String mostrarFormularioNuevo(Model model) {
         model.addAttribute("producto", new Producto());
@@ -38,6 +41,7 @@ public class ProductoController {
         return "productos/formulario";
     }
 
+    // Muestra el formulario para editar un producto existente por su id
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(
             @PathVariable Long id,
@@ -48,6 +52,7 @@ public class ProductoController {
         return "productos/formulario";
     }
 
+    // Guarda o actualiza un producto
     @PostMapping("/guardar")
     public String guardar(
             @ModelAttribute Producto producto,
@@ -70,6 +75,7 @@ public class ProductoController {
         return "redirect:/productos";
     }
 
+    // Elimina un producto por su id
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id) {
         productoService.eliminar(id);

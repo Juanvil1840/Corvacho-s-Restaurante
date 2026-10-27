@@ -22,6 +22,7 @@ import com.example.demo.entities.Pedido;
 import com.example.demo.errors.PedidoNotFoundException;
 import com.example.demo.service.PedidoService;
 
+// Controlador REST para la gestion de Pedidos
 @RestController
 @RequestMapping("/api/pedidos")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -33,6 +34,7 @@ public class PedidoRestController {
         this.pedidoService = pedidoService;
     }
 
+    // Lista todos los pedidos registrados
     @GetMapping
     public Collection<PedidoDTO> listar() {
         return pedidoService.findAll()
@@ -41,7 +43,7 @@ public class PedidoRestController {
                 .toList();
     }
 
-    // Historial del cliente: devuelve un DTO liviano solo con lo que se muestra en el perfil.
+    // Lista el historial de pedidos de un cliente especifico
     @GetMapping("/cliente/{clienteId}")
     public Collection<PedidoHistorialDTO> listarPorCliente(@PathVariable Long clienteId) {
         return pedidoService.findByClienteId(clienteId)
@@ -50,6 +52,7 @@ public class PedidoRestController {
                 .toList();
     }
 
+    // Busca un pedido por su id y devuelve su detalle completo
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         try {
@@ -63,12 +66,14 @@ public class PedidoRestController {
         }
     }
 
+    // Crea un nuevo pedido en la base de datos
     @PostMapping
     public ResponseEntity<PedidoDTO> crear(@RequestBody Pedido pedido) {
         Pedido guardado = pedidoService.crearPedido(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertirPedido(guardado));
     }
 
+    // Actualiza los datos de un pedido existente
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
         try {
@@ -79,6 +84,7 @@ public class PedidoRestController {
         }
     }
 
+    // Elimina un pedido de la base de datos
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         try {
@@ -94,6 +100,7 @@ public class PedidoRestController {
         return ResponseEntity.noContent().build();
     }
 
+    // Convertir la entidad Pedido a PedidoDTO
     private PedidoDTO convertirPedido(Pedido pedido) {
         if (pedido == null) {
             return null;

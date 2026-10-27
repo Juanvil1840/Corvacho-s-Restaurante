@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    // Redirige a la pagina principal
     @GetMapping("/")
     public String index() {
         return "index";
     }
-    
-    
 }

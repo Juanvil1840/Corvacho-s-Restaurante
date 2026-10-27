@@ -18,8 +18,8 @@ import com.example.demo.dto.CategoriaDTO;
 import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Categoria;
 import com.example.demo.service.CategoriaService;
-import com.example.demo.dto.MensajeDTO;
 
+// Controlador REST para la gestion de Categorias
 @RestController
 @RequestMapping("/api/categorias")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,6 +31,7 @@ public class CategoriaRestController {
         this.categoriaService = categoriaService;
     }
 
+    // Lista todas las categorias registradas en la base de datos
     @GetMapping
     public Collection<CategoriaDTO> listar() {
         return categoriaService.findAll()
@@ -39,6 +40,7 @@ public class CategoriaRestController {
                 .toList();
     }
 
+    // Busca una categoria por su id
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaDTO> buscarPorId(@PathVariable Long id) {
         Categoria categoria = categoriaService.findById(id);
@@ -48,6 +50,7 @@ public class CategoriaRestController {
         return ResponseEntity.ok(CategoriaDTO.fromEntity(categoria));
     }
 
+    // Crea una nueva categoria en la base de datos
     @PostMapping
     public ResponseEntity<CategoriaDTO> crear(@RequestBody Categoria categoria) {
         categoria.setId(null);
@@ -55,6 +58,7 @@ public class CategoriaRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(CategoriaDTO.fromEntity(guardada));
     }
 
+    // Actualiza los datos de una categoria existente
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaDTO> actualizar(
             @PathVariable Long id,
@@ -67,16 +71,18 @@ public class CategoriaRestController {
         return ResponseEntity.ok(CategoriaDTO.fromEntity(actualizada));
     }
 
-      @DeleteMapping("/{id}")
+    // Elimina una categoria, validando que no tenga productos o adicionales asociados
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         if (!categoriaService.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-
+        
+        // Si la categoria tiene productos o adicionales asociados, lanza un mensaje de error
         if (categoriaService.tieneProductosOAdicionales(id)) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new MensajeDTO(
-                            "No se puede eliminar la categoría porque tiene productos o adicionales asociados."));
+                            "No se puede eliminar la categoria porque tiene productos o adicionales asociados."));
         }
 
         categoriaService.deleteById(id);

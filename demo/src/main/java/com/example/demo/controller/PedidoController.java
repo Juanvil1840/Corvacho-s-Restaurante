@@ -13,6 +13,7 @@ import com.example.demo.entities.Pedido;
 import com.example.demo.service.ClienteService;
 import com.example.demo.service.PedidoService;
 
+// Controlador para las vistas de Pedidos
 @Controller
 @RequestMapping("/pedidos")
 public class PedidoController {
@@ -25,6 +26,7 @@ public class PedidoController {
         this.clienteService = clienteService;
     }
 
+    // Muestra la lista de todos los pedidos registrados
     @GetMapping
     public String listarTodos(Model model) {
         model.addAttribute("pedidos", pedidoService.findAll());
@@ -32,6 +34,7 @@ public class PedidoController {
         return "pedidos/lista";
     }
 
+    // Muestra los pedidos asociados a un cliente 
     @GetMapping("/cliente/{clienteId}")
     public String listarPorCliente(
             @PathVariable Long clienteId,
@@ -44,11 +47,12 @@ public class PedidoController {
         model.addAttribute("cliente", cliente);
         model.addAttribute(
                 "titulo",
-                "Mis Pedidos — " + cliente.getNombre() + " " + cliente.getApellido());
+                "Mis Pedidos - " + cliente.getNombre() + " " + cliente.getApellido());
 
         return "pedidos/lista";
     }
 
+    // Muestra el detalle de un pedido por su id
     @GetMapping("/{id}")
     public String verDetalle(@PathVariable Long id, Model model) {
         Pedido pedido = pedidoService.findById(id);

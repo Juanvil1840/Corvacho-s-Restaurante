@@ -20,6 +20,7 @@ import com.example.demo.dto.ProductoDTO;
 import com.example.demo.entities.Producto;
 import com.example.demo.service.ProductoService;
 
+// Controlador REST para la gestion de Productos
 @RestController
 @RequestMapping("/api/productos")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,7 +32,7 @@ public class ProductoRestController {
         this.productoService = productoService;
     }
 
-    @GetMapping
+    // Lista los productos
     public Collection<ProductoDTO> listar(
             @RequestParam(value = "todos", required = false, defaultValue = "true") boolean todos) {
         Collection<Producto> productos = todos
@@ -44,6 +45,7 @@ public class ProductoRestController {
                 .toList();
     }
 
+    // Busca un producto por su id
     @GetMapping("/{id}")
     public ResponseEntity<ProductoDTO> buscarPorId(@PathVariable Long id) {
         try {
@@ -54,12 +56,14 @@ public class ProductoRestController {
         }
     }
 
+    // Crea un nuevo producto en la base de datos
     @PostMapping
     public ResponseEntity<ProductoDTO> crear(@RequestBody Producto producto) {
         Producto guardado = productoService.crearProducto(producto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ProductoDTO.fromEntity(guardado));
     }
 
+    // Actualiza los datos de un producto existente
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> actualizar(
             @PathVariable Long id,
@@ -71,6 +75,7 @@ public class ProductoRestController {
         return ResponseEntity.ok(ProductoDTO.fromEntity(actualizado));
     }
 
+    // Elimina un producto de la base de datos
     @DeleteMapping("/{id}")
     public ResponseEntity<MensajeDTO> eliminar(@PathVariable Long id) {
         if (!productoService.existe(id)) {

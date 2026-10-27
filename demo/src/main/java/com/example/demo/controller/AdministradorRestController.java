@@ -20,6 +20,7 @@ import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Administrador;
 import com.example.demo.service.AdministradorService;
 
+// Controlador REST Administradores y autenticacion
 @RestController
 @RequestMapping("/api/administradores")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,6 +32,7 @@ public class AdministradorRestController {
         this.administradorService = administradorService;
     }
 
+    // Lista todos los administradores registrados en el sistema
     @GetMapping
     public Collection<AdministradorDTO> listar() {
         return administradorService.findAll()
@@ -39,6 +41,7 @@ public class AdministradorRestController {
                 .toList();
     }
 
+    // Busca un administrador por su identificador unico
     @GetMapping("/{id}")
     public ResponseEntity<AdministradorDTO> buscarPorId(@PathVariable Long id) {
         Administrador administrador = administradorService.findById(id);
@@ -48,12 +51,14 @@ public class AdministradorRestController {
         return ResponseEntity.ok(AdministradorDTO.fromEntity(administrador));
     }
 
+    // Crea un nuevo administrador en la base de datos
     @PostMapping
     public ResponseEntity<AdministradorDTO> crear(@RequestBody Administrador administrador) {
         Administrador guardado = administradorService.crearAdministrador(administrador);
         return ResponseEntity.status(HttpStatus.CREATED).body(AdministradorDTO.fromEntity(guardado));
     }
 
+    // Actualiza los datos de un administrador existente
     @PutMapping("/{id}")
     public ResponseEntity<AdministradorDTO> actualizar(
             @PathVariable Long id,
@@ -65,6 +70,7 @@ public class AdministradorRestController {
         return ResponseEntity.ok(AdministradorDTO.fromEntity(actualizado));
     }
 
+    // Elimina un administrador del sistema
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (administradorService.findById(id) == null) {
@@ -73,23 +79,29 @@ public class AdministradorRestController {
         administradorService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-        @PostMapping("/login")
+
+    // Endpoint para autenticar a un administrador mediante usuario y contrasena
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
         String usuario = credenciales.get("usuario");
         String contrasena = credenciales.get("contrasena");
 
+        // Validacion de que los campos no lleguen vacios al hacer el login
         if (usuario == null || contrasena == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MensajeDTO("Usuario y contraseña son obligatorios."));
+                    .body(new MensajeDTO("Usuario y contrasena son obligatorios."));
         }
 
+        // Se delega la validacion al servicio
         Administrador admin = administradorService.autenticar(usuario.trim(), contrasena);
 
+        // Si las credenciales son incorrectas se devuelve un mensaje de usuario o contraseñas incorrectos
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MensajeDTO("Usuario o contraseña incorrectos"));
+                    .body(new MensajeDTO("Usuario o contrasena incorrectos"));
         }
 
+        // Si el login es exitoso, se devuelve el DTO con los datos del admin
         return ResponseEntity.ok(AdministradorDTO.fromEntity(admin));
     }
 }

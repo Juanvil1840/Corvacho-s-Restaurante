@@ -19,6 +19,7 @@ import com.example.demo.dto.LoginClienteDTO;
 import com.example.demo.entities.Cliente;
 import com.example.demo.service.ClienteService;
 
+// Controlador REST para la gestion de Clientes
 @RestController
 @RequestMapping("/api/clientes")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -30,6 +31,7 @@ public class ClienteRestController {
         this.clienteService = clienteService;
     }
 
+    // Lista todos los clientes registrados en la base de datos
     @GetMapping
     public Collection<ClienteDTO> listar() {
         return clienteService.obtenerTodos()
@@ -38,6 +40,7 @@ public class ClienteRestController {
                 .toList();
     }
 
+    // Busca un cliente por su identificador unico
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
         try {
@@ -51,12 +54,14 @@ public class ClienteRestController {
         }
     }
 
+    // Crea un nuevo cliente en la base de datos
     @PostMapping
     public ResponseEntity<ClienteDTO> crear(@RequestBody Cliente cliente) {
         Cliente guardado = clienteService.crearCliente(cliente);
         return ResponseEntity.status(HttpStatus.CREATED).body(ClienteDTO.fromEntity(guardado));
     }
 
+    // Actualiza los datos de un cliente existente
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> actualizar(
             @PathVariable Long id,
@@ -68,6 +73,7 @@ public class ClienteRestController {
         return ResponseEntity.ok(ClienteDTO.fromEntity(actualizado));
     }
 
+    // Desactiva la cuenta de un cliente
     @PutMapping("/{id}/desactivar")
     public ResponseEntity<ClienteDTO> desactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
@@ -77,6 +83,7 @@ public class ClienteRestController {
         return ResponseEntity.ok(ClienteDTO.fromEntity(clienteService.obtenerPorId(id)));
     }
 
+    // Reactiva la cuenta de un cliente
     @PutMapping("/{id}/reactivar")
     public ResponseEntity<ClienteDTO> reactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
@@ -86,6 +93,7 @@ public class ClienteRestController {
         return ResponseEntity.ok(ClienteDTO.fromEntity(clienteService.obtenerPorId(id)));
     }
 
+    // Elimina un cliente de la base de datos
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
@@ -95,6 +103,7 @@ public class ClienteRestController {
         return ResponseEntity.noContent().build();
     }
 
+    // Endpoint para la autenticacion de clientes
     @PostMapping("/login")
     public ResponseEntity<ClienteDTO> login(@RequestBody LoginClienteDTO credenciales) {
         Cliente cliente = clienteService.autenticarCliente(credenciales);

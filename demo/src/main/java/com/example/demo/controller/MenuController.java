@@ -16,6 +16,7 @@ import com.example.demo.service.AdicionalService;
 import com.example.demo.service.CategoriaService;
 import com.example.demo.service.ProductoService;
 
+// Controlador para las vistas del menu de productos
 @Controller
 public class MenuController {
 
@@ -29,6 +30,7 @@ public class MenuController {
         this.adicionalService = adicionalService;
     }
 
+    // Muestra el menu agrupando los productos disponibles por categoria, por ejemplo Pastas: Pasta boloñesa
     @GetMapping("/menu")
     public String menu(Model model) {
         Collection<Producto> productos = productoService.obtenerDisponibles();
@@ -41,6 +43,7 @@ public class MenuController {
         return "menu";
     }
 
+    // Muestra el detalle de un producto junto con los adicionales de su categoria
     @GetMapping("/menu/detalle/{id}")
     public String detalle(@PathVariable Long id, Model model) {
         Producto producto = productoService.obtenerPorId(id);
@@ -60,6 +63,7 @@ public class MenuController {
         return "detalle-producto";
     }
 
+    // Muestra la tabla de todos los productos para el panel de administracion
     @GetMapping("/menu/adminTable")
     public String getMethodName(Model model) {
         model.addAttribute("productos", productoService.obtenerTodos());

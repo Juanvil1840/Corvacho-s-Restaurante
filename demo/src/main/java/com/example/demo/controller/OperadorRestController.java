@@ -20,6 +20,7 @@ import com.example.demo.dto.OperadorDTO;
 import com.example.demo.entities.Operador;
 import com.example.demo.service.OperadorService;
 
+// Controlador REST para la gestion de Operadores
 @RestController
 @RequestMapping("/api/operadores")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -31,6 +32,7 @@ public class OperadorRestController {
         this.operadorService = operadorService;
     }
 
+    // Lista todos los operadores registrados en la base de datos
     @GetMapping
     public Collection<OperadorDTO> listar() {
         return operadorService.findAll()
@@ -39,6 +41,7 @@ public class OperadorRestController {
                 .toList();
     }
 
+    // Busca un operador por su id
     @GetMapping("/{id}")
     public ResponseEntity<OperadorDTO> buscarPorId(@PathVariable Long id) {
         Operador operador = operadorService.findById(id);
@@ -48,12 +51,14 @@ public class OperadorRestController {
         return ResponseEntity.ok(OperadorDTO.fromEntity(operador));
     }
 
+    // Crea un nuevo operador en la base de datos
     @PostMapping
     public ResponseEntity<OperadorDTO> crear(@RequestBody Operador operador) {
         Operador guardado = operadorService.crearOperador(operador);
         return ResponseEntity.status(HttpStatus.CREATED).body(OperadorDTO.fromEntity(guardado));
     }
 
+    // Actualiza los datos de un operador existente
     @PutMapping("/{id}")
     public ResponseEntity<OperadorDTO> actualizar(
             @PathVariable Long id,
@@ -65,6 +70,7 @@ public class OperadorRestController {
         return ResponseEntity.ok(OperadorDTO.fromEntity(actualizado));
     }
 
+    // Elimina un operador de la base de datos
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!operadorService.eliminarOperador(id)) {
@@ -73,6 +79,7 @@ public class OperadorRestController {
         return ResponseEntity.noContent().build();
     }
 
+    // Autenticar a un operador paara el login
     @PostMapping("/login")
     public ResponseEntity<LoginOperadorDTO> login(@RequestBody LoginRequestDTO credenciales) {
         Operador operador = operadorService.autenticarOperador(credenciales);
