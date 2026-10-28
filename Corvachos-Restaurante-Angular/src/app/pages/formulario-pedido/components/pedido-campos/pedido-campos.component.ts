@@ -5,7 +5,6 @@ import { Pedido } from '../../../../models/pedido.model';
 import { Cliente } from '../../../../models/cliente.model';
 import { Operador } from '../../../../models/operador.model';
 import { Domiciliario } from '../../../../models/domiciliario.model';
-
 import { Producto } from '../../../../models/producto.model';
 import { Adicional } from '../../../../models/adicional.model';
 
@@ -26,13 +25,85 @@ export class PedidoCamposComponent {
   @Input() adicionales: Adicional[] = [];
   @Input() comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
   @Input() editando: boolean = false;
+  @Input() estadoOriginal: string = 'Recibido';
   @Input() domiciliarioAsignadoId: number = 0;
 
-  readonly estados: string[] = ['Recibido', 'Cocinando', 'Enviado', 'Entregado', 'Cancelado'];
+  private readonly ordenEstados: Record<string, number> = {
+    'Recibido': 1,
+    'Cocinando': 2,
+    'Enviado': 3,
+    'Entregado': 4
+  };
+
+  private readonly mapaSiguienteEstado: Record<string, string | null> = {
+    'Recibido': 'Cocinando',
+    'Cocinando': 'Enviado',
+    'Enviado': 'Entregado',
+    'Entregado': null
+  };
 
   productoSeleccionadoId: number = 0;
   adicionalSeleccionadoId: number = 0;
   cantidadSeleccionada: number = 1;
+
+  // Calcula únicamente el estado inmediatamente siguiente a partir del estado guardado en base de datos
+  get siguienteEstado(): string | null {
+    if (!this.editando) {
+      return null;
+    }
+    const base = this.normalizarEstado(this.estadoOriginal || this.pedido?.estado || 'Recibido');
+    return this.mapaSiguienteEstado[base] ?? null;
+  }
+
+  // Verifica si el usuario ya pulsó el botón para pasar al siguiente estado en la sesión actual de edición
+  get haAvanzadoEstado(): boolean {
+    if (!this.editando || !this.siguienteEstado) {
+      return false;
+    }
+    return this.normalizarEstado(this.pedido?.estado) === this.siguienteEstado;
+  }
+
+  // Avanza el pedido exactamente un paso al siguiente estado secuencial
+  avanzarAlSiguienteEstado(): void {
+    const siguiente = this.siguienteEstado;
+    if (siguiente) {
+      this.pedido.estado = siguiente;
+    }
+  }
+
+  // Permite deshacer el clic de avance antes de guardar, manteniendo el estado con el que cargó el pedido
+  deshacerAvance(): void {
+    if (this.editando && this.estadoOriginal) {
+      this.pedido.estado = this.normalizarEstado(this.estadoOriginal);
+    }
+  }
+
+  // Determina el estado visual de cada círculo en la barra de progreso (Recibido -> Cocinando -> Enviado -> Entregado)
+  pasoEstado(paso: number): 'activo' | 'completado' | '' {
+    const estadoActual = this.normalizarEstado(this.pedido?.estado || 'Recibido');
+    const actual = this.ordenEstados[estadoActual] || 1;
+    if (paso === actual) return 'activo';
+    if (paso < actual) return 'completado';
+    return '';
+  }
+
+  // Determina si la línea conectora entre dos pasos debe mostrarse completada
+  lineaCompletada(despuesDePaso: number): boolean {
+    const estadoActual = this.normalizarEstado(this.pedido?.estado || 'Recibido');
+    const actual = this.ordenEstados[estadoActual] || 1;
+    return actual > despuesDePaso;
+  }
+
+  normalizarEstado(texto: string): string {
+    if (!texto) return 'Recibido';
+    const t = texto.trim().toLowerCase();
+    if (t === 'recibido' || t === 'pendiente') return 'Recibido';
+    if (t === 'cocinando') return 'Cocinando';
+    if (t === 'enviado') return 'Enviado';
+    if (t === 'entregado') return 'Entregado';
+    if (t === 'cancelado') return 'Cancelado';
+    return texto.trim();
+  }
 
   // Solo se pueden elegir domiciliarios disponibles (o el que ya tiene asignado el pedido)
   get domiciliariosDisponibles(): Domiciliario[] {

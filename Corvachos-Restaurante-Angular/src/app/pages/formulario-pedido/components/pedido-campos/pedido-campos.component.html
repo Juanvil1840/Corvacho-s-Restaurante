@@ -1,16 +1,85 @@
 <div class="pedido-campos">
 
-  <div class="pedido-campo">
-    <label for="estado">Estado</label>
-    <select
-      id="estado"
-      name="estado"
-      [(ngModel)]="pedido.estado"
-      required>
-      @for (estado of estados; track estado) {
-        <option [value]="estado">{{ estado }}</option>
+  <!-- APARTADO DE ESTADO SECUENCIAL (SIN DESPLEGABLE LIBRE) -->
+  <div class="pedido-campo pedido-estado-bloque">
+    <label>Estado del Pedido</label>
+
+    <!-- BARRA DE PROGRESO: RECIBIDO -> COCINANDO -> ENVIADO -> ENTREGADO -->
+    <div class="detalle-timeline pedido-form-timeline">
+      <div class="timeline-step" [ngClass]="pasoEstado(1)">
+        <div class="timeline-dot">
+          <i class="bi bi-inbox"></i>
+        </div>
+        <span class="timeline-label">Recibido</span>
+      </div>
+      <div class="timeline-line" [class.completada]="lineaCompletada(1)"></div>
+
+      <div class="timeline-step" [ngClass]="pasoEstado(2)">
+        <div class="timeline-dot">
+          <i class="bi bi-fire"></i>
+        </div>
+        <span class="timeline-label">Cocinando</span>
+      </div>
+      <div class="timeline-line" [class.completada]="lineaCompletada(2)"></div>
+
+      <div class="timeline-step" [ngClass]="pasoEstado(3)">
+        <div class="timeline-dot">
+          <i class="bi bi-truck"></i>
+        </div>
+        <span class="timeline-label">Enviado</span>
+      </div>
+      <div class="timeline-line" [class.completada]="lineaCompletada(3)"></div>
+
+      <div class="timeline-step" [ngClass]="pasoEstado(4)">
+        <div class="timeline-dot">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <span class="timeline-label">Entregado</span>
+      </div>
+    </div>
+
+    <!-- BOTÓN ÚNICO PARA AVANZAR ÚNICAMENTE AL SIGUIENTE ESTADO -->
+    <div class="estado-avance-contenedor">
+      @if (!editando) {
+        <div class="estado-avance-info">
+          <span class="estado-texto-actual">
+            Estado inicial: <strong>Recibido</strong>
+          </span>
+        </div>
+      } @else if (siguienteEstado) {
+        @if (!haAvanzadoEstado) {
+          <div class="estado-avance-info">
+            <span class="estado-texto-actual">
+              Estado actual: <strong>{{ pedido.estado }}</strong>
+            </span>
+            <button
+              type="button"
+              class="btn-avanzar-estado"
+              (click)="avanzarAlSiguienteEstado()">
+              Avanzar a {{ siguienteEstado }} &rarr;
+            </button>
+          </div>
+        } @else {
+          <div class="estado-avance-info estado-avance-confirmado">
+            <span class="estado-texto-actual">
+              <i class="bi bi-check2-circle"></i> Pasará de <strong>{{ estadoOriginal }}</strong> a <strong>{{ pedido.estado }}</strong> al guardar
+            </span>
+            <button
+              type="button"
+              class="btn-deshacer-estado"
+              (click)="deshacerAvance()">
+              Mantener en {{ estadoOriginal }}
+            </button>
+          </div>
+        }
+      } @else {
+        <div class="estado-avance-info estado-avance-final">
+          <span class="estado-texto-actual">
+            <i class="bi bi-check-circle-fill"></i> El pedido ya está <strong>{{ pedido.estado }}</strong> (estado final alcanzado)
+          </span>
+        </div>
       }
-    </select>
+    </div>
   </div>
 
   <div class="pedido-campo">

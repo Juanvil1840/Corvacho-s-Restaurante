@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
 import { ClienteService } from '../../service/cliente.service';
 import { OperadorService } from '../../service/operador.service';
@@ -44,6 +44,7 @@ export class FormularioPedidoComponent implements OnInit {
   comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
 
   editando = false;
+  estadoOriginal = 'Recibido';
   domiciliarioAsignadoId = 0;
   guardando = false;
   error = '';
@@ -90,6 +91,7 @@ export class FormularioPedidoComponent implements OnInit {
       this.pedidoService.getPedidoById(Number(id)).subscribe({
         next: (pedido) => {
           this.domiciliarioAsignadoId = pedido.domiciliario?.id_domiciliario ?? 0;
+          this.estadoOriginal = pedido.estado || 'Recibido';
           this.pedido = {
             ...pedido,
             cliente: pedido.cliente ?? { clienteId: 0, nombre: '', apellido: '', correo: '', contrasena: '', telefono: '', direccion: '', activo: true },
@@ -98,26 +100,37 @@ export class FormularioPedidoComponent implements OnInit {
             fechaCreacion: pedido.fechaCreacion ? pedido.fechaCreacion.toString().substring(0, 16) : '',
             fechaEntrega: pedido.fechaEntrega ? pedido.fechaEntrega.toString().substring(0, 16) : null
           };
-        },
-        error: (error) => {
-          console.error('Error al cargar el pedido:', error);
-          this.error = 'No fue posible cargar el pedido.';
-        }
-      });
 
-      this.detallePedidoService.obtenerPorPedido(Number(id)).subscribe({
-        next: (detalles) => {
-          if (detalles && detalles.length > 0) {
-            this.comidasSeleccionadas = detalles
+          // Evita peticiones HTTP duplicadas usando directamente los detalles incluidos en el pedido
+          if (pedido.detallePedidos && pedido.detallePedidos.length > 0) {
+            this.comidasSeleccionadas = pedido.detallePedidos
               .filter(d => d.producto)
               .map(d => ({
                 producto: d.producto,
                 cantidad: d.cantidad || 1,
                 adicional: d.adicional ?? null
               }));
+          } else {
+            this.detallePedidoService.obtenerPorPedido(Number(id)).subscribe({
+              next: (detalles) => {
+                if (detalles && detalles.length > 0) {
+                  this.comidasSeleccionadas = detalles
+                    .filter(d => d.producto)
+                    .map(d => ({
+                      producto: d.producto,
+                      cantidad: d.cantidad || 1,
+                      adicional: d.adicional ?? null
+                    }));
+                }
+              },
+              error: (e) => console.error('Error al cargar comidas del pedido:', e)
+            });
           }
         },
-        error: (e) => console.error('Error al cargar comidas del pedido:', e)
+        error: (error) => {
+          console.error('Error al cargar el pedido:', error);
+          this.error = 'No fue posible cargar el pedido.';
+        }
       });
     }
   }
@@ -190,7 +203,7 @@ export class FormularioPedidoComponent implements OnInit {
       error: (error) => {
         console.error('Error al guardar el pedido:', error);
         this.guardando = false;
-        this.error = error.error?.mensaje || 'No fue posible guardar el pedido. Intenta nuevamente.';
+        this.error = error.error?.message || error.error?.mensaje || error.error?.detail || 'No fue posible guardar el pedido. Intenta nuevamente.';
       }
     });
   }

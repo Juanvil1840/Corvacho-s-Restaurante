@@ -14,6 +14,9 @@ public interface PedidoService {
     Pedido actualizarPedido(Long id, Pedido pedido);
     void deleteById(Long id);
 
+    // Obtiene todos los pedidos activos (no entregados)
+    Collection<Pedido> findActivos();
+
     // Obtiene todos los pedidos de un cliente específico
     List<Pedido> findByClienteId(Long clienteId);
 

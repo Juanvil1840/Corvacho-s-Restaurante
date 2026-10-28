@@ -32,7 +32,8 @@ public class ProductoRestController {
         this.productoService = productoService;
     }
 
-    // Lista los productos
+    // Lista los productos (por defecto todos=true, con todos=false solo disponibles para el menú)
+    @GetMapping
     public Collection<ProductoDTO> listar(
             @RequestParam(value = "todos", required = false, defaultValue = "true") boolean todos) {
         Collection<Producto> productos = todos

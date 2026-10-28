@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.PedidoDTO;
 import com.example.demo.dto.PedidoHistorialDTO;
+import com.example.demo.dto.PedidoListaDTO;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
 import com.example.demo.errors.PedidoNotFoundException;
@@ -34,12 +36,13 @@ public class PedidoRestController {
         this.pedidoService = pedidoService;
     }
 
-    // Lista todos los pedidos registrados
+    // Lista los pedidos registrados (soporta parametro activos=true para excluir entregados y optimizar payload)
     @GetMapping
-    public Collection<PedidoDTO> listar() {
-        return pedidoService.findAll()
-                .stream()
-                .map(this::convertirPedido)
+    public Collection<PedidoListaDTO> listar(
+            @RequestParam(value = "activos", required = false, defaultValue = "false") boolean activos) {
+        Collection<Pedido> pedidos = activos ? pedidoService.findActivos() : pedidoService.findAll();
+        return pedidos.stream()
+                .map(PedidoListaDTO::fromEntity)
                 .toList();
     }
 

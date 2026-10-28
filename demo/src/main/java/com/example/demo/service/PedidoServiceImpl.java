@@ -60,6 +60,11 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
+    public Collection<Pedido> findActivos() {
+        return pedidoRepository.findByEstadoNotIgnoreCase("Entregado");
+    }
+
+    @Override
     public Pedido findById(Long id) {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new PedidoNotFoundException(id));
@@ -85,6 +90,14 @@ public class PedidoServiceImpl implements PedidoService {
         }
         if (pedido.getEstado() == null || pedido.getEstado().trim().isEmpty()) {
             pedido.setEstado("Recibido");
+        } else {
+            String normalizado = normalizarEstado(pedido.getEstado());
+            if (!normalizado.equals("Recibido")) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Un pedido nuevo debe iniciarse obligatoriamente en estado 'Recibido'.");
+            }
+            pedido.setEstado(normalizado);
         }
 
         List<DetallePedido> detallesRecibidos = pedido.getDetallePedidos();
@@ -103,7 +116,11 @@ public class PedidoServiceImpl implements PedidoService {
         String estadoAnterior = existente.getEstado();
         Domiciliario domiciliarioAnterior = existente.getDomiciliario();
 
-        existente.setEstado(pedido.getEstado() != null ? pedido.getEstado() : existente.getEstado());
+        if (pedido.getEstado() != null && !pedido.getEstado().trim().isEmpty()) {
+            validarTransicionEstado(estadoAnterior, pedido.getEstado());
+            existente.setEstado(normalizarEstado(pedido.getEstado()));
+        }
+
         existente.setCliente(buscarCliente(pedido));
         existente.setOperador(buscarOperador(pedido));
         Domiciliario domiciliarioSolicitado = buscarDomiciliario(pedido);
@@ -136,6 +153,48 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         return actualizado;
+    }
+
+    // Valida que el pedido solo pueda cambiar al estado inmediatamente siguiente:
+    // Recibido -> Cocinando -> Enviado -> Entregado
+    private void validarTransicionEstado(String estadoActual, String nuevoEstado) {
+        if (nuevoEstado == null || nuevoEstado.trim().isEmpty()) {
+            return;
+        }
+
+        String actual = normalizarEstado(estadoActual);
+        String nuevo = normalizarEstado(nuevoEstado);
+
+        // Si se mantiene en el mismo estado, es válido
+        if (actual.equalsIgnoreCase(nuevo)) {
+            return;
+        }
+
+        boolean transicionValida = switch (actual) {
+            case "Recibido" -> nuevo.equals("Cocinando");
+            case "Cocinando" -> nuevo.equals("Enviado");
+            case "Enviado" -> nuevo.equals("Entregado");
+            default -> false; // "Entregado" o cualquier otro estado final no puede cambiar
+        };
+
+        if (!transicionValida) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    String.format("Transición no permitida: el pedido en estado '%s' solo puede avanzar al siguiente estado secuencial, no a '%s'.", actual, nuevo));
+        }
+    }
+
+    private String normalizarEstado(String estado) {
+        if (estado == null) return "Recibido";
+        String s = estado.trim().toLowerCase();
+        return switch (s) {
+            case "recibido", "pendiente" -> "Recibido";
+            case "cocinando" -> "Cocinando";
+            case "enviado" -> "Enviado";
+            case "entregado" -> "Entregado";
+            case "cancelado" -> "Cancelado";
+            default -> estado.trim();
+        };
     }
 
     // Cuando el pedido pasa a "Enviado" el domiciliario queda ocupado.

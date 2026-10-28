@@ -33,16 +33,16 @@ export class ListaPedidosComponent implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    this.pedidoService.getPedidos().subscribe({
-      next: (pedidos) => {
+    // Si es operario, el backend solo trae pedidos activos (excluye 'Entregado')
+    const soloActivos = this.esOperario;
 
+    this.pedidoService.getPedidos(soloActivos).subscribe({
+      next: (pedidos) => {
         if (this.esOperario) {
-          // El operario solo ve pedidos sin completar
           this.pedidos = pedidos.filter(pedido =>
             pedido.estado?.trim().toLowerCase() !== 'entregado'
           );
         } else {
-          // El administrador conserva todos los pedidos
           this.pedidos = pedidos;
         }
 

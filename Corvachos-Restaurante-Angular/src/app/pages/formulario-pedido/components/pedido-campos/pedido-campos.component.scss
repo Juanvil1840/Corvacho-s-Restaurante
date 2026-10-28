@@ -164,3 +164,85 @@
   font-style: italic;
   margin: 0.3rem 0;
 }
+
+
+/* --- Bloque de Estado Secuencial --- */
+.pedido-estado-bloque {
+  background: #001c2a;
+  border: 1px solid #1a3040;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.pedido-form-timeline {
+  padding: 0.8rem 0 1rem !important;
+}
+
+.estado-avance-contenedor {
+  border-top: 1px solid #1a3040;
+  padding-top: 0.9rem;
+}
+
+.estado-avance-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+
+  .estado-texto-actual {
+    color: #a0b8bf;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+
+    strong {
+      color: #cd9e46;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    i {
+      color: #81c784;
+      margin-right: 4px;
+    }
+  }
+}
+
+.btn-avanzar-estado {
+  background: #cd9e46;
+  color: #001c2a;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.3rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e0b45c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(205, 158, 70, 0.25);
+  }
+}
+
+.btn-deshacer-estado {
+  background: transparent;
+  color: #a0b8bf;
+  border: 1px solid #334955;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #cd9e46;
+    color: #cd9e46;
+  }
+}

@@ -13,8 +13,9 @@ export class PedidoService {
 
   constructor(private http: HttpClient) { }
 
-  getPedidos(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(this.apiUrl).pipe(
+  getPedidos(activos?: boolean): Observable<Pedido[]> {
+    const url = activos !== undefined ? `${this.apiUrl}?activos=${activos}` : this.apiUrl;
+    return this.http.get<Pedido[]>(url).pipe(
       catchError(this.manejarError)
     );
   }
