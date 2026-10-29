@@ -5,6 +5,7 @@ import { Producto } from '../models/producto.model';
 import { Cliente } from '../models/cliente.model';
 import { environment } from '../../environments/environment';
 
+// Estructura de un adicional dentro del carrito: id, nombre, precio y cantidad
 export interface AdicionalCarrito {
   id_adicional: number;
   nombre: string;
@@ -12,6 +13,7 @@ export interface AdicionalCarrito {
   cantidad: number;
 }
 
+// Estructura de un producto resumido dentro del carrito: id, nombre, precio e imagen
 export interface ProductoResumenCarrito {
   id: number;
   nombre: string;
@@ -19,13 +21,14 @@ export interface ProductoResumenCarrito {
   imagen: string;
 }
 
+// Estructura de un item del carrito: producto, cantidad y adicionales
 export interface ItemCarrito {
   producto: ProductoResumenCarrito;
   cantidad: number;
   adicionales: AdicionalCarrito[];
 }
 
-// Asi llega y se envia el carrito al backend (CarritoDTO)
+// Estructura de un producto 
 interface ProductoCarritoBackend {
   productoId: number;
   nombre?: string;
@@ -35,6 +38,7 @@ interface ProductoCarritoBackend {
   adicionales: AdicionalCarrito[];
 }
 
+// Estructura del carrito completo 
 interface CarritoBackend {
   items: ProductoCarritoBackend[];
 }
@@ -54,16 +58,17 @@ export class CarritoService {
   private itemsSubject = new BehaviorSubject<ItemCarrito[]>([]);
   items$ = this.itemsSubject.asObservable();
 
-  // Si el panel del carrito esta abierto
+  // Indica si el panel del carrito esta abierto
   private abiertoSubject = new BehaviorSubject<boolean>(false);
   abierto$ = this.abiertoSubject.asObservable();
 
-  // Avisa al perfil que se creo un pedido para recargar el historial
+  // Notifica al perfil que se creo un pedido para recargar el historial
   private pedidoCreadoSubject = new Subject<void>();
   pedidoCreado$ = this.pedidoCreadoSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
+  // Guarda el cliente logueado y sincroniza su carrito con el backend
   setClienteLogueado(cliente: Cliente | null): void {
     if (!cliente || !cliente.clienteId) {
       this.cerrarSesionCliente();
@@ -76,7 +81,7 @@ export class CarritoService {
       return;
     }
 
-    // Lo que el usuario agrego antes de iniciar sesion se suma a su carrito guardado
+    // Si habia items sin sesion, se fusionan con el carrito guardado
     const itemsSinSesion = this.clienteSubject.value ? [] : this.itemsSubject.value;
     this.clienteSubject.next(cliente);
     this.itemsSubject.next([]);
@@ -99,20 +104,24 @@ export class CarritoService {
     });
   }
 
+  // Devuelve el cliente logueado actualmente
   getClienteLogueado(): Cliente | null {
     return this.clienteSubject.value;
   }
 
+  // Cierra la sesion del cliente y vacia el carrito
   cerrarSesionCliente(): void {
     this.clienteSubject.next(null);
     this.itemsSubject.next([]);
     this.cerrarCarrito();
   }
 
+  // Devuelve los items actuales del carrito
   getItems(): ItemCarrito[] {
     return this.itemsSubject.value;
   }
 
+  // Agrega un producto al carrito
   agregarItem(producto: Producto, cantidad: number = 1, adicionales: AdicionalCarrito[] | null = null): void {
     const nuevo: ItemCarrito = {
       producto: {
@@ -127,6 +136,7 @@ export class CarritoService {
     this.guardarItems(this.sumarItem(this.itemsSubject.value, nuevo));
   }
 
+  // Modifica la cantidad de un item 
   modificarCantidad(index: number, cambio: number): void {
     const items = [...this.itemsSubject.value];
     if (!items[index]) {
@@ -141,17 +151,19 @@ export class CarritoService {
     this.guardarItems(items);
   }
 
+  // Elimina un item del carrito por su indice
   eliminarItem(index: number): void {
     const items = [...this.itemsSubject.value];
     items.splice(index, 1);
     this.guardarItems(items);
   }
 
+  // Vacia todo el carrito
   vaciarCarrito(): void {
     this.guardarItems([]);
   }
 
-  // Precio de una unidad del producto con sus adicionales
+  // Calcula el precio de una unidad de un item incluyendo sus adicionales
   calcularPrecioUnitarioItem(item: ItemCarrito): number {
     let total = item.producto.precio;
     for (const adicional of item.adicionales) {
@@ -160,6 +172,7 @@ export class CarritoService {
     return total;
   }
 
+  // Devuelve la cantidad total de productos en el carrito
   getTotalCantidad(): number {
     let total = 0;
     for (const item of this.itemsSubject.value) {
@@ -168,6 +181,7 @@ export class CarritoService {
     return total;
   }
 
+  // Devuelve el precio total de todos los items del carrito
   getTotalPrecio(): number {
     let total = 0;
     for (const item of this.itemsSubject.value) {
@@ -176,18 +190,22 @@ export class CarritoService {
     return total;
   }
 
+  // Abre el panel del carrito
   abrirCarrito(): void {
     this.abiertoSubject.next(true);
   }
 
+  // Cierra el panel del carrito
   cerrarCarrito(): void {
     this.abiertoSubject.next(false);
   }
 
+  // Alterna el estado del panel del carrito
   toggleCarrito(): void {
     this.abiertoSubject.next(!this.abiertoSubject.value);
   }
 
+  // Notifica que se creo un pedido
   notificarPedidoCreado(): void {
     this.pedidoCreadoSubject.next();
   }
@@ -200,6 +218,7 @@ export class CarritoService {
     }
   }
 
+  // Guarda el carrito en el backend
   private guardarEnBackend(items: ItemCarrito[]): void {
     const cliente = this.clienteSubject.value;
     if (!cliente) {
@@ -217,8 +236,7 @@ export class CarritoService {
     });
   }
 
-  // Si ya existe el mismo producto con los mismos adicionales se suma la cantidad,
-  // si no, se agrega como un item nuevo
+  // Si el producto ya existe con los mismos adicionales suma la cantidad, si no lo agrega
   private sumarItem(items: ItemCarrito[], nuevo: ItemCarrito): ItemCarrito[] {
     const resultado = [...items];
     const index = resultado.findIndex(item =>
@@ -232,6 +250,7 @@ export class CarritoService {
     return resultado;
   }
 
+  // Compara dos listas de adicionales para saber si son iguales
   private mismosAdicionales(a: AdicionalCarrito[], b: AdicionalCarrito[]): boolean {
     if (a.length !== b.length) {
       return false;
@@ -243,6 +262,7 @@ export class CarritoService {
     );
   }
 
+  // Convierte un item del backend al formato del frontend
   private convertirItem(item: ProductoCarritoBackend): ItemCarrito {
     return {
       producto: {
