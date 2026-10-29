@@ -1,15 +1,10 @@
 <div class="container-error" style="background-color: #001c2a; color: #fcfafa;">
   <div class="container text-center py-5">
-    <div class="mb-4">
-      <i class="bi bi-exclamation-triangle" style="font-size: 5rem; color: #cd9e46;"></i>
-    </div>
+    
+    <!-- Subcomponente que muestra el icono, titulo y mensaje -->
+    <app-error-mensaje [mensaje]="mensaje"></app-error-mensaje>
 
-    <h1 class="display-4" style="color: #cd9e46; font-family: 'Cormorant Garamond', serif;">
-      ¡Ups! Algo salió mal
-    </h1>
-
-    <p class="lead mb-4" style="color: #a0b8bf;">{{ mensaje }}</p>
-
+    <!-- Botones de accion (se quedan en la pagina principal) -->
     <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
       <a routerLink="/productos" class="productos-btn-nuevo" style="text-decoration: none;">
         Volver a productos
@@ -18,6 +13,6 @@
         Volver al inicio
       </a>
     </div>
+    
   </div>
 </div>
-

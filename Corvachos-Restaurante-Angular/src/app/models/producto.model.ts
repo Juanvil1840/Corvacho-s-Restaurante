@@ -1,6 +1,7 @@
 import { Categoria } from "./categoria.model";
 
-export interface Producto{
+// Estructura de un producto: id, nombre, precio, descripcion, imagen, disponibilidad y categoria
+export interface Producto {
     id: number;
     nombre: string;
     precio: number;

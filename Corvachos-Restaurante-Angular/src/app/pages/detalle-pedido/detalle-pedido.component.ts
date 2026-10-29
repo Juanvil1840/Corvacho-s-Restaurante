@@ -3,13 +3,16 @@ import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
 import { Pedido } from '../../models/pedido.model';
-import { AdicionalPedido, DetallePedido } from '../../models/detallePedido.model';
-import { ESTADOS_PEDIDO } from '../../models/estado-pedido.model';
+import { DetallePedido } from '../../models/detallePedido.model';
+
+// Importamos los subcomponentes
+import { PedidoCabeceraComponent } from './components/pedido-cabecera/pedido-cabecera.component';
+import { PedidoProductosComponent } from './components/pedido-productos/pedido-productos.component';
 
 @Component({
   selector: 'app-detalle-pedido',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PedidoCabeceraComponent, PedidoProductosComponent],
   templateUrl: './detalle-pedido.component.html',
   styleUrl: './detalle-pedido.component.scss'
 })
@@ -50,42 +53,5 @@ export class DetallePedidoComponent implements OnInit {
 
   volver(): void {
     this.location.back();
-  }
-
-  // Numero del estado actual: 1 = Recibido ... 4 = Entregado
-  private numeroEstadoActual(): number {
-    const posicion = ESTADOS_PEDIDO.indexOf(this.pedido?.estado || '');
-    return posicion >= 0 ? posicion + 1 : 1;
-  }
-
-  pasoEstado(paso: number): 'activo' | 'completado' | '' {
-    const actual = this.numeroEstadoActual();
-    if (paso === actual) return 'activo';
-    if (paso < actual) return 'completado';
-    return '';
-  }
-
-  lineaCompletada(despuesDePaso: number): boolean {
-    return this.numeroEstadoActual() > despuesDePaso;
-  }
-
-  getAdicionales(detalle: DetallePedido): AdicionalPedido[] {
-    return detalle.adicionales || [];
-  }
-
-  calcularSubtotal(detalle: DetallePedido): number {
-    let precioUnitario = detalle.producto.precio;
-    for (const adicional of this.getAdicionales(detalle)) {
-      precioUnitario += adicional.precio * adicional.cantidad;
-    }
-    return precioUnitario * detalle.cantidad;
-  }
-
-  calcularTotal(): number {
-    let total = 0;
-    for (const detalle of this.detalles) {
-      total += this.calcularSubtotal(detalle);
-    }
-    return total;
   }
 }

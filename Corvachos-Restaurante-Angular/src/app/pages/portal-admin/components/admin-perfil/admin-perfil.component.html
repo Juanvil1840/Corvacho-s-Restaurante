@@ -1,0 +1,55 @@
+<section class="perfil-seccion-info">
+  <div class="perfil-fondo-info"
+       style="background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url('assets/Images/Edificio.jpeg');">
+
+    <div class="perfil-contenedor-info">
+
+      <!-- Columna izquierda: Avatar -->
+      <div class="perfil-avatar-col">
+        <div class="perfil-avatar-cuadrado">
+          <img src="assets/Images/perfil.PNG" alt="Foto de perfil" class="perfil-avatar-img">
+        </div>
+      </div>
+
+      <!-- Columna central: Informacion Personal -->
+      <div class="perfil-datos-col">
+        <p class="perfil-bienvenida">Bienvenido a tu casa</p>
+
+        <div class="perfil-titulo-row">
+          <h2 class="perfil-titulo-info">Informacion Personal</h2>
+        </div>
+
+        <p class="perfil-nombre">{{ nombreAdmin }}</p>
+
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Rol</span>
+          <p class="perfil-dato"><i class="bi bi-person-badge"></i> <span>Administrador General</span></p>
+        </div>
+        
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Direccion</span>
+          <p class="perfil-dato"><i class="bi bi-geo-alt"></i> <span>Sede Principal - Corvacho's</span></p>
+        </div>
+        
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Estado de cuenta</span>
+          <p class="perfil-dato">
+            <i class="bi bi-check-circle"></i>
+            <span style="color: #4caf50;">Activo</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Botones de Perfil -->
+      <div class="perfil-botones-col" style="justify-content: flex-start; gap: 10px;">
+        
+        <a [routerLink]="['/administradores/editar', idAdmin]" class="perfil-btn-editar" style="border: 2px solid #cd9e46; text-decoration: none; text-align: center; display: block;">
+          Editar Perfil
+        </a>
+        
+        <button type="button" (click)="onCerrarSesion()" class="perfil-btn-cerrar">Cerrar Sesion</button>
+      </div>
+
+    </div>
+  </div>
+</section>

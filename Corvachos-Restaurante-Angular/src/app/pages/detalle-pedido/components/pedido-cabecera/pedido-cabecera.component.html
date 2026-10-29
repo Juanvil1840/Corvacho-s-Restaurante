@@ -1,0 +1,110 @@
+<!-- HEADER DEL PEDIDO -->
+<div class="detalle-header">
+  <div class="detalle-header-left">
+    <h2>Pedido #{{ pedido.id_Pedido }}</h2>
+    <div class="detalle-fechas">
+      <div class="detalle-fecha-item">
+        <i class="bi bi-calendar-plus"></i> Creado:
+        <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="detalle-fecha-item">
+        <i class="bi bi-calendar-check"></i> Entrega:
+        @if (pedido.fechaEntrega) {
+          <span>{{ pedido.fechaEntrega | date:'dd/MM/yyyy HH:mm' }}</span>
+        } @else {
+          <span style="color: #6f8896; font-style: italic;">Pendiente</span>
+        }
+      </div>
+    </div>
+  </div>
+
+  <span
+    class="estado-badge"
+    [ngClass]="{
+      'estado-recibido': pedido.estado === 'Recibido',
+      'estado-cocinando': pedido.estado === 'Cocinando',
+      'estado-enviado': pedido.estado === 'Enviado',
+      'estado-entregado': pedido.estado === 'Entregado'
+    }"
+    style="font-size: 0.85rem; padding: 0.4rem 1.2rem;">
+    <i
+      class="bi"
+      [ngClass]="{
+        'bi-inbox': pedido.estado === 'Recibido',
+        'bi-fire': pedido.estado === 'Cocinando',
+        'bi-truck': pedido.estado === 'Enviado',
+        'bi-check-circle': pedido.estado === 'Entregado'
+      }"></i>
+    <span>{{ pedido.estado }}</span>
+  </span>
+</div>
+
+<!-- BARRA DE PROGRESO DEL ESTADO -->
+<div class="detalle-timeline">
+  <div class="timeline-step" [ngClass]="pasoEstado(1)">
+    <div class="timeline-dot"><i class="bi bi-inbox"></i></div>
+    <span class="timeline-label">Recibido</span>
+  </div>
+  <div class="timeline-line" [class.completada]="lineaCompletada(1)"></div>
+
+  <div class="timeline-step" [ngClass]="pasoEstado(2)">
+    <div class="timeline-dot"><i class="bi bi-fire"></i></div>
+    <span class="timeline-label">Cocinando</span>
+  </div>
+  <div class="timeline-line" [class.completada]="lineaCompletada(2)"></div>
+
+  <div class="timeline-step" [ngClass]="pasoEstado(3)">
+    <div class="timeline-dot"><i class="bi bi-truck"></i></div>
+    <span class="timeline-label">Enviado</span>
+  </div>
+  <div class="timeline-line" [class.completada]="lineaCompletada(3)"></div>
+
+  <div class="timeline-step" [ngClass]="pasoEstado(4)">
+    <div class="timeline-dot"><i class="bi bi-check-circle"></i></div>
+    <span class="timeline-label">Entregado</span>
+  </div>
+</div>
+
+<!-- INFO DEL CLIENTE Y DOMICILIARIO -->
+<div class="detalle-info-row">
+  <div class="detalle-info-card">
+    <h3><i class="bi bi-person"></i> Información del Cliente</h3>
+    @if (pedido.cliente) {
+      <div class="detalle-info-item">
+        <i class="bi bi-person-fill"></i>
+        <span>{{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</span>
+      </div>
+      @if (pedido.cliente.telefono) {
+        <div class="detalle-info-item">
+          <i class="bi bi-telephone"></i>
+          <span>{{ pedido.cliente.telefono }}</span>
+        </div>
+      }
+      <div class="detalle-info-item">
+        <i class="bi bi-geo-alt"></i>
+        <span>{{ pedido.cliente.direccion }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="detalle-info-card">
+    <h3><i class="bi bi-bicycle"></i> Domiciliario Asignado</h3>
+    @if (pedido.domiciliario) {
+      <div class="detalle-info-item">
+        <i class="bi bi-person-fill"></i>
+        <span>{{ pedido.domiciliario.nombre }}</span>
+      </div>
+      @if (pedido.domiciliario.celular) {
+        <div class="detalle-info-item">
+          <i class="bi bi-phone"></i>
+          <span>{{ pedido.domiciliario.celular }}</span>
+        </div>
+      }
+    } @else {
+      <div style="color: #6f8896; text-align: center; padding: 1rem 0;">
+        <i class="bi bi-clock" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+        <p>Aún no se ha asignado un domiciliario</p>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<section class="perfil-seccion-info">
+  <div class="perfil-fondo-info"
+       style="background-image: linear-gradient(rgba(0,15,20,0.80), rgba(0,15,20,0.85)), url('assets/Images/Edificio.jpeg');">
+
+    <div class="perfil-contenedor-info">
+
+      <!-- Columna izquierda: Avatar -->
+      <div class="perfil-avatar-col">
+        <div class="perfil-avatar-cuadrado">
+          <img src="assets/Images/perfil.PNG" alt="Foto de perfil" class="perfil-avatar-img">
+        </div>
+      </div>
+
+      <!-- Columna central: Información personal -->
+      <div class="perfil-datos-col">
+        <p class="perfil-bienvenida">Bienvenido a tu casa</p>
+
+        <div class="perfil-titulo-row">
+          <h2 class="perfil-titulo-info">Información Personal</h2>
+        </div>
+
+        <p class="perfil-nombre">{{ nombreOperador }}</p>
+
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Rol</span>
+          <p class="perfil-dato">
+            <i class="bi bi-person-badge"></i>
+            <span>Operador de Pedidos</span>
+          </p>
+        </div>
+
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Dirección</span>
+          <p class="perfil-dato">
+            <i class="bi bi-geo-alt"></i>
+            <span>Sede Principal - Corvacho's</span>
+          </p>
+        </div>
+
+        <div class="perfil-dato-item">
+          <span class="perfil-dato-label">Estado de cuenta</span>
+          <p class="perfil-dato">
+            <i class="bi bi-check-circle"></i>
+            <span style="color: #4caf50;">Activo</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Botón cerrar sesión -->
+      <div class="perfil-botones-col" style="justify-content: flex-start; gap: 10px;">
+        <button type="button" (click)="onCerrarSesion()" class="perfil-btn-cerrar">
+          Cerrar Sesión
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>

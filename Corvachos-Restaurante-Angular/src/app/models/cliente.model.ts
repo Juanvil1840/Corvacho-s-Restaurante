@@ -1,3 +1,4 @@
+// Estructura de un cliente: id, nombre, apellido, correo, contrasena, telefono, direccion y estado
 export interface Cliente {
     clienteId: number;
     nombre: string;
@@ -7,4 +8,4 @@ export interface Cliente {
     telefono: string;
     direccion: string;
     activo: boolean;
-}
+}

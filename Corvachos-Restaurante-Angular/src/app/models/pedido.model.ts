@@ -1,6 +1,6 @@
 import { DetallePedido } from "./detallePedido.model";
 
-// Datos del cliente que trae el detalle de un pedido
+// Estructura del cliente dentro de un pedido: id, nombre, apellido, telefono y direccion
 export interface ClientePedido {
     clienteId: number;
     nombre: string;
@@ -9,17 +9,20 @@ export interface ClientePedido {
     direccion: string;
 }
 
+// Estructura del operador dentro de un pedido: id y nombre
 export interface OperadorPedido {
     id_operador: number;
     nombre: string;
 }
 
+// Estructura del domiciliario dentro de un pedido: id, nombre y celular
 export interface DomiciliarioPedido {
     id_domiciliario: number;
     nombre: string;
     celular: string;
 }
 
+// Estructura completa de un pedido con sus datos y detalles
 export interface Pedido {
     id_Pedido: number;
     estado: string;
@@ -31,7 +34,7 @@ export interface Pedido {
     detallePedidos: DetallePedido[];
 }
 
-// Fila de la tabla de pedidos
+// Estructura de una fila de la tabla de pedidos
 export interface PedidoLista {
     id_Pedido: number;
     estado: string;
@@ -41,7 +44,7 @@ export interface PedidoLista {
     domiciliarioNombre: string | null;
 }
 
-// Lo que se envia al backend para crear o actualizar un pedido (solo ids)
+// Estructura de los datos para crear o actualizar un pedido
 export interface PedidoGuardar {
     estado?: string;
     fechaCreacion?: string;
