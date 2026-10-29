@@ -90,7 +90,9 @@ class IntegracionRestH2Test {
 
         String nuevoJson = """
                 {
-                  "nombre": "Administrador Prueba H2"
+                  "nombre": "Administrador Prueba H2",
+                  "usuario": "admin_prueba_h2",
+                  "contrasena": "clave123"
                 }
                 """;
 
@@ -109,7 +111,8 @@ class IntegracionRestH2Test {
 
         String actualizarJson = """
                 {
-                  "nombre": "Administrador Modificado H2"
+                  "nombre": "Administrador Modificado H2",
+                  "usuario": "admin_prueba_h2"
                 }
                 """;
 

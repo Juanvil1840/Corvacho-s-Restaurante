@@ -1,12 +1,30 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Pedido } from '../../../../models/pedido.model';
 import { Cliente } from '../../../../models/cliente.model';
 import { Operador } from '../../../../models/operador.model';
 import { Domiciliario } from '../../../../models/domiciliario.model';
 import { Producto } from '../../../../models/producto.model';
 import { Adicional } from '../../../../models/adicional.model';
+import { AdicionalPedido, ProductoPedido } from '../../../../models/detallePedido.model';
+import { ESTADOS_PEDIDO } from '../../../../models/estado-pedido.model';
+
+// Datos que se llenan en el formulario (0 = no seleccionado)
+export interface FormularioPedido {
+  estado: string;
+  fechaCreacion: string;
+  fechaEntrega: string | null;
+  clienteId: number;
+  operadorId: number;
+  domiciliarioId: number;
+}
+
+// Una comida del pedido con sus adicionales
+export interface ComidaPedido {
+  producto: ProductoPedido;
+  cantidad: number;
+  adicionales: AdicionalPedido[];
+}
 
 @Component({
   selector: 'app-pedido-campos',
@@ -16,93 +34,64 @@ import { Adicional } from '../../../../models/adicional.model';
   styleUrl: './pedido-campos.component.scss'
 })
 export class PedidoCamposComponent {
-
-  @Input() pedido!: Pedido;
+  @Input() formulario!: FormularioPedido;
   @Input() clientes: Cliente[] = [];
   @Input() operadores: Operador[] = [];
   @Input() domiciliarios: Domiciliario[] = [];
   @Input() productos: Producto[] = [];
   @Input() adicionales: Adicional[] = [];
-  @Input() comidasSeleccionadas: { producto: Producto; cantidad: number; adicional?: Adicional | null }[] = [];
+  @Input() comidasSeleccionadas: ComidaPedido[] = [];
   @Input() editando: boolean = false;
   @Input() estadoOriginal: string = 'Recibido';
   @Input() domiciliarioAsignadoId: number = 0;
-
-  private readonly ordenEstados: Record<string, number> = {
-    'Recibido': 1,
-    'Cocinando': 2,
-    'Enviado': 3,
-    'Entregado': 4
-  };
-
-  private readonly mapaSiguienteEstado: Record<string, string | null> = {
-    'Recibido': 'Cocinando',
-    'Cocinando': 'Enviado',
-    'Enviado': 'Entregado',
-    'Entregado': null
-  };
 
   productoSeleccionadoId: number = 0;
   adicionalSeleccionadoId: number = 0;
   cantidadSeleccionada: number = 1;
 
-  // Calcula únicamente el estado inmediatamente siguiente a partir del estado guardado en base de datos
+  // El estado que sigue al estado guardado en la base de datos
   get siguienteEstado(): string | null {
     if (!this.editando) {
       return null;
     }
-    const base = this.normalizarEstado(this.estadoOriginal || this.pedido?.estado || 'Recibido');
-    return this.mapaSiguienteEstado[base] ?? null;
+    const posicion = ESTADOS_PEDIDO.indexOf(this.estadoOriginal);
+    if (posicion < 0 || posicion === ESTADOS_PEDIDO.length - 1) {
+      return null;
+    }
+    return ESTADOS_PEDIDO[posicion + 1];
   }
 
-  // Verifica si el usuario ya pulsó el botón para pasar al siguiente estado en la sesión actual de edición
+  // true si ya se pulso el boton de avanzar y aun no se ha guardado
   get haAvanzadoEstado(): boolean {
-    if (!this.editando || !this.siguienteEstado) {
-      return false;
-    }
-    return this.normalizarEstado(this.pedido?.estado) === this.siguienteEstado;
+    return this.siguienteEstado !== null && this.formulario.estado === this.siguienteEstado;
   }
 
-  // Avanza el pedido exactamente un paso al siguiente estado secuencial
   avanzarAlSiguienteEstado(): void {
-    const siguiente = this.siguienteEstado;
-    if (siguiente) {
-      this.pedido.estado = siguiente;
+    if (this.siguienteEstado) {
+      this.formulario.estado = this.siguienteEstado;
     }
   }
 
-  // Permite deshacer el clic de avance antes de guardar, manteniendo el estado con el que cargó el pedido
   deshacerAvance(): void {
-    if (this.editando && this.estadoOriginal) {
-      this.pedido.estado = this.normalizarEstado(this.estadoOriginal);
-    }
+    this.formulario.estado = this.estadoOriginal;
   }
 
-  // Determina el estado visual de cada círculo en la barra de progreso (Recibido -> Cocinando -> Enviado -> Entregado)
+  // Numero del estado actual: 1 = Recibido ... 4 = Entregado
+  private numeroEstadoActual(): number {
+    const posicion = ESTADOS_PEDIDO.indexOf(this.formulario.estado);
+    return posicion >= 0 ? posicion + 1 : 1;
+  }
+
+  // Clase de cada circulo de la barra de progreso
   pasoEstado(paso: number): 'activo' | 'completado' | '' {
-    const estadoActual = this.normalizarEstado(this.pedido?.estado || 'Recibido');
-    const actual = this.ordenEstados[estadoActual] || 1;
+    const actual = this.numeroEstadoActual();
     if (paso === actual) return 'activo';
     if (paso < actual) return 'completado';
     return '';
   }
 
-  // Determina si la línea conectora entre dos pasos debe mostrarse completada
   lineaCompletada(despuesDePaso: number): boolean {
-    const estadoActual = this.normalizarEstado(this.pedido?.estado || 'Recibido');
-    const actual = this.ordenEstados[estadoActual] || 1;
-    return actual > despuesDePaso;
-  }
-
-  normalizarEstado(texto: string): string {
-    if (!texto) return 'Recibido';
-    const t = texto.trim().toLowerCase();
-    if (t === 'recibido' || t === 'pendiente') return 'Recibido';
-    if (t === 'cocinando') return 'Cocinando';
-    if (t === 'enviado') return 'Enviado';
-    if (t === 'entregado') return 'Entregado';
-    if (t === 'cancelado') return 'Cancelado';
-    return texto.trim();
+    return this.numeroEstadoActual() > despuesDePaso;
   }
 
   // Solo se pueden elegir domiciliarios disponibles (o el que ya tiene asignado el pedido)
@@ -110,37 +99,44 @@ export class PedidoCamposComponent {
     return this.domiciliarios.filter(d => d.informaciondisp || d.id_domiciliario === this.domiciliarioAsignadoId);
   }
 
+  // Adicionales disponibles de la categoria del producto elegido
   get adicionalesDisponibles(): Adicional[] {
-    if (!this.productoSeleccionadoId || Number(this.productoSeleccionadoId) === 0) {
-      return this.adicionales.filter(a => a.disponible);
+    const producto = this.productos.find(p => p.id === Number(this.productoSeleccionadoId));
+    if (!producto) {
+      return [];
     }
-    const prod = this.productos.find(p => p.id === Number(this.productoSeleccionadoId));
-    if (prod && prod.categoria && prod.categoria.id) {
-      const filtrados = this.adicionales.filter(a => a.disponible && a.categoria && a.categoria.id === prod.categoria.id);
-      return filtrados.length > 0 ? filtrados : this.adicionales.filter(a => a.disponible);
-    }
-    return this.adicionales.filter(a => a.disponible);
+    return this.adicionales.filter(a => a.disponible && a.categoria?.id === producto.categoria.id);
   }
 
   agregarComida(): void {
-    if (!this.productoSeleccionadoId || Number(this.productoSeleccionadoId) === 0) return;
-    const prod = this.productos.find(p => p.id === Number(this.productoSeleccionadoId));
-    if (!prod) return;
+    const producto = this.productos.find(p => p.id === Number(this.productoSeleccionadoId));
+    if (!producto) {
+      return;
+    }
+    const cantidad = this.cantidadSeleccionada > 0 ? this.cantidadSeleccionada : 1;
+    const adicional = this.adicionales.find(a => a.id_adicional === Number(this.adicionalSeleccionadoId));
+    const adicionales: AdicionalPedido[] = adicional
+      ? [{ id_adicional: adicional.id_adicional, nombre: adicional.nombre, precio: adicional.precio, cantidad: 1 }]
+      : [];
 
-    const cant = this.cantidadSeleccionada > 0 ? this.cantidadSeleccionada : 1;
-    const adic = this.adicionalSeleccionadoId && Number(this.adicionalSeleccionadoId) > 0
-      ? this.adicionales.find(a => a.id_adicional === Number(this.adicionalSeleccionadoId)) ?? null
-      : null;
-
+    // Si ya esta el mismo producto con los mismos adicionales, solo se suma la cantidad
     const existente = this.comidasSeleccionadas.find(item =>
-      item.producto.id === prod.id &&
-      ((!item.adicional && !adic) || (item.adicional && adic && item.adicional.id_adicional === adic.id_adicional))
+      item.producto.id === producto.id && this.mismosAdicionales(item.adicionales, adicionales)
     );
-
     if (existente) {
-      existente.cantidad += cant;
+      existente.cantidad += cantidad;
     } else {
-      this.comidasSeleccionadas.push({ producto: prod, cantidad: cant, adicional: adic });
+      this.comidasSeleccionadas.push({
+        producto: {
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          descripcion: producto.descripcion,
+          imagen: producto.imagen
+        },
+        cantidad: cantidad,
+        adicionales: adicionales
+      });
     }
 
     this.productoSeleccionadoId = 0;
@@ -152,10 +148,10 @@ export class PedidoCamposComponent {
     this.comidasSeleccionadas.splice(index, 1);
   }
 
-  modificarCantidad(index: number, delta: number): void {
+  modificarCantidad(index: number, cambio: number): void {
     const item = this.comidasSeleccionadas[index];
     if (!item) return;
-    const nueva = item.cantidad + delta;
+    const nueva = item.cantidad + cambio;
     if (nueva <= 0) {
       this.quitarComida(index);
     } else {
@@ -163,10 +159,27 @@ export class PedidoCamposComponent {
     }
   }
 
+  // Precio de una unidad de la comida con sus adicionales
+  precioUnitario(item: ComidaPedido): number {
+    let precio = item.producto.precio;
+    for (const adicional of item.adicionales) {
+      precio += adicional.precio * adicional.cantidad;
+    }
+    return precio;
+  }
+
   calcularTotal(): number {
-    return this.comidasSeleccionadas.reduce((acc, item) => {
-      const precioAdicional = item.adicional ? item.adicional.precio : 0;
-      return acc + ((item.producto.precio + precioAdicional) * item.cantidad);
-    }, 0);
+    let total = 0;
+    for (const item of this.comidasSeleccionadas) {
+      total += this.precioUnitario(item) * item.cantidad;
+    }
+    return total;
+  }
+
+  private mismosAdicionales(a: AdicionalPedido[], b: AdicionalPedido[]): boolean {
+    if (a.length !== b.length) {
+      return false;
+    }
+    return a.every(adicionalA => b.some(adicionalB => adicionalB.id_adicional === adicionalA.id_adicional));
   }
 }

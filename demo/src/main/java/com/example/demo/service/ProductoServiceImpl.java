@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Producto;
-import com.example.demo.errors.ProductoNotFoundException;
 import com.example.demo.repository.CategoriaRepository;
 import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
@@ -19,17 +17,21 @@ import com.example.demo.repository.ProductoRepository;
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
-    @Autowired
-    private ProductoRepository productoRepository;
+    private final ProductoRepository productoRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final DetallePedidoRepository detallePedidoRepository;
+    private final ProductoCarritoRepository productoCarritoRepository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    @Autowired
-    private DetallePedidoRepository detallePedidoRepository;
-
-    @Autowired
-    private ProductoCarritoRepository productoCarritoRepository;
+    public ProductoServiceImpl(
+            ProductoRepository productoRepository,
+            CategoriaRepository categoriaRepository,
+            DetallePedidoRepository detallePedidoRepository,
+            ProductoCarritoRepository productoCarritoRepository) {
+        this.productoRepository = productoRepository;
+        this.categoriaRepository = categoriaRepository;
+        this.detallePedidoRepository = detallePedidoRepository;
+        this.productoCarritoRepository = productoCarritoRepository;
+    }
 
     @Override
     public Collection<Producto> obtenerTodos() {
@@ -44,12 +46,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     public Producto obtenerPorId(Long id) {
         return productoRepository.findById(id)
-                .orElseThrow(() -> new ProductoNotFoundException(id));
-    }
-
-    @Override
-    public Producto guardar(Producto producto) {
-        return productoRepository.save(producto);
+                .orElse(null);
     }
 
     @Override

@@ -37,8 +37,12 @@
           <span class="perfil-dato-label">Estado de cuenta</span>
           <p class="perfil-dato">
             <i class="bi bi-check-circle"></i>
-            <span *ngIf="cliente.activo" style="color: #4caf50;">Activo</span>
-            <span *ngIf="!cliente.activo" style="color: #e57373;">Inactivo</span>
+            @if (cliente.activo) {
+              <span style="color: #4caf50;">Activo</span>
+            }
+            @if (!cliente.activo) {
+              <span style="color: #e57373;">Inactivo</span>
+            }
           </p>
         </div>
       </div>

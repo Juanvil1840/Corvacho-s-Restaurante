@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
-import { CarritoServiceService } from '../../service/carrito-service.service';
+import { CarritoService } from '../../service/carrito.service';
 import { Cliente } from '../../models/cliente.model';
 import { PerfilInfoComponent } from './components/perfil-info/perfil-info.component';
 import { PerfilPedidosComponent } from './components/perfil-pedidos/perfil-pedidos.component';
@@ -21,7 +21,7 @@ export class PerfilClienteComponent implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
-    private carritoService: CarritoServiceService,
+    private carritoService: CarritoService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

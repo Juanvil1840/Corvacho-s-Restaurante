@@ -23,13 +23,13 @@ import lombok.NoArgsConstructor;
 public class Pedido {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id_Pedido;
+    private Long id_Pedido;
     @Column( length = 50, nullable = false )
-    String estado = "Recibido";
+    private String estado = "Recibido";
     @Column( nullable = false)
-    LocalDateTime fechaCreacion;
+    private LocalDateTime fechaCreacion;
     @Column( nullable = true)   // Puede ser null mientras el pedido no ha sido entregado
-    LocalDateTime fechaEntrega;
+    private LocalDateTime fechaEntrega;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")

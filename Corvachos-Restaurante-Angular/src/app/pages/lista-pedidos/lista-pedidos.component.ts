@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
-import { Pedido } from '../../models/pedido.model';
+import { PedidoLista } from '../../models/pedido.model';
 import { PedidoTablaComponent } from './components/pedido-tabla/pedido-tabla.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { PedidoTablaComponent } from './components/pedido-tabla/pedido-tabla.com
 })
 export class ListaPedidosComponent implements OnInit {
 
-  pedidos: Pedido[] = [];
+  pedidos: PedidoLista[] = [];
   cargando = false;
   error = '';
 
@@ -33,19 +33,10 @@ export class ListaPedidosComponent implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    // Si es operario, el backend solo trae pedidos activos (excluye 'Entregado')
-    const soloActivos = this.esOperario;
-
-    this.pedidoService.getPedidos(soloActivos).subscribe({
+    // El operario solo ve los pedidos que no se han entregado
+    this.pedidoService.getPedidos(this.esOperario).subscribe({
       next: (pedidos) => {
-        if (this.esOperario) {
-          this.pedidos = pedidos.filter(pedido =>
-            pedido.estado?.trim().toLowerCase() !== 'entregado'
-          );
-        } else {
-          this.pedidos = pedidos;
-        }
-
+        this.pedidos = pedidos;
         this.cargando = false;
       },
       error: (error) => {

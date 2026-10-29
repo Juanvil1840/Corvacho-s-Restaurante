@@ -10,27 +10,29 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let producto of productos">
-        <td><img [src]="producto.imagen" [alt]="producto.nombre"></td>
-        <td>{{ producto.nombre }}</td>
-        <td>$ {{ producto.precio }}</td>
-        <td>
-          <span 
-            (click)="onToggleDisponible(producto)" 
-            [title]="'Clic para marcar como ' + (producto.disponible ? 'No disponible' : 'Disponible')"
-            style="cursor: pointer; user-select: none;"
-            [class.productos-disponible]="producto.disponible"
-            [class.productos-no-disponible]="!producto.disponible">
-            {{ producto.disponible ? 'Disponible' : 'No disponible' }}
-          </span>
-        </td>
-        <td>
-          <div class="productos-acciones">
-            <a [routerLink]="['/productos/editar', producto.id]" class="productos-btn-editar">Editar</a>
-            <button (click)="eliminarProducto(producto.id)" class="productos-btn-eliminar">Eliminar</button>
-          </div>
-        </td>
-      </tr>
+      @for (producto of productos; track producto.id) {
+        <tr>
+          <td><img [src]="producto.imagen" [alt]="producto.nombre"></td>
+          <td>{{ producto.nombre }}</td>
+          <td>$ {{ producto.precio }}</td>
+          <td>
+            <span 
+              (click)="onToggleDisponible(producto)" 
+              [title]="'Clic para marcar como ' + (producto.disponible ? 'No disponible' : 'Disponible')"
+              style="cursor: pointer; user-select: none;"
+              [class.productos-disponible]="producto.disponible"
+              [class.productos-no-disponible]="!producto.disponible">
+              {{ producto.disponible ? 'Disponible' : 'No disponible' }}
+            </span>
+          </td>
+          <td>
+            <div class="productos-acciones">
+              <a [routerLink]="['/productos/editar', producto.id]" class="productos-btn-editar">Editar</a>
+              <button (click)="eliminarProducto(producto.id)" class="productos-btn-eliminar">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
-</div>
+</div>

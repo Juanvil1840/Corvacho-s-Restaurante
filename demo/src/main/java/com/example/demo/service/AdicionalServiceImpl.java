@@ -3,7 +3,6 @@ package com.example.demo.service;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,11 +15,13 @@ import com.example.demo.repository.CategoriaRepository;
 @Service
 public class AdicionalServiceImpl implements AdicionalService {
 
-    @Autowired
-    private AdicionalRepository adicionalRepository;
+    private final AdicionalRepository adicionalRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    public AdicionalServiceImpl(AdicionalRepository adicionalRepository, CategoriaRepository categoriaRepository) {
+        this.adicionalRepository = adicionalRepository;
+        this.categoriaRepository = categoriaRepository;
+    }
 
     @Override
     public Collection<Adicional> findAll() {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductoServiceService } from '../../service/producto-service.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductoService } from '../../service/producto.service';
 import { Producto } from '../../models/producto.model';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaService } from '../../service/categoria.service';
@@ -11,7 +11,7 @@ import { ProductoCamposComponent } from './components/producto-campos/producto-c
 @Component({
   selector: 'app-formulario-producto',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, ProductoCamposComponent],
+  imports: [CommonModule, FormsModule, ProductoCamposComponent],
   templateUrl: './formulario-producto.component.html',
   styleUrl: './formulario-producto.component.scss'
 })
@@ -33,7 +33,7 @@ export class FormularioProductoComponent implements OnInit {
   error = '';
 
   constructor(
-    private productoService: ProductoServiceService,
+    private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private route: ActivatedRoute,
     private router: Router
@@ -103,4 +103,4 @@ export class FormularioProductoComponent implements OnInit {
   cancelar(): void {
     this.router.navigate(['/productos']);
   }
-}
+}

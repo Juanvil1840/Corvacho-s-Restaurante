@@ -15,7 +15,7 @@
       <tr>
         <td>{{ adicional.id_adicional }}</td>
         <td>{{ adicional.nombre }}</td>
-<td>{{ adicional.precio | currency:'COP ':'symbol':'1.0-0' }}</td>        <td>{{ adicional.categoria?.nombre }}</td>
+<td>{{ adicional.precio | currency:'COP ':'symbol':'1.0-0' }}</td>        <td>{{ adicional.categoria.nombre }}</td>
         <td>
           <span [class.estado-activo]="adicional.disponible"
                 [class.estado-inactivo]="!adicional.disponible">
@@ -46,4 +46,4 @@
     }
   </tbody>
 </table>
-</div>
+</div>

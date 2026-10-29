@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@JsonPropertyOrder({"id_operador", "nombre", "usuario", "contrasena"})
+@JsonPropertyOrder({"id_operador", "nombre", "usuario"})
 public class OperadorDTO {
 
     @JsonProperty("id_operador")
@@ -20,16 +20,13 @@ public class OperadorDTO {
     @JsonProperty("usuario")
     private String usuario;
 
-    @JsonProperty("contrasena")
-    private String contrasena;
-
-    public OperadorDTO(Long id_operador, String nombre, String usuario, String contrasena) {
+    public OperadorDTO(Long id_operador, String nombre, String usuario) {
         this.id_operador = id_operador;
         this.nombre = nombre;
         this.usuario = usuario;
-        this.contrasena = contrasena;
     }
 
+    // No se envia la contrasena al frontend
     public static OperadorDTO fromEntity(Operador operador) {
         if (operador == null) {
             return null;
@@ -37,8 +34,7 @@ public class OperadorDTO {
         return new OperadorDTO(
                 operador.getId_operador(),
                 operador.getNombre(),
-                operador.getUsuario(),
-                operador.getContrasena()
+                operador.getUsuario()
         );
     }
 }

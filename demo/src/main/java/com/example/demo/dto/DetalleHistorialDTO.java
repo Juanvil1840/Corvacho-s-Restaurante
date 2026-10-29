@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO de una línea del pedido para el historial: cantidad, nombre del producto, adicionales y subtotal ya calculado.
+// Una linea del pedido en el historial del cliente: cantidad, producto, adicionales y subtotal
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,17 +35,9 @@ public class DetalleHistorialDTO {
             return null;
         }
 
-        // Soporta pedidos nuevos (lista de adicionales) y antiguos (un solo adicional).
         List<AdicionalSeleccionado> seleccionados = new ArrayList<>();
-        if (detalle.getAdicionales() != null && !detalle.getAdicionales().isEmpty()) {
+        if (detalle.getAdicionales() != null) {
             seleccionados.addAll(detalle.getAdicionales());
-        } else if (detalle.getAdicional() != null) {
-            seleccionados.add(new AdicionalSeleccionado(
-                    detalle.getAdicional().getId_adicional(),
-                    detalle.getAdicional().getNombre(),
-                    detalle.getAdicional().getPrecio(),
-                    1
-            ));
         }
 
         int cantidad = detalle.getCantidad() > 0 ? detalle.getCantidad() : 1;

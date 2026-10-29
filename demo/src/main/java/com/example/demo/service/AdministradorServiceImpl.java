@@ -2,8 +2,9 @@ package com.example.demo.service;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Administrador;
 import com.example.demo.repository.AdministradorRepository;
@@ -11,8 +12,11 @@ import com.example.demo.repository.AdministradorRepository;
 @Service
 public class AdministradorServiceImpl implements AdministradorService {
 
-    @Autowired
-    private AdministradorRepository administradorRepository;
+    private final AdministradorRepository administradorRepository;
+
+    public AdministradorServiceImpl(AdministradorRepository administradorRepository) {
+        this.administradorRepository = administradorRepository;
+    }
 
     @Override
     public Collection<Administrador> findAll() {
@@ -29,6 +33,8 @@ public class AdministradorServiceImpl implements AdministradorService {
     }
     @Override
     public Administrador crearAdministrador(Administrador admin) {
+        validarAdministrador(admin, null);
+        admin.setId_administrador(null);
         return administradorRepository.save(admin);
     }
 
@@ -36,6 +42,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     public Administrador actualizarAdministrador(Long id, Administrador admin) {
         Administrador existente = administradorRepository.findById(id).orElse(null);
         if (existente != null) {
+            validarAdministrador(admin, id);
             existente.setNombre(admin.getNombre());
             existente.setUsuario(admin.getUsuario());
             if (admin.getContrasena() != null && !admin.getContrasena().isBlank()) {
@@ -59,4 +66,20 @@ public class AdministradorServiceImpl implements AdministradorService {
         }
         return null;
     }
-}
+
+    private void validarAdministrador(Administrador admin, Long idActual) {
+        if (admin.getNombre() == null || admin.getNombre().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre del administrador es obligatorio");
+        }
+        if (admin.getUsuario() == null || admin.getUsuario().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El usuario del administrador es obligatorio");
+        }
+        if (idActual == null && (admin.getContrasena() == null || admin.getContrasena().isBlank())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña del administrador es obligatoria");
+        }
+        Administrador conMismoUsuario = administradorRepository.findByUsuario(admin.getUsuario().trim());
+        if (conMismoUsuario != null && !conMismoUsuario.getId_administrador().equals(idActual)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
+        }
+    }
+}

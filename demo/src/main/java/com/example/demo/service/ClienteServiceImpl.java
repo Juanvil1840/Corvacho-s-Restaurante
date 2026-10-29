@@ -2,24 +2,24 @@ package com.example.demo.service;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.LoginClienteDTO;
 import com.example.demo.entities.Cliente;
-import com.example.demo.errors.ClienteNotFoundException;
 import com.example.demo.repository.ClienteRepository;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
+    private final LoginService loginService;
 
-    @Autowired
-    private LoginService loginService;
+    public ClienteServiceImpl(ClienteRepository clienteRepository, LoginService loginService) {
+        this.clienteRepository = clienteRepository;
+        this.loginService = loginService;
+    }
 
     @Override
     public Collection<Cliente> obtenerTodos() {
@@ -29,7 +29,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente obtenerPorId(Long id) {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new ClienteNotFoundException(id));
+                .orElse(null);
     }
 
     @Override
@@ -70,40 +70,12 @@ public class ClienteServiceImpl implements ClienteService {
         existente.setNombre(datos.getNombre());
         existente.setApellido(datos.getApellido());
         existente.setCorreo(datos.getCorreo());
-        if (datos.getContraseña() != null && !datos.getContraseña().isBlank()) {
-            existente.setContraseña(datos.getContraseña());
+        if (datos.getContrasena() != null && !datos.getContrasena().isBlank()) {
+            existente.setContrasena(datos.getContrasena());
         }
         existente.setTelefono(datos.getTelefono() != null && !datos.getTelefono().isBlank() ? datos.getTelefono() : "Sin teléfono");
         existente.setDireccion(datos.getDireccion() != null && !datos.getDireccion().isBlank() ? datos.getDireccion() : "Sin dirección");
         existente.setActivo(datos.isActivo());
-
-        return clienteRepository.save(existente);
-    }
-
-    @Override
-    public Cliente registrar(Cliente cliente) {
-        cliente.setActivo(true);
-        return clienteRepository.save(cliente);
-    }
-
-    @Override
-    public Cliente actualizar(Cliente cliente) {
-        Cliente existente = clienteRepository.findById(cliente.getClienteId()).orElse(null);
-        if (existente == null) {
-            return clienteRepository.save(cliente);
-        }
-
-        if (cliente.getContraseña() == null || cliente.getContraseña().isEmpty()) {
-            cliente.setContraseña(existente.getContraseña());
-        }
-
-        existente.setNombre(cliente.getNombre());
-        existente.setApellido(cliente.getApellido());
-        existente.setCorreo(cliente.getCorreo());
-        existente.setContraseña(cliente.getContraseña());
-        existente.setTelefono(cliente.getTelefono());
-        existente.setDireccion(cliente.getDireccion());
-        existente.setActivo(existente.isActivo());
 
         return clienteRepository.save(existente);
     }
@@ -159,7 +131,7 @@ public class ClienteServiceImpl implements ClienteService {
                     HttpStatus.BAD_REQUEST,
                     "Nombre, apellido y correo son obligatorios");
         }
-        if (idActual == null && (cliente.getContraseña() == null || cliente.getContraseña().isBlank())) {
+        if (idActual == null && (cliente.getContrasena() == null || cliente.getContrasena().isBlank())) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Nombre, apellido, correo y contraseña son obligatorios");

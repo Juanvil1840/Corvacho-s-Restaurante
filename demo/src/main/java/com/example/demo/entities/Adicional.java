@@ -1,13 +1,10 @@
 package com.example.demo.entities;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,9 +30,6 @@ public class Adicional{
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
-
-    @OneToMany(mappedBy = "adicional")
-    private List<DetallePedido> detallePedidos;
 
     public Adicional(String nombre, double precio, boolean disponible){
         this.nombre = nombre;

@@ -12,8 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO liviano para el historial de pedidos del cliente.
-// No incluye cliente/operador/domiciliario porque el historial ya es del cliente en sesión.
+// Pedido en el historial del cliente. No trae cliente, operador ni domiciliario
+// porque el cliente ya sabe quien es.
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

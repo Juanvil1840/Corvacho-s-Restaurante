@@ -4,8 +4,12 @@
   <td>{{ cliente.correo }}</td>
   <td>{{ cliente.telefono }}</td>
   <td>
-    <span *ngIf="cliente.activo" class="productos-disponible">Activo</span>
-    <span *ngIf="!cliente.activo" class="productos-no-disponible">Inactivo</span>
+    @if (cliente.activo) {
+      <span class="productos-disponible">Activo</span>
+    }
+    @if (!cliente.activo) {
+      <span class="productos-no-disponible">Inactivo</span>
+    }
   </td>
   <td>
     <div class="productos-acciones">
@@ -14,4 +18,4 @@
       <button (click)="eliminarCliente()" class="productos-btn-eliminar">Eliminar</button>
     </div>
   </td>
-</tr>
+</tr>

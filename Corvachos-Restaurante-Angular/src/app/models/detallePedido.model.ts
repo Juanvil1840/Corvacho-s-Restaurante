@@ -1,19 +1,21 @@
-import { Adicional } from "./adicional.model";
-import { Pedido } from "./pedido.model";
-import { Producto } from "./producto.model";
-
-export interface AdicionalSeleccionadoItem {
+export interface AdicionalPedido {
     id_adicional: number;
     nombre: string;
     precio: number;
     cantidad: number;
 }
 
+export interface ProductoPedido {
+    id: number;
+    nombre: string;
+    precio: number;
+    descripcion: string;
+    imagen: string;
+}
+
 export interface DetallePedido {
     id_DetallePedido: number;
     cantidad: number;
-    producto: Producto;
-    pedido: Pedido;
-    adicional: Adicional;
-    adicionales?: AdicionalSeleccionadoItem[];
+    producto: ProductoPedido;
+    adicionales: AdicionalPedido[];
 }

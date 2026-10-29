@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Producto } from '../../../../models/producto.model';
 import { Adicional } from '../../../../models/adicional.model';
-import { AdicionalCarrito, CarritoServiceService } from '../../../../service/carrito-service.service';
+import { AdicionalCarrito, CarritoService } from '../../../../service/carrito.service';
 
 @Component({
   selector: 'app-detalle-info',
@@ -22,7 +22,7 @@ export class DetalleInfoComponent {
   adicionalesElegidos: Map<number, number> = new Map<number, number>();
   mensajeAgregado = false;
 
-  constructor(private carritoService: CarritoServiceService) {}
+  constructor(private carritoService: CarritoService) {}
 
   cambiarCantidad(delta: number): void {
     const nueva = this.cantidad + delta;

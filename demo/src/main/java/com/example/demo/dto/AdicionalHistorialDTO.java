@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO mínimo de un adicional para el historial: solo lo que se muestra en pantalla.
+// Adicional que se muestra en el historial del cliente
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

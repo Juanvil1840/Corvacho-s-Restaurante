@@ -21,7 +21,6 @@ import com.example.demo.dto.PedidoHistorialDTO;
 import com.example.demo.dto.PedidoListaDTO;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
-import com.example.demo.errors.PedidoNotFoundException;
 import com.example.demo.service.PedidoService;
 
 // Controlador REST para la gestion de Pedidos
@@ -36,7 +35,7 @@ public class PedidoRestController {
         this.pedidoService = pedidoService;
     }
 
-    // Lista los pedidos registrados (soporta parametro activos=true para excluir entregados y optimizar payload)
+    // Lista los pedidos registrados (con activos=true no trae los entregados)
     @GetMapping
     public Collection<PedidoListaDTO> listar(
             @RequestParam(value = "activos", required = false, defaultValue = "false") boolean activos) {
@@ -58,15 +57,11 @@ public class PedidoRestController {
     // Busca un pedido por su id y devuelve su detalle completo
     @GetMapping("/{id}")
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
-        try {
-            Pedido pedido = pedidoService.findById(id);
-            if (pedido == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(convertirPedido(pedido));
-        } catch (RuntimeException e) {
+        Pedido pedido = pedidoService.findById(id);
+        if (pedido == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(convertirPedido(pedido));
     }
 
     // Crea un nuevo pedido en la base de datos
@@ -79,26 +74,19 @@ public class PedidoRestController {
     // Actualiza los datos de un pedido existente
     @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> actualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
-        try {
-            Pedido actualizado = pedidoService.actualizarPedido(id, pedido);
-            return ResponseEntity.ok(convertirPedido(actualizado));
-        } catch (PedidoNotFoundException e) {
+        Pedido actualizado = pedidoService.actualizarPedido(id, pedido);
+        if (actualizado == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(convertirPedido(actualizado));
     }
 
     // Elimina un pedido de la base de datos
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        try {
-            Pedido existente = pedidoService.findById(id);
-            if (existente == null) {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (RuntimeException e) {
+        if (pedidoService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
-
         pedidoService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

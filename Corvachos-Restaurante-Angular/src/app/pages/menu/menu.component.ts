@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CategoriaSeccionComponent } from './components/categoria-seccion/categoria-seccion.component';
-import { ProductoServiceService } from '../../service/producto-service.service';
+import { ProductoService } from '../../service/producto.service';
 import { Producto } from '../../models/producto.model';
 
 @Component({
@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   cargando = true;
   error = '';
 
-  constructor(private productoService: ProductoServiceService) {}
+  constructor(private productoService: ProductoService) {}
 
   ngOnInit(): void {
     this.productoService.getProductosDisponibles().subscribe({
@@ -47,4 +47,4 @@ export class MenuComponent implements OnInit {
   getCategorias(): string[] {
     return Object.keys(this.productosPorCategoria);
   }
-}
+}

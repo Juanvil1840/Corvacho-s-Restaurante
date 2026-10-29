@@ -1,10 +1,10 @@
 <div class="pedido-campos">
 
-  <!-- APARTADO DE ESTADO SECUENCIAL (SIN DESPLEGABLE LIBRE) -->
+  <!-- ESTADO: solo se puede avanzar al siguiente -->
   <div class="pedido-campo pedido-estado-bloque">
     <label>Estado del Pedido</label>
 
-    <!-- BARRA DE PROGRESO: RECIBIDO -> COCINANDO -> ENVIADO -> ENTREGADO -->
+    <!-- Barra de progreso: Recibido, Cocinando, Enviado, Entregado -->
     <div class="detalle-timeline pedido-form-timeline">
       <div class="timeline-step" [ngClass]="pasoEstado(1)">
         <div class="timeline-dot">
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <!-- BOTÓN ÚNICO PARA AVANZAR ÚNICAMENTE AL SIGUIENTE ESTADO -->
+    <!-- Boton para pasar al siguiente estado -->
     <div class="estado-avance-contenedor">
       @if (!editando) {
         <div class="estado-avance-info">
@@ -50,7 +50,7 @@
         @if (!haAvanzadoEstado) {
           <div class="estado-avance-info">
             <span class="estado-texto-actual">
-              Estado actual: <strong>{{ pedido.estado }}</strong>
+              Estado actual: <strong>{{ formulario.estado }}</strong>
             </span>
             <button
               type="button"
@@ -62,7 +62,7 @@
         } @else {
           <div class="estado-avance-info estado-avance-confirmado">
             <span class="estado-texto-actual">
-              <i class="bi bi-check2-circle"></i> Pasará de <strong>{{ estadoOriginal }}</strong> a <strong>{{ pedido.estado }}</strong> al guardar
+              <i class="bi bi-check2-circle"></i> Pasará de <strong>{{ estadoOriginal }}</strong> a <strong>{{ formulario.estado }}</strong> al guardar
             </span>
             <button
               type="button"
@@ -75,7 +75,7 @@
       } @else {
         <div class="estado-avance-info estado-avance-final">
           <span class="estado-texto-actual">
-            <i class="bi bi-check-circle-fill"></i> El pedido ya está <strong>{{ pedido.estado }}</strong> (estado final alcanzado)
+            <i class="bi bi-check-circle-fill"></i> El pedido ya está <strong>{{ formulario.estado }}</strong> (estado final alcanzado)
           </span>
         </div>
       }
@@ -87,7 +87,7 @@
     <select
       id="cliente"
       name="cliente"
-      [(ngModel)]="pedido.cliente.clienteId"
+      [(ngModel)]="formulario.clienteId"
       required>
       <option [ngValue]="0" disabled>Selecciona un cliente</option>
       @for (cliente of clientes; track cliente.clienteId) {
@@ -101,7 +101,7 @@
     <select
       id="operador"
       name="operador"
-      [(ngModel)]="pedido.operador!.id_operador">
+      [(ngModel)]="formulario.operadorId">
       <option [ngValue]="0">Sin operador</option>
       @for (operador of operadores; track operador.id_operador) {
         <option [ngValue]="operador.id_operador">{{ operador.nombre }}</option>
@@ -114,7 +114,7 @@
     <select
       id="domiciliario"
       name="domiciliario"
-      [(ngModel)]="pedido.domiciliario!.id_domiciliario">
+      [(ngModel)]="formulario.domiciliarioId">
       <option [ngValue]="0">Sin domiciliario</option>
       @for (domiciliario of domiciliariosDisponibles; track domiciliario.id_domiciliario) {
         <option [ngValue]="domiciliario.id_domiciliario">{{ domiciliario.nombre }}</option>
@@ -128,7 +128,7 @@
       id="fechaCreacion"
       name="fechaCreacion"
       type="datetime-local"
-      [(ngModel)]="pedido.fechaCreacion"
+      [(ngModel)]="formulario.fechaCreacion"
     />
   </div>
 
@@ -138,11 +138,11 @@
       id="fechaEntrega"
       name="fechaEntrega"
       type="datetime-local"
-      [(ngModel)]="pedido.fechaEntrega"
+      [(ngModel)]="formulario.fechaEntrega"
     />
   </div>
 
-  <!-- SECCIÓN DE COMIDAS / PLATOS -->
+  <!-- Comidas del pedido -->
   <div class="pedido-campo pedido-seccion-comidas">
     <label><i class="bi bi-egg-fried"></i> Comidas / Productos del Pedido</label>
 
@@ -157,7 +157,7 @@
       </select>
 
       <select [(ngModel)]="adicionalSeleccionadoId" name="adicionalSelect">
-        <option [ngValue]="0">Sin adicional (opcional)</option>
+        <option [ngValue]="0">Sin adicional</option>
         @for (adic of adicionalesDisponibles; track adic.id_adicional) {
           <option [ngValue]="adic.id_adicional">
             + {{ adic.nombre }} ({{ adic.precio > 0 ? (adic.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
@@ -185,18 +185,18 @@
 
     @if (comidasSeleccionadas.length > 0) {
       <div class="pedido-lista-comidas">
-        @for (item of comidasSeleccionadas; track item.producto.id + '_' + (item.adicional?.id_adicional ?? 0); let idx = $index) {
+        @for (item of comidasSeleccionadas; track $index; let idx = $index) {
           <div class="pedido-comida-item">
             <div class="comida-item-info">
               <span class="comida-item-nombre">{{ item.producto.nombre }}</span>
-              @if (item.adicional) {
+              @for (adicional of item.adicionales; track adicional.id_adicional) {
                 <span class="comida-item-adicional">
-                  <i class="bi bi-plus-circle"></i> Adicional: <strong>{{ item.adicional.nombre }}</strong>
-                  ({{ item.adicional.precio > 0 ? (item.adicional.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
+                  <i class="bi bi-plus-circle"></i> {{ adicional.cantidad }}x <strong>{{ adicional.nombre }}</strong>
+                  ({{ adicional.precio > 0 ? (adicional.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
                 </span>
               }
               <span class="comida-item-precio">
-                {{ (item.producto.precio + (item.adicional?.precio ?? 0)) | currency:'USD':'symbol':'1.0-0' }} c/u
+                {{ precioUnitario(item) | currency:'USD':'symbol':'1.0-0' }} c/u
               </span>
             </div>
             <div class="comida-item-cantidades">
@@ -205,7 +205,7 @@
               <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, 1)">+</button>
             </div>
             <span class="comida-item-subtotal">
-              {{ ((item.producto.precio + (item.adicional?.precio ?? 0)) * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
+              {{ (precioUnitario(item) * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
             </span>
             <button
               type="button"

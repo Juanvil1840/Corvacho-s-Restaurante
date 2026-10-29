@@ -18,8 +18,6 @@ public interface ClienteService {
     Cliente actualizarCliente(Long id, Cliente datos);
     void eliminar(Long id);
 
-    Cliente registrar(Cliente cliente);
-    Cliente actualizar(Cliente cliente);
     void desactivar(Long id);
     void reactivar(Long id);
 

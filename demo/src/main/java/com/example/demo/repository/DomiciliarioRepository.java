@@ -15,6 +15,6 @@ public interface DomiciliarioRepository extends JpaRepository<Domiciliario, Long
     Optional<Domiciliario> findByCedula(String cedula);
     Optional<Domiciliario> findByCelular(String celular);
 
-    // Trae solo los que están disponibles (activos)
+    // Trae solo los que estan disponibles para llevar un pedido
     List<Domiciliario> findByInformaciondispTrue();
-}
+}

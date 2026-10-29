@@ -49,12 +49,11 @@ public class ProductoRestController {
     // Busca un producto por su id
     @GetMapping("/{id}")
     public ResponseEntity<ProductoDTO> buscarPorId(@PathVariable Long id) {
-        try {
-            Producto producto = productoService.obtenerPorId(id);
-            return ResponseEntity.ok(ProductoDTO.fromEntity(producto));
-        } catch (RuntimeException e) {
+        Producto producto = productoService.obtenerPorId(id);
+        if (producto == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(ProductoDTO.fromEntity(producto));
     }
 
     // Crea un nuevo producto en la base de datos

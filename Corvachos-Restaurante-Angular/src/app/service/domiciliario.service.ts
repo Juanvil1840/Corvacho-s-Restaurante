@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Domiciliario } from '../models/domiciliario.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DomiciliarioService {
 
-  private apiUrl = 'http://localhost:8090/api/domiciliarios';
+  private apiUrl = `${environment.apiUrl}/domiciliarios`;
 
   constructor(private http: HttpClient) { }
 

@@ -1,12 +1,21 @@
 package com.example.demo.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public record CarritoDTO(List<Item> items) {
-    public record Item(Long productoId, String nombre, double precio, String imagen,
-            int cantidad, List<Adicional> adicionales) {
-    }
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public record Adicional(Long id_adicional, String nombre, double precio, int cantidad) {
-    }
+// Se usa para leer el carrito y tambien para recibir los cambios desde Angular
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CarritoDTO {
+
+    @NotNull
+    @Valid
+    private List<ProductoCarritoDTO> items = new ArrayList<>();
 }

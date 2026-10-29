@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriaService } from '../../service/categoria.service';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaCamposComponent } from './components/categoria-campos/categoria-campos.component';
@@ -9,7 +9,7 @@ import { CategoriaCamposComponent } from './components/categoria-campos/categori
 @Component({
   selector: 'app-formulario-categoria',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, CategoriaCamposComponent],
+  imports: [CommonModule, FormsModule, CategoriaCamposComponent],
   templateUrl: './formulario-categoria.component.html',
   styleUrl: './formulario-categoria.component.scss'
 })
@@ -72,4 +72,4 @@ export class FormularioCategoriaComponent implements OnInit {
   cancelar(): void {
     this.router.navigate(['/categorias']);
   }
-}
+}

@@ -14,7 +14,7 @@ import { LoginAdminComponent } from './pages/login-admin/login-admin.component';
 import { PortalAdminComponent } from './pages/portal-admin/portal-admin.component';
 import { PortalOperarioComponent } from './pages/portal-operario/portal-operario.component';
 
-// NUEVOS
+// Categorias y adicionales
 import { ListaCategoriasComponent } from './pages/lista-categorias/lista-categorias.component';
 import { FormularioCategoriaComponent } from './pages/formulario-categoria/formulario-categoria.component';
 import { ListaAdicionalesComponent } from './pages/lista-adicionales/lista-adicionales.component';
@@ -42,7 +42,7 @@ export const routes: Routes = [
     { path: 'productos/nuevo', component: FormularioProductoComponent },
     { path: 'productos/editar/:id', component: FormularioProductoComponent },
 
-    // NUEVAS RUTAS
+    // Categorias y adicionales
     { path: 'categorias', component: ListaCategoriasComponent },
     { path: 'categorias/nuevo', component: FormularioCategoriaComponent },
     { path: 'categorias/editar/:id', component: FormularioCategoriaComponent },
@@ -81,4 +81,4 @@ export const routes: Routes = [
     { path: 'menu/detalle/:id', component: DetalleProductoComponent },
     { path: 'error', component: PaginaErrorComponent },
     { path: '**', component: PaginaErrorComponent },
-];
+];

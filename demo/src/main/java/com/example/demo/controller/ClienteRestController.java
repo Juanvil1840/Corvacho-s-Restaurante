@@ -43,15 +43,11 @@ public class ClienteRestController {
     // Busca un cliente por su identificador unico
     @GetMapping("/{id}")
     public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
-        try {
-            Cliente cliente = clienteService.obtenerPorId(id);
-            if (cliente == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
-        } catch (RuntimeException e) {
+        Cliente cliente = clienteService.obtenerPorId(id);
+        if (cliente == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
     }
 
     // Crea un nuevo cliente en la base de datos
@@ -112,4 +108,4 @@ public class ClienteRestController {
         }
         return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
     }
-}
+}

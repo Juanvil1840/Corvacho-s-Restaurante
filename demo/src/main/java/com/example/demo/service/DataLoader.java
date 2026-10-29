@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -37,38 +36,42 @@ import com.example.demo.entities.ProductoCarrito;
 
 public class DataLoader implements CommandLineRunner {
 
-        @Autowired
-        private CategoriaRepository categoriaRepository;
+        private final CategoriaRepository categoriaRepository;
+        private final ProductoRepository productoRepository;
+        private final ClienteRepository clienteRepository;
+        private final AdicionalRepository adicionalRepository;
+        private final AdministradorRepository administradorRepository;
+        private final CarritoRepository carritoRepository;
+        private final DetallePedidoRepository detallePedidoRepository;
+        private final DomiciliarioRepository domiciliarioRepository;
+        private final OperadorRepository operadorRepository;
+        private final PedidoRepository pedidoRepository;
+        private final ProductoCarritoRepository productoCarritoRepository;
 
-        @Autowired
-        private ProductoRepository productoRepository;
-
-        @Autowired
-        private ClienteRepository clienteRepository;
-
-        @Autowired
-        private AdicionalRepository adicionalRepository;
-
-        @Autowired
-        private AdministradorRepository administradorRepository;
-
-        @Autowired
-        private CarritoRepository carritoRepository;
-
-        @Autowired
-        private DetallePedidoRepository detallePedidoRepository;
-
-        @Autowired
-        private DomiciliarioRepository domiciliarioRepository;
-
-        @Autowired
-        private OperadorRepository operadorRepository;
-
-        @Autowired
-        private PedidoRepository pedidoRepository;
-
-        @Autowired
-        private ProductoCarritoRepository productoCarritoRepository;
+        public DataLoader(
+                        CategoriaRepository categoriaRepository,
+                        ProductoRepository productoRepository,
+                        ClienteRepository clienteRepository,
+                        AdicionalRepository adicionalRepository,
+                        AdministradorRepository administradorRepository,
+                        CarritoRepository carritoRepository,
+                        DetallePedidoRepository detallePedidoRepository,
+                        DomiciliarioRepository domiciliarioRepository,
+                        OperadorRepository operadorRepository,
+                        PedidoRepository pedidoRepository,
+                        ProductoCarritoRepository productoCarritoRepository) {
+                this.categoriaRepository = categoriaRepository;
+                this.productoRepository = productoRepository;
+                this.clienteRepository = clienteRepository;
+                this.adicionalRepository = adicionalRepository;
+                this.administradorRepository = administradorRepository;
+                this.carritoRepository = carritoRepository;
+                this.detallePedidoRepository = detallePedidoRepository;
+                this.domiciliarioRepository = domiciliarioRepository;
+                this.operadorRepository = operadorRepository;
+                this.pedidoRepository = pedidoRepository;
+                this.productoCarritoRepository = productoCarritoRepository;
+        }
 
         @Override
         public void run(String... args) throws Exception {

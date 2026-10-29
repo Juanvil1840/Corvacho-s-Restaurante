@@ -1,4 +1,4 @@
-// Modelo liviano que coincide con PedidoHistorialDTO del backend (historial del cliente).
+// Pedido en el historial del cliente (coincide con PedidoHistorialDTO del backend)
 export interface AdicionalHistorial {
   nombre: string;
   cantidad: number;

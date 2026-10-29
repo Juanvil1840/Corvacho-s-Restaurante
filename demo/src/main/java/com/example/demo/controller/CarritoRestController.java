@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.ActualizarCarritoDTO;
 import com.example.demo.dto.CarritoDTO;
 import com.example.demo.service.CarritoService;
 
@@ -34,7 +33,7 @@ public class CarritoRestController {
 
     @PutMapping("/cliente/{clienteId}")
     public CarritoDTO actualizarPorCliente(@PathVariable Long clienteId,
-            @Valid @RequestBody ActualizarCarritoDTO carrito) {
+            @Valid @RequestBody CarritoDTO carrito) {
         return carritoService.actualizarPorCliente(clienteId, carrito);
     }
 

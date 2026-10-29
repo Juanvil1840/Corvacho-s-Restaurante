@@ -98,12 +98,6 @@
               <i class="bi bi-person-fill"></i>
               <span>{{ pedido.cliente.nombre }} {{ pedido.cliente.apellido }}</span>
             </div>
-            @if (pedido.cliente.correo) {
-              <div class="detalle-info-item">
-                <i class="bi bi-envelope"></i>
-                <span>{{ pedido.cliente.correo }}</span>
-              </div>
-            }
             @if (pedido.cliente.telefono) {
               <div class="detalle-info-item">
                 <i class="bi bi-telephone"></i>
@@ -128,12 +122,6 @@
               <div class="detalle-info-item">
                 <i class="bi bi-phone"></i>
                 <span>{{ pedido.domiciliario.celular }}</span>
-              </div>
-            }
-            @if (pedido.domiciliario.cedula) {
-              <div class="detalle-info-item">
-                <i class="bi bi-card-text"></i>
-                <span>Cédula: {{ pedido.domiciliario.cedula }}</span>
               </div>
             }
           } @else {

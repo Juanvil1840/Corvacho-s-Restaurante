@@ -51,7 +51,7 @@ export class FormularioOperadorComponent implements OnInit {
   }
 
   guardar(): void {
-    if (!this.operador.nombre.trim() || !this.operador.usuario.trim() || (!this.editando && !this.operador.contrasena.trim())) {
+    if (!this.operador.nombre.trim() || !this.operador.usuario.trim() || (!this.editando && !this.operador.contrasena?.trim())) {
       this.error = 'Por favor completa todos los campos obligatorios.';
       return;
     }

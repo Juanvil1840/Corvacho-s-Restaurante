@@ -6,43 +6,53 @@
       <h2 class="perfil-titulo-reservas">Historial de Pedidos</h2>
 
       <!-- Si NO hay pedidos -->
-      <div *ngIf="pedidos.length === 0" class="perfil-mensaje-vacio">
-        <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
-        <p>No tienes pedidos registrados aun.</p>
-      </div>
+      @if (pedidos.length === 0) {
+        <div class="perfil-mensaje-vacio">
+          <i class="bi bi-bag-plus" style="font-size: 3rem; color: #6f8896;"></i>
+          <p>No tienes pedidos registrados aun.</p>
+        </div>
+      }
 
       <!-- Si hay pedidos -->
-      <div *ngIf="pedidos.length > 0">
-        <div *ngFor="let pedido of pedidos" class="perfil-pedido-item">
-          <p><strong>Pedido #</strong> <span>{{ pedido.id_Pedido }}</span></p>
-          <p><strong>Estado:</strong> <span>{{ pedido.estado }}</span></p>
-          <p><strong>Fecha:</strong> <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
-          <p><strong>Total:</strong> <span>$ {{ pedido.total | number }}</span></p>
+      @if (pedidos.length > 0) {
+        <div>
+          @for (pedido of pedidos; track pedido.id_Pedido) {
+            <div class="perfil-pedido-item">
+              <p><strong>Pedido #</strong> <span>{{ pedido.id_Pedido }}</span></p>
+              <p><strong>Estado:</strong> <span>{{ pedido.estado }}</span></p>
+              <p><strong>Fecha:</strong> <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
+              <p><strong>Total:</strong> <span>$ {{ pedido.total | number }}</span></p>
 
-          <!-- Detalles del pedido -->
-          <div *ngIf="pedido.productos.length > 0">
-            <p><strong>Productos:</strong></p>
-            <ul>
-              <li *ngFor="let detalle of pedido.productos">
-                {{ detalle.cantidad }}x {{ detalle.producto }}
-                <ng-container *ngIf="detalle.adicionales.length > 0">
-                  <span>
-                    (Adicionales:
-                    <ng-container *ngFor="let adic of detalle.adicionales; let last = last">
-                      {{ adic.cantidad }}x {{ adic.nombre }}{{ !last ? ', ' : '' }}
-                    </ng-container>)
-                  </span>
-                </ng-container>
-                - $ {{ detalle.subtotal | number }}
-              </li>
-            </ul>
-          </div>
+              <!-- Detalles del pedido -->
+              @if (pedido.productos.length > 0) {
+                <div>
+                  <p><strong>Productos:</strong></p>
+                  <ul>
+                    @for (detalle of pedido.productos; track $index) {
+                      <li>
+                        {{ detalle.cantidad }}x {{ detalle.producto }}
+                        @if (detalle.adicionales.length > 0) {
+                          <span>
+                            (Adicionales:
+                            @for (adic of detalle.adicionales; track adic.nombre; let last = $last) {
+                              {{ adic.cantidad }}x {{ adic.nombre }}{{ !last ? ', ' : '' }}
+                            })
+                          </span>
+                        }
+                        - $ {{ detalle.subtotal | number }}
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
 
-          <a [routerLink]="['/pedidos/detalle', pedido.id_Pedido]" class="perfil-btn-pedido" style="display: inline-block; margin-top: 0.5rem;">
-            Ver detalle
-          </a>
+              <a [routerLink]="['/pedidos/detalle', pedido.id_Pedido]" class="perfil-btn-pedido" style="display: inline-block; margin-top: 0.5rem;">
+                Ver detalle
+              </a>
+            </div>
+          }
         </div>
-      </div>
+      }
     </div>
   </div>
 </section>

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PedidoService } from '../../service/pedido.service';
-import { DetallePedidoServiceService } from '../../service/detalle-pedido-service.service';
 import { Pedido } from '../../models/pedido.model';
-import { AdicionalSeleccionadoItem, DetallePedido } from '../../models/detallePedido.model';
+import { AdicionalPedido, DetallePedido } from '../../models/detallePedido.model';
+import { ESTADOS_PEDIDO } from '../../models/estado-pedido.model';
 
 @Component({
   selector: 'app-detalle-pedido',
@@ -22,7 +22,6 @@ export class DetallePedidoComponent implements OnInit {
 
   constructor(
     private pedidoService: PedidoService,
-    private detallePedidoService: DetallePedidoServiceService,
     private route: ActivatedRoute,
     private location: Location
   ) {}
@@ -35,26 +34,11 @@ export class DetallePedidoComponent implements OnInit {
       return;
     }
 
-    const id = Number(idParam);
-    this.pedidoService.getPedidoById(id).subscribe({
+    this.pedidoService.getPedidoById(Number(idParam)).subscribe({
       next: (pedido) => {
         this.pedido = pedido;
-        if (pedido.detallePedidos && pedido.detallePedidos.length > 0) {
-          this.detalles = pedido.detallePedidos as DetallePedido[];
-          this.cargando = false;
-        } else {
-          this.detallePedidoService.obtenerPorPedido(id).subscribe({
-            next: (detalles) => {
-              this.detalles = detalles;
-              this.cargando = false;
-            },
-            error: (err) => {
-              console.error('Error al cargar detalles del pedido:', err);
-              this.detalles = [];
-              this.cargando = false;
-            }
-          });
-        }
+        this.detalles = pedido.detallePedidos;
+        this.cargando = false;
       },
       error: (err) => {
         console.error('Error al cargar el pedido:', err);
@@ -68,59 +52,40 @@ export class DetallePedidoComponent implements OnInit {
     this.location.back();
   }
 
-  esEstado(estado: string): boolean {
-    return this.pedido?.estado === estado;
+  // Numero del estado actual: 1 = Recibido ... 4 = Entregado
+  private numeroEstadoActual(): number {
+    const posicion = ESTADOS_PEDIDO.indexOf(this.pedido?.estado || '');
+    return posicion >= 0 ? posicion + 1 : 1;
   }
 
   pasoEstado(paso: number): 'activo' | 'completado' | '' {
-    const orden: Record<string, number> = {
-      'Recibido': 1,
-      'Cocinando': 2,
-      'Enviado': 3,
-      'Entregado': 4
-    };
-    const actual = orden[this.pedido?.estado || ''] || 1;
+    const actual = this.numeroEstadoActual();
     if (paso === actual) return 'activo';
     if (paso < actual) return 'completado';
     return '';
   }
 
   lineaCompletada(despuesDePaso: number): boolean {
-    const orden: Record<string, number> = {
-      'Recibido': 1,
-      'Cocinando': 2,
-      'Enviado': 3,
-      'Entregado': 4
-    };
-    const actual = orden[this.pedido?.estado || ''] || 1;
-    return actual > despuesDePaso;
+    return this.numeroEstadoActual() > despuesDePaso;
   }
 
-  getAdicionales(detalle: DetallePedido): AdicionalSeleccionadoItem[] {
-    if (detalle.adicionales && detalle.adicionales.length > 0) {
-      return detalle.adicionales;
-    }
-    if (detalle.adicional) {
-      return [{
-        id_adicional: detalle.adicional.id_adicional,
-        nombre: detalle.adicional.nombre,
-        precio: detalle.adicional.precio || 0,
-        cantidad: 1
-      }];
-    }
-    return [];
+  getAdicionales(detalle: DetallePedido): AdicionalPedido[] {
+    return detalle.adicionales || [];
   }
 
   calcularSubtotal(detalle: DetallePedido): number {
-    const precioProducto = detalle.producto?.precio || 0;
-    const precioAdicionales = this.getAdicionales(detalle).reduce(
-      (sum, a) => sum + (a.precio || 0) * (a.cantidad || 1),
-      0
-    );
-    return (precioProducto + precioAdicionales) * detalle.cantidad;
+    let precioUnitario = detalle.producto.precio;
+    for (const adicional of this.getAdicionales(detalle)) {
+      precioUnitario += adicional.precio * adicional.cantidad;
+    }
+    return precioUnitario * detalle.cantidad;
   }
 
   calcularTotal(): number {
-    return this.detalles.reduce((acc, d) => acc + this.calcularSubtotal(d), 0);
+    let total = 0;
+    for (const detalle of this.detalles) {
+      total += this.calcularSubtotal(detalle);
+    }
+    return total;
   }
 }

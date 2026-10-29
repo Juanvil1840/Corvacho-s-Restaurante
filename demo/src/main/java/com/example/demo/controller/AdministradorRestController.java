@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministradorDTO;
+import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Administrador;
 import com.example.demo.service.AdministradorService;
@@ -82,9 +82,9 @@ public class AdministradorRestController {
 
     // Endpoint para autenticar a un administrador mediante usuario y contrasena
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
-        String usuario = credenciales.get("usuario");
-        String contrasena = credenciales.get("contrasena");
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO credenciales) {
+        String usuario = credenciales.getUsuario();
+        String contrasena = credenciales.getContrasena();
 
         // Validacion de que los campos no lleguen vacios al hacer el login
         if (usuario == null || contrasena == null) {
@@ -95,7 +95,7 @@ public class AdministradorRestController {
         // Se delega la validacion al servicio
         Administrador admin = administradorService.autenticar(usuario.trim(), contrasena);
 
-        // Si las credenciales son incorrectas se devuelve un mensaje de usuario o contraseñas incorrectos
+        // Si las credenciales son incorrectas se devuelve un mensaje de usuario o contrasena incorrectos
         if (admin == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new MensajeDTO("Usuario o contrasena incorrectos"));
@@ -104,4 +104,4 @@ public class AdministradorRestController {
         // Si el login es exitoso, se devuelve el DTO con los datos del admin
         return ResponseEntity.ok(AdministradorDTO.fromEntity(admin));
     }
-}
+}

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
-import { CarritoServiceService } from '../../service/carrito-service.service';
+import { CarritoService } from '../../service/carrito.service';
 import { LoginFormularioComponent } from './components/login-formulario/login-formulario.component';
 
 @Component({
@@ -18,7 +18,7 @@ export class LoginClienteComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private carritoService: CarritoServiceService,
+    private carritoService: CarritoService,
     private router: Router
   ) {}
 

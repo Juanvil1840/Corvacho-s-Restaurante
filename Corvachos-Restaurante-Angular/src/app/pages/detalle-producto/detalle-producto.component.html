@@ -1,7 +1,9 @@
-<main class="detalle-container" *ngIf="producto">
+@if (producto) {
+  <main class="detalle-container">
 
-  <app-detalle-info [producto]="producto" [adicionales]="adicionales"></app-detalle-info>
+    <app-detalle-info [producto]="producto" [adicionales]="adicionales"></app-detalle-info>
 
-  <app-detalle-imagen [producto]="producto"></app-detalle-imagen>
+    <app-detalle-imagen [producto]="producto"></app-detalle-imagen>
 
-</main>
+  </main>
+}

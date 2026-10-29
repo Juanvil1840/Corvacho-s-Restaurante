@@ -16,8 +16,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @AllArgsConstructor 
@@ -42,10 +40,8 @@ public class Cliente {
     private String correo;
 
     @NotBlank(message = "La contrasena es obligatoria")
-    @Column(length = 80, nullable = false)
-    @JsonProperty("contrasena")
-    @JsonAlias({"contrasena", "contraseña"})
-    private String contraseña;
+    @Column(name = "contraseña", length = 80, nullable = false) // nombre de la columna que ya existe en la base de datos
+    private String contrasena;
 
     @NotBlank(message = "El telefono es obligatorio")
     private String telefono;
@@ -63,13 +59,13 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
-    public Cliente(String nombre, String apellido, String correo, String contraseña, String telefono, String direccion, boolean activo) {
+    public Cliente(String nombre, String apellido, String correo, String contrasena, String telefono, String direccion, boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.telefono = telefono;
         this.direccion = direccion;
         this.activo = activo;
     }
-}
+}

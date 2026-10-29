@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Pedido } from '../../../../models/pedido.model';
+import { PedidoLista } from '../../../../models/pedido.model';
 
 @Component({
   selector: 'app-pedido-tabla',
@@ -12,7 +12,7 @@ import { Pedido } from '../../../../models/pedido.model';
 })
 export class PedidoTablaComponent {
 
-  @Input() pedidos: Pedido[] = [];
+  @Input() pedidos: PedidoLista[] = [];
   @Output() eliminar = new EventEmitter<number>();
 
   onEliminar(id: number): void {

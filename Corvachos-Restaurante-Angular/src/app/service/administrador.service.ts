@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Administrador } from '../models/administrador.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdministradorService {
 
-  private apiUrl = 'http://localhost:8090/api/administradores';
+  private apiUrl = `${environment.apiUrl}/administradores`;
 
   constructor(private http: HttpClient) { }
 
@@ -45,7 +46,7 @@ export class AdministradorService {
     );
   }
 
-  // 👇 MÉTODO NUEVO PARA EL LOGIN 👇
+  // Login del administrador
   login(usuario: string, contrasena: string): Observable<Administrador> {
     return this.http.post<Administrador>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
       catchError(this.manejarError)
@@ -60,4 +61,4 @@ export class AdministradorService {
     }
     return throwError(() => error);
   }
-}
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ProductoServiceService } from '../../service/producto-service.service';
+import { ProductoService } from '../../service/producto.service';
 import { AdicionalService } from '../../service/adicional.service';
 import { Producto } from '../../models/producto.model';
 import { Adicional } from '../../models/adicional.model';
@@ -22,7 +22,7 @@ export class DetalleProductoComponent implements OnInit {
   error = '';
 
   constructor(
-    private productoService: ProductoServiceService,
+    private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private route: ActivatedRoute
   ) {}

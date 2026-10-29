@@ -23,7 +23,7 @@ import lombok.ToString;
 @Entity
 public class Producto {
     @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Creamos una clase Producto con sus atributos, id,nombre,precio,descripcion,       // imagen, si esta disponile, los ingredientes y su categoria
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column( length = 80, nullable = false)
     private String nombre;
@@ -35,8 +35,6 @@ public class Producto {
     private String imagen;
     @Column( nullable = false)
     private boolean disponible;
-    /* Quitar ingredientes 
-    private List<String> ingredientes; */
     @ManyToOne
     @JoinColumn( name = "id_categoria", nullable = false) 
     private Categoria categoria;
@@ -55,4 +53,4 @@ public class Producto {
     this.disponible = disponible;
     this.categoria = categoria;
     }
-}
+}

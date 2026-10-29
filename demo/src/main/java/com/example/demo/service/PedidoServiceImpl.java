@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.demo.entities.Adicional;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Cliente;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
-import com.example.demo.errors.PedidoNotFoundException;
+import com.example.demo.entities.Producto;
 import com.example.demo.repository.AdicionalRepository;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.repository.DetallePedidoRepository;
@@ -28,6 +29,12 @@ import com.example.demo.repository.ProductoRepository;
 
 @Service
 public class PedidoServiceImpl implements PedidoService {
+
+    // Estados posibles de un pedido, en orden
+    private static final String RECIBIDO = "Recibido";
+    private static final String COCINANDO = "Cocinando";
+    private static final String ENVIADO = "Enviado";
+    private static final String ENTREGADO = "Entregado";
 
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
@@ -61,13 +68,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Collection<Pedido> findActivos() {
-        return pedidoRepository.findByEstadoNotIgnoreCase("Entregado");
+        return pedidoRepository.findByEstadoNotIgnoreCase(ENTREGADO);
     }
 
     @Override
     public Pedido findById(Long id) {
         return pedidoRepository.findById(id)
-                .orElseThrow(() -> new PedidoNotFoundException(id));
+                .orElse(null);
     }
 
     @Override
@@ -89,10 +96,10 @@ public class PedidoServiceImpl implements PedidoService {
             pedido.setFechaCreacion(LocalDateTime.now());
         }
         if (pedido.getEstado() == null || pedido.getEstado().trim().isEmpty()) {
-            pedido.setEstado("Recibido");
+            pedido.setEstado(RECIBIDO);
         } else {
             String normalizado = normalizarEstado(pedido.getEstado());
-            if (!normalizado.equals("Recibido")) {
+            if (!normalizado.equals(RECIBIDO)) {
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST,
                         "Un pedido nuevo debe iniciarse obligatoriamente en estado 'Recibido'.");
@@ -113,6 +120,9 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public Pedido actualizarPedido(Long id, Pedido pedido) {
         Pedido existente = findById(id);
+        if (existente == null) {
+            return null;
+        }
         String estadoAnterior = existente.getEstado();
         Domiciliario domiciliarioAnterior = existente.getDomiciliario();
 
@@ -136,7 +146,7 @@ public class PedidoServiceImpl implements PedidoService {
             existente.setFechaCreacion(pedido.getFechaCreacion());
         }
         existente.setFechaEntrega(pedido.getFechaEntrega());
-        if ("Entregado".equalsIgnoreCase(existente.getEstado()) && existente.getFechaEntrega() == null) {
+        if (ENTREGADO.equals(existente.getEstado()) && existente.getFechaEntrega() == null) {
             existente.setFechaEntrega(LocalDateTime.now());
         }
 
@@ -170,39 +180,39 @@ public class PedidoServiceImpl implements PedidoService {
             return;
         }
 
-        boolean transicionValida = switch (actual) {
-            case "Recibido" -> nuevo.equals("Cocinando");
-            case "Cocinando" -> nuevo.equals("Enviado");
-            case "Enviado" -> nuevo.equals("Entregado");
-            default -> false; // "Entregado" o cualquier otro estado final no puede cambiar
-        };
+        // "Entregado" es el estado final y ya no puede cambiar
+        boolean transicionValida = false;
+        if (actual.equals(RECIBIDO)) {
+            transicionValida = nuevo.equals(COCINANDO);
+        } else if (actual.equals(COCINANDO)) {
+            transicionValida = nuevo.equals(ENVIADO);
+        } else if (actual.equals(ENVIADO)) {
+            transicionValida = nuevo.equals(ENTREGADO);
+        }
 
         if (!transicionValida) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    String.format("Transición no permitida: el pedido en estado '%s' solo puede avanzar al siguiente estado secuencial, no a '%s'.", actual, nuevo));
+                    "Transición no permitida: el pedido en estado '" + actual
+                            + "' solo puede pasar al siguiente estado, no a '" + nuevo + "'.");
         }
     }
 
+    // Deja el estado con la primera letra en mayuscula, por ejemplo "enviado" -> "Enviado"
     private String normalizarEstado(String estado) {
-        if (estado == null) return "Recibido";
-        String s = estado.trim().toLowerCase();
-        return switch (s) {
-            case "recibido", "pendiente" -> "Recibido";
-            case "cocinando" -> "Cocinando";
-            case "enviado" -> "Enviado";
-            case "entregado" -> "Entregado";
-            case "cancelado" -> "Cancelado";
-            default -> estado.trim();
-        };
+        if (estado == null || estado.trim().isEmpty()) {
+            return RECIBIDO;
+        }
+        String texto = estado.trim().toLowerCase();
+        return texto.substring(0, 1).toUpperCase() + texto.substring(1);
     }
 
     // Cuando el pedido pasa a "Enviado" el domiciliario queda ocupado.
-    // Cuando deja de estar "Enviado" (entregado, cancelado...) vuelve a estar disponible.
+    // Cuando deja de estar "Enviado" (por ejemplo al entregarse) vuelve a estar disponible.
     private void actualizarDisponibilidadDomiciliario(Pedido pedido, String estadoAnterior, Domiciliario domiciliarioAnterior) {
         Domiciliario domiciliario = pedido.getDomiciliario();
-        boolean estabaEnviado = "Enviado".equalsIgnoreCase(estadoAnterior);
-        boolean quedaEnviado = "Enviado".equalsIgnoreCase(pedido.getEstado());
+        boolean estabaEnviado = ENVIADO.equals(estadoAnterior);
+        boolean quedaEnviado = ENVIADO.equals(pedido.getEstado());
         boolean mismoDomiciliario = domiciliarioAnterior != null && domiciliario != null
                 && domiciliarioAnterior.getId_domiciliario().equals(domiciliario.getId_domiciliario());
 
@@ -236,48 +246,38 @@ public class PedidoServiceImpl implements PedidoService {
             return;
         }
         for (DetallePedido d : detallesRecibidos) {
-            if (d.getProducto() != null && d.getProducto().getId() != null) {
-                productoRepository.findById(d.getProducto().getId()).ifPresent(prod -> {
-                    DetallePedido nuevo = new DetallePedido();
-                    nuevo.setPedido(pedidoGuardado);
-                    nuevo.setProducto(prod);
-                    nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
-
-                    List<AdicionalSeleccionado> listaAdicionales = new ArrayList<>();
-
-                    if (d.getAdicionales() != null && !d.getAdicionales().isEmpty()) {
-                        for (AdicionalSeleccionado as : d.getAdicionales()) {
-                            if (as != null && as.getId_adicional() != null && as.getId_adicional() > 0) {
-                                adicionalRepository.findById(as.getId_adicional()).ifPresent(adic -> {
-                                    int cantAdic = as.getCantidad() > 0 ? as.getCantidad() : 1;
-                                    listaAdicionales.add(new AdicionalSeleccionado(
-                                            adic.getId_adicional(),
-                                            adic.getNombre(),
-                                            adic.getPrecio(),
-                                            cantAdic
-                                    ));
-                                    if (nuevo.getAdicional() == null) {
-                                        nuevo.setAdicional(adic);
-                                    }
-                                });
-                            }
-                        }
-                    } else if (d.getAdicional() != null && d.getAdicional().getId_adicional() != null && d.getAdicional().getId_adicional() > 0) {
-                        adicionalRepository.findById(d.getAdicional().getId_adicional()).ifPresent(adic -> {
-                            nuevo.setAdicional(adic);
-                            listaAdicionales.add(new AdicionalSeleccionado(
-                                    adic.getId_adicional(),
-                                    adic.getNombre(),
-                                    adic.getPrecio(),
-                                    1
-                            ));
-                        });
-                    }
-
-                    nuevo.setAdicionales(listaAdicionales);
-                    detallePedidoRepository.save(nuevo);
-                });
+            if (d.getProducto() == null || d.getProducto().getId() == null) {
+                continue;
             }
+            Producto producto = productoRepository.findById(d.getProducto().getId()).orElse(null);
+            if (producto == null) {
+                continue;
+            }
+            DetallePedido nuevo = new DetallePedido();
+            nuevo.setPedido(pedidoGuardado);
+            nuevo.setProducto(producto);
+            nuevo.setCantidad(d.getCantidad() > 0 ? d.getCantidad() : 1);
+
+            // Se toman nombre y precio de la base de datos, no de lo que manda el frontend
+            List<AdicionalSeleccionado> adicionales = new ArrayList<>();
+            if (d.getAdicionales() != null) {
+                for (AdicionalSeleccionado seleccionado : d.getAdicionales()) {
+                    if (seleccionado == null || seleccionado.getId_adicional() == null) {
+                        continue;
+                    }
+                    Adicional adicional = adicionalRepository.findById(seleccionado.getId_adicional()).orElse(null);
+                    if (adicional != null) {
+                        int cantidad = seleccionado.getCantidad() > 0 ? seleccionado.getCantidad() : 1;
+                        adicionales.add(new AdicionalSeleccionado(
+                                adicional.getId_adicional(),
+                                adicional.getNombre(),
+                                adicional.getPrecio(),
+                                cantidad));
+                    }
+                }
+            }
+            nuevo.setAdicionales(adicionales);
+            detallePedidoRepository.save(nuevo);
         }
     }
 

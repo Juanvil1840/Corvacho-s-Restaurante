@@ -17,7 +17,9 @@ export class FormularioAdministradorComponent implements OnInit {
 
   administrador: Administrador = {
     id_administrador: 0,
-    nombre: ''
+    nombre: '',
+    usuario: '',
+    contrasena: ''
   };
 
   editando = false;
@@ -49,8 +51,9 @@ export class FormularioAdministradorComponent implements OnInit {
   }
 
   guardar(): void {
-    if (!this.administrador.nombre.trim()) {
-      this.error = 'El nombre del administrador es obligatorio.';
+    if (!this.administrador.nombre.trim() || !this.administrador.usuario.trim()
+        || (!this.editando && !this.administrador.contrasena?.trim())) {
+      this.error = 'Por favor completa todos los campos obligatorios.';
       return;
     }
 
@@ -92,7 +95,7 @@ export class FormularioAdministradorComponent implements OnInit {
   }
 
   cancelar(): void {
-    // 🛠️ Si cancela, verificamos de dónde vino para devolverlo
+    // Si cancela, se devuelve a la pantalla de donde vino
     const adminLogueadoStr = localStorage.getItem('administrador');
     if (adminLogueadoStr) {
       const adminLogueado = JSON.parse(adminLogueadoStr);
@@ -105,4 +108,4 @@ export class FormularioAdministradorComponent implements OnInit {
     // Si no, volvemos a la lista
     this.router.navigate(['/administradores']);
   }
-}
+}

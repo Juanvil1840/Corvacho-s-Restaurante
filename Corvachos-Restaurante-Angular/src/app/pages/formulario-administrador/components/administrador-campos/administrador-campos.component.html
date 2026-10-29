@@ -12,5 +12,28 @@
     />
   </div>
 
+  <div class="administrador-campo">
+    <label for="usuario">Usuario</label>
+    <input
+      id="usuario"
+      name="usuario"
+      type="text"
+      [(ngModel)]="administrador.usuario"
+      placeholder="Ej: admin_principal"
+      required
+    />
+  </div>
+
+  <div class="administrador-campo">
+    <label for="contrasena">Contraseña</label>
+    <input
+      id="contrasena"
+      name="contrasena"
+      type="password"
+      [(ngModel)]="administrador.contrasena"
+      placeholder="Ingresa la contraseña"
+    />
+  </div>
+
 </div>
 

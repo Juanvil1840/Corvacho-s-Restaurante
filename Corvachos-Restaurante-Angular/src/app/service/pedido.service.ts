@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
-import { Pedido } from '../models/pedido.model';
+import { Pedido, PedidoGuardar, PedidoLista } from '../models/pedido.model';
 import { PedidoHistorial } from '../models/pedidoHistorial.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PedidoService {
 
-  private apiUrl = 'http://localhost:8090/api/pedidos';
+  private apiUrl = `${environment.apiUrl}/pedidos`;
 
   constructor(private http: HttpClient) { }
 
-  getPedidos(activos?: boolean): Observable<Pedido[]> {
-    const url = activos !== undefined ? `${this.apiUrl}?activos=${activos}` : this.apiUrl;
-    return this.http.get<Pedido[]>(url).pipe(
+  getPedidos(activos: boolean = false): Observable<PedidoLista[]> {
+    return this.http.get<PedidoLista[]>(`${this.apiUrl}?activos=${activos}`).pipe(
       catchError(this.manejarError)
     );
   }
@@ -32,17 +32,14 @@ export class PedidoService {
     );
   }
 
-  agregarPedido(pedido: Partial<Pedido>): Observable<Pedido> {
+  agregarPedido(pedido: PedidoGuardar): Observable<Pedido> {
     return this.http.post<Pedido>(this.apiUrl, pedido).pipe(
       catchError(this.manejarError)
     );
   }
 
-  actualizarPedido(pedido: Pedido): Observable<Pedido> {
-    return this.http.put<Pedido>(
-      `${this.apiUrl}/${pedido.id_Pedido}`,
-      pedido
-    ).pipe(
+  actualizarPedido(id: number, pedido: PedidoGuardar): Observable<Pedido> {
+    return this.http.put<Pedido>(`${this.apiUrl}/${id}`, pedido).pipe(
       catchError(this.manejarError)
     );
   }

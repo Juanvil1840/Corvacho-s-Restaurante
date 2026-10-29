@@ -9,11 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO optimizado para el listado de pedidos en tablas (evita over-fetching de detalles de productos)
+// DTO para la tabla de pedidos: solo los datos que se muestran en cada fila
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "cliente", "operador", "domiciliario"})
+@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "clienteNombre", "operadorNombre", "domiciliarioNombre"})
 public class PedidoListaDTO {
 
     @JsonProperty("id_Pedido")
@@ -25,27 +25,32 @@ public class PedidoListaDTO {
     @JsonProperty("fechaCreacion")
     private LocalDateTime fechaCreacion;
 
-    @JsonProperty("cliente")
-    private ClientePedidoDTO cliente;
+    @JsonProperty("clienteNombre")
+    private String clienteNombre;
 
-    @JsonProperty("operador")
-    private OperadorPedidoDTO operador;
+    @JsonProperty("operadorNombre")
+    private String operadorNombre;
 
-    @JsonProperty("domiciliario")
-    private DomiciliarioPedidoDTO domiciliario;
+    @JsonProperty("domiciliarioNombre")
+    private String domiciliarioNombre;
 
     public static PedidoListaDTO fromEntity(Pedido pedido) {
         if (pedido == null) {
             return null;
         }
+        String clienteNombre = null;
+        if (pedido.getCliente() != null) {
+            clienteNombre = pedido.getCliente().getNombre() + " " + pedido.getCliente().getApellido();
+        }
+        String operadorNombre = pedido.getOperador() != null ? pedido.getOperador().getNombre() : null;
+        String domiciliarioNombre = pedido.getDomiciliario() != null ? pedido.getDomiciliario().getNombre() : null;
         return new PedidoListaDTO(
                 pedido.getId_Pedido(),
                 pedido.getEstado(),
                 pedido.getFechaCreacion(),
-                ClientePedidoDTO.fromEntity(pedido.getCliente()),
-                OperadorPedidoDTO.fromEntity(pedido.getOperador()),
-                DomiciliarioPedidoDTO.fromEntity(pedido.getDomiciliario())
+                clienteNombre,
+                operadorNombre,
+                domiciliarioNombre
         );
     }
 }
-

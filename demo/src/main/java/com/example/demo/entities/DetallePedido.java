@@ -26,7 +26,7 @@ public class DetallePedido {
     private Long id_DetallePedido;
 
     @Column(nullable = false)
-    int cantidad;
+    private int cantidad;
 
     @ManyToOne
     @JoinColumn(name = "id_producto")
@@ -36,10 +36,6 @@ public class DetallePedido {
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;
 
-    @ManyToOne
-    @JoinColumn(name = "id_adicional")
-    private Adicional adicional;
-
     @ElementCollection(fetch = FetchType.EAGER)
     private List<AdicionalSeleccionado> adicionales = new ArrayList<>();
 
@@ -47,7 +43,6 @@ public class DetallePedido {
         this.cantidad = cantidad;
         this.producto = producto;
         this.pedido = pedido;
-        this.adicional = adicional;
         if (adicional != null) {
             this.adicionales.add(new AdicionalSeleccionado(
                     adicional.getId_adicional(),

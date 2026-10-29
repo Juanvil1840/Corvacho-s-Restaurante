@@ -1,9 +1,8 @@
 package com.example.demo.service;
 
 import java.util.Collection;
-import java.util.List; // 👈 AGREGAR ESTO
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +17,15 @@ import com.example.demo.repository.PedidoRepository;
 @Service
 public class DomiciliarioServiceImpl implements DomiciliarioService {
 
-    @Autowired
-    private DomiciliarioRepository domiciliarioRepository;
+    private final DomiciliarioRepository domiciliarioRepository;
+    private final OperadorRepository operadorRepository;
+    private final PedidoRepository pedidoRepository;
 
-    @Autowired
-    private OperadorRepository operadorRepository;
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
+    public DomiciliarioServiceImpl(DomiciliarioRepository domiciliarioRepository, OperadorRepository operadorRepository, PedidoRepository pedidoRepository) {
+        this.domiciliarioRepository = domiciliarioRepository;
+        this.operadorRepository = operadorRepository;
+        this.pedidoRepository = pedidoRepository;
+    }
 
     @Override
     public Collection<Domiciliario> findAll() {
@@ -45,6 +45,7 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
     @Override
     public Domiciliario crearDomiciliario(Domiciliario domiciliario) {
         domiciliario.setId_domiciliario(null);
+        validarDatosUnicos(domiciliario, null);
         domiciliario.setActivo(true);
         domiciliario.setOperador(buscarOperador(domiciliario));
         return domiciliarioRepository.save(domiciliario);
@@ -56,6 +57,7 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
             return null;
         }
         domiciliario.setId_domiciliario(id);
+        validarDatosUnicos(domiciliario, id);
         if (domiciliario.isActivo()) {
             domiciliario.setOperador(buscarOperador(domiciliario));
         } else {
@@ -101,4 +103,16 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
                         HttpStatus.BAD_REQUEST,
                         "El operador seleccionado no existe"));
     }
-}
+
+    // La cedula y el celular no se pueden repetir entre domiciliarios
+    private void validarDatosUnicos(Domiciliario domiciliario, Long idActual) {
+        Domiciliario conMismaCedula = domiciliarioRepository.findByCedula(domiciliario.getCedula()).orElse(null);
+        if (conMismaCedula != null && !conMismaCedula.getId_domiciliario().equals(idActual)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya existe un domiciliario con esa cedula");
+        }
+        Domiciliario conMismoCelular = domiciliarioRepository.findByCelular(domiciliario.getCelular()).orElse(null);
+        if (conMismoCelular != null && !conMismoCelular.getId_domiciliario().equals(idActual)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya existe un domiciliario con ese celular");
+        }
+    }
+}

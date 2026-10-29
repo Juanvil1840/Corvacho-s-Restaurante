@@ -7,10 +7,11 @@
   </div>
 
   <section class="tarjetas">
-    <app-producto-card
-      *ngFor="let producto of productos"
-      [producto]="producto">
-    </app-producto-card>
+    @for (producto of productos; track producto.id) {
+      <app-producto-card
+        [producto]="producto">
+      </app-producto-card>
+    }
   </section>
 
-</div>
+</div>

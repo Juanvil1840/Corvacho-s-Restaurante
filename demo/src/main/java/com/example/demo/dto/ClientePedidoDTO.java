@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Datos del cliente que se necesitan para entregar un pedido
 @Data
 @NoArgsConstructor
-@JsonPropertyOrder({"clienteId", "nombre", "apellido", "correo", "telefono", "direccion", "activo"})
+@JsonPropertyOrder({"clienteId", "nombre", "apellido", "telefono", "direccion"})
 public class ClientePedidoDTO {
 
     @JsonProperty("clienteId")
@@ -20,26 +21,18 @@ public class ClientePedidoDTO {
     @JsonProperty("apellido")
     private String apellido;
 
-    @JsonProperty("correo")
-    private String correo;
-
     @JsonProperty("telefono")
     private String telefono;
 
     @JsonProperty("direccion")
     private String direccion;
 
-    @JsonProperty("activo")
-    private boolean activo;
-
-    public ClientePedidoDTO(Long clienteId, String nombre, String apellido, String correo, String telefono, String direccion, boolean activo) {
+    public ClientePedidoDTO(Long clienteId, String nombre, String apellido, String telefono, String direccion) {
         this.clienteId = clienteId;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.correo = correo;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.activo = activo;
     }
 
     public static ClientePedidoDTO fromEntity(Cliente cliente) {
@@ -50,10 +43,8 @@ public class ClientePedidoDTO {
                 cliente.getClienteId(),
                 cliente.getNombre(),
                 cliente.getApellido(),
-                cliente.getCorreo() != null ? cliente.getCorreo() : "",
                 cliente.getTelefono() != null ? cliente.getTelefono() : "",
-                cliente.getDireccion() != null ? cliente.getDireccion() : "",
-                cliente.isActivo()
+                cliente.getDireccion() != null ? cliente.getDireccion() : ""
         );
     }
 }

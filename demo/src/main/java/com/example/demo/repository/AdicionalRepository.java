@@ -20,6 +20,6 @@ public interface AdicionalRepository extends JpaRepository<Adicional, Long>{
 
     boolean existsByCategoria_Id(Long categoriaId);
 
-    @Query("SELECT COUNT(d) > 0 FROM DetallePedido d WHERE d.adicional.id_adicional = :adicionalId")
+    @Query("SELECT COUNT(d) > 0 FROM DetallePedido d JOIN d.adicionales a WHERE a.id_adicional = :adicionalId")
     boolean existsEnDetallePedido(@Param("adicionalId") Long adicionalId);
-}
+}

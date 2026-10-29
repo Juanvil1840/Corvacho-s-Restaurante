@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +18,15 @@ import com.example.demo.repository.PedidoRepository;
 @Service
 public class OperadorServiceImpl implements OperadorService {
 
-    @Autowired
-    private OperadorRepository operadorRepository;
+    private final OperadorRepository operadorRepository;
+    private final DomiciliarioRepository domiciliarioRepository;
+    private final PedidoRepository pedidoRepository;
 
-    @Autowired
-    private DomiciliarioRepository domiciliarioRepository;
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
+    public OperadorServiceImpl(OperadorRepository operadorRepository, DomiciliarioRepository domiciliarioRepository, PedidoRepository pedidoRepository) {
+        this.operadorRepository = operadorRepository;
+        this.domiciliarioRepository = domiciliarioRepository;
+        this.pedidoRepository = pedidoRepository;
+    }
 
     @Override
     public Collection<Operador> findAll() {
@@ -130,10 +130,8 @@ public class OperadorServiceImpl implements OperadorService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña del operador es obligatoria");
         }
 
-        boolean usuarioDuplicado = operadorRepository.findAll().stream()
-                .anyMatch(op -> op.getUsuario().equalsIgnoreCase(operador.getUsuario().trim())
-                        && (idActual == null || !op.getId_operador().equals(idActual)));
-        if (usuarioDuplicado) {
+        Operador conMismoUsuario = operadorRepository.findByUsuario(operador.getUsuario().trim());
+        if (conMismoUsuario != null && !conMismoUsuario.getId_operador().equals(idActual)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
         }
     }

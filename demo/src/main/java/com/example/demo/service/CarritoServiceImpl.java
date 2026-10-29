@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.demo.dto.ActualizarCarritoDTO;
+import com.example.demo.dto.AdicionalPedidoDTO;
 import com.example.demo.dto.CarritoDTO;
+import com.example.demo.dto.ProductoCarritoDTO;
 import com.example.demo.entities.Adicional;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Carrito;
@@ -63,12 +64,12 @@ public class CarritoServiceImpl implements CarritoService{
     public CarritoDTO obtenerPorCliente(Long clienteId) {
         return carritoRepository.findByClienteClienteId(clienteId)
                 .map(carrito -> convertir(carrito.getProductoCarritos()))
-                .orElseGet(() -> new CarritoDTO(List.of()));
+                .orElseGet(() -> new CarritoDTO());
     }
 
     @Override
     @Transactional
-    public CarritoDTO actualizarPorCliente(Long clienteId, ActualizarCarritoDTO datos) {
+    public CarritoDTO actualizarPorCliente(Long clienteId, CarritoDTO datos) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
 
@@ -76,18 +77,18 @@ public class CarritoServiceImpl implements CarritoService{
                 .orElseGet(() -> new Carrito(cliente));
         carrito.getProductoCarritos().clear();
 
-        for (ActualizarCarritoDTO.Item item : datos.items()) {
-            Producto producto = productoRepository.findById(item.productoId())
+        for (ProductoCarritoDTO item : datos.getItems()) {
+            Producto producto = productoRepository.findById(item.getProductoId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Producto no encontrado"));
             if (!producto.isDisponible()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                         "El producto " + producto.getNombre() + " no está disponible");
             }
 
-            ProductoCarrito productoCarrito = new ProductoCarrito(item.cantidad(), producto, carrito);
+            ProductoCarrito productoCarrito = new ProductoCarrito(item.getCantidad(), producto, carrito);
             List<AdicionalSeleccionado> adicionales = new ArrayList<>();
-            for (ActualizarCarritoDTO.Adicional adicionalSeleccionado : item.adicionales()) {
-                Adicional adicional = adicionalRepository.findById(adicionalSeleccionado.id_adicional())
+            for (AdicionalPedidoDTO adicionalSeleccionado : item.getAdicionales()) {
+                Adicional adicional = adicionalRepository.findById(adicionalSeleccionado.getId_adicional())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
                                 "Adicional no encontrado"));
                 if (!adicional.isDisponible()) {
@@ -99,7 +100,7 @@ public class CarritoServiceImpl implements CarritoService{
                             "El adicional no corresponde a este producto");
                 }
                 adicionales.add(new AdicionalSeleccionado(adicional.getId_adicional(), adicional.getNombre(),
-                        adicional.getPrecio(), adicionalSeleccionado.cantidad()));
+                        adicional.getPrecio(), adicionalSeleccionado.getCantidad()));
             }
             productoCarrito.setAdicionales(adicionales);
             carrito.getProductoCarritos().add(productoCarrito);
@@ -119,12 +120,20 @@ public class CarritoServiceImpl implements CarritoService{
     }
 
     private CarritoDTO convertir(List<ProductoCarrito> productos) {
-        List<CarritoDTO.Item> items = productos.stream().map(item -> new CarritoDTO.Item(
-                item.getProducto().getId(), item.getProducto().getNombre(), item.getProducto().getPrecio(),
-                item.getProducto().getImagen(), item.getCantidadP(),
-                item.getAdicionales().stream().map(adicional -> new CarritoDTO.Adicional(
-                        adicional.getId_adicional(), adicional.getNombre(), adicional.getPrecio(),
-                        adicional.getCantidad())).toList())).toList();
+        List<ProductoCarritoDTO> items = new ArrayList<>();
+        for (ProductoCarrito item : productos) {
+            List<AdicionalPedidoDTO> adicionales = new ArrayList<>();
+            for (AdicionalSeleccionado adicional : item.getAdicionales()) {
+                adicionales.add(AdicionalPedidoDTO.fromEntity(adicional));
+            }
+            items.add(new ProductoCarritoDTO(
+                    item.getProducto().getId(),
+                    item.getProducto().getNombre(),
+                    item.getProducto().getPrecio(),
+                    item.getProducto().getImagen(),
+                    item.getCantidadP(),
+                    adicionales));
+        }
         return new CarritoDTO(items);
     }
 }

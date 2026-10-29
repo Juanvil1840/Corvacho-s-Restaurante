@@ -23,9 +23,11 @@
   <label>Categoria</label>
   <select [(ngModel)]="producto.categoria.id" name="categoriaId" required>
     <option [ngValue]="0">-- Seleccionar categoria --</option>
-    <option *ngFor="let cat of categorias" [ngValue]="cat.id">
-      {{ cat.nombre }}
-    </option>
+    @for (cat of categorias; track cat.id) {
+      <option [ngValue]="cat.id">
+        {{ cat.nombre }}
+      </option>
+    }
   </select>
 </div>
 
@@ -34,4 +36,4 @@
     <input type="checkbox" [(ngModel)]="producto.disponible" name="disponible">
     Disponible
   </label>
-</div>
+</div>

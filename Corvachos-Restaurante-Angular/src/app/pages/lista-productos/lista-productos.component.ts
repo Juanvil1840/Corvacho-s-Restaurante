@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { ProductoServiceService } from '../../service/producto-service.service';
+import { ProductoService } from '../../service/producto.service';
 import { Producto } from '../../models/producto.model';
 import { ProductoTablaComponent } from './components/producto-tabla/producto-tabla.component';
 
@@ -19,7 +19,7 @@ export class ListaProductosComponent implements OnInit {
   error = '';
 
   constructor(
-    private productoService: ProductoServiceService,
+    private productoService: ProductoService,
     private router: Router
   ) {}
 
@@ -87,4 +87,4 @@ export class ListaProductosComponent implements OnInit {
       }
     });
   }
-}
+}

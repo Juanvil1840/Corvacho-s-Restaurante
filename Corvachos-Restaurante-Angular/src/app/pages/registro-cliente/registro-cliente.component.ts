@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
-import { CarritoServiceService } from '../../service/carrito-service.service';
+import { CarritoService } from '../../service/carrito.service';
 import { Cliente } from '../../models/cliente.model';
 import { RegistroFormularioComponent } from './components/registro-formulario/registro-formulario.component';
 
@@ -19,7 +19,7 @@ export class RegistroClienteComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private carritoService: CarritoServiceService,
+    private carritoService: CarritoService,
     private router: Router
   ) {}
 

@@ -18,9 +18,9 @@
         <td>
           <span class="pedido-estado-badge">{{ pedido.estado }}</span>
         </td>
-        <td>{{ pedido.cliente ? (pedido.cliente.nombre + ' ' + pedido.cliente.apellido) : '—' }}</td>
-        <td>{{ pedido.operador?.nombre ?? '—' }}</td>
-        <td>{{ pedido.domiciliario?.nombre ?? 'Sin asignar' }}</td>
+        <td>{{ pedido.clienteNombre ?? '—' }}</td>
+        <td>{{ pedido.operadorNombre ?? '—' }}</td>
+        <td>{{ pedido.domiciliarioNombre ?? 'Sin asignar' }}</td>
         <td>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <a

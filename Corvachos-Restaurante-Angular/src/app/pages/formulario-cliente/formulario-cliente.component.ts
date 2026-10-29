@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
-import { CarritoServiceService } from '../../service/carrito-service.service';
+import { CarritoService } from '../../service/carrito.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteCamposComponent } from './components/cliente-campos/cliente-campos.component';
 
@@ -33,7 +33,7 @@ export class FormularioClienteComponent implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
-    private carritoService: CarritoServiceService,
+    private carritoService: CarritoService,
     private route: ActivatedRoute,
     private router: Router
   ) {}

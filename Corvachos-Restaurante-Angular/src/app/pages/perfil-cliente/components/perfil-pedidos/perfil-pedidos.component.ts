@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { PedidoHistorial } from '../../../../models/pedidoHistorial.model';
 import { PedidoService } from '../../../../service/pedido.service';
-import { CarritoServiceService } from '../../../../service/carrito-service.service';
+import { CarritoService } from '../../../../service/carrito.service';
 
 @Component({
   selector: 'app-perfil-pedidos',
@@ -23,7 +23,7 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private pedidoService: PedidoService,
-    private carritoService: CarritoServiceService
+    private carritoService: CarritoService
   ) {}
 
   ngOnInit(): void {

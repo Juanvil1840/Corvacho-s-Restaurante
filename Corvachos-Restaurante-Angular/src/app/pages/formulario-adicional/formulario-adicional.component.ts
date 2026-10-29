@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdicionalService } from '../../service/adicional.service';
 import { CategoriaService } from '../../service/categoria.service';
 import { Adicional } from '../../models/adicional.model';
@@ -11,7 +11,7 @@ import { AdicionalCamposComponent } from './components/adicional-campos/adiciona
 @Component({
   selector: 'app-formulario-adicional',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, AdicionalCamposComponent],
+  imports: [CommonModule, FormsModule, AdicionalCamposComponent],
   templateUrl: './formulario-adicional.component.html',
   styleUrl: './formulario-adicional.component.scss'
 })
@@ -101,4 +101,4 @@ export class FormularioAdicionalComponent implements OnInit {
   cancelar(): void {
     this.router.navigate(['/adicionales']);
   }
-}
+}

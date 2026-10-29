@@ -2,11 +2,12 @@
   <div class="menu-grid">
 
     <!-- Por cada categoria -->
-    <app-categoria-seccion
-      *ngFor="let categoria of getCategorias()"
-      [categoria]="categoria"
-      [productos]="productosPorCategoria[categoria]">
-    </app-categoria-seccion>
+    @for (categoria of getCategorias(); track categoria) {
+      <app-categoria-seccion
+        [categoria]="categoria"
+        [productos]="productosPorCategoria[categoria]">
+      </app-categoria-seccion>
+    }
 
   </div>
 </main>

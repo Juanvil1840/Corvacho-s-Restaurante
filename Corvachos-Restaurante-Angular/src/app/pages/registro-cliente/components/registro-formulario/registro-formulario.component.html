@@ -1,6 +1,8 @@
 <form (ngSubmit)="onSubmit()">
 
-  <p *ngIf="error" style="color: #ef4444; text-align: center;">{{ error }}</p>
+  @if (error) {
+    <p style="color: #ef4444; text-align: center;">{{ error }}</p>
+  }
 
   <div class="registro-grupo">
     <label>Nombre</label>
@@ -38,4 +40,4 @@
     Ya tienes una cuenta?
     <a routerLink="/login">Inicia sesion</a>
   </p>
-</form>
+</form>

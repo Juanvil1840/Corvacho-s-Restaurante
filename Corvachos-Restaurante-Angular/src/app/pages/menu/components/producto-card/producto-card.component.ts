@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Producto } from '../../../../models/producto.model';
-import { CarritoServiceService } from '../../../../service/carrito-service.service';
+import { CarritoService } from '../../../../service/carrito.service';
 
 @Component({
   selector: 'app-producto-card',
@@ -16,7 +16,7 @@ export class ProductoCardComponent {
   @Input() producto!: Producto;
   agregado = false;
 
-  constructor(private carritoService: CarritoServiceService) {}
+  constructor(private carritoService: CarritoService) {}
 
   agregarRapido(): void {
     this.carritoService.agregarItem(this.producto, 1, null);

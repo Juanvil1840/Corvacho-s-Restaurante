@@ -25,11 +25,11 @@ export class PortalAdminComponent implements OnInit {
     }
     const admin: Administrador = JSON.parse(adminStr);
     this.nombreAdmin = admin.nombre;
-    this.idAdmin = admin.id_administrador; // 👈 GUARDAMOS EL ID
+    this.idAdmin = admin.id_administrador;
   }
 
   cerrarSesion(): void {
     localStorage.removeItem('administrador');
     this.router.navigate(['/login-admin']);
   }
-}
+}

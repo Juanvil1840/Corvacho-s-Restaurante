@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.LoginOperadorDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.OperadorDTO;
 import com.example.demo.entities.Operador;
@@ -79,14 +78,10 @@ public class OperadorRestController {
         return ResponseEntity.noContent().build();
     }
 
-    // Autenticar a un operador paara el login
+    // Autentica a un operador para el login
     @PostMapping("/login")
-    public ResponseEntity<LoginOperadorDTO> login(@RequestBody LoginRequestDTO credenciales) {
+    public ResponseEntity<OperadorDTO> login(@RequestBody LoginRequestDTO credenciales) {
         Operador operador = operadorService.autenticarOperador(credenciales);
-        return ResponseEntity.ok(new LoginOperadorDTO(
-                operador.getId_operador(),
-                operador.getNombre(),
-                operador.getUsuario()
-        ));
+        return ResponseEntity.ok(OperadorDTO.fromEntity(operador));
     }
-}
+}
