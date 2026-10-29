@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Pedido;
 
+// Repositorio JPA para la entidad Pedido
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 

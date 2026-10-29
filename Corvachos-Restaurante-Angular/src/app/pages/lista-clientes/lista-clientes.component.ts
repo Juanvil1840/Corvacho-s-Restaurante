@@ -5,6 +5,7 @@ import { ClienteService } from '../../service/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.component';
 
+// Componente para visualizar y gestionar el listado de clientes registrados
 @Component({
   selector: 'app-lista-clientes',
   standalone: true,
@@ -14,16 +15,19 @@ import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.
 })
 export class ListaClientesComponent implements OnInit {
 
+  // Arreglo de clientes y estados para controlar la interfaz
   clientes: Cliente[] = [];
   cargando = false;
   error = '';
 
   constructor(private clienteService: ClienteService) {}
 
+  // Carga los clientes al iniciar el componente
   ngOnInit(): void {
     this.cargarClientes();
   }
 
+  // Solicita al backend la lista completa de clientes
   cargarClientes(): void {
     this.cargando = true;
     this.error = '';
@@ -41,10 +45,12 @@ export class ListaClientesComponent implements OnInit {
     });
   }
 
+  // Pide confirmación y elimina un cliente según su ID
   eliminarCliente(id: number): void {
     if (confirm('¿Estas seguro de eliminar este cliente?')) {
       this.clienteService.eliminarCliente(id).subscribe({
         next: () => {
+          // Recarga el listado de clientes tras eliminar
           this.cargarClientes();
         },
         error: (err) => {

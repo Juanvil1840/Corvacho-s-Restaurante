@@ -8,6 +8,7 @@ import { Adicional } from '../../models/adicional.model';
 import { Categoria } from '../../models/categoria.model';
 import { AdicionalCamposComponent } from './components/adicional-campos/adicional-campos.component';
 
+// Página de formulario para crear o editar un adicional del menú
 @Component({
   selector: 'app-formulario-adicional',
   standalone: true,
@@ -17,6 +18,7 @@ import { AdicionalCamposComponent } from './components/adicional-campos/adiciona
 })
 export class FormularioAdicionalComponent implements OnInit {
 
+  // Objeto del adicional que se enlaza con los campos del formulario
   adicional: Adicional = {
     id_adicional: 0,
     nombre: '',
@@ -25,6 +27,7 @@ export class FormularioAdicionalComponent implements OnInit {
     categoria: { id: 0, nombre: '' }
   };
 
+  // Lista de categorías y variables de estado del formulario
   categorias: Categoria[] = [];
   editando = false;
   guardando = false;
@@ -37,6 +40,7 @@ export class FormularioAdicionalComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga las categorías disponibles y, si viene un ID en la URL, carga el adicional a editar
   ngOnInit(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
@@ -65,6 +69,7 @@ export class FormularioAdicionalComponent implements OnInit {
     }
   }
 
+  // Sincroniza el objeto completo de la categoría según el ID seleccionado en el formulario
   actualizarCategoria(): void {
     const categoriaId = Number(this.adicional.categoria.id);
     const categoriaSeleccionada = this.categorias.find(
@@ -76,6 +81,7 @@ export class FormularioAdicionalComponent implements OnInit {
     }
   }
 
+  // Envía la petición para crear o actualizar el adicional y redirige a la lista
   guardar(): void {
     this.actualizarCategoria();
     this.guardando = true;
@@ -98,7 +104,8 @@ export class FormularioAdicionalComponent implements OnInit {
     });
   }
 
+  // Cancela la operación y vuelve al listado de adicionales
   cancelar(): void {
     this.router.navigate(['/adicionales']);
   }
-}
+}

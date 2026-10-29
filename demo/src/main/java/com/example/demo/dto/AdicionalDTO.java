@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO que representa la informacion de un adicional junto con su categoria
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id_adicional", "nombre", "precio", "disponible", "categoria"})
@@ -26,6 +27,7 @@ public class AdicionalDTO {
     @JsonProperty("categoria")
     private CategoriaDTO categoria;
 
+    // Constructor con todos los campos del DTO
     public AdicionalDTO(Long id_adicional, String nombre, double precio, boolean disponible, CategoriaDTO categoria) {
         this.id_adicional = id_adicional;
         this.nombre = nombre;
@@ -34,6 +36,7 @@ public class AdicionalDTO {
         this.categoria = categoria;
     }
 
+    // Convierte una entidad Adicional a su respectivo DTO
     public static AdicionalDTO fromEntity(Adicional adicional) {
         if (adicional == null) {
             return null;

@@ -7,6 +7,7 @@ import { CarritoService } from '../../service/carrito.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteCamposComponent } from './components/cliente-campos/cliente-campos.component';
 
+// Página de formulario para registrar, editar, desactivar o reactivar un cliente
 @Component({
   selector: 'app-formulario-cliente',
   standalone: true,
@@ -16,6 +17,7 @@ import { ClienteCamposComponent } from './components/cliente-campos/cliente-camp
 })
 export class FormularioClienteComponent implements OnInit {
 
+  // Objeto cliente enlazado a los campos del formulario
   cliente: Cliente = {
     clienteId: 0,
     nombre: '',
@@ -27,6 +29,7 @@ export class FormularioClienteComponent implements OnInit {
     activo: true
   };
 
+  // Variables de estado para controlar la edición, el envío y los errores
   editando: boolean = false;
   guardando: boolean = false;
   error: string = '';
@@ -38,6 +41,7 @@ export class FormularioClienteComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga los datos del cliente si se recibe un ID en los parámetros de la ruta
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -54,6 +58,7 @@ export class FormularioClienteComponent implements OnInit {
     }
   }
 
+  // Guarda o actualiza la información del cliente y actualiza su sesión activa
   guardar(): void {
     this.guardando = true;
     this.error = '';
@@ -76,6 +81,7 @@ export class FormularioClienteComponent implements OnInit {
     });
   }
 
+  // Solicita confirmación y desactiva la cuenta del cliente actual
   desactivarCuenta(): void {
     if (confirm('¿Estás seguro de que quieres desactivar tu cuenta? Podrás reactivarla más tarde.')) {
       this.clienteService.desactivarCliente(this.cliente.clienteId).subscribe({
@@ -91,6 +97,7 @@ export class FormularioClienteComponent implements OnInit {
     }
   }
 
+  // Reactiva la cuenta del cliente y actualiza los datos en la sesión
   reactivarCuenta(): void {
     this.clienteService.reactivarCliente(this.cliente.clienteId).subscribe({
       next: (actualizado) => {
@@ -104,6 +111,7 @@ export class FormularioClienteComponent implements OnInit {
     });
   }
 
+  // Regresa al perfil del cliente si estaba editando o al listado general si estaba creando
   cancelar(): void {
     if (this.editando) {
       this.router.navigate(['/clientes/perfil', this.cliente.clienteId]);

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+// Sección de la página de inicio que muestra una galería con las especialidades de la casa
 @Component({
   selector: 'app-especialidades',
   standalone: true,
@@ -9,6 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./especialidades.component.scss']
 })
 export class EspecialidadesComponent {
+  // Lista de platos destacados con su nombre y ruta de imagen
   platos = [
     { nombre: 'Berenjenas a la parmesana', imagen: '/Images/comida-berenjenas_a_la_parmesana.png' },
     { nombre: 'Burrata', imagen: '/Images/Comida-burrata.png' },

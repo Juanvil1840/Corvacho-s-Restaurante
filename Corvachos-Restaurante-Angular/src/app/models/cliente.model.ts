@@ -1,3 +1,4 @@
+// Modelo que representa la información de un cliente registrado en el restaurante
 export interface Cliente {
     clienteId: number;
     nombre: string;
@@ -7,4 +8,4 @@ export interface Cliente {
     telefono: string;
     direccion: string;
     activo: boolean;
-}
+}

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Domiciliario } from '../../../../models/domiciliario.model';
 import { Operador } from '../../../../models/operador.model';
 
+// Subcomponente que contiene los campos de entrada del formulario de domiciliario
 @Component({
   selector: 'app-domiciliario-campos',
   standalone: true,
@@ -13,6 +14,7 @@ import { Operador } from '../../../../models/operador.model';
 })
 export class DomiciliarioCamposComponent {
 
+  // Datos del domiciliario y lista de operadores para asignar encargado
   @Input() domiciliario!: Domiciliario;
   @Input() operadores: Operador[] = [];
 }

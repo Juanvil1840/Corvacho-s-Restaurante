@@ -19,6 +19,7 @@ public class DetallePedidoRestController {
 
     private final DetallePedidoService detallePedidoService;
 
+    // Constructor para inyectar el servicio de detalles de pedido
     public DetallePedidoRestController(DetallePedidoService detallePedidoService) {
         this.detallePedidoService = detallePedidoService;
     }

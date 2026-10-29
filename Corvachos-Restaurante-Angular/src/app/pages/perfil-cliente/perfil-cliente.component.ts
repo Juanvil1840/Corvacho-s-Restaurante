@@ -7,6 +7,7 @@ import { Cliente } from '../../models/cliente.model';
 import { PerfilInfoComponent } from './components/perfil-info/perfil-info.component';
 import { PerfilPedidosComponent } from './components/perfil-pedidos/perfil-pedidos.component';
 
+// Componente que gestiona la vista de perfil del cliente y el historial de sus pedidos
 @Component({
   selector: 'app-perfil-cliente',
   standalone: true,
@@ -16,6 +17,7 @@ import { PerfilPedidosComponent } from './components/perfil-pedidos/perfil-pedid
 })
 export class PerfilClienteComponent implements OnInit {
 
+  // Datos del cliente actual y estado de carga
   cliente: Cliente | undefined;
   cargando = true;
 
@@ -26,6 +28,7 @@ export class PerfilClienteComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Obtiene el cliente desde la sesión activa o consultando el ID de la ruta en el servidor
   ngOnInit(): void {
     const enSesion = this.carritoService.getClienteLogueado();
     if (enSesion && enSesion.clienteId > 0) {
@@ -36,6 +39,7 @@ export class PerfilClienteComponent implements OnInit {
       const idParam = params.get('id');
       const idNum = idParam ? Number(idParam) : (enSesion?.clienteId || 0);
 
+      // Si hay un ID válido, actualiza la información del cliente desde el backend
       if (idNum > 0 && !isNaN(idNum)) {
         this.cargando = true;
         this.clienteService.getClienteById(idNum).subscribe({
@@ -58,6 +62,7 @@ export class PerfilClienteComponent implements OnInit {
     });
   }
 
+  // Solicita confirmación para eliminar o desactivar la cuenta del cliente y cierra su sesión
   eliminarCuenta(): void {
     if (confirm('¿Estas seguro de que deseas eliminar tu cuenta? Esta accion no se puede deshacer.')) {
       if (this.cliente) {
@@ -74,6 +79,7 @@ export class PerfilClienteComponent implements OnInit {
     }
   }
 
+  // Cierra la sesión activa del cliente y redirige al inicio
   cerrarSesion(): void {
     this.carritoService.cerrarSesionCliente();
     this.router.navigate(['/']);

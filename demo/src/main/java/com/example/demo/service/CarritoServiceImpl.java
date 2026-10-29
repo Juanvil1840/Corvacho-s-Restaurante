@@ -23,6 +23,7 @@ import com.example.demo.repository.CarritoRepository;
 import com.example.demo.repository.ClienteRepository;
 import com.example.demo.repository.ProductoRepository;
 
+// Implementacion del servicio para la gestion del carrito de compras de los clientes
 @Service
 public class CarritoServiceImpl implements CarritoService{
 
@@ -31,6 +32,7 @@ public class CarritoServiceImpl implements CarritoService{
     private final ProductoRepository productoRepository;
     private final AdicionalRepository adicionalRepository;
 
+    // Constructor con inyeccion de los repositorios necesarios
     public CarritoServiceImpl(CarritoRepository carritoRepository, ClienteRepository clienteRepository,
             ProductoRepository productoRepository, AdicionalRepository adicionalRepository) {
         this.carritoRepository = carritoRepository;
@@ -39,26 +41,31 @@ public class CarritoServiceImpl implements CarritoService{
         this.adicionalRepository = adicionalRepository;
     }
 
+    // Lista todos los carritos registrados
     @Override
     public Collection<Carrito> findAll() {
         return carritoRepository.findAll();
     }
 
+    // Busca un carrito por su id
     @Override
     public Carrito findById(Long id) {
        return carritoRepository.findById(id).orElse(null);
     }
 
+    // Guarda una entidad Carrito
     @Override
     public Carrito guardar(Carrito carrito) {
         return carritoRepository.save(carrito);
     }
 
+    // Elimina un carrito por su id
     @Override
     public void deleteById(Long id) {
         carritoRepository.deleteById(id);
     }
 
+    // Obtiene el carrito actual del cliente o devuelve uno vacio si aun no tiene
     @Override
     @Transactional(readOnly = true)
     public CarritoDTO obtenerPorCliente(Long clienteId) {
@@ -67,16 +74,19 @@ public class CarritoServiceImpl implements CarritoService{
                 .orElseGet(() -> new CarritoDTO());
     }
 
+    // Actualiza el contenido del carrito validando disponibilidad de productos y adicionales
     @Override
     @Transactional
     public CarritoDTO actualizarPorCliente(Long clienteId, CarritoDTO datos) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
 
+        // Busca el carrito existente del cliente o crea uno nuevo y limpia los items anteriores
         Carrito carrito = carritoRepository.findByClienteClienteId(clienteId)
                 .orElseGet(() -> new Carrito(cliente));
         carrito.getProductoCarritos().clear();
 
+        // Recorre cada producto enviado desde el frontend para validarlo y agregarlo al carrito
         for (ProductoCarritoDTO item : datos.getItems()) {
             Producto producto = productoRepository.findById(item.getProductoId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Producto no encontrado"));
@@ -87,6 +97,7 @@ public class CarritoServiceImpl implements CarritoService{
 
             ProductoCarrito productoCarrito = new ProductoCarrito(item.getCantidad(), producto, carrito);
             List<AdicionalSeleccionado> adicionales = new ArrayList<>();
+            // Valida que cada adicional exista, este disponible y pertenezca a la misma categoria del producto
             for (AdicionalPedidoDTO adicionalSeleccionado : item.getAdicionales()) {
                 Adicional adicional = adicionalRepository.findById(adicionalSeleccionado.getId_adicional())
                         .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -110,6 +121,7 @@ public class CarritoServiceImpl implements CarritoService{
         return convertir(carrito.getProductoCarritos());
     }
 
+    // Vacia todos los productos del carrito asociado al cliente
     @Override
     @Transactional
     public void vaciarPorCliente(Long clienteId) {
@@ -119,6 +131,7 @@ public class CarritoServiceImpl implements CarritoService{
         });
     }
 
+    // Convierte la lista de entidades ProductoCarrito al objeto CarritoDTO para enviar al frontend
     private CarritoDTO convertir(List<ProductoCarrito> productos) {
         List<ProductoCarritoDTO> items = new ArrayList<>();
         for (ProductoCarrito item : productos) {

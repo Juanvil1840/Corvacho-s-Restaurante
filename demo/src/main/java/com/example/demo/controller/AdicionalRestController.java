@@ -27,6 +27,7 @@ public class AdicionalRestController {
 
     private final AdicionalService adicionalService;
 
+    // Constructor para inyectar el servicio de adicionales
     public AdicionalRestController(AdicionalService adicionalService) {
         this.adicionalService = adicionalService;
     }
@@ -96,17 +97,26 @@ public class AdicionalRestController {
         return ResponseEntity.ok(AdicionalDTO.fromEntity(actualizado));
     }
 
-    // Elimina un adicional, si no esta asociado a ningun pedido y si lo esta, manda un mensaje que no se puede eliminar porque esta asociado a un pedido
+    // Elimina un adicional si no esta en ningun pedido ni carrito; si lo esta, manda un mensaje de que no se puede eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        // Verifica que el adicional exista antes de intentar eliminarlo
         if (adicionalService.findById(id) == null) {
             return ResponseEntity.notFound().build();
         }
 
+        // Valida que no este asociado a ningun pedido registrado
         if (adicionalService.tienePedidos(id)) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(new MensajeDTO(
                             "No se puede eliminar el adicional porque esta asociado a uno o mas pedidos."));
+        }
+
+        // Valida que no este actualmente en el carrito de un cliente
+        if (adicionalService.estaEnCarrito(id)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new MensajeDTO(
+                            "No se puede eliminar el adicional porque esta en el carrito de un cliente. Puede marcarlo como no disponible."));
         }
 
         adicionalService.deleteById(id);

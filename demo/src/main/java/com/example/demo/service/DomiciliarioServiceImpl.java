@@ -14,6 +14,7 @@ import com.example.demo.repository.DomiciliarioRepository;
 import com.example.demo.repository.OperadorRepository;
 import com.example.demo.repository.PedidoRepository;
 
+// Implementacion del servicio para la gestion de domiciliarios
 @Service
 public class DomiciliarioServiceImpl implements DomiciliarioService {
 
@@ -21,27 +22,32 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
     private final OperadorRepository operadorRepository;
     private final PedidoRepository pedidoRepository;
 
+    // Constructor con inyeccion de repositorios
     public DomiciliarioServiceImpl(DomiciliarioRepository domiciliarioRepository, OperadorRepository operadorRepository, PedidoRepository pedidoRepository) {
         this.domiciliarioRepository = domiciliarioRepository;
         this.operadorRepository = operadorRepository;
         this.pedidoRepository = pedidoRepository;
     }
 
+    // Lista todos los domiciliarios registrados
     @Override
     public Collection<Domiciliario> findAll() {
         return domiciliarioRepository.findAll();
     }
 
+    // Busca un domiciliario por su id o retorna null si no existe
     @Override
     public Domiciliario findById(Long id) {
         return domiciliarioRepository.findById(id).orElse(null);
     }
 
+    // Guarda un domiciliario en la base de datos
     @Override
     public Domiciliario guardar(Domiciliario domiciliario) {
         return domiciliarioRepository.save(domiciliario);
     }
 
+    // Crea un nuevo domiciliario activo validando datos unicos y asignando su operador
     @Override
     public Domiciliario crearDomiciliario(Domiciliario domiciliario) {
         domiciliario.setId_domiciliario(null);
@@ -51,6 +57,7 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
         return domiciliarioRepository.save(domiciliario);
     }
 
+    // Actualiza un domiciliario; si pasa a inactivo se desvincula del operador y queda no disponible
     @Override
     public Domiciliario actualizarDomiciliario(Long id, Domiciliario domiciliario) {
         if (findById(id) == null) {
@@ -61,12 +68,14 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
         if (domiciliario.isActivo()) {
             domiciliario.setOperador(buscarOperador(domiciliario));
         } else {
+            // Al desactivar al domiciliario se le quita el operador y se marca como no disponible
             domiciliario.setOperador(null);
             domiciliario.setInformaciondisp(false);
         }
         return domiciliarioRepository.save(domiciliario);
     }
 
+    // Elimina un domiciliario desvinculandolo primero de sus pedidos y operador
     @Override
     @Transactional
     public void deleteById(Long id) {
@@ -75,6 +84,7 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
             return;
         }
 
+        // Desasocia el domiciliario de los pedidos en los que estuvo registrado
         if (domiciliario.getPedidos() != null) {
             domiciliario.getPedidos().forEach(pedido -> {
                 pedido.setDomiciliario(null);
@@ -87,11 +97,13 @@ public class DomiciliarioServiceImpl implements DomiciliarioService {
         domiciliarioRepository.delete(domiciliario);
     }
 
+    // Obtiene la lista de domiciliarios disponibles para entregar pedidos
     @Override
     public List<Domiciliario> obtenerDisponibles() {
         return domiciliarioRepository.findByInformaciondispTrue();
     }
 
+    // Valida y obtiene el operador asignado al domiciliario
     private Operador buscarOperador(Domiciliario domiciliario) {
         if (domiciliario.getOperador() == null || domiciliario.getOperador().getId_operador() == null) {
             throw new ResponseStatusException(

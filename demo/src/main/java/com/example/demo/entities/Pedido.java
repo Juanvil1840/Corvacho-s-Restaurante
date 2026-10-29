@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa un pedido realizado por un cliente
 @Data 
 @AllArgsConstructor 
 @NoArgsConstructor 
@@ -31,21 +32,26 @@ public class Pedido {
     @Column( nullable = true)   // Puede ser null mientras el pedido no ha sido entregado
     private LocalDateTime fechaEntrega;
 
+    // Cliente que realizo el pedido
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
+    // Operador que gestiona el pedido
     @ManyToOne
     @JoinColumn(name = "id_operador")
     private Operador operador;
 
+    // Domiciliario asignado para la entrega
     @ManyToOne
     @JoinColumn(name = "id_domiciliario")
     private Domiciliario domiciliario;
 
+    // Detalles o lineas de productos que componen el pedido
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detallePedidos;
 
+    // Constructor para crear un pedido asegurando el estado inicial "Recibido" por defecto
     public Pedido(String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega, Cliente cliente, Operador operador, Domiciliario domiciliario){
     this.estado = (estado != null && !estado.trim().isEmpty()) ? estado : "Recibido";
     this.fechaCreacion = fechaCreacion;

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con la informacion de un cliente (sin exponer su contrasena)
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"clienteId", "nombre", "apellido", "correo", "telefono", "direccion", "activo"})
@@ -32,6 +33,7 @@ public class ClienteDTO {
     @JsonProperty("activo")
     private boolean activo;
 
+    // Constructor con los datos publicos del cliente
     public ClienteDTO(Long clienteId, String nombre, String apellido, String correo, String telefono, String direccion, boolean activo) {
         this.clienteId = clienteId;
         this.nombre = nombre;
@@ -42,6 +44,7 @@ public class ClienteDTO {
         this.activo = activo;
     }
 
+    // Convierte una entidad Cliente a ClienteDTO asegurando que los campos opcionales no sean nulos
     public static ClienteDTO fromEntity(Cliente cliente) {
         if (cliente == null) {
             return null;

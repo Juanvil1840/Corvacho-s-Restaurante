@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Objeto embebible que guarda los datos y cantidad de un adicional elegido en un pedido o carrito
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

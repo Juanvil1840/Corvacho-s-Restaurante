@@ -5,11 +5,13 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Producto } from '../models/producto.model';
 import { environment } from '../../environments/environment';
 
+// Servicio para gestionar las operaciones CRUD y consultas de productos del menú
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoService {
 
+  // URL base del endpoint de productos
   private apiUrl = `${environment.apiUrl}/productos`;
 
   constructor(private http: HttpClient) { }

@@ -9,17 +9,20 @@ export interface ClientePedido {
     direccion: string;
 }
 
+// Datos resumidos del operador asignado al pedido
 export interface OperadorPedido {
     id_operador: number;
     nombre: string;
 }
 
+// Datos resumidos del domiciliario asignado al pedido
 export interface DomiciliarioPedido {
     id_domiciliario: number;
     nombre: string;
     celular: string;
 }
 
+// Modelo completo de un pedido con su cliente, operador, domiciliario y detalles
 export interface Pedido {
     id_Pedido: number;
     estado: string;

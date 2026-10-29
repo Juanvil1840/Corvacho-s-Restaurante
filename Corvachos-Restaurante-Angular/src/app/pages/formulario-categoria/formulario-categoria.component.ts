@@ -6,6 +6,7 @@ import { CategoriaService } from '../../service/categoria.service';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaCamposComponent } from './components/categoria-campos/categoria-campos.component';
 
+// Página de formulario para crear o editar una categoría de productos
 @Component({
   selector: 'app-formulario-categoria',
   standalone: true,
@@ -15,11 +16,13 @@ import { CategoriaCamposComponent } from './components/categoria-campos/categori
 })
 export class FormularioCategoriaComponent implements OnInit {
 
+  // Modelo de la categoría vinculada al formulario
   categoria: Categoria = {
     id: 0,
     nombre: ''
   };
 
+  // Estado de modo edición, carga de guardado y errores
   editando = false;
   guardando = false;
   error = '';
@@ -30,6 +33,7 @@ export class FormularioCategoriaComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Verifica si se está editando una categoría existente para cargar sus datos
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -48,6 +52,7 @@ export class FormularioCategoriaComponent implements OnInit {
     }
   }
 
+  // Crea o actualiza la categoría en el backend y redirige al listado
   guardar(): void {
     this.guardando = true;
     this.error = '';
@@ -69,7 +74,8 @@ export class FormularioCategoriaComponent implements OnInit {
     });
   }
 
+  // Cancela la operación y vuelve a la lista de categorías
   cancelar(): void {
     this.router.navigate(['/categorias']);
   }
-}
+}

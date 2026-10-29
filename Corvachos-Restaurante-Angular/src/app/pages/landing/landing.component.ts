@@ -5,6 +5,7 @@ import { AboutComponent } from './components/about/about.component';
 import { EspecialidadesComponent } from './components/especialidades/especialidades.component'; 
 import { ContactoComponent } from './components/contacto/contacto.component';
 
+// Página principal de bienvenida que reúne las secciones de presentación, historia, especialidades y contacto
 @Component({
   selector: 'app-landing',
   standalone: true,

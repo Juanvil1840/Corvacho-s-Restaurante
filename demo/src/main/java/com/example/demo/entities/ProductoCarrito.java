@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa un producto agregado dentro de un carrito junto con su cantidad y adicionales
 @Data 
 @AllArgsConstructor 
 @NoArgsConstructor 
@@ -28,18 +29,22 @@ public class ProductoCarrito {
     @Column( nullable = false)
     private int cantidadP;
 
+    // Producto seleccionado
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;
 
+    // Carrito al que pertenece este item
     @ManyToOne
     @JoinColumn(name = "id_carrito")
     private Carrito carrito;
 
+    // Lista de adicionales elegidos para este producto en el carrito
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "producto_carrito_adicionales", joinColumns = @JoinColumn(name = "id_producto_carrito"))
     private List<AdicionalSeleccionado> adicionales = new ArrayList<>();
 
+    // Constructor para asociar un producto y su cantidad a un carrito
     public ProductoCarrito(int cantidadP, Producto producto, Carrito carrito){
     this.cantidadP = cantidadP;
     this.producto = producto;

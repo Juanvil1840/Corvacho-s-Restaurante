@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 
 
+// Entidad que representa un adicional que puede agregarse a los productos de una categoria
 @Data
 @AllArgsConstructor
 @NoArgsConstructor 
@@ -27,16 +28,19 @@ public class Adicional{
     @Column( nullable = false)
     private boolean disponible;
 
+    // Categoria a la que pertenece este adicional
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
 
+    // Constructor sin categoria
     public Adicional(String nombre, double precio, boolean disponible){
         this.nombre = nombre;
         this.precio = precio;
         this.disponible = disponible;
     }
 
+    // Constructor completo con categoria
     public Adicional(String nombre, double precio, boolean disponible, Categoria categoria){
         this.nombre = nombre;
         this.precio = precio;

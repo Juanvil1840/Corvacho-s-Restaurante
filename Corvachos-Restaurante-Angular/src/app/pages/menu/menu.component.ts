@@ -4,6 +4,7 @@ import { CategoriaSeccionComponent } from './components/categoria-seccion/catego
 import { ProductoService } from '../../service/producto.service';
 import { Producto } from '../../models/producto.model';
 
+// Componente principal que muestra el menú del restaurante agrupado por categorías
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -13,17 +14,20 @@ import { Producto } from '../../models/producto.model';
 })
 export class MenuComponent implements OnInit {
 
+  // Diccionario de productos agrupados por nombre de categoría y estados de la vista
   productosPorCategoria: { [categoria: string]: Producto[] } = {};
   cargando = true;
   error = '';
 
   constructor(private productoService: ProductoService) {}
 
+  // Carga los productos disponibles al iniciar y los organiza por categoría
   ngOnInit(): void {
     this.productoService.getProductosDisponibles().subscribe({
       next: (productos) => {
         this.productosPorCategoria = {};
 
+        // Agrupa cada producto dentro de su categoría correspondiente
         productos.forEach((p) => {
           const cat = p.categoria?.nombre || 'Sin categoria';
 
@@ -44,7 +48,8 @@ export class MenuComponent implements OnInit {
     });
   }
 
+  // Retorna la lista de nombres de las categorías con productos disponibles
   getCategorias(): string[] {
     return Object.keys(this.productosPorCategoria);
   }
-}
+}

@@ -5,6 +5,7 @@ import { CategoriaService } from '../../service/categoria.service';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaTablaComponent } from './components/categoria-tabla/categoria-tabla.component';
 
+// Componente para listar y administrar las categorías de productos
 @Component({
   selector: 'app-lista-categorias',
   standalone: true,
@@ -14,16 +15,19 @@ import { CategoriaTablaComponent } from './components/categoria-tabla/categoria-
 })
 export class ListaCategoriasComponent implements OnInit {
 
+  // Lista de categorías y estados de carga y error
   categorias: Categoria[] = [];
   cargando = false;
   error = '';
 
   constructor(private categoriaService: CategoriaService) {}
 
+  // Carga las categorías al iniciar el componente
   ngOnInit(): void {
     this.cargarCategorias();
   }
 
+  // Obtiene las categorías desde el servicio correspondiente
   cargarCategorias(): void {
     this.cargando = true;
     this.error = '';
@@ -41,10 +45,12 @@ export class ListaCategoriasComponent implements OnInit {
     });
   }
 
+  // Solicita confirmación y elimina una categoría por su ID
   eliminarCategoria(id: number): void {
     if (confirm('¿Eliminar esta categoría?')) {
       this.categoriaService.eliminarCategoria(id).subscribe({
         next: () => {
+          // Actualiza el listado tras la eliminación
           this.cargarCategorias();
         },
         error: (error) => {

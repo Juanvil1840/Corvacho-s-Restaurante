@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa a un domiciliario encargado de entregar pedidos
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,19 +29,24 @@ public class Domiciliario {
     private String celular;
     @Column( unique = true, length = 80, nullable = false)
     private String cedula;
+    // Indica si el domiciliario esta disponible para recibir un pedido
     @Column( nullable = false)
     private boolean informaciondisp;
 
+    // Indica si el domiciliario sigue vinculado activamente al restaurante
     @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean activo = true;
 
+    // Operador responsable de coordinar a este domiciliario
     @ManyToOne
     @JoinColumn(name = "id_operador")
     private Operador operador;
 
+    // Pedidos asignados a este domiciliario
     @OneToMany(mappedBy = "domiciliario")
     private List<Pedido> pedidos;
 
+    // Constructor para crear un domiciliario con su operador asignado
     public Domiciliario(String nombre, String celular, String cedula, boolean informaciondisp, Operador operador){
     this.nombre = nombre;
     this.celular = celular;

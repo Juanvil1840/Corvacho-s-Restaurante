@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO para recibir las credenciales de inicio de sesion de un cliente
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

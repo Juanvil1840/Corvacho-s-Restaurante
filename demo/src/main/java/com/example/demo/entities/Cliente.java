@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa a un cliente registrado en el restaurante
 @Data
 @AllArgsConstructor 
 @NoArgsConstructor  
@@ -53,12 +54,15 @@ public class Cliente {
     @Column(nullable = false)
     private boolean activo = true;
 
+    // Carrito de compras asociado al cliente
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Carrito carrito;
 
+    // Historial de pedidos realizados por el cliente
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
+    // Constructor para registrar un cliente con sus datos personales
     public Cliente(String nombre, String apellido, String correo, String contrasena, String telefono, String direccion, boolean activo) {
         this.nombre = nombre;
         this.apellido = apellido;

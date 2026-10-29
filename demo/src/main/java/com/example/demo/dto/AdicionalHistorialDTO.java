@@ -20,6 +20,7 @@ public class AdicionalHistorialDTO {
     @JsonProperty("cantidad")
     private int cantidad;
 
+    // Convierte un adicional seleccionado al formato resumido del historial
     public static AdicionalHistorialDTO fromEntity(AdicionalSeleccionado adicional) {
         if (adicional == null) {
             return null;

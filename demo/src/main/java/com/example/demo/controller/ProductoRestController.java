@@ -28,6 +28,7 @@ public class ProductoRestController {
 
     private final ProductoService productoService;
 
+    // Constructor para inyectar el servicio de productos
     public ProductoRestController(ProductoService productoService) {
         this.productoService = productoService;
     }

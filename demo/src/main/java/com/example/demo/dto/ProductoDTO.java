@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con la informacion completa de un producto del menu y su categoria
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id", "nombre", "precio", "descripcion", "imagen", "disponible", "categoria"})
@@ -32,6 +33,7 @@ public class ProductoDTO {
     @JsonProperty("categoria")
     private CategoriaDTO categoria;
 
+    // Constructor con todos los atributos del producto
     public ProductoDTO(Long id, String nombre, double precio, String descripcion, String imagen, boolean disponible, CategoriaDTO categoria) {
         this.id = id;
         this.nombre = nombre;
@@ -42,6 +44,7 @@ public class ProductoDTO {
         this.categoria = categoria;
     }
 
+    // Convierte una entidad Producto a ProductoDTO
     public static ProductoDTO fromEntity(Producto producto) {
         if (producto == null) {
             return null;

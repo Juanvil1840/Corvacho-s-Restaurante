@@ -5,6 +5,7 @@ import { Producto } from '../models/producto.model';
 import { Cliente } from '../models/cliente.model';
 import { environment } from '../../environments/environment';
 
+// Representa un adicional seleccionado para un producto dentro del carrito
 export interface AdicionalCarrito {
   id_adicional: number;
   nombre: string;
@@ -12,6 +13,7 @@ export interface AdicionalCarrito {
   cantidad: number;
 }
 
+// Información resumida del producto mostrada en el carrito
 export interface ProductoResumenCarrito {
   id: number;
   nombre: string;
@@ -19,6 +21,7 @@ export interface ProductoResumenCarrito {
   imagen: string;
 }
 
+// Representa una línea del carrito con su producto, cantidad y adicionales
 export interface ItemCarrito {
   producto: ProductoResumenCarrito;
   cantidad: number;
@@ -35,15 +38,18 @@ interface ProductoCarritoBackend {
   adicionales: AdicionalCarrito[];
 }
 
+// Estructura del contenedor de ítems que espera y devuelve el backend
 interface CarritoBackend {
   items: ProductoCarritoBackend[];
 }
 
+// Servicio que administra el estado del carrito de compras, la sesión del cliente y la sincronización con el backend
 @Injectable({
   providedIn: 'root'
 })
 export class CarritoService {
 
+  // URL base del endpoint de carritos
   private apiUrl = `${environment.apiUrl}/carritos`;
 
   // Cliente con sesion iniciada
@@ -62,13 +68,22 @@ export class CarritoService {
   private pedidoCreadoSubject = new Subject<void>();
   pedidoCreado$ = this.pedidoCreadoSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Si el cliente ya habia iniciado sesion, se recupera al recargar la pagina
+    const clienteGuardado = localStorage.getItem('cliente');
+    if (clienteGuardado) {
+      this.setClienteLogueado(JSON.parse(clienteGuardado));
+    }
+  }
 
+  // Establece el cliente en sesión y sincroniza su carrito local con el guardado en el servidor
   setClienteLogueado(cliente: Cliente | null): void {
     if (!cliente || !cliente.clienteId) {
       this.cerrarSesionCliente();
       return;
     }
+
+    localStorage.setItem('cliente', JSON.stringify(cliente));
 
     // Si es el mismo cliente solo se actualizan sus datos
     if (this.clienteSubject.value?.clienteId === cliente.clienteId) {
@@ -99,20 +114,25 @@ export class CarritoService {
     });
   }
 
+  // Obtiene el cliente actualmente autenticado
   getClienteLogueado(): Cliente | null {
     return this.clienteSubject.value;
   }
 
+  // Cierra la sesión del cliente y limpia los datos del carrito en memoria
   cerrarSesionCliente(): void {
+    localStorage.removeItem('cliente');
     this.clienteSubject.next(null);
     this.itemsSubject.next([]);
     this.cerrarCarrito();
   }
 
+  // Devuelve la lista actual de productos en el carrito
   getItems(): ItemCarrito[] {
     return this.itemsSubject.value;
   }
 
+  // Agrega un producto con su cantidad y adicionales al carrito
   agregarItem(producto: Producto, cantidad: number = 1, adicionales: AdicionalCarrito[] | null = null): void {
     const nuevo: ItemCarrito = {
       producto: {
@@ -127,6 +147,7 @@ export class CarritoService {
     this.guardarItems(this.sumarItem(this.itemsSubject.value, nuevo));
   }
 
+  // Aumenta o disminuye la cantidad de un ítem del carrito o lo elimina si llega a cero
   modificarCantidad(index: number, cambio: number): void {
     const items = [...this.itemsSubject.value];
     if (!items[index]) {
@@ -141,12 +162,14 @@ export class CarritoService {
     this.guardarItems(items);
   }
 
+  // Elimina un ítem específico del carrito según su posición
   eliminarItem(index: number): void {
     const items = [...this.itemsSubject.value];
     items.splice(index, 1);
     this.guardarItems(items);
   }
 
+  // Vacía por completo todos los productos del carrito
   vaciarCarrito(): void {
     this.guardarItems([]);
   }
@@ -160,6 +183,7 @@ export class CarritoService {
     return total;
   }
 
+  // Calcula la suma total de unidades de productos en el carrito
   getTotalCantidad(): number {
     let total = 0;
     for (const item of this.itemsSubject.value) {
@@ -168,6 +192,7 @@ export class CarritoService {
     return total;
   }
 
+  // Calcula el valor monetario total de todos los ítems del carrito
   getTotalPrecio(): number {
     let total = 0;
     for (const item of this.itemsSubject.value) {
@@ -176,18 +201,22 @@ export class CarritoService {
     return total;
   }
 
+  // Abre el panel lateral del carrito
   abrirCarrito(): void {
     this.abiertoSubject.next(true);
   }
 
+  // Cierra el panel lateral del carrito
   cerrarCarrito(): void {
     this.abiertoSubject.next(false);
   }
 
+  // Alterna entre abrir y cerrar el panel del carrito
   toggleCarrito(): void {
     this.abiertoSubject.next(!this.abiertoSubject.value);
   }
 
+  // Emite un evento cuando se confirma un pedido para actualizar vistas suscritas
   notificarPedidoCreado(): void {
     this.pedidoCreadoSubject.next();
   }
@@ -200,6 +229,7 @@ export class CarritoService {
     }
   }
 
+  // Envía el estado actual del carrito al backend para persistirlo en la cuenta del cliente
   private guardarEnBackend(items: ItemCarrito[]): void {
     const cliente = this.clienteSubject.value;
     if (!cliente) {
@@ -232,6 +262,7 @@ export class CarritoService {
     return resultado;
   }
 
+  // Compara si dos listas de adicionales tienen exactamente los mismos ítems y cantidades
   private mismosAdicionales(a: AdicionalCarrito[], b: AdicionalCarrito[]): boolean {
     if (a.length !== b.length) {
       return false;
@@ -243,6 +274,7 @@ export class CarritoService {
     );
   }
 
+  // Convierte un ítem recibido del backend al formato usado en el frontend
   private convertirItem(item: ProductoCarritoBackend): ItemCarrito {
     return {
       producto: {

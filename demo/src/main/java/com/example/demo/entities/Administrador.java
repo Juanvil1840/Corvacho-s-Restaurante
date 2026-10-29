@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Entidad que representa a un usuario administrador del sistema
 @Data 
 @AllArgsConstructor 
 @NoArgsConstructor 
@@ -27,6 +28,7 @@ public class Administrador {
     @Column (length = 255, nullable = false)
     private String contrasena;
     
+    // Constructor para crear un administrador con sus credenciales
     public Administrador(String nombre, String usuario, String contrasena){
         this.nombre = nombre;
         this.usuario = usuario;

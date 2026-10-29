@@ -27,6 +27,7 @@ public class ClienteRestController {
 
     private final ClienteService clienteService;
 
+    // Constructor para inyectar el servicio de clientes
     public ClienteRestController(ClienteService clienteService) {
         this.clienteService = clienteService;
     }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO para recibir las credenciales de login de administradores y operadores
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

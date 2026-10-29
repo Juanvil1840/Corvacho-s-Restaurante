@@ -31,6 +31,7 @@ import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
 import com.example.demo.entities.ProductoCarrito;
 
+// Componente que carga los datos iniciales de prueba en la base de datos al iniciar la aplicacion
 @Component
 @Transactional
 
@@ -48,6 +49,7 @@ public class DataLoader implements CommandLineRunner {
         private final PedidoRepository pedidoRepository;
         private final ProductoCarritoRepository productoCarritoRepository;
 
+        // Constructor para inyectar todos los repositorios necesarios en la carga inicial
         public DataLoader(
                         CategoriaRepository categoriaRepository,
                         ProductoRepository productoRepository,
@@ -73,9 +75,11 @@ public class DataLoader implements CommandLineRunner {
                 this.productoCarritoRepository = productoCarritoRepository;
         }
 
+        // Se ejecuta automaticamente al arrancar Spring Boot para poblar la base de datos si esta vacia
         @Override
         public void run(String... args) throws Exception {
 
+                // Si ya existen categorias registradas no se vuelven a insertar los datos iniciales
                 if (categoriaRepository.count() > 0) {
                         return;
                 }

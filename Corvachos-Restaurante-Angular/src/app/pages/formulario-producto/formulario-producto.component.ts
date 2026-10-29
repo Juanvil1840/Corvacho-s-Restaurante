@@ -8,6 +8,7 @@ import { Categoria } from '../../models/categoria.model';
 import { CategoriaService } from '../../service/categoria.service';
 import { ProductoCamposComponent } from './components/producto-campos/producto-campos.component';
 
+// Página de formulario para registrar o editar un producto del menú
 @Component({
   selector: 'app-formulario-producto',
   standalone: true,
@@ -17,6 +18,7 @@ import { ProductoCamposComponent } from './components/producto-campos/producto-c
 })
 export class FormularioProductoComponent implements OnInit {
 
+  // Datos del producto vinculados a los controles del formulario
   producto: Producto = {
     id: 0,
     nombre: '',
@@ -27,6 +29,7 @@ export class FormularioProductoComponent implements OnInit {
     categoria: { id: 0, nombre: '' }
   };
 
+  // Lista de categorías disponibles y estados del formulario
   categorias: Categoria[] = [];
   editando = false;
   guardando = false;
@@ -39,6 +42,7 @@ export class FormularioProductoComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga las categorías y, si existe un ID en la URL, consulta los datos del producto a editar
   ngOnInit(): void {
     this.categoriaService.getCategorias().subscribe({
       next: (categorias) => {
@@ -67,6 +71,7 @@ export class FormularioProductoComponent implements OnInit {
     }
   }
 
+  // Actualiza el objeto categoría del producto según el ID elegido en el selector
   actualizarCategoria(): void {
     const categoriaId = Number(this.producto.categoria.id);
     const categoriaSeleccionada = this.categorias.find(
@@ -78,6 +83,7 @@ export class FormularioProductoComponent implements OnInit {
     }
   }
 
+  // Guarda el nuevo producto o actualiza el existente y redirige a la lista de productos
   guardar(): void {
     this.actualizarCategoria();
     this.guardando = true;
@@ -100,7 +106,8 @@ export class FormularioProductoComponent implements OnInit {
     });
   }
 
+  // Cancela la edición y regresa al listado de productos
   cancelar(): void {
     this.router.navigate(['/productos']);
   }
-}
+}

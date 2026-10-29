@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con los datos publicos de un administrador (sin exponer la contrasena)
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id_administrador", "nombre", "usuario"})
@@ -20,12 +21,14 @@ public class AdministradorDTO {
     @JsonProperty("usuario")
     private String usuario;
 
+    // Constructor con los datos basicos del administrador
     public AdministradorDTO(Long id_administrador, String nombre, String usuario) {
         this.id_administrador = id_administrador;
         this.nombre = nombre;
         this.usuario = usuario;
     }
 
+    // Convierte una entidad Administrador a AdministradorDTO
     public static AdministradorDTO fromEntity(Administrador admin) {
         if (admin == null) {
             return null;

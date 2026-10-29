@@ -26,6 +26,7 @@ public class DomiciliarioRestController {
 
     private final DomiciliarioService domiciliarioService;
 
+    // Constructor para inyectar el servicio de domiciliarios
     public DomiciliarioRestController(DomiciliarioService domiciliarioService) {
         this.domiciliarioService = domiciliarioService;
     }

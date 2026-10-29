@@ -27,6 +27,7 @@ public class ClientePedidoDTO {
     @JsonProperty("direccion")
     private String direccion;
 
+    // Constructor con los datos de contacto y entrega del cliente
     public ClientePedidoDTO(Long clienteId, String nombre, String apellido, String telefono, String direccion) {
         this.clienteId = clienteId;
         this.nombre = nombre;
@@ -35,6 +36,7 @@ public class ClientePedidoDTO {
         this.direccion = direccion;
     }
 
+    // Convierte una entidad Cliente a ClientePedidoDTO
     public static ClientePedidoDTO fromEntity(Cliente cliente) {
         if (cliente == null) {
             return null;

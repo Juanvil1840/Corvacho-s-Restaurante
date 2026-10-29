@@ -6,6 +6,7 @@ import { AdministradorService } from '../../service/administrador.service';
 import { Administrador } from '../../models/administrador.model';
 import { AdministradorCamposComponent } from './components/administrador-campos/administrador-campos.component';
 
+// Página de formulario para registrar o editar un administrador
 @Component({
   selector: 'app-formulario-administrador',
   standalone: true,
@@ -15,6 +16,7 @@ import { AdministradorCamposComponent } from './components/administrador-campos/
 })
 export class FormularioAdministradorComponent implements OnInit {
 
+  // Datos del administrador vinculados al formulario
   administrador: Administrador = {
     id_administrador: 0,
     nombre: '',
@@ -22,6 +24,7 @@ export class FormularioAdministradorComponent implements OnInit {
     contrasena: ''
   };
 
+  // Variables de estado de edición, guardado y mensajes de error
   editando = false;
   guardando = false;
   error = '';
@@ -32,6 +35,7 @@ export class FormularioAdministradorComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Si existe un ID en la ruta, activa el modo edición y consulta los datos del administrador
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -50,7 +54,9 @@ export class FormularioAdministradorComponent implements OnInit {
     }
   }
 
+  // Valida los campos obligatorios y guarda o actualiza el administrador en el backend
   guardar(): void {
+    // Validación de campos obligatorios (la contraseña solo es obligatoria al crear)
     if (!this.administrador.nombre.trim() || !this.administrador.usuario.trim()
         || (!this.editando && !this.administrador.contrasena?.trim())) {
       this.error = 'Por favor completa todos los campos obligatorios.';
@@ -94,6 +100,7 @@ export class FormularioAdministradorComponent implements OnInit {
     });
   }
 
+  // Cancela la edición y regresa al portal o a la lista de administradores según corresponda
   cancelar(): void {
     // Si cancela, se devuelve a la pantalla de donde vino
     const adminLogueadoStr = localStorage.getItem('administrador');
@@ -108,4 +115,4 @@ export class FormularioAdministradorComponent implements OnInit {
     // Si no, volvemos a la lista
     this.router.navigate(['/administradores']);
   }
-}
+}

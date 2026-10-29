@@ -5,6 +5,7 @@ import { PedidoService } from '../../service/pedido.service';
 import { PedidoLista } from '../../models/pedido.model';
 import { PedidoTablaComponent } from './components/pedido-tabla/pedido-tabla.component';
 
+// Componente para listar y gestionar los pedidos registrados en el restaurante
 @Component({
   selector: 'app-lista-pedidos',
   standalone: true,
@@ -14,6 +15,7 @@ import { PedidoTablaComponent } from './components/pedido-tabla/pedido-tabla.com
 })
 export class ListaPedidosComponent implements OnInit {
 
+  // Lista de pedidos y estados de carga y error
   pedidos: PedidoLista[] = [];
   cargando = false;
   error = '';
@@ -25,10 +27,12 @@ export class ListaPedidosComponent implements OnInit {
 
   constructor(private pedidoService: PedidoService) {}
 
+  // Carga los pedidos al iniciar el componente
   ngOnInit(): void {
     this.cargarPedidos();
   }
 
+  // Obtiene los pedidos desde el backend según el rol activo
   cargarPedidos(): void {
     this.cargando = true;
     this.error = '';
@@ -47,10 +51,12 @@ export class ListaPedidosComponent implements OnInit {
     });
   }
 
+  // Confirma y elimina un pedido por su ID
   eliminarPedido(id: number): void {
     if (confirm('¿Eliminar este pedido?')) {
       this.pedidoService.eliminarPedido(id).subscribe({
         next: () => {
+          // Recarga la lista de pedidos después de eliminar
           this.cargarPedidos();
         },
         error: (error) => {

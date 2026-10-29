@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con la informacion completa de un domiciliario y su operador asignado
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id_domiciliario", "nombre", "celular", "cedula", "informaciondisp", "activo", "operador"})
@@ -32,6 +33,7 @@ public class DomiciliarioDTO {
     @JsonProperty("operador")
     private OperadorPedidoDTO operador;
 
+    // Constructor con todos los datos del domiciliario
     public DomiciliarioDTO(Long id_domiciliario, String nombre, String celular, String cedula,
             boolean informaciondisp, boolean activo, OperadorPedidoDTO operador) {
         this.id_domiciliario = id_domiciliario;
@@ -43,6 +45,7 @@ public class DomiciliarioDTO {
         this.operador = operador;
     }
 
+    // Convierte una entidad Domiciliario a DomiciliarioDTO
     public static DomiciliarioDTO fromEntity(Domiciliario domiciliario) {
         if (domiciliario == null) {
             return null;

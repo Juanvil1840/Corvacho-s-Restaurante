@@ -27,6 +27,7 @@ public class OperadorRestController {
 
     private final OperadorService operadorService;
 
+    // Constructor para inyectar el servicio de operadores
     public OperadorRestController(OperadorService operadorService) {
         this.operadorService = operadorService;
     }

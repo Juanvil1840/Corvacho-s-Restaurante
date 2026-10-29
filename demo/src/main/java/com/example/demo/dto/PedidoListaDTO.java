@@ -34,6 +34,7 @@ public class PedidoListaDTO {
     @JsonProperty("domiciliarioNombre")
     private String domiciliarioNombre;
 
+    // Convierte una entidad Pedido en una fila resumida para el listado de pedidos
     public static PedidoListaDTO fromEntity(Pedido pedido) {
         if (pedido == null) {
             return null;

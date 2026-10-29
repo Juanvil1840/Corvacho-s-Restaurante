@@ -6,6 +6,7 @@ import { OperadorService } from '../../service/operador.service';
 import { Operador } from '../../models/operador.model';
 import { OperadorCamposComponent } from './components/operador-campos/operador-campos.component';
 
+// Página de formulario para registrar o editar un operador del sistema
 @Component({
   selector: 'app-formulario-operador',
   standalone: true,
@@ -15,6 +16,7 @@ import { OperadorCamposComponent } from './components/operador-campos/operador-c
 })
 export class FormularioOperadorComponent implements OnInit {
 
+  // Datos del operador vinculados al formulario
   operador: Operador = {
     id_operador: 0,
     nombre: '',
@@ -22,6 +24,7 @@ export class FormularioOperadorComponent implements OnInit {
     contrasena: ''
   };
 
+  // Estados de modo edición, guardado en curso y mensaje de error
   editando = false;
   guardando = false;
   error = '';
@@ -32,6 +35,7 @@ export class FormularioOperadorComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Si la ruta incluye un ID, activa la edición y consulta los datos del operador
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -50,7 +54,9 @@ export class FormularioOperadorComponent implements OnInit {
     }
   }
 
+  // Valida los campos obligatorios y guarda o actualiza el operador en el backend
   guardar(): void {
+    // Verifica que nombre, usuario y contraseña (al crear) no estén vacíos
     if (!this.operador.nombre.trim() || !this.operador.usuario.trim() || (!this.editando && !this.operador.contrasena?.trim())) {
       this.error = 'Por favor completa todos los campos obligatorios.';
       return;
@@ -76,8 +82,8 @@ export class FormularioOperadorComponent implements OnInit {
     });
   }
 
+  // Cancela la operación y regresa al listado de operadores
   cancelar(): void {
     this.router.navigate(['/operadores']);
   }
 }
-

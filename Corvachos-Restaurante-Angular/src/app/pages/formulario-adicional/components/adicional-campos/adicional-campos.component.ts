@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Adicional } from '../../../../models/adicional.model';
 import { Categoria } from '../../../../models/categoria.model';
 
+// Subcomponente presentacional con los campos de entrada para el formulario de adicional
 @Component({
   selector: 'app-adicional-campos',
   standalone: true,
@@ -13,6 +14,7 @@ import { Categoria } from '../../../../models/categoria.model';
 })
 export class AdicionalCamposComponent {
 
+  // Datos del adicional y lista de categorías para el selector
   @Input() adicional!: Adicional;
   @Input() categorias: Categoria[] = [];
 }

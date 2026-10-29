@@ -27,6 +27,7 @@ public class CategoriaRestController {
 
     private final CategoriaService categoriaService;
 
+    // Constructor para inyectar el servicio de categorias
     public CategoriaRestController(CategoriaService categoriaService) {
         this.categoriaService = categoriaService;
     }

@@ -5,6 +5,7 @@ import { OperadorService } from '../../service/operador.service';
 import { Operador } from '../../models/operador.model';
 import { OperadorTablaComponent } from './components/operador-tabla/operador-tabla.component';
 
+// Componente para listar y administrar los operadores del sistema
 @Component({
   selector: 'app-lista-operadores',
   standalone: true,
@@ -14,16 +15,19 @@ import { OperadorTablaComponent } from './components/operador-tabla/operador-tab
 })
 export class ListaOperadoresComponent implements OnInit {
 
+  // Lista de operadores y variables de estado para la vista
   operadores: Operador[] = [];
   cargando = false;
   error = '';
 
   constructor(private operadorService: OperadorService) {}
 
+  // Carga los operadores al inicializar el componente
   ngOnInit(): void {
     this.cargarOperadores();
   }
 
+  // Obtiene la lista de operadores desde el servicio
   cargarOperadores(): void {
     this.cargando = true;
     this.error = '';
@@ -41,10 +45,12 @@ export class ListaOperadoresComponent implements OnInit {
     });
   }
 
+  // Solicita confirmación y elimina un operador por su ID
   eliminarOperador(id: number): void {
     if (confirm('¿Eliminar este operador?')) {
       this.operadorService.eliminarOperador(id).subscribe({
         next: () => {
+          // Recarga la lista de operadores tras eliminar
           this.cargarOperadores();
         },
         error: (error) => {
@@ -55,4 +61,3 @@ export class ListaOperadoresComponent implements OnInit {
     }
   }
 }
-

@@ -16,6 +16,7 @@ import { Operador } from '../../models/operador.model';
 import { Domiciliario } from '../../models/domiciliario.model';
 import { ComidaPedido, FormularioPedido, PedidoCamposComponent } from './components/pedido-campos/pedido-campos.component';
 
+// Página de formulario para crear o editar un pedido, su estado, domiciliario y comidas
 @Component({
   selector: 'app-formulario-pedido',
   standalone: true,
@@ -25,6 +26,7 @@ import { ComidaPedido, FormularioPedido, PedidoCamposComponent } from './compone
 })
 export class FormularioPedidoComponent implements OnInit {
 
+  // Valores iniciales de los campos principales del formulario de pedido
   formulario: FormularioPedido = {
     estado: 'Recibido',
     fechaCreacion: FormularioPedidoComponent.ahoraLocal(),
@@ -34,6 +36,7 @@ export class FormularioPedidoComponent implements OnInit {
     domiciliarioId: 0
   };
 
+  // Listas de opciones cargadas desde el backend y comidas agregadas al pedido
   clientes: Cliente[] = [];
   operadores: Operador[] = [];
   domiciliarios: Domiciliario[] = [];
@@ -41,6 +44,7 @@ export class FormularioPedidoComponent implements OnInit {
   adicionales: Adicional[] = [];
   comidasSeleccionadas: ComidaPedido[] = [];
 
+  // Estado de edición, control del estado original y banderas de guardado
   idPedido = 0;
   editando = false;
   estadoOriginal = 'Recibido';
@@ -59,6 +63,7 @@ export class FormularioPedidoComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga las listas de clientes, operadores, domiciliarios, productos y adicionales, y el pedido si se está editando
   ngOnInit(): void {
     this.clienteService.getClientes().subscribe({
       next: (clientes) => this.clientes = clientes,
@@ -113,7 +118,13 @@ export class FormularioPedidoComponent implements OnInit {
     }
   }
 
+  // Valida las reglas del pedido y envía los datos al backend para crearlo o actualizarlo
   guardar(): void {
+    // Validaciones de estado, cliente, domiciliario requerido al enviar y comidas mínimas
+    if (this.estadoOriginal === 'Entregado') {
+      this.error = 'El pedido ya fue entregado y no se puede modificar.';
+      return;
+    }
     if (!this.formulario.clienteId) {
       this.error = 'Debe seleccionar un cliente.';
       return;
@@ -162,6 +173,7 @@ export class FormularioPedidoComponent implements OnInit {
     });
   }
 
+  // Cancela la edición y regresa a la lista de pedidos
   cancelar(): void {
     this.router.navigate(['/pedidos']);
   }

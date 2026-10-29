@@ -8,6 +8,7 @@ import { Adicional } from '../../models/adicional.model';
 import { DetalleInfoComponent } from './components/detalle-info/detalle-info.component';
 import { DetalleImagenComponent } from './components/detalle-imagen/detalle-imagen.component';
 
+// Página de detalle de un producto donde se carga su información y los adicionales de su categoría
 @Component({
   selector: 'app-detalle-producto',
   standalone: true,
@@ -17,6 +18,7 @@ import { DetalleImagenComponent } from './components/detalle-imagen/detalle-imag
 })
 export class DetalleProductoComponent implements OnInit {
 
+  // Producto consultado, sus adicionales disponibles y mensaje de error
   producto: Producto | undefined;
   adicionales: Adicional[] = [];
   error = '';
@@ -27,6 +29,7 @@ export class DetalleProductoComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
+  // Carga el producto por su ID desde la URL y luego consulta los adicionales de su categoría
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -41,6 +44,7 @@ export class DetalleProductoComponent implements OnInit {
 
         const categoriaId = producto.categoria?.id;
 
+        // Si el producto tiene categoría, busca los adicionales disponibles para esa categoría
         if (categoriaId !== undefined) {
           this.adicionalService.getAdicionalesDisponiblesPorCategoria(categoriaId).subscribe({
             next: (adicionales) => {
