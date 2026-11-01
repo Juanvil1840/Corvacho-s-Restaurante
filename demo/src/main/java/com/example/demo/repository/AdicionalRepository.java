@@ -32,4 +32,7 @@ public interface AdicionalRepository extends JpaRepository<Adicional, Long>{
     // Comprueba si el adicional esta presente en el carrito de algun cliente
     @Query("SELECT COUNT(p) > 0 FROM ProductoCarrito p JOIN p.adicionales a WHERE a.id_adicional = :adicionalId")
     boolean existsEnCarrito(@Param("adicionalId") Long adicionalId);
+
+    @Query(value = "SELECT * FROM adicional WHERE id_categoria = :categoriaId AND disponible = TRUE ORDER BY id_adicional", nativeQuery = true)
+    List<Adicional> findDisponiblesByCategoriaNative(@Param("categoriaId") Long categoriaId);
 }

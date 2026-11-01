@@ -3,6 +3,8 @@ package com.example.demo.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Producto;
@@ -13,6 +15,12 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     // Obtiene todos los productos marcados como disponibles
     List<Producto> findByDisponibleTrue();
+
+    @Query(value = "SELECT * FROM producto WHERE disponible = TRUE ORDER BY id", nativeQuery = true)
+    List<Producto> findDisponiblesNative();
+
+    @Query(value = "SELECT * FROM producto WHERE id_categoria = :categoriaId AND disponible = TRUE ORDER BY id", nativeQuery = true)
+    List<Producto> findDisponiblesByCategoriaNative(@Param("categoriaId") Long categoriaId);
 
     // Verifica si existen productos asociados a una categoria especifica
     boolean existsByCategoria_Id(Long categoriaId);
