@@ -29,6 +29,7 @@ class ProductoUpdatetest {
     @Autowired
     private EntityManager entityManager;
 
+    // Verifica que al actualizar un producto se conserve su categoria cuando no se envia una nueva.
     @Test
     @Transactional
     void actualizarDebeMantenerLaCategoriaExistente() {

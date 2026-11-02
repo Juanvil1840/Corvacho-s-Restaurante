@@ -20,9 +20,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     @Query("SELECT p FROM Pedido p WHERE p.estado IS NULL OR LOWER(p.estado) != LOWER(:estado) ORDER BY p.id_Pedido ASC")
     List<Pedido> findByEstadoNotIgnoreCase(@Param("estado") String estado);
 
-    @Query(value = "SELECT * FROM pedido WHERE id_cliente = :clienteId ORDER BY fecha_creacion DESC, id_pedido DESC", nativeQuery = true)
-    List<Pedido> findHistorialByClienteNative(@Param("clienteId") Long clienteId);
+    // Busca el historial de pedidos de un cliente y los ordena por fecha e ID descendentes
+    @Query("SELECT p FROM Pedido p WHERE p.cliente.clienteId = :clienteId ORDER BY p.fechaCreacion DESC, p.id_Pedido DESC")
+    List<Pedido> findHistorialByCliente(@Param("clienteId") Long clienteId);
 
-    @Query(value = "SELECT * FROM pedido WHERE LOWER(estado) = LOWER(:estado) ORDER BY fecha_creacion DESC, id_pedido DESC", nativeQuery = true)
-    List<Pedido> findByEstadoNative(@Param("estado") String estado);
+    // Busca pedidos por estado ignorando mayúsculas y minúsculas, ordenados por fecha e ID descendentes
+    @Query("SELECT p FROM Pedido p WHERE LOWER(p.estado) = LOWER(:estado) ORDER BY p.fechaCreacion DESC, p.id_Pedido DESC")
+    List<Pedido> findByEstadoIgnoreCase(@Param("estado") String estado);
 }

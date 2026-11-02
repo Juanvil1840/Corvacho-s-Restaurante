@@ -16,7 +16,7 @@ import com.example.demo.entities.Pedido;
 import com.example.demo.entities.Producto;
 
 @DataJpaTest
-class ConsultasNativasRepositoryTest {
+class ConsultasRepositoryTest {
 
     @Autowired
     private ProductoRepository productoRepository;
@@ -33,8 +33,9 @@ class ConsultasNativasRepositoryTest {
     @Autowired
     private AdicionalRepository adicionalRepository;
 
+    // Prueba ProductoRepository.findDisponibles: filtra los productos disponibles y los ordena por ID.
     @Test
-    void findDisponiblesNative_filtraDisponibilidadYOrdenaPorId() {
+    void findDisponibles_filtraDisponibilidadYOrdenaPorId() {
         // Arrange
         Categoria categoria = categoriaRepository.save(new Categoria("Entradas"));
         Producto productoPosterior = productoRepository.save(producto("Disponible posterior", true, categoria));
@@ -42,7 +43,7 @@ class ConsultasNativasRepositoryTest {
         Producto productoAnterior = productoRepository.save(producto("Disponible anterior", true, categoria));
 
         // Act
-        List<Producto> resultado = productoRepository.findDisponiblesNative();
+        List<Producto> resultado = productoRepository.findDisponibles();
 
         // Assert
         assertThat(resultado).extracting(Producto::getId)
@@ -51,8 +52,9 @@ class ConsultasNativasRepositoryTest {
                 .doesNotContain("No disponible");
     }
 
+    // Prueba ProductoRepository.findDisponiblesByCategoria: filtra por categoría y disponibilidad.
     @Test
-    void findDisponiblesByCategoriaNative_filtraCategoriaYDisponibilidad() {
+    void findDisponiblesByCategoria_filtraCategoriaYDisponibilidad() {
         // Arrange
         Categoria categoriaObjetivo = categoriaRepository.save(new Categoria("Pastas"));
         Categoria otraCategoria = categoriaRepository.save(new Categoria("Bebidas"));
@@ -61,17 +63,18 @@ class ConsultasNativasRepositoryTest {
         productoRepository.save(producto("Bebida disponible", true, otraCategoria));
 
         // Act
-        List<Producto> resultado = productoRepository.findDisponiblesByCategoriaNative(categoriaObjetivo.getId());
+        List<Producto> resultado = productoRepository.findDisponiblesByCategoria(categoriaObjetivo.getId());
         List<Producto> resultadoSinCoincidencias = productoRepository
-                .findDisponiblesByCategoriaNative(Long.MAX_VALUE);
+                .findDisponiblesByCategoria(Long.MAX_VALUE);
 
         // Assert
         assertThat(resultado).extracting(Producto::getId).containsExactly(esperado.getId());
         assertThat(resultadoSinCoincidencias).isEmpty();
     }
 
+    // Prueba PedidoRepository.findHistorialByCliente: filtra por cliente y ordena por fecha e ID descendentes.
     @Test
-    void findHistorialByClienteNative_filtraClienteYOrdenaDeMasRecienteAMasAntiguo() {
+    void findHistorialByCliente_filtraClienteYOrdenaDeMasRecienteAMasAntiguo() {
         // Arrange
         Cliente cliente = clienteRepository.save(cliente("historial@example.test"));
         Cliente otroCliente = clienteRepository.save(cliente("otro@example.test"));
@@ -79,40 +82,45 @@ class ConsultasNativasRepositoryTest {
         Pedido antiguo = pedidoRepository.save(pedido(cliente, "Recibido", ahora.minusDays(2)));
         Pedido ajeno = pedidoRepository.save(pedido(otroCliente, "Entregado", ahora));
         Pedido reciente = pedidoRepository.save(pedido(cliente, "Entregado", ahora.minusDays(1)));
+        Pedido recienteConMismaFecha = pedidoRepository.save(pedido(cliente, "Entregado", ahora.minusDays(1)));
 
         // Act
-        List<Pedido> resultado = pedidoRepository.findHistorialByClienteNative(cliente.getClienteId());
+        List<Pedido> resultado = pedidoRepository.findHistorialByCliente(cliente.getClienteId());
         List<Pedido> resultadoSinCoincidencias = pedidoRepository
-                .findHistorialByClienteNative(Long.MAX_VALUE);
+                .findHistorialByCliente(Long.MAX_VALUE);
 
         // Assert
         assertThat(resultado).extracting(Pedido::getId_Pedido)
-                .containsExactly(reciente.getId_Pedido(), antiguo.getId_Pedido())
+                .containsExactly(recienteConMismaFecha.getId_Pedido(), reciente.getId_Pedido(), antiguo.getId_Pedido())
                 .doesNotContain(ajeno.getId_Pedido());
         assertThat(resultadoSinCoincidencias).isEmpty();
     }
 
+    // Prueba PedidoRepository.findByEstadoIgnoreCase: ignora mayúsculas y ordena por fecha e ID descendentes.
     @Test
-    void findByEstadoNative_filtraEstadoSinDistinguirMayusculasYOrdenaPorFecha() {
+    void findByEstadoIgnoreCase_filtraEstadoSinDistinguirMayusculasYOrdenaPorFecha() {
         // Arrange
         Cliente cliente = clienteRepository.save(cliente("estado@example.test"));
         LocalDateTime ahora = LocalDateTime.of(2026, 4, 20, 18, 0);
         Pedido pendienteAntiguo = pedidoRepository.save(pedido(cliente, "Pendiente", ahora.minusDays(2)));
         pedidoRepository.save(pedido(cliente, "Entregado", ahora));
         Pedido pendienteReciente = pedidoRepository.save(pedido(cliente, "Pendiente", ahora.minusDays(1)));
+        Pedido pendienteRecienteMismoDia = pedidoRepository.save(pedido(cliente, "Pendiente", ahora.minusDays(1)));
 
         // Act
-        List<Pedido> resultado = pedidoRepository.findByEstadoNative("pEnDiEnTe");
-        List<Pedido> resultadoSinCoincidencias = pedidoRepository.findByEstadoNative("Cancelado");
+        List<Pedido> resultado = pedidoRepository.findByEstadoIgnoreCase("pEnDiEnTe");
+        List<Pedido> resultadoSinCoincidencias = pedidoRepository.findByEstadoIgnoreCase("Cancelado");
 
         // Assert
         assertThat(resultado).extracting(Pedido::getId_Pedido)
-                .containsExactly(pendienteReciente.getId_Pedido(), pendienteAntiguo.getId_Pedido());
+                .containsExactly(pendienteRecienteMismoDia.getId_Pedido(), pendienteReciente.getId_Pedido(),
+                        pendienteAntiguo.getId_Pedido());
         assertThat(resultadoSinCoincidencias).isEmpty();
     }
 
+    // Prueba AdicionalRepository.findDisponiblesByCategoria: filtra por categoría y disponibilidad.
     @Test
-    void findDisponiblesByCategoriaNative_enAdicionalesFiltraCategoriaYDisponibilidad() {
+    void findDisponiblesByCategoria_enAdicionalesFiltraCategoriaYDisponibilidad() {
         // Arrange
         Categoria categoriaObjetivo = categoriaRepository.save(new Categoria("Acompanamientos"));
         Categoria otraCategoria = categoriaRepository.save(new Categoria("Bebidas"));
@@ -122,9 +130,9 @@ class ConsultasNativasRepositoryTest {
 
         // Act
         List<Adicional> resultado = adicionalRepository
-                .findDisponiblesByCategoriaNative(categoriaObjetivo.getId());
+                .findDisponiblesByCategoria(categoriaObjetivo.getId());
         List<Adicional> resultadoSinCoincidencias = adicionalRepository
-                .findDisponiblesByCategoriaNative(Long.MAX_VALUE);
+                .findDisponiblesByCategoria(Long.MAX_VALUE);
 
         // Assert
         assertThat(resultado).extracting(Adicional::getId_adicional).containsExactly(esperado.getId_adicional());

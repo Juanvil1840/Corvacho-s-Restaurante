@@ -16,11 +16,13 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Obtiene todos los productos marcados como disponibles
     List<Producto> findByDisponibleTrue();
 
-    @Query(value = "SELECT * FROM producto WHERE disponible = TRUE ORDER BY id", nativeQuery = true)
-    List<Producto> findDisponiblesNative();
+    // Busca todos los productos disponibles y los ordena por ID ascendente
+    @Query("SELECT p FROM Producto p WHERE p.disponible = true ORDER BY p.id ASC")
+    List<Producto> findDisponibles();
 
-    @Query(value = "SELECT * FROM producto WHERE id_categoria = :categoriaId AND disponible = TRUE ORDER BY id", nativeQuery = true)
-    List<Producto> findDisponiblesByCategoriaNative(@Param("categoriaId") Long categoriaId);
+    // Busca los productos disponibles de una categoria y los ordena por ID ascendente
+    @Query("SELECT p FROM Producto p WHERE p.categoria.id = :categoriaId AND p.disponible = true ORDER BY p.id ASC")
+    List<Producto> findDisponiblesByCategoria(@Param("categoriaId") Long categoriaId);
 
     // Verifica si existen productos asociados a una categoria especifica
     boolean existsByCategoria_Id(Long categoriaId);
