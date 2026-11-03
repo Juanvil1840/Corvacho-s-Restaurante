@@ -29,6 +29,7 @@ public class ProductoPedidoDTO {
     @JsonProperty("imagen")
     private String imagen;
 
+    // Convierte una entidad Producto a ProductoPedidoDTO
     public static ProductoPedidoDTO fromEntity(Producto producto) {
         if (producto == null) {
             return null;

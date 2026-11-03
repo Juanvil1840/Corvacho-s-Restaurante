@@ -88,6 +88,7 @@
       id="cliente"
       name="cliente"
       [(ngModel)]="formulario.clienteId"
+      [disabled]="!puedeCambiarDatos"
       required>
       <option [ngValue]="0" disabled>Selecciona un cliente</option>
       @for (cliente of clientes; track cliente.clienteId) {
@@ -101,7 +102,8 @@
     <select
       id="operador"
       name="operador"
-      [(ngModel)]="formulario.operadorId">
+      [(ngModel)]="formulario.operadorId"
+      [disabled]="pedidoEntregado">
       <option [ngValue]="0">Sin operador</option>
       @for (operador of operadores; track operador.id_operador) {
         <option [ngValue]="operador.id_operador">{{ operador.nombre }}</option>
@@ -114,7 +116,8 @@
     <select
       id="domiciliario"
       name="domiciliario"
-      [(ngModel)]="formulario.domiciliarioId">
+      [(ngModel)]="formulario.domiciliarioId"
+      [disabled]="estadoOriginal === 'Enviado' || pedidoEntregado">
       <option [ngValue]="0">Sin domiciliario</option>
       @for (domiciliario of domiciliariosDisponibles; track domiciliario.id_domiciliario) {
         <option [ngValue]="domiciliario.id_domiciliario">{{ domiciliario.nombre }}</option>
@@ -129,6 +132,7 @@
       name="fechaCreacion"
       type="datetime-local"
       [(ngModel)]="formulario.fechaCreacion"
+      [disabled]="!puedeCambiarDatos"
     />
   </div>
 
@@ -139,6 +143,7 @@
       name="fechaEntrega"
       type="datetime-local"
       [(ngModel)]="formulario.fechaEntrega"
+      [disabled]="pedidoEntregado"
     />
   </div>
 
@@ -146,42 +151,48 @@
   <div class="pedido-campo pedido-seccion-comidas">
     <label><i class="bi bi-egg-fried"></i> Comidas / Productos del Pedido</label>
 
-    <div class="pedido-agregar-comida-fila">
-      <select [(ngModel)]="productoSeleccionadoId" name="productoSelect">
-        <option [ngValue]="0" disabled>Selecciona una comida para agregar</option>
-        @for (prod of productos; track prod.id) {
-          <option [ngValue]="prod.id">
-            {{ prod.nombre }} - {{ prod.precio | currency:'USD':'symbol':'1.0-0' }} {{ prod.disponible ? '' : '(Agotado)' }}
-          </option>
-        }
-      </select>
+    @if (puedeCambiarDatos) {
+      <div class="pedido-agregar-comida-fila">
+        <select [(ngModel)]="productoSeleccionadoId" name="productoSelect">
+          <option [ngValue]="0" disabled>Selecciona una comida para agregar</option>
+          @for (prod of productos; track prod.id) {
+            <option [ngValue]="prod.id" [disabled]="!prod.disponible">
+              {{ prod.nombre }} - {{ prod.precio | currency:'USD':'symbol':'1.0-0' }} {{ prod.disponible ? '' : '(Agotado)' }}
+            </option>
+          }
+        </select>
 
-      <select [(ngModel)]="adicionalSeleccionadoId" name="adicionalSelect">
-        <option [ngValue]="0">Sin adicional</option>
-        @for (adic of adicionalesDisponibles; track adic.id_adicional) {
-          <option [ngValue]="adic.id_adicional">
-            + {{ adic.nombre }} ({{ adic.precio > 0 ? (adic.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
-          </option>
-        }
-      </select>
+        <select [(ngModel)]="adicionalSeleccionadoId" name="adicionalSelect">
+          <option [ngValue]="0">Sin adicional</option>
+          @for (adic of adicionalesDisponibles; track adic.id_adicional) {
+            <option [ngValue]="adic.id_adicional">
+              + {{ adic.nombre }} ({{ adic.precio > 0 ? (adic.precio | currency:'USD':'symbol':'1.0-0') : 'Gratis' }})
+            </option>
+          }
+        </select>
 
-      <input
-        type="number"
-        [(ngModel)]="cantidadSeleccionada"
-        name="cantidadInput"
-        min="1"
-        max="99"
-        placeholder="Cant."
-        class="input-cant-nueva"
-      />
-      <button
-        type="button"
-        class="btn-agregar-comida"
-        (click)="agregarComida()"
-        [disabled]="!productoSeleccionadoId || productoSeleccionadoId === 0">
-        + Añadir
-      </button>
-    </div>
+        <input
+          type="number"
+          [(ngModel)]="cantidadSeleccionada"
+          name="cantidadInput"
+          min="1"
+          max="99"
+          placeholder="Cant."
+          class="input-cant-nueva"
+        />
+        <button
+          type="button"
+          class="btn-agregar-comida"
+          (click)="agregarComida()"
+          [disabled]="!productoSeleccionadoId || productoSeleccionadoId === 0">
+          + Añadir
+        </button>
+      </div>
+    } @else {
+      <p class="pedido-sin-comidas">
+        Las comidas solo se pueden cambiar mientras el pedido está Recibido.
+      </p>
+    }
 
     @if (comidasSeleccionadas.length > 0) {
       <div class="pedido-lista-comidas">
@@ -200,20 +211,26 @@
               </span>
             </div>
             <div class="comida-item-cantidades">
-              <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, -1)">-</button>
+              @if (puedeCambiarDatos) {
+                <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, -1)">-</button>
+              }
               <span class="comida-cant-val">{{ item.cantidad }}</span>
-              <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, 1)">+</button>
+              @if (puedeCambiarDatos) {
+                <button type="button" class="btn-cant-ctrl" (click)="modificarCantidad(idx, 1)">+</button>
+              }
             </div>
             <span class="comida-item-subtotal">
               {{ (precioUnitario(item) * item.cantidad) | currency:'USD':'symbol':'1.0-0' }}
             </span>
-            <button
-              type="button"
-              class="btn-quitar-comida"
-              (click)="quitarComida(idx)"
-              title="Quitar comida">
-              &times;
-            </button>
+            @if (puedeCambiarDatos) {
+              <button
+                type="button"
+                class="btn-quitar-comida"
+                (click)="quitarComida(idx)"
+                title="Quitar comida">
+                &times;
+              </button>
+            }
           </div>
         }
         <div class="pedido-comidas-total">

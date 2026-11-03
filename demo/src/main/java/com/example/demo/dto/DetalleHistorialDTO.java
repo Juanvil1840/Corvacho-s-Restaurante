@@ -30,16 +30,19 @@ public class DetalleHistorialDTO {
     @JsonProperty("subtotal")
     private double subtotal;
 
+    // Convierte un detalle de pedido en una linea del historial calculando su subtotal con adicionales
     public static DetalleHistorialDTO fromEntity(DetallePedido detalle) {
         if (detalle == null) {
             return null;
         }
 
+        // Obtiene los adicionales seleccionados para este producto
         List<AdicionalSeleccionado> seleccionados = new ArrayList<>();
         if (detalle.getAdicionales() != null) {
             seleccionados.addAll(detalle.getAdicionales());
         }
 
+        // Calcula el precio base mas el valor de los adicionales multiplicado por la cantidad del producto
         int cantidad = detalle.getCantidad() > 0 ? detalle.getCantidad() : 1;
         double precioBase = detalle.getProducto() != null ? detalle.getProducto().getPrecio() : 0;
         double extras = seleccionados.stream()

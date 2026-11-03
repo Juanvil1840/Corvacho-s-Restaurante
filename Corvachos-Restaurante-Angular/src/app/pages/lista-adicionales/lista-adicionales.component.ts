@@ -5,6 +5,7 @@ import { AdicionalService } from '../../service/adicional.service';
 import { Adicional } from '../../models/adicional.model';
 import { AdicionalTablaComponent } from './components/adicional-tabla/adicional-tabla.component';
 
+// Componente para listar y administrar los adicionales del restaurante
 @Component({
   selector: 'app-lista-adicionales',
   standalone: true,
@@ -14,16 +15,19 @@ import { AdicionalTablaComponent } from './components/adicional-tabla/adicional-
 })
 export class ListaAdicionalesComponent implements OnInit {
 
+  // Lista de adicionales obtenidos del servidor y estados de la vista
   adicionales: Adicional[] = [];
   cargando = false;
   error = '';
 
   constructor(private adicionalService: AdicionalService) {}
 
+  // Carga los adicionales al inicializar el componente
   ngOnInit(): void {
     this.cargarAdicionales();
   }
 
+  // Consulta al servicio la lista de adicionales disponibles
   cargarAdicionales(): void {
     this.cargando = true;
     this.error = '';
@@ -41,15 +45,17 @@ export class ListaAdicionalesComponent implements OnInit {
     });
   }
 
+  // Solicita confirmación y elimina un adicional por su ID
   eliminarAdicional(id: number): void {
     if (confirm('¿Eliminar este adicional?')) {
       this.adicionalService.eliminarAdicional(id).subscribe({
         next: () => {
+          // Recarga la lista tras eliminar exitosamente
           this.cargarAdicionales();
         },
         error: (error) => {
           console.error('Error al eliminar el adicional:', error);
-          this.error = 'No fue posible eliminar el adicional.';
+          this.error = error.error?.mensaje || 'No fue posible eliminar el adicional.';
         }
       });
     }

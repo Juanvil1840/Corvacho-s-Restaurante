@@ -1,4 +1,4 @@
-// Estructura de un adicional dentro de un pedido: id, nombre, precio y cantidad
+// Adicional incluido dentro de un detalle de pedido con su cantidad elegida
 export interface AdicionalPedido {
     id_adicional: number;
     nombre: string;
@@ -6,7 +6,7 @@ export interface AdicionalPedido {
     cantidad: number;
 }
 
-// Estructura de un producto dentro de un pedido: id, nombre, precio, descripcion e imagen
+// Datos básicos del producto asociado a una línea del pedido
 export interface ProductoPedido {
     id: number;
     nombre: string;
@@ -15,7 +15,7 @@ export interface ProductoPedido {
     imagen: string;
 }
 
-// Estructura de un detalle de pedido: id, cantidad, producto y adicionales
+// Representa un ítem o línea de un pedido con su producto, cantidad y adicionales
 export interface DetallePedido {
     id_DetallePedido: number;
     cantidad: number;

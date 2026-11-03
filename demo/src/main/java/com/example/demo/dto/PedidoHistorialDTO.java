@@ -35,6 +35,7 @@ public class PedidoHistorialDTO {
     @JsonProperty("productos")
     private List<DetalleHistorialDTO> productos;
 
+    // Convierte un pedido y sus detalles al formato del historial, calculando el total pagado
     public static PedidoHistorialDTO fromEntity(Pedido pedido, List<DetallePedido> detalles) {
         if (pedido == null) {
             return null;

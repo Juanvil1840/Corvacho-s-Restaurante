@@ -5,6 +5,7 @@ import { ProductoService } from '../../service/producto.service';
 import { Producto } from '../../models/producto.model';
 import { ProductoTablaComponent } from './components/producto-tabla/producto-tabla.component';
 
+// Componente para listar, eliminar y cambiar la disponibilidad de los productos
 @Component({
   selector: 'app-lista-productos',
   standalone: true,
@@ -14,6 +15,7 @@ import { ProductoTablaComponent } from './components/producto-tabla/producto-tab
 })
 export class ListaProductosComponent implements OnInit {
 
+  // Lista de productos y estados de carga y error
   productos: Producto[] = [];
   cargando = false;
   error = '';
@@ -23,10 +25,12 @@ export class ListaProductosComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga el catálogo de productos al iniciar el componente
   ngOnInit(): void {
     this.cargarProductos();
   }
 
+  // Obtiene todos los productos desde el servicio
   cargarProductos(): void {
     this.cargando = true;
     this.error = '';
@@ -44,6 +48,7 @@ export class ListaProductosComponent implements OnInit {
     });
   }
 
+  // Confirma y elimina un producto por su ID, o redirige a la página de error si está asociado a un pedido
   eliminarProducto(id: number): void {
     if (!confirm('¿Eliminar este producto?')) {
       return;
@@ -53,6 +58,7 @@ export class ListaProductosComponent implements OnInit {
 
     this.productoService.eliminarProducto(id).subscribe({
       next: () => {
+        // Recarga los productos tras eliminar exitosamente
         this.cargarProductos();
       },
       error: (error) => {
@@ -61,6 +67,7 @@ export class ListaProductosComponent implements OnInit {
           || error.error?.message 
           || 'Excepción: No se puede eliminar el producto porque está anidado a un pedido.';
         
+        // Redirige a la vista de error mostrando el motivo del fallo
         this.router.navigate(['/error'], {
           queryParams: { mensaje: mensajeError }
         });
@@ -68,6 +75,7 @@ export class ListaProductosComponent implements OnInit {
     });
   }
 
+  // Alterna el estado de disponibilidad de un producto en el menú
   toggleDisponible(producto: Producto): void {
     const nuevoEstado = !producto.disponible;
     const productoActualizado: Producto = {
@@ -79,6 +87,7 @@ export class ListaProductosComponent implements OnInit {
 
     this.productoService.actualizarProducto(productoActualizado).subscribe({
       next: (actualizado) => {
+        // Actualiza el estado local del producto con la respuesta del servidor
         producto.disponible = actualizado.disponible;
       },
       error: (error) => {
@@ -87,4 +96,4 @@ export class ListaProductosComponent implements OnInit {
       }
     });
   }
-}
+}

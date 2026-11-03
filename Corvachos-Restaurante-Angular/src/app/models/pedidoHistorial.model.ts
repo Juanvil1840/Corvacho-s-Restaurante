@@ -1,10 +1,10 @@
-// Estructura de un adicional en el historial: nombre y cantidad
+// Pedido en el historial del cliente (coincide con PedidoHistorialDTO del backend)
 export interface AdicionalHistorial {
   nombre: string;
   cantidad: number;
 }
 
-// Estructura de un detalle en el historial: cantidad, producto, adicionales y subtotal
+// Detalle de un producto dentro del historial de pedidos del cliente
 export interface DetalleHistorial {
   cantidad: number;
   producto: string;
@@ -12,7 +12,7 @@ export interface DetalleHistorial {
   subtotal: number;
 }
 
-// Estructura de un pedido en el historial del cliente
+// Resumen de un pedido mostrado en el historial del perfil del cliente
 export interface PedidoHistorial {
   id_Pedido: number;
   estado: string;

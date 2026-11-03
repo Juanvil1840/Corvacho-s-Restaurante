@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Producto } from '../../../../models/producto.model';
 
+// Subcomponente que muestra la imagen del producto en la vista de detalle
 @Component({
   selector: 'app-detalle-imagen',
   standalone: true,
@@ -11,6 +12,7 @@ import { Producto } from '../../../../models/producto.model';
 })
 export class DetalleImagenComponent {
 
+  // Producto cuya imagen se va a mostrar
   @Input() producto!: Producto;
 
 }

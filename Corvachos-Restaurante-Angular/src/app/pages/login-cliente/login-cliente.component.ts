@@ -5,6 +5,7 @@ import { ClienteService } from '../../service/cliente.service';
 import { CarritoService } from '../../service/carrito.service';
 import { LoginFormularioComponent } from './components/login-formulario/login-formulario.component';
 
+// Componente de página para el inicio de sesión de clientes
 @Component({
   selector: 'app-login-cliente',
   standalone: true,
@@ -14,6 +15,7 @@ import { LoginFormularioComponent } from './components/login-formulario/login-fo
 })
 export class LoginClienteComponent {
 
+  // Referencia al formulario hijo para gestionar errores de autenticación
   @ViewChild(LoginFormularioComponent) formulario!: LoginFormularioComponent;
 
   constructor(
@@ -22,6 +24,7 @@ export class LoginClienteComponent {
     private router: Router
   ) {}
 
+  // Autentica al cliente, guarda su sesión en el carrito y redirige a su perfil
   onIniciarSesion(datos: { correo: string, contrasena: string }): void {
     this.clienteService.login(datos.correo, datos.contrasena).subscribe({
       next: (clienteEncontrado) => {
@@ -29,6 +32,7 @@ export class LoginClienteComponent {
         this.router.navigate(['/clientes/perfil', clienteEncontrado.clienteId]);
       },
       error: (err) => {
+        // Verifica si la cuenta está desactivada o si las credenciales son inválidas
         if (err.status === 403) {
           this.formulario.setError('Tu cuenta se encuentra desactivada.');
         } else {

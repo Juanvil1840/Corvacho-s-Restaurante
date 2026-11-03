@@ -6,6 +6,7 @@ import { Producto } from '../../../../models/producto.model';
 import { Adicional } from '../../../../models/adicional.model';
 import { AdicionalCarrito, CarritoService } from '../../../../service/carrito.service';
 
+// Subcomponente que muestra los datos del producto y permite elegir cantidad y adicionales para agregarlo al carrito
 @Component({
   selector: 'app-detalle-info',
   standalone: true,
@@ -15,15 +16,18 @@ import { AdicionalCarrito, CarritoService } from '../../../../service/carrito.se
 })
 export class DetalleInfoComponent {
 
+  // Producto actual y lista de adicionales disponibles para su categoría
   @Input() producto!: Producto;
   @Input() adicionales: Adicional[] = [];
 
+  // Cantidad de unidades del producto, mapa de adicionales elegidos y estado de confirmación
   cantidad = 1;
   adicionalesElegidos: Map<number, number> = new Map<number, number>();
   mensajeAgregado = false;
 
   constructor(private carritoService: CarritoService) {}
 
+  // Aumenta o disminuye la cantidad del producto entre 1 y 99
   cambiarCantidad(delta: number): void {
     const nueva = this.cantidad + delta;
     if (nueva >= 1 && nueva <= 99) {
@@ -31,18 +35,22 @@ export class DetalleInfoComponent {
     }
   }
 
+  // Quita todos los adicionales seleccionados
   limpiarAdicionales(): void {
     this.adicionalesElegidos.clear();
   }
 
+  // Verifica si un adicional específico está seleccionado con al menos 1 unidad
   estaSeleccionado(idAdicional: number): boolean {
     return (this.adicionalesElegidos.get(idAdicional) || 0) > 0;
   }
 
+  // Obtiene la cantidad seleccionada de un adicional por su ID
   obtenerCantidadAdicional(idAdicional: number): number {
     return this.adicionalesElegidos.get(idAdicional) || 0;
   }
 
+  // Marca o desmarca un adicional al hacer clic sobre su tarjeta
   toggleAdicional(adicional: Adicional): void {
     const id = adicional.id_adicional;
     if (this.estaSeleccionado(id)) {
@@ -52,6 +60,7 @@ export class DetalleInfoComponent {
     }
   }
 
+  // Modifica la cantidad de un adicional seleccionado o lo desmarca si baja a cero
   cambiarCantidadAdicional(adicional: Adicional, delta: number, event: Event): void {
     event.stopPropagation();
     const id = adicional.id_adicional;
@@ -64,10 +73,12 @@ export class DetalleInfoComponent {
     }
   }
 
+  // Indica si el usuario no ha elegido ningún adicional
   get sinAdicionales(): boolean {
     return this.adicionalesElegidos.size === 0;
   }
 
+  // Construye la lista de adicionales seleccionados con el formato requerido por el carrito
   get listaAdicionalesSeleccionados(): AdicionalCarrito[] {
     const resultado: AdicionalCarrito[] = [];
     for (const adic of this.adicionales) {
@@ -84,6 +95,7 @@ export class DetalleInfoComponent {
     return resultado;
   }
 
+  // Calcula el precio total de la selección actual incluyendo adicionales y cantidad
   get precioTotalSeleccion(): number {
     const base = this.producto?.precio || 0;
     const extra = this.listaAdicionalesSeleccionados.reduce(
@@ -93,6 +105,7 @@ export class DetalleInfoComponent {
     return (base + extra) * this.cantidad;
   }
 
+  // Envía el producto con la cantidad y adicionales elegidos al carrito y muestra confirmación temporal
   agregarAlCarrito(): void {
     if (!this.producto) return;
     this.carritoService.agregarItem(
@@ -106,6 +119,7 @@ export class DetalleInfoComponent {
     }, 3500);
   }
 
+  // Abre el panel lateral del carrito
   abrirCarrito(): void {
     this.carritoService.abrirCarrito();
   }

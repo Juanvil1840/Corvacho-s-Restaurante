@@ -25,9 +25,11 @@
         }
 
         <div class="pedido-form-acciones">
-          <button type="submit" class="pedido-form-btn-guardar" [disabled]="guardando">
-            {{ guardando ? 'Guardando...' : 'Guardar' }}
-          </button>
+          @if (estadoOriginal !== 'Entregado') {
+            <button type="submit" class="pedido-form-btn-guardar" [disabled]="guardando">
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+          }
           <button type="button" class="pedido-form-btn-cancelar" (click)="cancelar()">
             Cancelar
           </button>

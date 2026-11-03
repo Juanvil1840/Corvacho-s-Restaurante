@@ -1,6 +1,6 @@
 import { Operador } from "./operador.model";
 
-// Estructura de un domiciliario: id, nombre, celular, cedula, disponibilidad, estado y operador
+// Modelo que representa a un domiciliario encargado de entregar los pedidos
 export interface Domiciliario {
     id_domiciliario: number;
     nombre: string;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Domiciliario;
 
+// Repositorio JPA para la entidad Domiciliario
 @Repository
 public interface DomiciliarioRepository extends JpaRepository<Domiciliario, Long>{
 

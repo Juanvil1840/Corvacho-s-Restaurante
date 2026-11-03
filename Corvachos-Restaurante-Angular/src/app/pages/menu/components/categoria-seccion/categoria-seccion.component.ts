@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductoCardComponent } from '../producto-card/producto-card.component';
 import { Producto } from '../../../../models/producto.model';
 
+// Componente que representa una sección del menú correspondiente a una categoría
 @Component({
   selector: 'app-categoria-seccion',
   standalone: true,
@@ -12,6 +13,7 @@ import { Producto } from '../../../../models/producto.model';
 })
 export class CategoriaSeccionComponent {
 
+  // Nombre de la categoría y lista de productos que pertenecen a ella
   @Input() categoria!: string;
   @Input() productos!: Producto[];
 

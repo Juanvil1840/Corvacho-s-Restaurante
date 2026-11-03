@@ -28,6 +28,7 @@ public class AdministradorRestController {
 
     private final AdministradorService administradorService;
 
+    // Constructor para inyectar el servicio de administradores
     public AdministradorRestController(AdministradorService administradorService) {
         this.administradorService = administradorService;
     }

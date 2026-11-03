@@ -35,8 +35,10 @@ import { DetallePedidoComponent } from './pages/detalle-pedido/detalle-pedido.co
 import { PaginaErrorComponent } from './pages/pagina-error/pagina-error.component';
 import { LoginOperarioComponent } from './pages/login-operario/login-operario.component';
 
+// Definición de todas las rutas de navegación de la aplicación
 export const routes: Routes = [
 
+    // Página de inicio y gestión de productos
     { path: '', component: LandingComponent },
     { path: 'productos', component: ListaProductosComponent },
     { path: 'productos/nuevo', component: FormularioProductoComponent },
@@ -71,6 +73,7 @@ export const routes: Routes = [
     { path: 'login-admin', component: LoginAdminComponent },
     { path: 'portal-admin', component: PortalAdminComponent },
 
+    // Rutas de clientes, autenticación, menú público y manejo de errores
     { path: 'clientes', component: ListaClientesComponent },
     { path: 'clientes/nuevo', component: FormularioClienteComponent },
     { path: 'clientes/editar/:id', component: FormularioClienteComponent },
@@ -81,4 +84,4 @@ export const routes: Routes = [
     { path: 'menu/detalle/:id', component: DetalleProductoComponent },
     { path: 'error', component: PaginaErrorComponent },
     { path: '**', component: PaginaErrorComponent },
-];
+];

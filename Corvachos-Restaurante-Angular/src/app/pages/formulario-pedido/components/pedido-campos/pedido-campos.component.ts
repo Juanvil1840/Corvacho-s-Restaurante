@@ -26,6 +26,7 @@ export interface ComidaPedido {
   adicionales: AdicionalPedido[];
 }
 
+// Subcomponente que gestiona los campos del pedido, el avance de estado y la selección de comidas
 @Component({
   selector: 'app-pedido-campos',
   standalone: true,
@@ -34,6 +35,7 @@ export interface ComidaPedido {
   styleUrl: './pedido-campos.component.scss'
 })
 export class PedidoCamposComponent {
+  // Datos del formulario, listas de entidades y estado actual recibidos desde el componente padre
   @Input() formulario!: FormularioPedido;
   @Input() clientes: Cliente[] = [];
   @Input() operadores: Operador[] = [];
@@ -45,6 +47,7 @@ export class PedidoCamposComponent {
   @Input() estadoOriginal: string = 'Recibido';
   @Input() domiciliarioAsignadoId: number = 0;
 
+  // Variables temporales para agregar una nueva comida a la lista del pedido
   productoSeleccionadoId: number = 0;
   adicionalSeleccionadoId: number = 0;
   cantidadSeleccionada: number = 1;
@@ -66,12 +69,14 @@ export class PedidoCamposComponent {
     return this.siguienteEstado !== null && this.formulario.estado === this.siguienteEstado;
   }
 
+  // Avanza el estado del formulario al siguiente paso del flujo del pedido
   avanzarAlSiguienteEstado(): void {
     if (this.siguienteEstado) {
       this.formulario.estado = this.siguienteEstado;
     }
   }
 
+  // Restaura el estado del formulario al estado original antes de guardar
   deshacerAvance(): void {
     this.formulario.estado = this.estadoOriginal;
   }
@@ -90,13 +95,27 @@ export class PedidoCamposComponent {
     return '';
   }
 
+  // Indica si la línea entre pasos de la barra de progreso está completada
   lineaCompletada(despuesDePaso: number): boolean {
     return this.numeroEstadoActual() > despuesDePaso;
   }
 
-  // Solo se pueden elegir domiciliarios disponibles (o el que ya tiene asignado el pedido)
+  // Cliente, fecha de creacion y comidas solo se cambian mientras el pedido esta "Recibido"
+  get puedeCambiarDatos(): boolean {
+    return !this.editando || this.estadoOriginal === 'Recibido';
+  }
+
+  // Un pedido entregado ya no se puede modificar
+  get pedidoEntregado(): boolean {
+    return this.editando && this.estadoOriginal === 'Entregado';
+  }
+
+  // Solo se pueden elegir domiciliarios disponibles.
+  // Si el pedido ya va en camino, su domiciliario esta ocupado por este mismo pedido y tambien se muestra.
   get domiciliariosDisponibles(): Domiciliario[] {
-    return this.domiciliarios.filter(d => d.informaciondisp || d.id_domiciliario === this.domiciliarioAsignadoId);
+    return this.domiciliarios.filter(d =>
+      d.informaciondisp || (this.estadoOriginal === 'Enviado' && d.id_domiciliario === this.domiciliarioAsignadoId)
+    );
   }
 
   // Adicionales disponibles de la categoria del producto elegido
@@ -108,9 +127,10 @@ export class PedidoCamposComponent {
     return this.adicionales.filter(a => a.disponible && a.categoria?.id === producto.categoria.id);
   }
 
+  // Agrega el producto seleccionado junto con su cantidad y adicional a la lista de comidas del pedido
   agregarComida(): void {
     const producto = this.productos.find(p => p.id === Number(this.productoSeleccionadoId));
-    if (!producto) {
+    if (!producto || !producto.disponible) {
       return;
     }
     const cantidad = this.cantidadSeleccionada > 0 ? this.cantidadSeleccionada : 1;
@@ -144,10 +164,12 @@ export class PedidoCamposComponent {
     this.cantidadSeleccionada = 1;
   }
 
+  // Elimina una comida de la lista del pedido según su índice
   quitarComida(index: number): void {
     this.comidasSeleccionadas.splice(index, 1);
   }
 
+  // Aumenta o disminuye la cantidad de una comida en el pedido o la quita si llega a cero
   modificarCantidad(index: number, cambio: number): void {
     const item = this.comidasSeleccionadas[index];
     if (!item) return;
@@ -168,6 +190,7 @@ export class PedidoCamposComponent {
     return precio;
   }
 
+  // Calcula el valor total de todas las comidas seleccionadas en el pedido
   calcularTotal(): number {
     let total = 0;
     for (const item of this.comidasSeleccionadas) {
@@ -176,10 +199,15 @@ export class PedidoCamposComponent {
     return total;
   }
 
+  // Verifica si dos listas de adicionales contienen los mismos elementos y cantidades
   private mismosAdicionales(a: AdicionalPedido[], b: AdicionalPedido[]): boolean {
     if (a.length !== b.length) {
       return false;
     }
-    return a.every(adicionalA => b.some(adicionalB => adicionalB.id_adicional === adicionalA.id_adicional));
+    return a.every(adicionalA =>
+      b.some(adicionalB =>
+        adicionalB.id_adicional === adicionalA.id_adicional && adicionalB.cantidad === adicionalA.cantidad
+      )
+    );
   }
 }

@@ -4,38 +4,39 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Administrador } from '../models/administrador.model';
 import { environment } from '../../environments/environment';
 
-// Servicio para la gestion de Administradores
+// Servicio para gestionar administradores y su inicio de sesión
 @Injectable({
   providedIn: 'root'
 })
 export class AdministradorService {
 
+  // URL base del endpoint de administradores
   private apiUrl = `${environment.apiUrl}/administradores`;
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene todos los administradores
+  // Consultar todos los administradores registrados
   getAdministradores(): Observable<Administrador[]> {
     return this.http.get<Administrador[]>(this.apiUrl).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Obtiene un administrador por su id
+  // Consultar un administrador por su ID
   getAdministradorById(id: number): Observable<Administrador> {
     return this.http.get<Administrador>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Crea un nuevo administrador
+  // Registrar un nuevo administrador
   agregarAdministrador(administrador: Administrador): Observable<Administrador> {
     return this.http.post<Administrador>(this.apiUrl, administrador).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Actualiza un administrador existente
+  // Actualizar los datos de un administrador existente
   actualizarAdministrador(administrador: Administrador): Observable<Administrador> {
     return this.http.put<Administrador>(
       `${this.apiUrl}/${administrador.id_administrador}`,
@@ -45,7 +46,7 @@ export class AdministradorService {
     );
   }
 
-  // Elimina un administrador por su id
+  // Eliminar un administrador por su ID
   eliminarAdministrador(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.manejarError)
@@ -59,10 +60,10 @@ export class AdministradorService {
     );
   }
 
-  // Manejo de errores 
+  // Manejo básico de errores HTTP
   private manejarError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      console.error('Error de conexion con Spring Boot', error);
+      console.error('Error de conexión con Spring Boot', error);
     } else {
       console.error(`Error HTTP ${error.status}: ${error.message}`);
     }

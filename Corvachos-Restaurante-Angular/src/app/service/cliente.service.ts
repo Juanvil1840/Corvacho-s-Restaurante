@@ -4,38 +4,39 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { environment } from '../../environments/environment';
 
-// Servicio para la gestion de Clientes 
+// Servicio para gestionar clientes, estado de su cuenta e inicio de sesión
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
 
+  // URL base del endpoint de clientes
   private apiUrl = `${environment.apiUrl}/clientes`;
 
   constructor(private http: HttpClient) { }
 
-  // Obtiene todos los clientes
+  // Consultar la lista de todos los clientes
   getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.apiUrl).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Obtiene un cliente por su id
+  // Consultar la información de un cliente por su ID
   getClienteById(id: number): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Crea un nuevo cliente
+  // Registrar un nuevo cliente
   agregarCliente(cliente: Cliente): Observable<Cliente> {
     return this.http.post<Cliente>(this.apiUrl, cliente).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Actualiza un cliente existente
+  // Actualizar los datos de un cliente existente
   actualizarCliente(cliente: Cliente): Observable<Cliente> {
     return this.http.put<Cliente>(
       `${this.apiUrl}/${cliente.clienteId}`,
@@ -45,38 +46,38 @@ export class ClienteService {
     );
   }
 
-  // Desactiva la cuenta de un cliente
+  // Desactivar la cuenta de un cliente sin eliminar su registro
   desactivarCliente(id: number): Observable<Cliente> {
     return this.http.put<Cliente>(`${this.apiUrl}/${id}/desactivar`, {}).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Reactiva la cuenta de un cliente
+  // Reactivar la cuenta de un cliente previamente desactivado
   reactivarCliente(id: number): Observable<Cliente> {
     return this.http.put<Cliente>(`${this.apiUrl}/${id}/reactivar`, {}).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Elimina un cliente por su id
+  // Eliminar un cliente por su ID
   eliminarCliente(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Login del cliente
+  // Iniciar sesión de cliente con correo y contraseña
   login(correo: string, contrasena: string): Observable<Cliente> {
     return this.http.post<Cliente>(`${this.apiUrl}/login`, { correo, contrasena }).pipe(
       catchError(this.manejarError)
     );
   }
 
-  // Manejo de errores 
+  // Manejo básico de errores HTTP
   private manejarError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      console.error('Error de conexion con Spring Boot', error);
+      console.error('Error de conexión con Spring Boot', error);
     } else {
       console.error(`Error HTTP ${error.status}: ${error.message}`);
     }

@@ -8,6 +8,7 @@ import { Domiciliario } from '../../models/domiciliario.model';
 import { Operador } from '../../models/operador.model';
 import { DomiciliarioCamposComponent } from './components/domiciliario-campos/domiciliario-campos.component';
 
+// Página de formulario para registrar o editar un domiciliario y su operador encargado
 @Component({
   selector: 'app-formulario-domiciliario',
   standalone: true,
@@ -17,6 +18,7 @@ import { DomiciliarioCamposComponent } from './components/domiciliario-campos/do
 })
 export class FormularioDomiciliarioComponent implements OnInit {
 
+  // Datos del domiciliario vinculados al formulario
   domiciliario: Domiciliario = {
     id_domiciliario: 0,
     nombre: '',
@@ -27,6 +29,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     operador: { id_operador: 0, nombre: '', usuario: '', contrasena: '' }
   };
 
+  // Lista de operadores disponibles y estados del formulario
   operadores: Operador[] = [];
   editando = false;
   guardando = false;
@@ -39,6 +42,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Carga la lista de operadores y, si viene un ID en la URL, consulta los datos del domiciliario
   ngOnInit(): void {
     this.operadorService.getOperadores().subscribe({
       next: (ops) => this.operadores = ops,
@@ -70,6 +74,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     }
   }
 
+  // Asigna el objeto completo del operador según el ID seleccionado en el formulario
   actualizarOperador(): void {
     if (!this.domiciliario.operador) {
       return;
@@ -84,6 +89,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     }
   }
 
+  // Envía la petición para crear o actualizar el domiciliario y navega al listado
   guardar(): void {
     this.actualizarOperador();
     this.guardando = true;
@@ -106,6 +112,7 @@ export class FormularioDomiciliarioComponent implements OnInit {
     });
   }
 
+  // Cancela la acción y vuelve a la lista de domiciliarios
   cancelar(): void {
     this.router.navigate(['/domiciliarios']);
   }

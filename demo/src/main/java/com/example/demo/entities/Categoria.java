@@ -15,6 +15,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
+// Entidad que representa una categoria del menu (ej. Pastas, Carnes, Bebidas)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,14 +27,17 @@ public class Categoria{
     @Column( length = 80, nullable = false)
     private String nombre;
 
+    // Productos que pertenecen a esta categoria
     @ToString.Exclude
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     private List<Producto> productos;
 
+    // Adicionales permitidos para esta categoria
     @ToString.Exclude
     @OneToMany(mappedBy = "categoria")
     private List<Adicional> adicionales;
 
+    // Constructor con el nombre de la categoria
     public Categoria(String nombre) {
     this.nombre = nombre;
     }

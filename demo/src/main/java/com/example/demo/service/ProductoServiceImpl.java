@@ -14,6 +14,7 @@ import com.example.demo.repository.DetallePedidoRepository;
 import com.example.demo.repository.ProductoCarritoRepository;
 import com.example.demo.repository.ProductoRepository;
 
+// Implementacion del servicio para la gestion de productos
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
@@ -22,6 +23,7 @@ public class ProductoServiceImpl implements ProductoService {
     private final DetallePedidoRepository detallePedidoRepository;
     private final ProductoCarritoRepository productoCarritoRepository;
 
+    // Constructor con inyeccion de repositorios
     public ProductoServiceImpl(
             ProductoRepository productoRepository,
             CategoriaRepository categoriaRepository,
@@ -33,22 +35,26 @@ public class ProductoServiceImpl implements ProductoService {
         this.productoCarritoRepository = productoCarritoRepository;
     }
 
+    // Lista todos los productos del restaurante
     @Override
     public Collection<Producto> obtenerTodos() {
         return productoRepository.findAll();
     }
 
+    // Lista unicamente los productos marcados como disponibles para el menu
     @Override
     public Collection<Producto> obtenerDisponibles() {
         return productoRepository.findByDisponibleTrue();
     }
 
+    // Busca un producto por su id o retorna null si no existe
     @Override
     public Producto obtenerPorId(Long id) {
         return productoRepository.findById(id)
                 .orElse(null);
     }
 
+    // Crea un nuevo producto validando que tenga una categoria existente
     @Override
     public Producto crearProducto(Producto producto) {
         producto.setId(null);
@@ -56,6 +62,7 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(producto);
     }
 
+    // Actualiza un producto existente por su id validando su categoria
     @Override
     public Producto actualizarProducto(Long id, Producto producto) {
         if (!existe(id)) {
@@ -66,6 +73,7 @@ public class ProductoServiceImpl implements ProductoService {
         return actualizar(producto);
     }
 
+    // Actualiza los datos basicos y la categoria de una entidad Producto
     @Override
     public Producto actualizar(Producto producto) {
         if (producto == null || producto.getId() == null) {
@@ -90,16 +98,19 @@ public class ProductoServiceImpl implements ProductoService {
         return productoRepository.save(existente);
     }
 
+    // Elimina un producto si no esta en ningun pedido; si esta en carritos, lo retira primero de los carritos
     @Override
     @Transactional
     public void eliminar(Long id) {
         Producto producto = productoRepository.findById(id).orElse(null);
         if (producto != null) {
+            // Impide eliminar el producto si ya forma parte del historial de algun pedido
             if (tienePedidos(id)) {
                 throw new ResponseStatusException(
                         HttpStatus.CONFLICT,
                         "Excepción: No se puede eliminar el producto porque está presente en un pedido.");
             }
+            // Elimina las referencias del producto en los carritos activos antes de borrarlo
             if (producto.getProductoCarritos() != null && !producto.getProductoCarritos().isEmpty()) {
                 productoCarritoRepository.deleteAll(producto.getProductoCarritos());
             }
@@ -107,16 +118,19 @@ public class ProductoServiceImpl implements ProductoService {
         }
     }
 
+    // Comprueba si existe un producto con el id dado
     @Override
     public boolean existe(Long id) {
         return productoRepository.existsById(id);
     }
 
+    // Verifica si el producto esta asociado a algun detalle de pedido
     @Override
     public boolean tienePedidos(Long id) {
         return detallePedidoRepository.existsByProducto_Id(id);
     }
 
+    // Valida y obtiene la categoria seleccionada para el producto
     private Categoria buscarCategoria(Producto producto) {
         if (producto.getCategoria() == null || producto.getCategoria().getId() == null) {
             throw new ResponseStatusException(

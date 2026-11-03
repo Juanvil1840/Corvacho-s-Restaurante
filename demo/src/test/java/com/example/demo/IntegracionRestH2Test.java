@@ -35,6 +35,7 @@ class IntegracionRestH2Test {
     @Autowired
     private AdministradorRepository administradorRepository;
 
+    // Prueba el registro, actualización y eliminación de un operador mediante la API REST y verifica los cambios en H2.
     @Test
     void crudOperadorSeReflejaEnH2() throws Exception {
         long conteoInicial = operadorRepository.count();
@@ -84,6 +85,7 @@ class IntegracionRestH2Test {
         assertThat(operadorRepository.findById(creado.getId_operador())).isEmpty();
     }
 
+    // Prueba el registro, actualización y eliminación de un administrador mediante la API REST y verifica los cambios en H2.
     @Test
     void crudAdministradorSeReflejaEnH2() throws Exception {
         long conteoInicial = administradorRepository.count();
@@ -131,6 +133,7 @@ class IntegracionRestH2Test {
         assertThat(administradorRepository.findById(creado.getId_administrador())).isEmpty();
     }
 
+    // Verifica que los endpoints REST respondan correctamente y devuelvan datos de H2.
     @Test
     void endpointsRestDeIntegracionRespondenConDatosDeH2() throws Exception {
         mockMvc.perform(get("/api/operadores"))

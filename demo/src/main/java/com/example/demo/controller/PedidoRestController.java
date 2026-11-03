@@ -31,6 +31,7 @@ public class PedidoRestController {
 
     private final PedidoService pedidoService;
 
+    // Constructor para inyectar el servicio de pedidos
     public PedidoRestController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
     }

@@ -30,6 +30,7 @@ public class AdicionalPedidoDTO {
     @JsonProperty("cantidad")
     private int cantidad;
 
+    // Convierte un adicional seleccionado a su DTO para pedidos o carrito
     public static AdicionalPedidoDTO fromEntity(AdicionalSeleccionado adicional) {
         if (adicional == null) {
             return null;

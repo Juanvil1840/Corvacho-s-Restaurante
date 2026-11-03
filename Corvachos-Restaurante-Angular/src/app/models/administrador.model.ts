@@ -1,4 +1,4 @@
-// Estructura de un administrador: id, nombre, usuario y contraseña
+// Modelo que representa a un usuario administrador del sistema
 export interface Administrador {
     id_administrador: number;
     nombre: string;

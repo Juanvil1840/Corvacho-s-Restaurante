@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con toda la informacion detallada de un pedido, incluyendo cliente, operador, domiciliario e items
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "fechaEntrega", "cliente", "operador", "domiciliario", "detallePedidos"})
@@ -40,6 +41,7 @@ public class PedidoDTO {
     @JsonProperty("detallePedidos")
     private List<DetallePedidoDTO> detallePedidos;
 
+    // Constructor completo de PedidoDTO
     public PedidoDTO(Long id_Pedido, String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega,
                      ClientePedidoDTO cliente, OperadorPedidoDTO operador, DomiciliarioPedidoDTO domiciliario,
                      List<DetallePedidoDTO> detallePedidos) {
@@ -53,10 +55,12 @@ public class PedidoDTO {
         this.detallePedidos = detallePedidos;
     }
 
+    // Convierte una entidad Pedido a PedidoDTO tomando sus propios detalles
     public static PedidoDTO fromEntity(Pedido pedido) {
         return fromEntity(pedido, pedido != null ? pedido.getDetallePedidos() : null);
     }
 
+    // Convierte una entidad Pedido y una lista de detalles especifica a PedidoDTO
     public static PedidoDTO fromEntity(Pedido pedido, List<DetallePedido> detalles) {
         if (pedido == null) {
             return null;

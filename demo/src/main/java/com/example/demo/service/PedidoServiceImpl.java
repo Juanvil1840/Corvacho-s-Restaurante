@@ -27,6 +27,7 @@ import com.example.demo.repository.OperadorRepository;
 import com.example.demo.repository.PedidoRepository;
 import com.example.demo.repository.ProductoRepository;
 
+// Implementacion del servicio para la gestion de pedidos, estados y asignacion de domiciliarios
 @Service
 public class PedidoServiceImpl implements PedidoService {
 
@@ -44,6 +45,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final DetallePedidoRepository detallePedidoRepository;
     private final AdicionalRepository adicionalRepository;
 
+    // Constructor con inyeccion de todos los repositorios requeridos
     public PedidoServiceImpl(
             PedidoRepository pedidoRepository,
             ClienteRepository clienteRepository,
@@ -61,33 +63,39 @@ public class PedidoServiceImpl implements PedidoService {
         this.adicionalRepository = adicionalRepository;
     }
 
+    // Obtiene todos los pedidos registrados
     @Override
     public Collection<Pedido> findAll() {
         return pedidoRepository.findAll();
     }
 
+    // Obtiene todos los pedidos que aun no han sido entregados
     @Override
     public Collection<Pedido> findActivos() {
         return pedidoRepository.findByEstadoNotIgnoreCase(ENTREGADO);
     }
 
+    // Busca un pedido por su id o devuelve null si no existe
     @Override
     public Pedido findById(Long id) {
         return pedidoRepository.findById(id)
                 .orElse(null);
     }
 
+    // Guarda un pedido directamente en la base de datos
     @Override
     @Transactional
     public Pedido guardar(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
 
+    // Crea un pedido nuevo verificando cliente activo, estado inicial "Recibido" y guardando sus detalles
     @Override
     @Transactional
     public Pedido crearPedido(Pedido pedido) {
         pedido.setId_Pedido(null);
         pedido.setCliente(buscarCliente(pedido));
+        validarClienteActivo(pedido.getCliente());
         pedido.setOperador(buscarOperador(pedido));
         pedido.setDomiciliario(buscarDomiciliario(pedido));
         validarDomiciliarioActivo(pedido.getDomiciliario());
@@ -111,11 +119,12 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setDetallePedidos(null);
 
         Pedido guardado = pedidoRepository.save(pedido);
-        guardarDetallesDelPedido(guardado, detallesRecibidos);
+        guardarDetallesDelPedido(guardado, detallesRecibidos, new ArrayList<>());
 
         return guardado;
     }
 
+    // Actualiza un pedido existente validando cambios de estado, domiciliario y detalles
     @Override
     @Transactional
     public Pedido actualizarPedido(Long id, Pedido pedido) {
@@ -126,24 +135,45 @@ public class PedidoServiceImpl implements PedidoService {
         String estadoAnterior = existente.getEstado();
         Domiciliario domiciliarioAnterior = existente.getDomiciliario();
 
+        // Un pedido entregado ya no se puede modificar
+        if (ENTREGADO.equals(estadoAnterior)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El pedido ya fue entregado y no se puede modificar");
+        }
+
         if (pedido.getEstado() != null && !pedido.getEstado().trim().isEmpty()) {
             validarTransicionEstado(estadoAnterior, pedido.getEstado());
             existente.setEstado(normalizarEstado(pedido.getEstado()));
         }
 
-        existente.setCliente(buscarCliente(pedido));
-        existente.setOperador(buscarOperador(pedido));
-        Domiciliario domiciliarioSolicitado = buscarDomiciliario(pedido);
-        boolean conservaDomiciliarioActual = existente.getDomiciliario() != null
-                && domiciliarioSolicitado != null
-                && existente.getDomiciliario().getId_domiciliario()
-                        .equals(domiciliarioSolicitado.getId_domiciliario());
-        if (!conservaDomiciliarioActual) {
-            validarDomiciliarioActivo(domiciliarioSolicitado);
+        // El cliente, la fecha de creacion y las comidas solo se cambian mientras el pedido esta "Recibido"
+        boolean puedeCambiarDatos = RECIBIDO.equals(estadoAnterior);
+        if (puedeCambiarDatos) {
+            Cliente cliente = buscarCliente(pedido);
+            if (existente.getCliente() == null
+                    || !existente.getCliente().getClienteId().equals(cliente.getClienteId())) {
+                validarClienteActivo(cliente);
+            }
+            existente.setCliente(cliente);
+            if (pedido.getFechaCreacion() != null) {
+                existente.setFechaCreacion(pedido.getFechaCreacion());
+            }
         }
-        existente.setDomiciliario(domiciliarioSolicitado);
-        if (pedido.getFechaCreacion() != null) {
-            existente.setFechaCreacion(pedido.getFechaCreacion());
+
+        existente.setOperador(buscarOperador(pedido));
+
+        // Cuando el pedido ya fue enviado no se cambia el domiciliario
+        if (!ENVIADO.equals(estadoAnterior)) {
+            Domiciliario domiciliarioSolicitado = buscarDomiciliario(pedido);
+            boolean conservaDomiciliarioActual = existente.getDomiciliario() != null
+                    && domiciliarioSolicitado != null
+                    && existente.getDomiciliario().getId_domiciliario()
+                            .equals(domiciliarioSolicitado.getId_domiciliario());
+            if (!conservaDomiciliarioActual) {
+                validarDomiciliarioActivo(domiciliarioSolicitado);
+            }
+            existente.setDomiciliario(domiciliarioSolicitado);
         }
         existente.setFechaEntrega(pedido.getFechaEntrega());
         if (ENTREGADO.equals(existente.getEstado()) && existente.getFechaEntrega() == null) {
@@ -154,12 +184,16 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido actualizado = pedidoRepository.save(existente);
 
-        if (pedido.getDetallePedidos() != null) {
+        if (puedeCambiarDatos && pedido.getDetallePedidos() != null) {
             List<DetallePedido> previos = detallePedidoRepository.findByPedido_Id_Pedido(id);
+            List<Long> productosPrevios = new ArrayList<>();
+            for (DetallePedido previo : previos) {
+                productosPrevios.add(previo.getProducto().getId());
+            }
             if (!previos.isEmpty()) {
                 detallePedidoRepository.deleteAll(previos);
             }
-            guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos());
+            guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos(), productosPrevios);
         }
 
         return actualizado;
@@ -241,9 +275,13 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
-    private void guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos) {
+    // productosPrevios son los productos que el pedido ya tenia: esos se dejan aunque ahora esten agotados
+    private void guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos,
+            List<Long> productosPrevios) {
         if (detallesRecibidos == null || detallesRecibidos.isEmpty()) {
-            return;
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El pedido debe tener al menos una comida");
         }
         for (DetallePedido d : detallesRecibidos) {
             if (d.getProducto() == null || d.getProducto().getId() == null) {
@@ -252,6 +290,12 @@ public class PedidoServiceImpl implements PedidoService {
             Producto producto = productoRepository.findById(d.getProducto().getId()).orElse(null);
             if (producto == null) {
                 continue;
+            }
+            boolean yaEstabaEnElPedido = productosPrevios.contains(producto.getId());
+            if (!producto.isDisponible() && !yaEstabaEnElPedido) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "El producto " + producto.getNombre() + " está agotado");
             }
             DetallePedido nuevo = new DetallePedido();
             nuevo.setPedido(pedidoGuardado);
@@ -266,14 +310,22 @@ public class PedidoServiceImpl implements PedidoService {
                         continue;
                     }
                     Adicional adicional = adicionalRepository.findById(seleccionado.getId_adicional()).orElse(null);
-                    if (adicional != null) {
-                        int cantidad = seleccionado.getCantidad() > 0 ? seleccionado.getCantidad() : 1;
-                        adicionales.add(new AdicionalSeleccionado(
-                                adicional.getId_adicional(),
-                                adicional.getNombre(),
-                                adicional.getPrecio(),
-                                cantidad));
+                    if (adicional == null) {
+                        throw new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "Uno de los adicionales del pedido ya no existe");
                     }
+                    if (!adicional.isDisponible() && !yaEstabaEnElPedido) {
+                        throw new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST,
+                                "El adicional " + adicional.getNombre() + " está agotado");
+                    }
+                    int cantidad = seleccionado.getCantidad() > 0 ? seleccionado.getCantidad() : 1;
+                    adicionales.add(new AdicionalSeleccionado(
+                            adicional.getId_adicional(),
+                            adicional.getNombre(),
+                            adicional.getPrecio(),
+                            cantidad));
                 }
             }
             nuevo.setAdicionales(adicionales);
@@ -281,17 +333,27 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+    // Elimina un pedido por su id y libera al domiciliario si el pedido estaba en camino
     @Override
     @Transactional
     public void deleteById(Long id) {
+        Pedido pedido = findById(id);
+        // Si el pedido iba en camino, el domiciliario vuelve a quedar disponible
+        if (pedido != null && ENVIADO.equals(pedido.getEstado()) && pedido.getDomiciliario() != null) {
+            Domiciliario domiciliario = pedido.getDomiciliario();
+            domiciliario.setInformaciondisp(domiciliario.isActivo());
+            domiciliarioRepository.save(domiciliario);
+        }
         pedidoRepository.deleteById(id);
     }
 
+    // Obtiene todos los pedidos realizados por un cliente especifico
     @Override
     public List<Pedido> findByClienteId(Long clienteId) {
         return pedidoRepository.findByClienteClienteId(clienteId);
     }
 
+    // Obtiene la lista de detalles de un pedido por su id
     @Override
     public List<DetallePedido> findDetallesByPedidoId(Long pedidoId) {
         if (pedidoId == null) {
@@ -300,6 +362,7 @@ public class PedidoServiceImpl implements PedidoService {
         return detallePedidoRepository.findByPedido_Id_Pedido(pedidoId);
     }
 
+    // Valida y obtiene el cliente asociado al pedido
     private Cliente buscarCliente(Pedido pedido) {
         if (pedido.getCliente() == null || pedido.getCliente().getClienteId() == null
                 || pedido.getCliente().getClienteId() <= 0) {
@@ -313,6 +376,7 @@ public class PedidoServiceImpl implements PedidoService {
                         "El cliente seleccionado no existe"));
     }
 
+    // Busca el operador asignado al pedido si se envio uno
     private Operador buscarOperador(Pedido pedido) {
         if (pedido.getOperador() == null || pedido.getOperador().getId_operador() == null
                 || pedido.getOperador().getId_operador() <= 0) {
@@ -322,6 +386,7 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElse(null);
     }
 
+    // Busca el domiciliario asignado al pedido si se envio uno
     private Domiciliario buscarDomiciliario(Pedido pedido) {
         if (pedido.getDomiciliario() == null || pedido.getDomiciliario().getId_domiciliario() == null
                 || pedido.getDomiciliario().getId_domiciliario() <= 0) {
@@ -331,6 +396,16 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElse(null);
     }
 
+    // Verifica que el cliente tenga su cuenta activa para poder hacer pedidos
+    private void validarClienteActivo(Cliente cliente) {
+        if (!cliente.isActivo()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El cliente está desactivado y no puede hacer pedidos");
+        }
+    }
+
+    // Verifica que el domiciliario seleccionado se encuentre activo
     private void validarDomiciliarioActivo(Domiciliario domiciliario) {
         if (domiciliario != null && !domiciliario.isActivo()) {
             throw new ResponseStatusException(

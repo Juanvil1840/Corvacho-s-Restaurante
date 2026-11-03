@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Categoria } from '../../../../models/categoria.model';
 
+// Subcomponente que contiene los campos de entrada para el nombre de la categoría
 @Component({
   selector: 'app-categoria-campos',
   standalone: true,
@@ -12,5 +13,6 @@ import { Categoria } from '../../../../models/categoria.model';
 })
 export class CategoriaCamposComponent {
 
+  // Categoría que se edita en el formulario
   @Input() categoria!: Categoria;
 }

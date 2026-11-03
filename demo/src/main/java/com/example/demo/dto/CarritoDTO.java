@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CarritoDTO {
 
+    // Lista de productos con sus cantidades y adicionales dentro del carrito
     @NotNull
     @Valid
     private List<ProductoCarritoDTO> items = new ArrayList<>();

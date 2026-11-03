@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO que representa un item dentro de un pedido con su producto, cantidad y adicionales
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,7 @@ public class DetallePedidoDTO {
     @JsonProperty("adicionales")
     private List<AdicionalPedidoDTO> adicionales = new ArrayList<>();
 
+    // Convierte una entidad DetallePedido y su lista de adicionales a DetallePedidoDTO
     public static DetallePedidoDTO fromEntity(DetallePedido detallePedido) {
         if (detallePedido == null) {
             return null;

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO con los datos publicos de un operador
 @Data
 @NoArgsConstructor
 @JsonPropertyOrder({"id_operador", "nombre", "usuario"})
@@ -20,6 +21,7 @@ public class OperadorDTO {
     @JsonProperty("usuario")
     private String usuario;
 
+    // Constructor con id, nombre y usuario del operador
     public OperadorDTO(Long id_operador, String nombre, String usuario) {
         this.id_operador = id_operador;
         this.nombre = nombre;

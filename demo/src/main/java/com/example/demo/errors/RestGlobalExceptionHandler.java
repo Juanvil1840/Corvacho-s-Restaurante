@@ -7,9 +7,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.MensajeDTO;
 
+// Manejador global de excepciones para los controladores REST
 @RestControllerAdvice
 public class RestGlobalExceptionHandler {
 
+    // Captura las excepciones de estado HTTP y devuelve el mensaje en formato JSON usando MensajeDTO
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<MensajeDTO> handleResponseStatus(ResponseStatusException ex) {
         return ResponseEntity.status(ex.getStatusCode())

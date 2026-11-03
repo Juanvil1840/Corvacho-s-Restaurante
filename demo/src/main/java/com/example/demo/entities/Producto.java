@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+// Entidad que representa un plato o producto ofrecido en el menu del restaurante
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,16 +36,20 @@ public class Producto {
     private String imagen;
     @Column( nullable = false)
     private boolean disponible;
+    // Categoria a la que pertenece el producto
     @ManyToOne
     @JoinColumn( name = "id_categoria", nullable = false) 
     private Categoria categoria;
 
+    // Referencias a los carritos donde se encuentra este producto
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<ProductoCarrito> productoCarritos;
 
+    // Referencias a los detalles de pedidos donde se ha solicitado este producto
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detallePedidos;
 
+    // Constructor para crear un producto con todos sus datos y su categoria
     public Producto(String nombre, double precio, String descripcion, String imagen, boolean disponible, Categoria categoria) {
     this.nombre = nombre;
     this.precio = precio;

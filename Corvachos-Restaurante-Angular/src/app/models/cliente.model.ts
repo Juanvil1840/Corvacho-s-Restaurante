@@ -1,4 +1,4 @@
-// Estructura de un cliente: id, nombre, apellido, correo, contrasena, telefono, direccion y estado
+// Modelo que representa la información de un cliente registrado en el restaurante
 export interface Cliente {
     clienteId: number;
     nombre: string;

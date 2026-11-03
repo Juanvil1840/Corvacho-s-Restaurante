@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entities.Categoria;
 
+// Repositorio JPA para las operaciones CRUD de la entidad Categoria
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 
