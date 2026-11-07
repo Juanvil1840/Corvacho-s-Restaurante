@@ -68,6 +68,19 @@
             <artifactId>h2</artifactId>
             <version>2.3.232</version>
         </dependency>
+        <!-- Selenium WebDriver para pruebas de sistema E2E -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- WebDriverManager para gestión automática del driver de Chrome -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Operador } from '../../models/operador.model';
+import { OperadorOpcionesComponent } from './components/operador-opciones/operador-opciones.component';
+import { OperadorPerfilComponent } from './components/operador-perfil/operador-perfil.component';
 
 // Componente principal del portal de trabajo para operarios
 @Component({
   selector: 'app-portal-operario',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, OperadorPerfilComponent, OperadorOpcionesComponent],
   templateUrl: './portal-operario.component.html',
   styleUrl: './portal-operario.component.scss'
 })

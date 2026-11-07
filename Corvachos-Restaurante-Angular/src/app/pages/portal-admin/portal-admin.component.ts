@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Administrador } from '../../models/administrador.model';
+import { AdminOpcionesComponent } from './components/admin-opciones/admin-opciones.component';
+import { AdminPerfilComponent } from './components/admin-perfil/admin-perfil.component';
 
 // Componente principal del panel de administración
 @Component({
   selector: 'app-portal-admin',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, AdminPerfilComponent, AdminOpcionesComponent],
   templateUrl: './portal-admin.component.html',
   styleUrl: './portal-admin.component.scss'
 })

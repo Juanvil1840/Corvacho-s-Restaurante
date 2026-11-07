@@ -79,6 +79,24 @@ public class DataLoader implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
 
+                /* Administradores (asegurar que siempre existan) */
+                if (administradorRepository.count() == 0) {
+                        administradorRepository.save(new Administrador("Daniel Cedeño", "admin1", "1234"));
+                        administradorRepository.save(new Administrador("Juan Mendoza", "admin2", "1234"));
+                        administradorRepository.save(new Administrador("Jose Pulido", "admin3", "1234"));
+                        administradorRepository.save(new Administrador("Sebastian Rincon", "admin4", "1234"));
+                        administradorRepository.save(new Administrador("Juan Angarita", "admin5", "1234"));
+                }
+
+                /* Operadores (asegurar que siempre existan) */
+                if (operadorRepository.count() == 0) {
+                        operadorRepository.save(new Operador("Kika Nieto", "KikaNieto_", "1234"));
+                        operadorRepository.save(new Operador("Nicolas Almendra", "NicoAla_08", "4322"));
+                        operadorRepository.save(new Operador("Mafe Cruz", "Mafecruz_0909", "0987"));
+                        operadorRepository.save(new Operador("Samuel Corredor", "SamCor__", "6392"));
+                        operadorRepository.save(new Operador("Operador1234", "Operador1234", "0000"));
+                }
+
                 // Si ya existen categorias registradas no se vuelven a insertar los datos iniciales
                 if (categoriaRepository.count() > 0) {
                         return;

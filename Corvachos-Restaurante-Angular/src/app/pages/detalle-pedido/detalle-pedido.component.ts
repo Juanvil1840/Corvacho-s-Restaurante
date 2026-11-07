@@ -6,11 +6,14 @@ import { Pedido } from '../../models/pedido.model';
 import { AdicionalPedido, DetallePedido } from '../../models/detallePedido.model';
 import { ESTADOS_PEDIDO } from '../../models/estado-pedido.model';
 
+import { PedidoCabeceraComponent } from './components/pedido-cabecera/pedido-cabecera.component';
+import { PedidoProductosComponent } from './components/pedido-productos/pedido-productos.component';
+
 // Página que muestra la información detallada, el progreso de estado y los productos de un pedido
 @Component({
   selector: 'app-detalle-pedido',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PedidoCabeceraComponent, PedidoProductosComponent],
   templateUrl: './detalle-pedido.component.html',
   styleUrl: './detalle-pedido.component.scss'
 })
