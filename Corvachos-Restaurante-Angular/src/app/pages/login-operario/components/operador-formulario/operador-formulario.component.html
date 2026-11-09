@@ -2,7 +2,7 @@
   <h2 class="operador-form-titulo">LOGIN OPERARIO</h2>
 
   @if (error) {
-    <p class="operador-form-error">{{ error }}</p>
+    <p id="loginOperadorError" class="operador-form-error">{{ error }}</p>
   }
 
   <div class="operador-form-campo">
@@ -15,5 +15,5 @@
     <input type="password" id="contrasena" name="contrasena" [(ngModel)]="contrasena" placeholder="**********" required>
   </div>
 
-  <button type="submit" class="operador-form-btn">INGRESAR</button>
+  <button id="btnIngresarOperador" type="submit" class="operador-form-btn">INGRESAR</button>
 </form>

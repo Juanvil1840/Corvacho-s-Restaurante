@@ -50,9 +50,10 @@
         @if (!haAvanzadoEstado) {
           <div class="estado-avance-info">
             <span class="estado-texto-actual">
-              Estado actual: <strong>{{ formulario.estado }}</strong>
+              Estado actual: <strong id="estadoActual">{{ formulario.estado }}</strong>
             </span>
             <button
+              id="btnAvanzarEstado"
               type="button"
               class="btn-avanzar-estado"
               (click)="avanzarAlSiguienteEstado()">

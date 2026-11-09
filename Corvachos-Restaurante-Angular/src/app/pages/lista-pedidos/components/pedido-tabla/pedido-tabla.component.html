@@ -13,14 +13,14 @@
   </thead>
   <tbody>
     @for (pedido of pedidos; track pedido.id_Pedido) {
-      <tr>
+      <tr [id]="'fila-pedido-' + pedido.id_Pedido">
         <td>{{ pedido.id_Pedido }}</td>
         <td>
           <span class="pedido-estado-badge">{{ pedido.estado }}</span>
         </td>
         <td>{{ pedido.clienteNombre ?? '—' }}</td>
         <td>{{ pedido.operadorNombre ?? '—' }}</td>
-        <td>{{ pedido.domiciliarioNombre ?? 'Sin asignar' }}</td>
+        <td class="pedido-domiciliario">{{ pedido.domiciliarioNombre ?? 'Sin asignar' }}</td>
         <td>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <a
@@ -29,6 +29,7 @@
             Ver
           </a>
           <a
+            [id]="'editar-pedido-' + pedido.id_Pedido"
             [routerLink]="['/pedidos/editar', pedido.id_Pedido]"
             class="pedido-tabla-btn-editar">
             Editar

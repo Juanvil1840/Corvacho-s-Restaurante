@@ -4,7 +4,7 @@
     <h5 class="card-title">{{ producto.nombre }}</h5>
     <p class="card-text">$ {{ producto.precio | number }}</p>
     <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-      <a [routerLink]="['/menu/detalle', producto.id]" class="btn btn-primary">
+      <a [id]="'btnDetalle-' + producto.id" [routerLink]="['/menu/detalle', producto.id]" class="btn btn-primary btn-detalle-producto">
         Ver detalle / Adicionales
       </a>
       <button

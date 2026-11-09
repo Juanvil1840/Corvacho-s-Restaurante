@@ -1,7 +1,7 @@
 <form class="login-form" (ngSubmit)="onSubmit()">
 
   @if (error) {
-    <p class="login-error">{{ error }}</p>
+    <p id="loginError" class="login-error">{{ error }}</p>
   }
 
   <label for="correo">Correo Electronico</label>
@@ -10,7 +10,7 @@
   <label for="contrasena">Contrasena</label>
   <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" placeholder="**********" required>
 
-  <button type="submit" class="login-btn">INGRESAR</button>
+  <button id="btnIngresar" type="submit" class="login-btn">INGRESAR</button>
 
   <p class="login-registrate">
     No tienes una cuenta aun?

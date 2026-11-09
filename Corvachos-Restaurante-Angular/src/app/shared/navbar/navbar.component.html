@@ -18,7 +18,7 @@
           <a class="nav-link" routerLink="/">INICIO</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/menu">MENÚ</a>
+          <a id="navMenu" class="nav-link" routerLink="/menu">MENÚ</a>
         </li>
 
         <!-- LÓGICA PARA OPERARIOS Y ADMINS (SOLO EN LOGIN) -->
@@ -58,12 +58,12 @@
         <!-- Si es CLIENTE -->
         @else if (clienteLogueado && !esPortalOperario && !esPortalAdmin) {
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/clientes/perfil', clienteLogueado.clienteId]" (click)="cerrarCarrito()">
+            <a id="navPerfilCliente" class="nav-link" [routerLink]="['/clientes/perfil', clienteLogueado.clienteId]" (click)="cerrarCarrito()">
               PERFIL
             </a>
           </li>
           <li class="nav-item">
-            <button type="button" class="nav-link btn-carrito-nav" aria-label="Abrir carrito de compras" (click)="toggleCarrito()">
+            <button id="btnCarrito" type="button" class="nav-link btn-carrito-nav" aria-label="Abrir carrito de compras" (click)="toggleCarrito()">
               <i class="bi bi-cart3"></i> CARRITO
               @if (totalCantidad > 0) {
                 <span class="carrito-badge">{{ totalCantidad }}</span>
@@ -83,7 +83,7 @@
             </li>
           }
           <li class="nav-item">
-            <a class="nav-link login" routerLink="/login">LOG IN</a>
+            <a id="navLogin" class="nav-link login" routerLink="/login">LOG IN</a>
           </li>
           <li class="nav-item">
             <a class="nav-link signup" routerLink="/registro">SIGN UP</a>
@@ -116,7 +116,7 @@
       @if (exitoPedido) {
         <div class="carrito-alerta-exito">
           <i class="bi bi-check-circle-fill"></i>
-          <p>{{ exitoPedido }}</p>
+          <p id="pedidoExito">{{ exitoPedido }}</p>
         </div>
       }
 
@@ -185,10 +185,11 @@
       <footer class="carrito-footer">
         <div class="carrito-resumen-fila">
           <span>Total ({{ totalCantidad }} {{ totalCantidad === 1 ? 'producto' : 'productos' }}):</span>
-          <strong class="carrito-total-valor">$ {{ totalPrecio | number }}</strong>
+          <strong id="carritoTotal" class="carrito-total-valor">$ {{ totalPrecio | number }}</strong>
         </div>
 
         <button
+          id="btnConfirmarPedido"
           type="button"
           class="btn-confirmar-pedido"
           [disabled]="enviandoPedido"

@@ -49,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * 7. Finalmente verifica en el menú que esté el producto con los 3 adicionales y los selecciona.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class Caso1RegistroProductoTest {
 
     private WebDriver driver;

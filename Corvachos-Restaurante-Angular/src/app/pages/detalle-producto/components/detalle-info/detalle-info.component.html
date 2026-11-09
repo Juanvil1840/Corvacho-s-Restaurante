@@ -1,6 +1,6 @@
 <section class="detalle-info">
   <a routerLink="/menu" class="btn-volver">&#8592; Volver al menu</a>
-  <h1 class="detalle-nombre">{{ producto.nombre }}</h1>
+  <h1 id="detalleNombre" class="detalle-nombre">{{ producto.nombre }}</h1>
   <p class="detalle-categoria">Categoria: <span>{{ producto.categoria.nombre }}</span></p>
 
   <h3 class="detalle-subtitulo">Descripcion</h3>
@@ -8,7 +8,7 @@
 
   <div class="adicionales-container">
     <h3 class="detalle-subtitulo">Precio Base</h3>
-    <p class="detalle-precio">$ {{ producto.precio | number }}</p>
+    <p id="detallePrecio" class="detalle-precio">$ {{ producto.precio | number }}</p>
   </div>
 
   <!-- Adicionales disponibles (selección múltiple con cantidad) -->
@@ -29,7 +29,8 @@
 
         @for (adicional of adicionales; track adicional.id_adicional) {
           <li
-            class="adicional-item adicional-seleccionable"
+            [id]="'adicional-' + adicional.id_adicional"
+            class="adicional-item adicional-seleccionable adicional-opcion"
             [class.adicional-activo]="estaSeleccionado(adicional.id_adicional)"
             (click)="toggleAdicional(adicional)">
             <span class="adicional-nombre">
@@ -77,12 +78,12 @@
       <strong>$ {{ precioTotalSeleccion | number }}</strong>
     </div>
 
-    <button type="button" class="btn-agregar-carrito-detalle" (click)="agregarAlCarrito()">
+    <button id="btnAgregarCarrito" type="button" class="btn-agregar-carrito-detalle" (click)="agregarAlCarrito()">
       <i class="bi bi-cart-plus-fill"></i> Añadir al Carrito
     </button>
 
     @if (mensajeAgregado) {
-      <div class="detalle-alerta-agregado">
+      <div id="alertaAgregado" class="detalle-alerta-agregado">
         <span><i class="bi bi-check2-circle"></i> ¡Producto añadido a tu carrito!</span>
         <button type="button" class="btn-ver-carrito-inline" (click)="abrirCarrito()">
           Ver Carrito / Pedir

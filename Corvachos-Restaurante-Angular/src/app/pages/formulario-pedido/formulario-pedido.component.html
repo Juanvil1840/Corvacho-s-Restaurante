@@ -21,12 +21,12 @@
         </app-pedido-campos>
 
         @if (error) {
-          <p class="pedido-form-error">{{ error }}</p>
+          <p id="pedidoFormError" class="pedido-form-error">{{ error }}</p>
         }
 
         <div class="pedido-form-acciones">
           @if (estadoOriginal !== 'Entregado') {
-            <button type="submit" class="pedido-form-btn-guardar" [disabled]="guardando">
+            <button id="btnGuardarPedido" type="submit" class="pedido-form-btn-guardar" [disabled]="guardando">
               {{ guardando ? 'Guardando...' : 'Guardar' }}
             </button>
           }

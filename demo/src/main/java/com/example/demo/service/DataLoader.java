@@ -79,8 +79,13 @@ public class DataLoader implements CommandLineRunner {
         @Override
         public void run(String... args) throws Exception {
 
+                // Base nueva (por ejemplo la H2 en memoria del perfil "test"): se carga todo mas abajo.
+                // Estos bloques solo rellenan administradores y operadores cuando la base ya tenia datos,
+                // asi no se insertan dos veces y no chocan con la restriccion unique del usuario.
+                boolean baseConDatos = categoriaRepository.count() > 0;
+
                 /* Administradores (asegurar que siempre existan) */
-                if (administradorRepository.count() == 0) {
+                if (baseConDatos && administradorRepository.count() == 0) {
                         administradorRepository.save(new Administrador("Daniel Cedeño", "admin1", "1234"));
                         administradorRepository.save(new Administrador("Juan Mendoza", "admin2", "1234"));
                         administradorRepository.save(new Administrador("Jose Pulido", "admin3", "1234"));
@@ -89,7 +94,7 @@ public class DataLoader implements CommandLineRunner {
                 }
 
                 /* Operadores (asegurar que siempre existan) */
-                if (operadorRepository.count() == 0) {
+                if (baseConDatos && operadorRepository.count() == 0) {
                         operadorRepository.save(new Operador("Kika Nieto", "KikaNieto_", "1234"));
                         operadorRepository.save(new Operador("Nicolas Almendra", "NicoAla_08", "4322"));
                         operadorRepository.save(new Operador("Mafe Cruz", "Mafecruz_0909", "0987"));
@@ -98,7 +103,7 @@ public class DataLoader implements CommandLineRunner {
                 }
 
                 // Si ya existen categorias registradas no se vuelven a insertar los datos iniciales
-                if (categoriaRepository.count() > 0) {
+                if (baseConDatos) {
                         return;
                 }
 
