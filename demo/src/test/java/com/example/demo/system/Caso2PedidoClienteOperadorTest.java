@@ -34,23 +34,32 @@ import io.github.bonigarcia.wdm.WebDriverManager;
  * Caso 2: Flujo End-to-End (E2E) con Selenium WebDriver.
  *
  * Requerimiento:
- * 1. Llega un usuario ya registrado a la plataforma, ingresa sus credenciales y hace login.
+ * 1. Llega un usuario ya registrado a la plataforma, ingresa sus credenciales y
+ * hace login.
  * 2. Va a la sección de menú y agrega 2 comidas, cada una con 2 adicionales.
- * 3. Antes de realizar el pedido verifica que el carrito esté correcto (comidas, adicionales y total).
+ * 3. Antes de realizar el pedido verifica que el carrito esté correcto
+ * (comidas, adicionales y total).
  * 4. Confirma el envío y espera la respuesta del servidor.
- * 5. En otra pestaña un operador inicia sesión, va a pedidos, selecciona el nuevo pedido y cambia su estado.
- *    En la pestaña del usuario se verifica que aparezca el cambio de estado.
- * 6. El operador sigue cambiando el estado, asigna el domiciliario y completa el pedido.
- * 7. El usuario entra a su perfil y en el historial revisa que el pedido esté entregado,
- *    con todas las comidas y adicionales elegidos, y que el total corresponda a los productos.
+ * 5. En otra pestaña un operador inicia sesión, va a pedidos, selecciona el
+ * nuevo pedido y cambia su estado.
+ * En la pestaña del usuario se verifica que aparezca el cambio de estado.
+ * 6. El operador sigue cambiando el estado, asigna el domiciliario y completa
+ * el pedido.
+ * 7. El usuario entra a su perfil y en el historial revisa que el pedido esté
+ * entregado,
+ * con todas las comidas y adicionales elegidos, y que el total corresponda a
+ * los productos.
  *
- * El total esperado NO está quemado: se calcula con los precios que la prueba lee en pantalla
- * (precio de cada comida y de cada adicional en la página de detalle del producto).
+ * El total esperado NO está quemado: se calcula con los precios que la prueba
+ * lee en pantalla
+ * (precio de cada comida y de cada adicional en la página de detalle del
+ * producto).
  *
  * Para correrla:
- *  - Levantar el frontend con "ng serve" (http://localhost:4200).
- *  - NO tener el backend corriendo: esta prueba levanta su propio Spring Boot en el puerto 8090
- *    con el perfil "test" (base H2 en memoria, así no se ensucia mydatabase).
+ * - Levantar el frontend con "ng serve" (http://localhost:4200).
+ * - NO tener el backend corriendo: esta prueba levanta su propio Spring Boot en
+ * el puerto 8090
+ * con el perfil "test" (base H2 en memoria, así no se ensucia mydatabase).
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
@@ -63,8 +72,9 @@ public class Caso2PedidoClienteOperadorTest {
     // URL base de la aplicación frontend en Angular (puerto 4200 por defecto)
     private static final String BASE_URL = System.getProperty("frontend.url", "http://localhost:4200");
 
-    // Pausa entre pasos para poder ver la prueba (se puede quitar con -De2e.pausa=0)
-    private static final int PAUSA_MS = Integer.parseInt(System.getProperty("e2e.pausa", "800"));
+    // Pausa entre pasos para poder ver la prueba (se puede quitar con
+    // -De2e.pausa=0)
+    private static final int PAUSA_MS = Integer.parseInt(System.getProperty("e2e.pausa", "1600"));
 
     // Cliente ya registrado por el DataLoader (no tiene pedidos previos)
     private static final String CORREO_CLIENTE = "diegui200@gmail.com";
@@ -75,13 +85,15 @@ public class Caso2PedidoClienteOperadorTest {
     private static final String USUARIO_OPERADOR = "KikaNieto_";
     private static final String CONTRASENA_OPERADOR = "1234";
 
-    // Comidas que el cliente va a pedir (las dos son de "Pastas", que tiene varios adicionales)
+    // Comidas que el cliente va a pedir (las dos son de "Pastas", que tiene varios
+    // adicionales)
     private static final String COMIDA_1 = "pasta gratinada del chef";
     private static final String COMIDA_2 = "Carbonara di mare";
     private static final int ADICIONALES_POR_COMIDA = 2;
 
     // Lo que el cliente eligió, con los precios leídos de la pantalla
-    record AdicionalElegido(String nombre, long precio) {}
+    record AdicionalElegido(String nombre, long precio) {
+    }
 
     record ComidaElegida(String nombre, long precio, List<AdicionalElegido> adicionales) {
         // Precio de la comida más sus adicionales (1 unidad de cada uno)
@@ -96,8 +108,9 @@ public class Caso2PedidoClienteOperadorTest {
 
     @BeforeEach
     void setUp() {
-        // WebDriverManager descarga el ChromeDriver que corresponde a tu Chrome.
-        // Si ya tienes uno, se puede indicar con -Dwebdriver.chrome.driver=ruta/al/chromedriver
+        // WebDriverManager descarga el ChromeDriver que corresponde al Chrome instalado.
+        // Si ya tienes uno, se puede indicar con
+        // -Dwebdriver.chrome.driver=ruta/al/chromedriver
         if (System.getProperty("webdriver.chrome.driver") == null) {
             WebDriverManager.chromedriver().setup();
         }
@@ -126,9 +139,8 @@ public class Caso2PedidoClienteOperadorTest {
     @DisplayName("Caso 2: Cliente hace un pedido con 2 comidas y 2 adicionales c/u, el operador lo lleva hasta Entregado y el cliente revisa su historial")
     void testCaso2PedidoClienteYOperador() {
 
-        // =========================================================================
         // PASO 1: El cliente llega a la plataforma e inicia sesión
-        // =========================================================================
+
         driver.get(BASE_URL);
         pausar(PAUSA_MS);
 
@@ -146,9 +158,8 @@ public class Caso2PedidoClienteOperadorTest {
         String urlPerfil = driver.getCurrentUrl();
         pausar(PAUSA_MS);
 
-        // =========================================================================
         // PASO 2: Va al menú y agrega 2 comidas con 2 adicionales cada una
-        // =========================================================================
+
         List<ComidaElegida> comidas = new ArrayList<>();
         comidas.add(agregarComidaConAdicionales(COMIDA_1, ADICIONALES_POR_COMIDA));
         comidas.add(agregarComidaConAdicionales(COMIDA_2, ADICIONALES_POR_COMIDA));
@@ -159,9 +170,8 @@ public class Caso2PedidoClienteOperadorTest {
             totalEsperado += comida.subtotal();
         }
 
-        // =========================================================================
         // PASO 3: Antes de pedir, verifica que el carrito esté correcto
-        // =========================================================================
+
         scrollYClick(wait.until(ExpectedConditions.elementToBeClickable(By.id("btnCarrito"))));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("carrito-drawer")));
 
@@ -186,9 +196,8 @@ public class Caso2PedidoClienteOperadorTest {
                 .isEqualTo(totalEsperado);
         pausar(PAUSA_MS * 2);
 
-        // =========================================================================
         // PASO 4: Confirma el pedido y espera la respuesta del servicio REST
-        // =========================================================================
+
         scrollYClick(driver.findElement(By.id("btnConfirmarPedido")));
 
         // El mensaje de éxito se muestra poco tiempo, por eso se revisa cada 100 ms
@@ -201,7 +210,8 @@ public class Caso2PedidoClienteOperadorTest {
         assertThat(matcher.find()).as("El mensaje de éxito trae el número del pedido").isTrue();
         String idPedido = matcher.group(1);
 
-        // Después de pedir, el sistema lo devuelve a su perfil con el pedido en "Recibido"
+        // Después de pedir, el sistema lo devuelve a su perfil con el pedido en
+        // "Recibido"
         wait.until(ExpectedConditions.urlContains("/clientes/perfil/"));
         By estadoPedidoCliente = By.cssSelector("#pedido-" + idPedido + " .pedido-estado");
         wait.until(textoPresente(estadoPedidoCliente, "Recibido"));
@@ -210,9 +220,9 @@ public class Caso2PedidoClienteOperadorTest {
 
         String pestanaCliente = driver.getWindowHandle();
 
-        // =========================================================================
-        // PASO 5: En otra pestaña un operador inicia sesión y va a la sección de pedidos
-        // =========================================================================
+        // PASO 5: En otra pestaña un operador inicia sesión y va a la sección de
+        // pedidos
+
         driver.switchTo().newWindow(WindowType.TAB);
         String pestanaOperador = driver.getWindowHandle();
 
@@ -240,9 +250,9 @@ public class Caso2PedidoClienteOperadorTest {
         centrarEnPantalla(driver.findElement(By.id("pedido-" + idPedido)));
         pausar(PAUSA_MS * 2);
 
-        // =========================================================================
-        // PASO 6: El operador lo pasa a "Enviado" asignando domiciliario y luego a "Entregado"
-        // =========================================================================
+        // PASO 6: El operador lo pasa a "Enviado" asignando domiciliario y luego a
+        // "Entregado"
+
         driver.switchTo().window(pestanaOperador);
         String domiciliario = avanzarEstado(idPedido, comidas.size(), "Cocinando", "Enviado", true);
         verificarEstadoEnFila(idPedido, "Enviado");
@@ -263,16 +273,19 @@ public class Caso2PedidoClienteOperadorTest {
 
         // El operador cierra su sesión y cierra su pestaña
         driver.get(BASE_URL + "/portal-operario");
+        pausar(PAUSA_MS * 2);
         scrollYClick(wait.until(ExpectedConditions.elementToBeClickable(By.id("btnCerrarSesionOperador"))));
         wait.until(ExpectedConditions.urlContains("/login-operario"));
+        pausar(PAUSA_MS * 2);
         driver.close();
 
-        // =========================================================================
         // PASO 7: El usuario entra a su perfil y revisa el pedido en el historial
-        // =========================================================================
+
         driver.switchTo().window(pestanaCliente);
+        pausar(PAUSA_MS);
         scrollYClick(wait.until(ExpectedConditions.elementToBeClickable(By.id("navMenu"))));
         wait.until(ExpectedConditions.urlContains("/menu"));
+        pausar(PAUSA_MS);
         scrollYClick(wait.until(ExpectedConditions.elementToBeClickable(By.id("navPerfilCliente"))));
         wait.until(ExpectedConditions.urlToBe(urlPerfil));
 
@@ -302,13 +315,15 @@ public class Caso2PedidoClienteOperadorTest {
         pausar(PAUSA_MS * 3);
     }
 
-    // Desde el menú abre el detalle de una comida, elige sus primeros adicionales y la agrega al carrito.
+    // Desde el menú abre el detalle de una comida, elige sus primeros adicionales y
+    // la agrega al carrito.
     // Devuelve la comida con los precios leídos en pantalla.
     private ComidaElegida agregarComidaConAdicionales(String nombreComida, int cantidadAdicionales) {
         scrollYClick(wait.until(ExpectedConditions.elementToBeClickable(By.id("navMenu"))));
         wait.until(ExpectedConditions.urlContains("/menu"));
 
-        // Busca la tarjeta de la comida por su título y entra a "Ver detalle / Adicionales"
+        // Busca la tarjeta de la comida por su título y entra a "Ver detalle /
+        // Adicionales"
         By botonDetalle = By.xpath("//app-producto-card[.//h5[normalize-space()=\"" + nombreComida
                 + "\"]]//a[contains(@class, 'btn-detalle-producto')]");
         WebElement verDetalle = wait.until(ExpectedConditions.elementToBeClickable(botonDetalle));
@@ -345,7 +360,8 @@ public class Caso2PedidoClienteOperadorTest {
         return new ComidaElegida(nombreComida, precioComida, adicionales);
     }
 
-    // Desde la lista de pedidos del operador: abre el pedido, lo pasa al siguiente estado y guarda.
+    // Desde la lista de pedidos del operador: abre el pedido, lo pasa al siguiente
+    // estado y guarda.
     // Si se pide, asigna el primer domiciliario disponible y devuelve su nombre.
     private String avanzarEstado(String idPedido, int cantidadComidas, String estadoActual,
             String estadoSiguiente, boolean asignarDomiciliario) {
@@ -385,7 +401,8 @@ public class Caso2PedidoClienteOperadorTest {
         wait.until(textoPresente(By.cssSelector("#fila-pedido-" + idPedido + " .pedido-estado-badge"), estado));
     }
 
-    // Espera a que el elemento contenga el texto, sin importar mayúsculas (el CSS puede capitalizar)
+    // Espera a que el elemento contenga el texto, sin importar mayúsculas (el CSS
+    // puede capitalizar)
     private ExpectedCondition<Boolean> textoPresente(By localizador, String texto) {
         return d -> d.findElement(localizador).getText().toLowerCase().contains(texto.toLowerCase());
     }
