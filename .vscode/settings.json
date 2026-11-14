@@ -1,6 +1,6 @@
 {
   "java.compile.nullAnalysis.mode": "disabled",
-  "java.debug.settings.onBuildFailureProceed": false,
+  "java.debug.settings.onBuildFailureProceed": true,
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.autobuild.enabled": true
 }

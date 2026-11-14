@@ -108,7 +108,8 @@ public class Caso2PedidoClienteOperadorTest {
 
     @BeforeEach
     void setUp() {
-        // WebDriverManager descarga el ChromeDriver que corresponde al Chrome instalado.
+        // WebDriverManager descarga el ChromeDriver que corresponde al Chrome
+        // instalado.
         // Si ya tienes uno, se puede indicar con
         // -Dwebdriver.chrome.driver=ruta/al/chromedriver
         if (System.getProperty("webdriver.chrome.driver") == null) {
