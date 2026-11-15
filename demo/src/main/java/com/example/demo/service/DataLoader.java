@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.repository.CategoriaRepository;
@@ -33,6 +34,7 @@ import com.example.demo.entities.ProductoCarrito;
 
 // Componente que carga los datos iniciales de prueba en la base de datos al iniciar la aplicacion
 @Component
+@Order(1)
 @Transactional
 
 public class DataLoader implements CommandLineRunner {

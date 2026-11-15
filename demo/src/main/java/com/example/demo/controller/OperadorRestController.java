@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.AuthResponseDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.OperadorDTO;
 import com.example.demo.entities.Operador;
+import com.example.demo.entities.Role;
+import com.example.demo.security.AuthService;
 import com.example.demo.service.OperadorService;
 
 // Controlador REST para la gestion de Operadores
@@ -26,10 +29,12 @@ import com.example.demo.service.OperadorService;
 public class OperadorRestController {
 
     private final OperadorService operadorService;
+    private final AuthService authService;
 
-    // Constructor para inyectar el servicio de operadores
-    public OperadorRestController(OperadorService operadorService) {
+    // Constructor para inyectar el servicio de operadores y el de autenticacion (JWT)
+    public OperadorRestController(OperadorService operadorService, AuthService authService) {
         this.operadorService = operadorService;
+        this.authService = authService;
     }
 
     // Lista todos los operadores registrados en la base de datos
@@ -79,10 +84,11 @@ public class OperadorRestController {
         return ResponseEntity.noContent().build();
     }
 
-    // Autentica a un operador para el login
+    // Autentica a un operador: devuelve el token JWT, el rol y los datos del operador
     @PostMapping("/login")
-    public ResponseEntity<OperadorDTO> login(@RequestBody LoginRequestDTO credenciales) {
+    public ResponseEntity<AuthResponseDTO<OperadorDTO>> login(@RequestBody LoginRequestDTO credenciales) {
         Operador operador = operadorService.autenticarOperador(credenciales);
-        return ResponseEntity.ok(OperadorDTO.fromEntity(operador));
+        String token = authService.login(operador.getUsuario(), credenciales.getContrasena(), Role.OPERADOR);
+        return ResponseEntity.ok(new AuthResponseDTO<>(token, Role.OPERADOR, OperadorDTO.fromEntity(operador)));
     }
-}
+}

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AdministradorService } from '../../service/administrador.service';
+import { AuthService } from '../../service/auth.service';
 import { AdminFormularioComponent } from './components/admin-formulario/admin-formulario.component';
 
 // Componente de página para el inicio de sesión de administradores
@@ -19,17 +20,17 @@ export class LoginAdminComponent {
 
   constructor(
     private administradorService: AdministradorService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
   // Valida las credenciales del administrador e inicia su sesión
   onIniciarSesion(datos: { usuario: string, contrasena: string }): void {
     this.administradorService.login(datos.usuario, datos.contrasena).subscribe({
-      next: (admin) => {
-        // Solo puede haber una sesion de trabajo a la vez
-        localStorage.removeItem('operador');
-        localStorage.setItem('administrador', JSON.stringify(admin));
-        this.router.navigate(['/portal-admin']);
+      next: (respuesta) => {
+        // Guarda el token JWT y los datos del admin (cierra cualquier otra sesión)
+        this.authService.iniciarSesion(respuesta);
+        this.router.navigate([this.authService.rutaInicio(respuesta.rol)]);
       },
       error: (err) => {
         // Muestra un mensaje de error en el formulario si las credenciales fallan

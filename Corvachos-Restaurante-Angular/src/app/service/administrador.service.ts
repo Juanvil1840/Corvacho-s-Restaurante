@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Administrador } from '../models/administrador.model';
+import { AuthResponse } from '../models/auth.model';
 import { environment } from '../../environments/environment';
 
 // Servicio para gestionar administradores y su inicio de sesión
@@ -53,9 +54,9 @@ export class AdministradorService {
     );
   }
 
-  // Login del administrador
-  login(usuario: string, contrasena: string): Observable<Administrador> {
-    return this.http.post<Administrador>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
+  // Login del administrador: devuelve el token JWT, el rol y los datos del administrador
+  login(usuario: string, contrasena: string): Observable<AuthResponse<Administrador>> {
+    return this.http.post<AuthResponse<Administrador>>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
       catchError(this.manejarError)
     );
   }

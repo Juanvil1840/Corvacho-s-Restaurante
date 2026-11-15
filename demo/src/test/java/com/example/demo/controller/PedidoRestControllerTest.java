@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -31,6 +32,8 @@ import com.example.demo.service.PedidoService;
 
 // Pruebas unitarias con MOCKS del controlador REST (PedidoRestController) usando MockMvc y @MockitoBean
 @WebMvcTest(PedidoRestController.class)
+// Prueba solo la capa web del controlador: se desactivan los filtros de seguridad (JWT)
+@AutoConfigureMockMvc(addFilters = false)
 class PedidoRestControllerTest {
 
     @Autowired

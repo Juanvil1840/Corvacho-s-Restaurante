@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Producto } from '../models/producto.model';
 import { Cliente } from '../models/cliente.model';
 import { environment } from '../../environments/environment';
+import { obtenerTokenValido } from './token.util';
 
 // Representa un adicional seleccionado para un producto dentro del carrito
 export interface AdicionalCarrito {
@@ -70,8 +71,11 @@ export class CarritoService {
 
   constructor(private http: HttpClient) {
     // Si el cliente ya habia iniciado sesion, se recupera al recargar la pagina
+    // (solo si su token JWT sigue vigente; si venció se borra la sesión vieja)
     const clienteGuardado = localStorage.getItem('cliente');
-    if (clienteGuardado) {
+    if (clienteGuardado && !obtenerTokenValido()) {
+      localStorage.removeItem('cliente');
+    } else if (clienteGuardado) {
       this.setClienteLogueado(JSON.parse(clienteGuardado));
     }
   }
@@ -80,6 +84,13 @@ export class CarritoService {
   setClienteLogueado(cliente: Cliente | null): void {
     if (!cliente || !cliente.clienteId) {
       this.cerrarSesionCliente();
+      return;
+    }
+
+    // Si quien tiene la sesión es un admin u operador (por ejemplo, editando un cliente)
+    // no se toma ese cliente como el usuario logueado
+    const rol = localStorage.getItem('rol');
+    if (rol && rol !== 'CLIENTE') {
       return;
     }
 

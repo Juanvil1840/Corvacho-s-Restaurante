@@ -10,17 +10,19 @@ import com.example.demo.repository.ClienteRepository;
 public class LoginServiceImpl implements LoginService {
 
     private final ClienteRepository clienteRepository;
+    private final UsuarioService usuarioService;
 
-    // Constructor para inyectar el repositorio de clientes
-    public LoginServiceImpl(ClienteRepository clienteRepository) {
+    // Constructor para inyectar el repositorio de clientes y el servicio de usuarios
+    public LoginServiceImpl(ClienteRepository clienteRepository, UsuarioService usuarioService) {
         this.clienteRepository = clienteRepository;
+        this.usuarioService = usuarioService;
     }
 
     // Busca al cliente por correo y comprueba si la contrasena coincide
     @Override
     public Cliente autenticar(String correo, String contrasena) {
         Cliente cliente = clienteRepository.findByCorreo(correo);
-        if (cliente != null && cliente.getContrasena().equals(contrasena)) {
+        if (cliente != null && usuarioService.coincide(contrasena, cliente.getContrasena())) {
             return cliente;
         }
         return null;

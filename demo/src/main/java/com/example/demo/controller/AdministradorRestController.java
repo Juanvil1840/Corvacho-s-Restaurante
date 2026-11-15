@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AdministradorDTO;
+import com.example.demo.dto.AuthResponseDTO;
 import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.dto.MensajeDTO;
 import com.example.demo.entities.Administrador;
+import com.example.demo.entities.Role;
+import com.example.demo.security.AuthService;
 import com.example.demo.service.AdministradorService;
 
 // Controlador REST Administradores y autenticacion
@@ -27,10 +30,12 @@ import com.example.demo.service.AdministradorService;
 public class AdministradorRestController {
 
     private final AdministradorService administradorService;
+    private final AuthService authService;
 
-    // Constructor para inyectar el servicio de administradores
-    public AdministradorRestController(AdministradorService administradorService) {
+    // Constructor para inyectar el servicio de administradores y el de autenticacion (JWT)
+    public AdministradorRestController(AdministradorService administradorService, AuthService authService) {
         this.administradorService = administradorService;
+        this.authService = authService;
     }
 
     // Lista todos los administradores registrados en el sistema
@@ -102,7 +107,8 @@ public class AdministradorRestController {
                     .body(new MensajeDTO("Usuario o contrasena incorrectos"));
         }
 
-        // Si el login es exitoso, se devuelve el DTO con los datos del admin
-        return ResponseEntity.ok(AdministradorDTO.fromEntity(admin));
+        // Si el login es exitoso, se devuelve el token JWT, el rol y los datos del admin
+        String token = authService.login(admin.getUsuario(), contrasena, Role.ADMIN);
+        return ResponseEntity.ok(new AuthResponseDTO<>(token, Role.ADMIN, AdministradorDTO.fromEntity(admin)));
     }
-}
+}

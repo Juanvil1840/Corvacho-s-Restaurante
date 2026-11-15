@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Operador } from '../models/operador.model';
+import { AuthResponse } from '../models/auth.model';
 import { environment } from '../../environments/environment';
 
 // Servicio para gestionar operadores y su autenticación en el sistema
@@ -22,9 +23,9 @@ export class OperadorService {
     );
   }
 
-  // Iniciar sesión de operador con usuario y contraseña
-  login(usuario: string, contrasena: string): Observable<Operador> {
-  return this.http.post<Operador>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
+  // Iniciar sesión de operador: devuelve el token JWT, el rol y los datos del operador
+  login(usuario: string, contrasena: string): Observable<AuthResponse<Operador>> {
+  return this.http.post<AuthResponse<Operador>>(`${this.apiUrl}/login`, { usuario, contrasena }).pipe(
     catchError(this.manejarError)
   );
 }

@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.LoginClienteDTO;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Role;
 import com.example.demo.repository.ClienteRepository;
 
 // Implementacion del servicio para la gestion de clientes
@@ -16,11 +17,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final LoginService loginService;
+    private final UsuarioService usuarioService;
 
-    // Constructor para inyectar el repositorio de clientes y el servicio de login
-    public ClienteServiceImpl(ClienteRepository clienteRepository, LoginService loginService) {
+    // Constructor para inyectar el repositorio de clientes, el servicio de login y el de usuarios (seguridad)
+    public ClienteServiceImpl(ClienteRepository clienteRepository, LoginService loginService, UsuarioService usuarioService) {
         this.clienteRepository = clienteRepository;
         this.loginService = loginService;
+        this.usuarioService = usuarioService;
     }
 
     // Obtiene todos los clientes registrados
@@ -58,6 +61,9 @@ public class ClienteServiceImpl implements ClienteService {
         if (cliente.getDireccion() == null || cliente.getDireccion().isBlank()) {
             cliente.setDireccion("Sin dirección");
         }
+        // Se crea su usuario de seguridad (el correo es el usuario) y la contrasena se guarda encriptada
+        cliente.setUser(usuarioService.crearUsuario(cliente.getCorreo(), cliente.getContrasena(), Role.CLIENTE));
+        cliente.setContrasena(usuarioService.encriptar(cliente.getContrasena()));
         return clienteRepository.save(cliente);
     }
 
@@ -76,12 +82,15 @@ public class ClienteServiceImpl implements ClienteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Este correo ya está registrado por otro cliente");
         }
 
+        // Se actualiza su usuario de seguridad (correo y contrasena si cambian)
+        existente.setUser(usuarioService.actualizarUsuario(existente.getUser(), datos.getCorreo(),
+                datos.getContrasena(), existente.getContrasena(), Role.CLIENTE));
         existente.setNombre(datos.getNombre());
         existente.setApellido(datos.getApellido());
         existente.setCorreo(datos.getCorreo());
-        // Solo actualiza la contrasena si se proporciona una nueva
+        // Solo actualiza la contrasena si se proporciona una nueva (se guarda encriptada)
         if (datos.getContrasena() != null && !datos.getContrasena().isBlank()) {
-            existente.setContrasena(datos.getContrasena());
+            existente.setContrasena(usuarioService.encriptar(datos.getContrasena()));
         }
         existente.setTelefono(datos.getTelefono() != null && !datos.getTelefono().isBlank() ? datos.getTelefono() : "Sin teléfono");
         existente.setDireccion(datos.getDireccion() != null && !datos.getDireccion().isBlank() ? datos.getDireccion() : "Sin dirección");

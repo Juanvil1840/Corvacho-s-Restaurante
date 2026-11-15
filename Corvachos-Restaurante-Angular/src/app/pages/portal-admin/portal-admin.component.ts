@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Administrador } from '../../models/administrador.model';
+import { AuthService } from '../../service/auth.service';
 import { AdminOpcionesComponent } from './components/admin-opciones/admin-opciones.component';
 import { AdminPerfilComponent } from './components/admin-perfil/admin-perfil.component';
 
@@ -19,7 +20,7 @@ export class PortalAdminComponent implements OnInit {
   nombreAdmin = '';
   idAdmin = 0; 
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   // Verifica que exista una sesión de administrador activa al cargar el portal
   ngOnInit(): void {
@@ -33,9 +34,9 @@ export class PortalAdminComponent implements OnInit {
     this.idAdmin = admin.id_administrador;
   }
 
-  // Elimina la sesión del administrador y redirige al login
+  // Cierra la sesión (borra el token JWT y los datos) y vuelve al inicio
   cerrarSesion(): void {
-    localStorage.removeItem('administrador');
-    this.router.navigate(['/login-admin']);
+    this.authService.cerrarSesion();
+    this.router.navigate(['/']);
   }
 }

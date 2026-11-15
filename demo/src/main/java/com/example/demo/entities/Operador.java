@@ -1,5 +1,8 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,6 +40,12 @@ public class Operador {
     @OneToMany(mappedBy = "operador")
     private List<Pedido> pedidos;
 
+
+    // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
     // Constructor para crear un operador con sus credenciales
     public Operador(String nombre, String usuario, String contrasena){
         this.nombre = nombre;

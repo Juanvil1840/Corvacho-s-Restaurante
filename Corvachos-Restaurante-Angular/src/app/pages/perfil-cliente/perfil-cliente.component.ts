@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
 import { CarritoService } from '../../service/carrito.service';
+import { AuthService } from '../../service/auth.service';
 import { Cliente } from '../../models/cliente.model';
 import { PerfilInfoComponent } from './components/perfil-info/perfil-info.component';
 import { PerfilPedidosComponent } from './components/perfil-pedidos/perfil-pedidos.component';
@@ -24,6 +25,7 @@ export class PerfilClienteComponent implements OnInit {
   constructor(
     private clienteService: ClienteService,
     private carritoService: CarritoService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -68,7 +70,7 @@ export class PerfilClienteComponent implements OnInit {
       if (this.cliente) {
         this.clienteService.eliminarCliente(this.cliente.clienteId).subscribe({
           next: () => {
-            this.carritoService.cerrarSesionCliente();
+            this.authService.cerrarSesion();
             this.router.navigate(['/']);
           },
           error: (err) => {
@@ -79,9 +81,9 @@ export class PerfilClienteComponent implements OnInit {
     }
   }
 
-  // Cierra la sesión activa del cliente y redirige al inicio
+  // Cierra la sesión activa del cliente (borra el token JWT) y redirige al inicio
   cerrarSesion(): void {
-    this.carritoService.cerrarSesionCliente();
+    this.authService.cerrarSesion();
     this.router.navigate(['/']);
   }
 }

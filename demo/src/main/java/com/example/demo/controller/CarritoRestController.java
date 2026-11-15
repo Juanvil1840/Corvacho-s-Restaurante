@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,14 @@ public class CarritoRestController {
 
     // Obtiene el carrito actual de un cliente especifico
     @GetMapping("/cliente/{clienteId}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#clienteId)")
     public CarritoDTO obtenerPorCliente(@PathVariable Long clienteId) {
         return carritoService.obtenerPorCliente(clienteId);
     }
 
     // Reemplaza y actualiza los productos y adicionales del carrito de un cliente
     @PutMapping("/cliente/{clienteId}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#clienteId)")
     public CarritoDTO actualizarPorCliente(@PathVariable Long clienteId,
             @Valid @RequestBody CarritoDTO carrito) {
         return carritoService.actualizarPorCliente(clienteId, carrito);
@@ -43,6 +46,7 @@ public class CarritoRestController {
 
     // Vacia todos los productos del carrito de un cliente
     @DeleteMapping("/cliente/{clienteId}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#clienteId)")
     public ResponseEntity<Void> vaciarPorCliente(@PathVariable Long clienteId) {
         carritoService.vaciarPorCliente(clienteId);
         return ResponseEntity.noContent().build();

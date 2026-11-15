@@ -35,51 +35,61 @@ import { DetallePedidoComponent } from './pages/detalle-pedido/detalle-pedido.co
 import { PaginaErrorComponent } from './pages/pagina-error/pagina-error.component';
 import { LoginOperarioComponent } from './pages/login-operario/login-operario.component';
 
+// Seguridad: guards por rol (JWT)
+import { authGuard, sinSesionGuard } from './guards/auth.guard';
+
+// Roles que pueden entrar a cada grupo de páginas
+const SOLO_ADMIN = { roles: ['ADMIN'] };
+const SOLO_OPERADOR = { roles: ['OPERADOR'] };
+const ADMIN_U_OPERADOR = { roles: ['ADMIN', 'OPERADOR'] };
+const CLIENTE_O_ADMIN = { roles: ['CLIENTE', 'ADMIN'] };
+const CUALQUIER_ROL = { roles: ['CLIENTE', 'OPERADOR', 'ADMIN'] };
+
 // Definición de todas las rutas de navegación de la aplicación
 export const routes: Routes = [
 
     // Página de inicio y gestión de productos
-    { path: '', component: LandingComponent },
-    { path: 'productos', component: ListaProductosComponent },
-    { path: 'productos/nuevo', component: FormularioProductoComponent },
-    { path: 'productos/editar/:id', component: FormularioProductoComponent },
+    { path: '', component: LandingComponent, canActivate: [sinSesionGuard] },
+    { path: 'productos', component: ListaProductosComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'productos/nuevo', component: FormularioProductoComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'productos/editar/:id', component: FormularioProductoComponent, canActivate: [authGuard], data: SOLO_ADMIN },
 
     // Categorias y adicionales
-    { path: 'categorias', component: ListaCategoriasComponent },
-    { path: 'categorias/nuevo', component: FormularioCategoriaComponent },
-    { path: 'categorias/editar/:id', component: FormularioCategoriaComponent },
-    { path: 'adicionales', component: ListaAdicionalesComponent },
-    { path: 'adicionales/nuevo', component: FormularioAdicionalComponent },
-    { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent },
-    { path: 'portal-operario', component: PortalOperarioComponent },
+    { path: 'categorias', component: ListaCategoriasComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'categorias/nuevo', component: FormularioCategoriaComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'categorias/editar/:id', component: FormularioCategoriaComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'adicionales', component: ListaAdicionalesComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'adicionales/nuevo', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'portal-operario', component: PortalOperarioComponent, canActivate: [authGuard], data: SOLO_OPERADOR },
 
     // CRUD Pedido y Domiciliario
-    { path: 'pedidos', component: ListaPedidosComponent },
-    { path: 'pedidos/nuevo', component: FormularioPedidoComponent },
-    { path: 'pedidos/editar/:id', component: FormularioPedidoComponent },
-    { path: 'pedidos/detalle/:id', component: DetallePedidoComponent },
-    { path: 'domiciliarios', component: ListaDomiciliariosComponent },
-    { path: 'domiciliarios/nuevo', component: FormularioDomiciliarioComponent },
-    { path: 'domiciliarios/editar/:id', component: FormularioDomiciliarioComponent },
+    { path: 'pedidos', component: ListaPedidosComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'pedidos/nuevo', component: FormularioPedidoComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'pedidos/editar/:id', component: FormularioPedidoComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+    { path: 'pedidos/detalle/:id', component: DetallePedidoComponent, canActivate: [authGuard], data: CUALQUIER_ROL },
+    { path: 'domiciliarios', component: ListaDomiciliariosComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'domiciliarios/nuevo', component: FormularioDomiciliarioComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'domiciliarios/editar/:id', component: FormularioDomiciliarioComponent, canActivate: [authGuard], data: SOLO_ADMIN },
 
     // CRUD Operador y Administrador
-    { path: 'operadores', component: ListaOperadoresComponent },
-    { path: 'operadores/nuevo', component: FormularioOperadorComponent },
-    { path: 'operadores/editar/:id', component: FormularioOperadorComponent },
-    { path: 'administradores', component: ListaAdministradoresComponent },
-    { path: 'administradores/nuevo', component: FormularioAdministradorComponent },
-    { path: 'administradores/editar/:id', component: FormularioAdministradorComponent },
-    { path: 'login-operario', component: LoginOperarioComponent },
-    { path: 'login-admin', component: LoginAdminComponent },
-    { path: 'portal-admin', component: PortalAdminComponent },
+    { path: 'operadores', component: ListaOperadoresComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'operadores/nuevo', component: FormularioOperadorComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'operadores/editar/:id', component: FormularioOperadorComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'administradores', component: ListaAdministradoresComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'administradores/nuevo', component: FormularioAdministradorComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'administradores/editar/:id', component: FormularioAdministradorComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'login-operario', component: LoginOperarioComponent, canActivate: [sinSesionGuard] },
+    { path: 'login-admin', component: LoginAdminComponent, canActivate: [sinSesionGuard] },
+    { path: 'portal-admin', component: PortalAdminComponent, canActivate: [authGuard], data: SOLO_ADMIN },
 
     // Rutas de clientes, autenticación, menú público y manejo de errores
-    { path: 'clientes', component: ListaClientesComponent },
-    { path: 'clientes/nuevo', component: FormularioClienteComponent },
-    { path: 'clientes/editar/:id', component: FormularioClienteComponent },
-    { path: 'clientes/perfil/:id', component: PerfilClienteComponent },
-    { path: 'login', component: LoginClienteComponent },
-    { path: 'registro', component: RegistroClienteComponent },
+    { path: 'clientes', component: ListaClientesComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'clientes/nuevo', component: FormularioClienteComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'clientes/editar/:id', component: FormularioClienteComponent, canActivate: [authGuard], data: CLIENTE_O_ADMIN },
+    { path: 'clientes/perfil/:id', component: PerfilClienteComponent, canActivate: [authGuard], data: CLIENTE_O_ADMIN },
+    { path: 'login', component: LoginClienteComponent, canActivate: [sinSesionGuard] },
+    { path: 'registro', component: RegistroClienteComponent, canActivate: [sinSesionGuard] },
     { path: 'menu', component: MenuComponent },
     { path: 'menu/detalle/:id', component: DetalleProductoComponent },
     { path: 'error', component: PaginaErrorComponent },

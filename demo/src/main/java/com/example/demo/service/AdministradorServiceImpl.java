@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.entities.Administrador;
+import com.example.demo.entities.Role;
 import com.example.demo.repository.AdministradorRepository;
 
 // Implementacion del servicio para la gestion de administradores
@@ -14,10 +15,12 @@ import com.example.demo.repository.AdministradorRepository;
 public class AdministradorServiceImpl implements AdministradorService {
 
     private final AdministradorRepository administradorRepository;
+    private final UsuarioService usuarioService;
 
-    // Constructor para inyectar el repositorio de administradores
-    public AdministradorServiceImpl(AdministradorRepository administradorRepository) {
+    // Constructor para inyectar el repositorio de administradores y el servicio de usuarios (seguridad)
+    public AdministradorServiceImpl(AdministradorRepository administradorRepository, UsuarioService usuarioService) {
         this.administradorRepository = administradorRepository;
+        this.usuarioService = usuarioService;
     }
 
     // Obtiene todos los administradores registrados
@@ -43,6 +46,9 @@ public class AdministradorServiceImpl implements AdministradorService {
     public Administrador crearAdministrador(Administrador admin) {
         validarAdministrador(admin, null);
         admin.setId_administrador(null);
+        // Se crea su usuario de seguridad con rol ADMIN y la contrasena se guarda encriptada
+        admin.setUser(usuarioService.crearUsuario(admin.getUsuario(), admin.getContrasena(), Role.ADMIN));
+        admin.setContrasena(usuarioService.encriptar(admin.getContrasena()));
         return administradorRepository.save(admin);
     }
 
@@ -52,11 +58,13 @@ public class AdministradorServiceImpl implements AdministradorService {
         Administrador existente = administradorRepository.findById(id).orElse(null);
         if (existente != null) {
             validarAdministrador(admin, id);
+            existente.setUser(usuarioService.actualizarUsuario(existente.getUser(), admin.getUsuario(),
+                    admin.getContrasena(), existente.getContrasena(), Role.ADMIN));
             existente.setNombre(admin.getNombre());
             existente.setUsuario(admin.getUsuario());
-            // Solo actualiza la contrasena si no viene vacia
+            // Solo actualiza la contrasena si no viene vacia (se guarda encriptada)
             if (admin.getContrasena() != null && !admin.getContrasena().isBlank()) {
-                existente.setContrasena(admin.getContrasena());
+                existente.setContrasena(usuarioService.encriptar(admin.getContrasena()));
             }
             return administradorRepository.save(existente);
         }
@@ -73,7 +81,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public Administrador autenticar(String usuario, String contrasena) {
         Administrador admin = administradorRepository.findByUsuario(usuario);
-        if (admin != null && admin.getContrasena().equals(contrasena)) {
+        if (admin != null && usuarioService.coincide(contrasena, admin.getContrasena())) {
             return admin;
         }
         return null;
@@ -95,4 +103,4 @@ public class AdministradorServiceImpl implements AdministradorService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El nombre de usuario ya está registrado");
         }
     }
-}
+}

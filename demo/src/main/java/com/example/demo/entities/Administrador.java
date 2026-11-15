@@ -1,5 +1,9 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +32,12 @@ public class Administrador {
     @Column (length = 255, nullable = false)
     private String contrasena;
     
+
+    // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
     // Constructor para crear un administrador con sus credenciales
     public Administrador(String nombre, String usuario, String contrasena){
         this.nombre = nombre;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class PedidoRestController {
 
     // Lista el historial de pedidos de un cliente especifico
     @GetMapping("/cliente/{clienteId}")
+    @PreAuthorize("@seguridad.esPersonal() or @seguridad.esElCliente(#clienteId)")
     public Collection<PedidoHistorialDTO> listarPorCliente(@PathVariable Long clienteId) {
         return pedidoService.findByClienteId(clienteId)
                 .stream()
@@ -57,6 +59,7 @@ public class PedidoRestController {
 
     // Busca un pedido por su id y devuelve su detalle completo
     @GetMapping("/{id}")
+    @PreAuthorize("@seguridad.esPersonal() or @seguridad.esPedidoDelCliente(#id)")
     public ResponseEntity<PedidoDTO> buscarPorId(@PathVariable Long id) {
         Pedido pedido = pedidoService.findById(id);
         if (pedido == null) {
@@ -67,6 +70,7 @@ public class PedidoRestController {
 
     // Crea un nuevo pedido en la base de datos
     @PostMapping
+    @PreAuthorize("@seguridad.esPersonal() or @seguridad.esPedidoParaElCliente(#pedido)")
     public ResponseEntity<PedidoDTO> crear(@RequestBody Pedido pedido) {
         Pedido guardado = pedidoService.crearPedido(pedido);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertirPedido(guardado));

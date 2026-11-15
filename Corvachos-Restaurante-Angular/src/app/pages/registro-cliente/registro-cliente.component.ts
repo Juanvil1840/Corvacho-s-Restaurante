@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 import { ClienteService } from '../../service/cliente.service';
-import { CarritoService } from '../../service/carrito.service';
+import { AuthService } from '../../service/auth.service';
 import { Cliente } from '../../models/cliente.model';
 import { RegistroFormularioComponent } from './components/registro-formulario/registro-formulario.component';
 
@@ -21,16 +22,18 @@ export class RegistroClienteComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private carritoService: CarritoService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
-  // Registra al nuevo cliente en el backend, inicia su sesión y lo redirige a su perfil
+  // Registra al nuevo cliente en el backend, inicia su sesión (pide el token JWT) y lo redirige a su perfil
   onRegistrar(cliente: Cliente): void {
-    this.clienteService.agregarCliente(cliente).subscribe({
-      next: (guardado) => {
-        this.carritoService.setClienteLogueado(guardado);
-        this.router.navigate(['/clientes/perfil', guardado.clienteId]);
+    this.clienteService.agregarCliente(cliente).pipe(
+      switchMap(guardado => this.clienteService.login(guardado.correo, cliente.contrasena ?? ''))
+    ).subscribe({
+      next: (respuesta) => {
+        this.authService.iniciarSesion(respuesta);
+        this.router.navigate(['/clientes/perfil', respuesta.usuario.clienteId]);
       },
       error: (err) => {
         // Muestra el mensaje de error devuelto por el servidor o uno genérico

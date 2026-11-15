@@ -89,6 +89,15 @@
             <a class="nav-link signup" routerLink="/registro">SIGN UP</a>
           </li>
         }
+
+        <!-- Cerrar sesión (cualquier rol) -->
+        @if (adminLogueado || operarioLogueado || clienteLogueado) {
+          <li class="nav-item">
+            <button id="btnCerrarSesion" type="button" class="nav-link btn-carrito-nav" (click)="cerrarSesion()">
+              <i class="bi bi-box-arrow-right"></i> CERRAR SESIÓN
+            </button>
+          </li>
+        }
       </ul>
     </div>
   </div>

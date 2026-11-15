@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.AuthResponseDTO;
 import com.example.demo.dto.ClienteDTO;
 import com.example.demo.dto.LoginClienteDTO;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Role;
+import com.example.demo.security.AuthService;
 import com.example.demo.service.ClienteService;
 
 // Controlador REST para la gestion de Clientes
@@ -26,10 +30,12 @@ import com.example.demo.service.ClienteService;
 public class ClienteRestController {
 
     private final ClienteService clienteService;
+    private final AuthService authService;
 
-    // Constructor para inyectar el servicio de clientes
-    public ClienteRestController(ClienteService clienteService) {
+    // Constructor para inyectar el servicio de clientes y el de autenticacion (JWT)
+    public ClienteRestController(ClienteService clienteService, AuthService authService) {
         this.clienteService = clienteService;
+        this.authService = authService;
     }
 
     // Lista todos los clientes registrados en la base de datos
@@ -43,6 +49,7 @@ public class ClienteRestController {
 
     // Busca un cliente por su identificador unico
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#id)")
     public ResponseEntity<ClienteDTO> buscarPorId(@PathVariable Long id) {
         Cliente cliente = clienteService.obtenerPorId(id);
         if (cliente == null) {
@@ -60,6 +67,7 @@ public class ClienteRestController {
 
     // Actualiza los datos de un cliente existente
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#id)")
     public ResponseEntity<ClienteDTO> actualizar(
             @PathVariable Long id,
             @RequestBody Cliente datos) {
@@ -72,6 +80,7 @@ public class ClienteRestController {
 
     // Desactiva la cuenta de un cliente
     @PutMapping("/{id}/desactivar")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#id)")
     public ResponseEntity<ClienteDTO> desactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
@@ -82,6 +91,7 @@ public class ClienteRestController {
 
     // Reactiva la cuenta de un cliente
     @PutMapping("/{id}/reactivar")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#id)")
     public ResponseEntity<ClienteDTO> reactivar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
@@ -92,6 +102,7 @@ public class ClienteRestController {
 
     // Elimina un cliente de la base de datos
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN') or @seguridad.esElCliente(#id)")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!clienteService.existe(id)) {
             return ResponseEntity.notFound().build();
@@ -100,13 +111,15 @@ public class ClienteRestController {
         return ResponseEntity.noContent().build();
     }
 
-    // Endpoint para la autenticacion de clientes
+    // Endpoint para la autenticacion de clientes: devuelve el token JWT, el rol y los datos del cliente
     @PostMapping("/login")
-    public ResponseEntity<ClienteDTO> login(@RequestBody LoginClienteDTO credenciales) {
+    public ResponseEntity<AuthResponseDTO<ClienteDTO>> login(@RequestBody LoginClienteDTO credenciales) {
+        // Valida la contrasena y que la cuenta este activa (si esta desactivada responde 403)
         Cliente cliente = clienteService.autenticarCliente(credenciales);
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(ClienteDTO.fromEntity(cliente));
+        String token = authService.login(cliente.getCorreo(), credenciales.getContrasena(), Role.CLIENTE);
+        return ResponseEntity.ok(new AuthResponseDTO<>(token, Role.CLIENTE, ClienteDTO.fromEntity(cliente)));
     }
-}
+}

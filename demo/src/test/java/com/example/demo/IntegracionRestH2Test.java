@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,8 @@ import com.example.demo.repository.OperadorRepository;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
+// Los endpoints ahora estan protegidos con JWT: las pruebas se ejecutan como un usuario con rol ADMIN
+@WithMockUser(authorities = "ADMIN")
 class IntegracionRestH2Test {
 
     @Autowired

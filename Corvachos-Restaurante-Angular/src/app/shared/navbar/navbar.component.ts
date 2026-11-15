@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { CarritoService, ItemCarrito } from '../../service/carrito.service';
 import { PedidoService } from '../../service/pedido.service';
+import { AuthService } from '../../service/auth.service';
 import { Cliente } from '../../models/cliente.model';
 
 // Barra de navegación principal que incluye los enlaces de acceso, estado de sesión y el panel del carrito de compras
@@ -42,7 +43,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private carritoService: CarritoService,
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private authService: AuthService
   ) {}
 
   // Se suscribe a los cambios de ruta, sesión del cliente y estado del carrito al iniciar
@@ -89,8 +91,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.esPaginaLogin = url === '/login' || url.startsWith('/login?');
     this.esPortalOperario = url.startsWith('/portal-operario') || url.startsWith('/login-operario');
     this.esPortalAdmin = url.startsWith('/login-admin') || url.startsWith('/portal-admin');
-    this.adminLogueado = !!localStorage.getItem('administrador');
-    this.operarioLogueado = !!localStorage.getItem('operador');
+    // El rol sale del token JWT (si no hay token o ya venció no hay sesión)
+    const rol = this.authService.getRol();
+    this.adminLogueado = rol === 'ADMIN';
+    this.operarioLogueado = rol === 'OPERADOR';
+  }
+
+  // Cierra la sesión de cualquier rol (borra el token JWT) y vuelve al inicio
+  cerrarSesion(): void {
+    this.cerrarCarrito();
+    this.authService.cerrarSesion();
+    this.adminLogueado = false;
+    this.operarioLogueado = false;
+    this.router.navigate(['/']);
   }
 
   // Cantidad total de productos en el carrito

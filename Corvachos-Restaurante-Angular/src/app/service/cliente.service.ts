@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
+import { AuthResponse } from '../models/auth.model';
 import { environment } from '../../environments/environment';
 
 // Servicio para gestionar clientes, estado de su cuenta e inicio de sesión
@@ -67,9 +68,9 @@ export class ClienteService {
     );
   }
 
-  // Iniciar sesión de cliente con correo y contraseña
-  login(correo: string, contrasena: string): Observable<Cliente> {
-    return this.http.post<Cliente>(`${this.apiUrl}/login`, { correo, contrasena }).pipe(
+  // Iniciar sesión de cliente: devuelve el token JWT, el rol y los datos del cliente
+  login(correo: string, contrasena: string): Observable<AuthResponse<Cliente>> {
+    return this.http.post<AuthResponse<Cliente>>(`${this.apiUrl}/login`, { correo, contrasena }).pipe(
       catchError(this.manejarError)
     );
   }

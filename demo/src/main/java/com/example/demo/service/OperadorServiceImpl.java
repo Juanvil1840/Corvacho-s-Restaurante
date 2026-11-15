@@ -11,6 +11,7 @@ import com.example.demo.dto.LoginRequestDTO;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
 import com.example.demo.entities.Pedido;
+import com.example.demo.entities.Role;
 import com.example.demo.repository.DomiciliarioRepository;
 import com.example.demo.repository.OperadorRepository;
 import com.example.demo.repository.PedidoRepository;
@@ -22,12 +23,15 @@ public class OperadorServiceImpl implements OperadorService {
     private final OperadorRepository operadorRepository;
     private final DomiciliarioRepository domiciliarioRepository;
     private final PedidoRepository pedidoRepository;
+    private final UsuarioService usuarioService;
 
-    // Constructor con inyeccion de repositorios
-    public OperadorServiceImpl(OperadorRepository operadorRepository, DomiciliarioRepository domiciliarioRepository, PedidoRepository pedidoRepository) {
+    // Constructor con inyeccion de repositorios y del servicio de usuarios (seguridad)
+    public OperadorServiceImpl(OperadorRepository operadorRepository, DomiciliarioRepository domiciliarioRepository,
+            PedidoRepository pedidoRepository, UsuarioService usuarioService) {
         this.operadorRepository = operadorRepository;
         this.domiciliarioRepository = domiciliarioRepository;
         this.pedidoRepository = pedidoRepository;
+        this.usuarioService = usuarioService;
     }
 
     // Lista todos los operadores registrados
@@ -53,6 +57,9 @@ public class OperadorServiceImpl implements OperadorService {
     public Operador crearOperador(Operador operador) {
         validarOperador(operador, null);
         operador.setId_operador(null);
+        // Se crea su usuario de seguridad con rol OPERADOR y la contrasena se guarda encriptada
+        operador.setUser(usuarioService.crearUsuario(operador.getUsuario(), operador.getContrasena(), Role.OPERADOR));
+        operador.setContrasena(usuarioService.encriptar(operador.getContrasena()));
         return operadorRepository.save(operador);
     }
 
@@ -64,11 +71,13 @@ public class OperadorServiceImpl implements OperadorService {
             return null;
         }
         validarOperador(datos, id);
+        existente.setUser(usuarioService.actualizarUsuario(existente.getUser(), datos.getUsuario(),
+                datos.getContrasena(), existente.getContrasena(), Role.OPERADOR));
         existente.setNombre(datos.getNombre());
         existente.setUsuario(datos.getUsuario());
-        // Solo cambia la contrasena si se envia una nueva no vacia
+        // Solo cambia la contrasena si se envia una nueva no vacia (se guarda encriptada)
         if (datos.getContrasena() != null && !datos.getContrasena().isBlank()) {
-            existente.setContrasena(datos.getContrasena());
+            existente.setContrasena(usuarioService.encriptar(datos.getContrasena()));
         }
         return operadorRepository.save(existente);
     }
@@ -114,7 +123,7 @@ public class OperadorServiceImpl implements OperadorService {
     @Override
     public Operador autenticar(String usuario, String contrasena) {
         Operador operador = operadorRepository.findByUsuario(usuario);
-        if (operador != null && operador.getContrasena().equals(contrasena)) {
+        if (operador != null && usuarioService.coincide(contrasena, operador.getContrasena())) {
             return operador;
         }
         return null;

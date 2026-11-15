@@ -1,5 +1,7 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.JoinColumn;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -62,6 +64,12 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
 
+
+    // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
     // Constructor para registrar un cliente con sus datos personales
     public Cliente(String nombre, String apellido, String correo, String contrasena, String telefono, String direccion, boolean activo) {
         this.nombre = nombre;
@@ -72,4 +80,4 @@ public class Cliente {
         this.direccion = direccion;
         this.activo = activo;
     }
-}
+}
