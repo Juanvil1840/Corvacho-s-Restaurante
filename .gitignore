@@ -1,0 +1,4 @@
+# Bases de datos H2 locales: cada uno genera la suya al arrancar el backend
+*.mv.db
+*.trace.db
+_bd_vieja/
