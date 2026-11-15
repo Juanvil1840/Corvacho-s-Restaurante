@@ -23,23 +23,24 @@ public class Administrador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_administrador;
 
-    @Column (length = 80, nullable = false)
+    @Column(length = 80, nullable = false)
     private String nombre;
 
-    @Column (unique = true, length = 100, nullable = false)
+    @Column(unique = true, length = 100, nullable = false)
     private String usuario;
 
-    @Column (length = 255, nullable = false)
+    @JsonIgnore
+    @Column(length = 255, nullable = false)
     private String contrasena;
     
-
     // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     // Constructor para crear un administrador con sus credenciales
-    public Administrador(String nombre, String usuario, String contrasena){
+    public Administrador(String nombre, String usuario, String contrasena) {
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;

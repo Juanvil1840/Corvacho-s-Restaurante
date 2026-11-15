@@ -3,10 +3,11 @@ package com.example.demo.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,15 +27,18 @@ public class ProductoCarrito {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_ProductoCarrito;
-    @Column( nullable = false)
+
+    @Column(nullable = false)
     private int cantidadP;
 
     // Producto seleccionado
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;
 
     // Carrito al que pertenece este item
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_carrito")
     private Carrito carrito;
@@ -45,9 +49,9 @@ public class ProductoCarrito {
     private List<AdicionalSeleccionado> adicionales = new ArrayList<>();
 
     // Constructor para asociar un producto y su cantidad a un carrito
-    public ProductoCarrito(int cantidadP, Producto producto, Carrito carrito){
-    this.cantidadP = cantidadP;
-    this.producto = producto;
-    this.carrito = carrito;
+    public ProductoCarrito(int cantidadP, Producto producto, Carrito carrito) {
+        this.cantidadP = cantidadP;
+        this.producto = producto;
+        this.carrito = carrito;
     }
 }

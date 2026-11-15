@@ -1,17 +1,17 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,29 +25,35 @@ public class Operador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_operador;
-    @Column( length = 100, nullable = false )
+
+    @Column(length = 100, nullable = false)
     private String nombre;
-    @Column( unique = true, length = 100, nullable = false)
+
+    @Column(unique = true, length = 100, nullable = false)
     private String usuario;
-    @Column( length = 255, nullable = false)
+
+    @JsonIgnore
+    @Column(length = 255, nullable = false)
     private String contrasena;
 
     // Domiciliarios asignados a este operador
+    @JsonIgnore
     @OneToMany(mappedBy = "operador", cascade = CascadeType.ALL)
     private List<Domiciliario> domiciliarios;
 
     // Pedidos gestionados por este operador
+    @JsonIgnore
     @OneToMany(mappedBy = "operador")
     private List<Pedido> pedidos;
-
 
     // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     // Constructor para crear un operador con sus credenciales
-    public Operador(String nombre, String usuario, String contrasena){
+    public Operador(String nombre, String usuario, String contrasena) {
         this.nombre = nombre;
         this.usuario = usuario;
         this.contrasena = contrasena;

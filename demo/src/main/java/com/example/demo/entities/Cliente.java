@@ -1,20 +1,19 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.JoinColumn;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +28,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clienteId;
 
-    @NotBlank(message = "El nombre es obligatorio") //Para que el nombre no este vacio
+    @NotBlank(message = "El nombre es obligatorio")
     @Column(length = 80, nullable = false)
     private String nombre;
 
@@ -38,12 +37,13 @@ public class Cliente {
     private String apellido;
 
     @NotBlank(message = "El correo es obligatorio")
-    @Email //Verificacion del formato correcto del email
+    @Email
     @Column(unique = true, length = 80, nullable = false)
     private String correo;
 
+    @JsonIgnore
     @NotBlank(message = "La contrasena es obligatoria")
-    @Column(name = "contraseña", length = 80, nullable = false) // nombre de la columna que ya existe en la base de datos
+    @Column(name = "contraseña", length = 80, nullable = false)
     private String contrasena;
 
     @NotBlank(message = "El telefono es obligatorio")
@@ -57,19 +57,21 @@ public class Cliente {
     private boolean activo = true;
 
     // Carrito de compras asociado al cliente
+    @JsonIgnore
     @OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Carrito carrito;
 
     // Historial de pedidos realizados por el cliente
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos;
-
 
     // Usuario de seguridad (tabla UserEntity) con el que inicia sesion
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
     // Constructor para registrar un cliente con sus datos personales
     public Cliente(String nombre, String apellido, String correo, String contrasena, String telefono, String direccion, boolean activo) {
         this.nombre = nombre;

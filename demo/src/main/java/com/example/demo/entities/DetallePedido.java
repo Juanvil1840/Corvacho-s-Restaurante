@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -30,11 +31,13 @@ public class DetallePedido {
     private int cantidad;
 
     // Producto solicitado en esta linea del pedido
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;
 
     // Pedido al que pertenece este detalle
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private Pedido pedido;

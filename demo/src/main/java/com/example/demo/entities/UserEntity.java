@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +33,8 @@ public class UserEntity {
     @Column(unique = true, nullable = false, length = 100)
     private String username;
 
-    // Contrasena encriptada con BCrypt
+    // Contrasena encriptada con BCrypt (Oculta con @JsonIgnore por seguridad)
+    @JsonIgnore
     @Column(nullable = false, length = 255)
     private String password;
 

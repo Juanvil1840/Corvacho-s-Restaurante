@@ -2,6 +2,7 @@ package com.example.demo.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,8 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_carrito;
     
-    // Cliente dueno del carrito
+    // Cliente dueno del carrito (Agregamos @JsonIgnore para evitar bucle infinito con Cliente)
+    @JsonIgnore
     @OneToOne 
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
@@ -35,6 +37,6 @@ public class Carrito {
 
     // Constructor que asocia el carrito a un cliente
     public Carrito(Cliente cliente){
-    this.cliente = cliente;
+        this.cliente = cliente;
     }
 }
