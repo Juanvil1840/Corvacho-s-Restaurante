@@ -1,0 +1,1193 @@
+{
+  "info": {
+    "_postman_id": "corvachos-restaurante-sprint-jwt-collection",
+    "name": "Corvacho's Restaurante - Backend API (JWT + Roles)",
+    "description": "Colección completa con todas las peticiones REST del backend de Corvacho's Restaurante, configurada con autenticación JWT Bearer Token y pruebas por rol (ADMIN, OPERADOR, CLIENTE).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8090",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Administradores (/api/administradores)",
+      "item": [
+        {
+          "name": "Login Administrador (Guarda Token ADMIN)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set('token', data.token);",
+                  "        console.log('Token ADMIN guardado en {{token}}');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": \"admin1\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores", "login"]
+            },
+            "description": "Autentica a un administrador (público). Devuelve AuthResponseDTO con token JWT, rol ADMIN y AdministradorDTO, y guarda automáticamente el token en la variable {{token}}."
+          }
+        },
+        {
+          "name": "Listar Administradores (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores"]
+            },
+            "description": "Requiere rol ADMIN. Retorna lista de AdministradorDTO (id_administrador, nombre, usuario) sin exponer contraseñas ni UserEntity."
+          }
+        },
+        {
+          "name": "Buscar Administrador por ID (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores", "1"]
+            },
+            "description": "Requiere rol ADMIN. Retorna AdministradorDTO."
+          }
+        },
+        {
+          "name": "Crear Administrador (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Carlos Administrador\",\n  \"usuario\": \"admin_nuevo\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores"]
+            },
+            "description": "Requiere rol ADMIN. Crea el Administrador y su UserEntity con rol ADMIN y contraseña encriptada."
+          }
+        },
+        {
+          "name": "Actualizar Administrador (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Daniel Cedeño Actualizado\",\n  \"usuario\": \"admin1\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores", "1"]
+            },
+            "description": "Requiere rol ADMIN. Actualiza un administrador existente."
+          }
+        },
+        {
+          "name": "Eliminar Administrador (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores", "5"]
+            },
+            "description": "Requiere rol ADMIN. Elimina el administrador y su UserEntity asociado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Operadores (/api/operadores)",
+      "item": [
+        {
+          "name": "Login Operador (Guarda Token OPERADOR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set('token', data.token);",
+                  "        console.log('Token OPERADOR guardado en {{token}}');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usuario\": \"KikaNieto_\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores", "login"]
+            },
+            "description": "Autentica a un operador (público). Devuelve AuthResponseDTO con token JWT, rol OPERADOR y OperadorDTO."
+          }
+        },
+        {
+          "name": "Listar Operadores (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna lista de OperadorDTO (id_operador, nombre, usuario)."
+          }
+        },
+        {
+          "name": "Buscar Operador por ID (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores", "1"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna OperadorDTO."
+          }
+        },
+        {
+          "name": "Crear Operador (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Operador Nuevo\",\n  \"usuario\": \"operador_nuevo\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores"]
+            },
+            "description": "Requiere rol ADMIN. Crea un nuevo operador y su UserEntity con rol OPERADOR."
+          }
+        },
+        {
+          "name": "Actualizar Operador (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Kika Nieto Actualizada\",\n  \"usuario\": \"KikaNieto_\",\n  \"contrasena\": \"1234\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores", "1"]
+            },
+            "description": "Requiere rol ADMIN. Actualiza un operador existente."
+          }
+        },
+        {
+          "name": "Eliminar Operador (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/operadores/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "operadores", "5"]
+            },
+            "description": "Requiere rol ADMIN. Desvincula pedidos y domiciliarios y elimina el operador."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Clientes (/api/clientes)",
+      "item": [
+        {
+          "name": "Login Cliente (Guarda Token CLIENTE)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    if (data.token) {",
+                  "        pm.collectionVariables.set('token', data.token);",
+                  "        console.log('Token CLIENTE guardado en {{token}}');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"cedeno.danielc@javeriana.edu.co\",\n  \"contrasena\": \"1234567\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "login"]
+            },
+            "description": "Autentica a un cliente (público). Devuelve AuthResponseDTO con token JWT, rol CLIENTE y ClienteDTO."
+          }
+        },
+        {
+          "name": "Registrar Cliente (POST - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Camila\",\n  \"apellido\": \"Torres\",\n  \"correo\": \"camila.torres@javeriana.edu.co\",\n  \"contrasena\": \"clave1234\",\n  \"telefono\": \"3001112233\",\n  \"direccion\": \"Carrera 7 #40-62\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            },
+            "description": "Público. Registra un cliente nuevo y crea su UserEntity con rol CLIENTE."
+          }
+        },
+        {
+          "name": "Listar Clientes (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna lista de ClienteDTO sin contraseñas ni carritos/pedidos anidados."
+          }
+        },
+        {
+          "name": "Buscar Cliente por ID (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño del ID (#id). Retorna ClienteDTO."
+          }
+        },
+        {
+          "name": "Actualizar Cliente (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Daniel\",\n  \"apellido\": \"Cedeño\",\n  \"correo\": \"cedeno.danielc@javeriana.edu.co\",\n  \"contrasena\": \"1234567\",\n  \"telefono\": \"3106699555\",\n  \"direccion\": \"Calle 45 #7-95 Apto 301\",\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño del ID."
+          }
+        },
+        {
+          "name": "Desactivar Cliente (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1/desactivar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1", "desactivar"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño del ID. Desactiva la cuenta del cliente."
+          }
+        },
+        {
+          "name": "Reactivar Cliente (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/1/reactivar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "1", "reactivar"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño del ID. Reactiva la cuenta del cliente."
+          }
+        },
+        {
+          "name": "Eliminar Cliente (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "10"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño del ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Productos (/api/productos)",
+      "item": [
+        {
+          "name": "Listar Todos los Productos (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos?todos=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"],
+              "query": [
+                {
+                  "key": "todos",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Público. Retorna lista de ProductoDTO (id, nombre, precio, descripcion, imagen, disponible, categoria: {id, nombre})."
+          }
+        },
+        {
+          "name": "Listar Productos Disponibles Menú (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos?todos=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"],
+              "query": [
+                {
+                  "key": "todos",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Público. Retorna únicamente los productos con disponible=true como ProductoDTO."
+          }
+        },
+        {
+          "name": "Buscar Producto por ID (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            },
+            "description": "Público. Retorna ProductoDTO con su CategoriaDTO resumida."
+          }
+        },
+        {
+          "name": "Crear Producto (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Risotto ai Funghi Porcini\",\n  \"precio\": 54000,\n  \"descripcion\": \"Arroz arbóreo cremoso con hongos porcini, parmesano madurado y aceite de trufa blanca.\",\n  \"imagen\": \"https://images.unsplash.com/photo-1633964913295-ceb43826e7c9\",\n  \"disponible\": true,\n  \"categoria\": {\n    \"id\": 2\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            },
+            "description": "Requiere rol ADMIN. Crea un producto asociado a una categoría existente."
+          }
+        },
+        {
+          "name": "Actualizar Producto (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"berenjenas a la parmesana\",\n  \"precio\": 42000,\n  \"descripcion\": \"Capas de rodajas de berenjena horneadas con salsa pomodoro, albahaca fresca, mozzarella y parmesano.\",\n  \"imagen\": \"https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/2c7fa867-64f4-4fea-af73-98ac6129b3c6.webp\",\n  \"disponible\": true,\n  \"categoria\": {\n    \"id\": 1\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            },
+            "description": "Requiere rol ADMIN. Actualiza los datos y categoría de un producto."
+          }
+        },
+        {
+          "name": "Eliminar Producto (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/7",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "7"]
+            },
+            "description": "Requiere rol ADMIN. Elimina un producto si no está asociado a ningún pedido."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Categorías (/api/categorias)",
+      "item": [
+        {
+          "name": "Listar Categorías (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categorias",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categorias"]
+            },
+            "description": "Público. Retorna lista de CategoriaDTO (id, nombre) sin listas de productos ni adicionales anidados."
+          }
+        },
+        {
+          "name": "Buscar Categoría por ID (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categorias", "1"]
+            },
+            "description": "Público. Retorna CategoriaDTO (id, nombre)."
+          }
+        },
+        {
+          "name": "Crear Categoría (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Especialidades de la Casa\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categorias",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categorias"]
+            },
+            "description": "Requiere rol ADMIN. Crea una nueva categoría."
+          }
+        },
+        {
+          "name": "Actualizar Categoría (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Entradas Italianas\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categorias/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categorias", "1"]
+            },
+            "description": "Requiere rol ADMIN. Actualiza el nombre de una categoría."
+          }
+        },
+        {
+          "name": "Eliminar Categoría (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categorias/9",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categorias", "9"]
+            },
+            "description": "Requiere rol ADMIN. Elimina una categoría si no tiene productos ni adicionales asociados."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Adicionales (/api/adicionales)",
+      "item": [
+        {
+          "name": "Listar Todos los Adicionales (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales"]
+            },
+            "description": "Público. Retorna lista de AdicionalDTO (id_adicional, nombre, precio, disponible, categoria: {id, nombre})."
+          }
+        },
+        {
+          "name": "Listar Adicionales Disponibles (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/disponibles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "disponibles"]
+            },
+            "description": "Público. Retorna lista de AdicionalDTO disponibles."
+          }
+        },
+        {
+          "name": "Buscar Adicional por ID (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "1"]
+            },
+            "description": "Público. Retorna AdicionalDTO."
+          }
+        },
+        {
+          "name": "Listar Adicionales por Categoría (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/categoria/2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "categoria", "2"]
+            },
+            "description": "Público. Retorna los adicionales asociados a una categoría como AdicionalDTO."
+          }
+        },
+        {
+          "name": "Listar Adicionales Disponibles por Categoría (GET - Público)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/categoria/2/disponibles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "categoria", "2", "disponibles"]
+            },
+            "description": "Público. Retorna los adicionales disponibles de una categoría como AdicionalDTO."
+          }
+        },
+        {
+          "name": "Crear Adicional (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Albahaca Fresca\",\n  \"precio\": 3000,\n  \"disponible\": true,\n  \"categoria\": {\n    \"id\": 2\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Crea un nuevo adicional asociado a una categoría."
+          }
+        },
+        {
+          "name": "Actualizar Adicional (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Queso Extra Gratinado\",\n  \"precio\": 6000,\n  \"disponible\": true,\n  \"categoria\": {\n    \"id\": 2\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "1"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Actualiza un adicional existente."
+          }
+        },
+        {
+          "name": "Eliminar Adicional (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/adicionales/13",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "adicionales", "13"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Elimina un adicional si no está en ningún pedido ni carrito."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Domiciliarios (/api/domiciliarios)",
+      "item": [
+        {
+          "name": "Listar Domiciliarios (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna lista de DomiciliarioDTO con OperadorPedidoDTO resumido (id_operador, nombre)."
+          }
+        },
+        {
+          "name": "Listar Domiciliarios Disponibles (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios/disponibles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios", "disponibles"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna domiciliarios con informaciondisp=true como DomiciliarioDTO."
+          }
+        },
+        {
+          "name": "Buscar Domiciliario por ID (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios", "1"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna DomiciliarioDTO."
+          }
+        },
+        {
+          "name": "Crear Domiciliario (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Andrés Repartidor\",\n  \"celular\": \"3158889900\",\n  \"cedula\": \"1020304050\",\n  \"informaciondisp\": true,\n  \"activo\": true,\n  \"operador\": {\n    \"id_operador\": 1\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios"]
+            },
+            "description": "Requiere rol ADMIN. Crea un domiciliario asignado a un operador."
+          }
+        },
+        {
+          "name": "Actualizar Domiciliario (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juls Caicedo\",\n  \"celular\": \"3056677848\",\n  \"cedula\": \"0000238282\",\n  \"informaciondisp\": true,\n  \"activo\": true,\n  \"operador\": {\n    \"id_operador\": 1\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios", "1"]
+            },
+            "description": "Requiere rol ADMIN. Actualiza un domiciliario existente."
+          }
+        },
+        {
+          "name": "Eliminar Domiciliario (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/domiciliarios/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "domiciliarios", "5"]
+            },
+            "description": "Requiere rol ADMIN. Desvincula pedidos y elimina al domiciliario."
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. Carritos (/api/carritos)",
+      "item": [
+        {
+          "name": "Obtener Carrito de Cliente (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/carritos/cliente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "carritos", "cliente", "1"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño (#clienteId). Retorna CarritoDTO con items resumidos."
+          }
+        },
+        {
+          "name": "Actualizar Carrito de Cliente (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productoId\": 5,\n      \"nombre\": \"pasta gratinada del chef\",\n      \"precio\": 50000,\n      \"imagen\": \"https://dvzwo3mu4ucsq.cloudfront.net/images/restaurants/storiadamore/product/579c0e8e-d7e1-4b91-8874-c09b9966d142.webp\",\n      \"cantidad\": 1,\n      \"adicionales\": [\n        {\n          \"id_adicional\": 1,\n          \"nombre\": \"Queso Extra\",\n          \"precio\": 5500,\n          \"cantidad\": 1\n        }\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/carritos/cliente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "carritos", "cliente", "1"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño (#clienteId). Reemplaza los items del carrito del cliente."
+          }
+        },
+        {
+          "name": "Vaciar Carrito de Cliente (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/carritos/cliente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "carritos", "cliente", "1"]
+            },
+            "description": "Requiere rol ADMIN o ser el mismo CLIENTE dueño (#clienteId). Vacía el carrito del cliente."
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. Pedidos (/api/pedidos)",
+      "item": [
+        {
+          "name": "Listar Todos los Pedidos Resumidos (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos?activos=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"],
+              "query": [
+                {
+                  "key": "activos",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna lista de PedidoListaDTO (solo id_Pedido, estado, fechaCreacion, clienteNombre, operadorNombre, domiciliarioNombre)."
+          }
+        },
+        {
+          "name": "Listar Solo Pedidos Activos (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos?activos=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"],
+              "query": [
+                {
+                  "key": "activos",
+                  "value": "true"
+                }
+              ]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna solo los pedidos no entregados como PedidoListaDTO."
+          }
+        },
+        {
+          "name": "Listar Historial de Pedidos por Cliente (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/cliente/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "cliente", "1"]
+            },
+            "description": "Requiere rol ADMIN, OPERADOR o ser el mismo CLIENTE (#clienteId). Retorna lista de PedidoHistorialDTO con el total y subtotales calculados."
+          }
+        },
+        {
+          "name": "Buscar Pedido por ID - Detalle Completo (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Requiere rol ADMIN, OPERADOR o ser el CLIENTE dueño del pedido. Retorna PedidoDTO con ClientePedidoDTO, OperadorPedidoDTO, DomiciliarioPedidoDTO y DetallePedidoDTO."
+          }
+        },
+        {
+          "name": "Crear Pedido (POST)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Recibido\",\n  \"cliente\": {\n    \"clienteId\": 1\n  },\n  \"operador\": {\n    \"id_operador\": 1\n  },\n  \"domiciliario\": {\n    \"id_domiciliario\": 1\n  },\n  \"detallePedidos\": [\n    {\n      \"cantidad\": 2,\n      \"producto\": {\n        \"id\": 5\n      },\n      \"adicionales\": [\n        {\n          \"id_adicional\": 1,\n          \"cantidad\": 1\n        }\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"]
+            },
+            "description": "Requiere rol ADMIN, OPERADOR o ser el CLIENTE dueño del pedido que se crea."
+          }
+        },
+        {
+          "name": "Actualizar Estado / Datos de Pedido (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"Cocinando\",\n  \"cliente\": {\n    \"clienteId\": 4\n  },\n  \"operador\": {\n    \"id_operador\": 4\n  },\n  \"domiciliario\": {\n    \"id_domiciliario\": 4\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "4"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Avanza el estado del pedido de forma secuencial (Recibido -> Cocinando -> Enviado -> Entregado)."
+          }
+        },
+        {
+          "name": "Eliminar Pedido (DELETE)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "5"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Elimina el pedido y libera al domiciliario si estaba en estado Enviado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Detalles de Pedido (/api/detalles-pedido)",
+      "item": [
+        {
+          "name": "Listar Todos los Detalles de Pedido (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/detalles-pedido",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "detalles-pedido"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna lista de DetallePedidoDTO (id_DetallePedido, cantidad, producto: ProductoPedidoDTO, adicionales: AdicionalPedidoDTO[])."
+          }
+        },
+        {
+          "name": "Listar Detalles por ID de Pedido (GET)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/detalles-pedido/pedido/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "detalles-pedido", "pedido", "1"]
+            },
+            "description": "Requiere rol ADMIN u OPERADOR. Retorna los DetallePedidoDTO de un pedido específico."
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Pruebas de Seguridad JWT (401 y 403 Sustentación)",
+      "item": [
+        {
+          "name": "1. Sin Token -> GET /api/administradores (401 Unauthorized)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores"]
+            },
+            "description": "Envía la petición sin header Authorization (No Auth). El backend responde 401 Unauthorized con MensajeDTO."
+          }
+        },
+        {
+          "name": "2. Sin Token -> POST /api/productos (401 Unauthorized)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Intento Sin Token\",\n  \"precio\": 10000,\n  \"descripcion\": \"Prueba\",\n  \"imagen\": \"https://via.placeholder.com/150\",\n  \"disponible\": true,\n  \"categoria\": { \"id\": 1 }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            },
+            "description": "Aunque GET /api/productos es público, POST /api/productos exige rol ADMIN. Sin token responde 401 Unauthorized."
+          }
+        },
+        {
+          "name": "3. Rol Incorrecto -> GET /api/administradores (403 Forbidden con token de CLIENTE u OPERADOR)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/administradores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "administradores"]
+            },
+            "description": "Haz primero 'Login Cliente' o 'Login Operador' y luego ejecuta esta petición: como el token es válido pero el rol no es ADMIN, responde 403 Forbidden."
+          }
+        },
+        {
+          "name": "4. Cliente Ajeno -> GET /api/clientes/2 (403 Forbidden con token del Cliente 1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/clientes/2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clientes", "2"]
+            },
+            "description": "Haz primero 'Login Cliente' (que inicia sesión como el cliente 1: cedeno.danielc@javeriana.edu.co) y luego ejecuta esta petición para intentar ver el perfil del cliente 2: @PreAuthorize bloquea con 403 Forbidden."
+          }
+        }
+      ]
+    }
+  ]
+}
+
