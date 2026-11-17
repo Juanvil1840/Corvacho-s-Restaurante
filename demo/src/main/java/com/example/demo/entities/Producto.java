@@ -42,7 +42,6 @@ public class Producto {
     private boolean disponible;
 
     // Categoria a la que pertenece el producto
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false) 
     private Categoria categoria;

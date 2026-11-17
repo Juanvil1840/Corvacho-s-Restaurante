@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +42,7 @@ public class Cliente {
     @Column(unique = true, length = 80, nullable = false)
     private String correo;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "La contrasena es obligatoria")
     @Column(name = "contraseña", length = 80, nullable = false)
     private String contrasena;

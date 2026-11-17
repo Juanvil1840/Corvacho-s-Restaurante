@@ -43,7 +43,6 @@ public class Domiciliario {
     private boolean activo = true;
 
     // Operador responsable de coordinar a este domiciliario
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_operador")
     private Operador operador;

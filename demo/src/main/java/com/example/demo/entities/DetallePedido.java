@@ -31,7 +31,6 @@ public class DetallePedido {
     private int cantidad;
 
     // Producto solicitado en esta linea del pedido
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_producto")
     private Producto producto;

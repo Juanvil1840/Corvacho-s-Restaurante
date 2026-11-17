@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +33,7 @@ public class Operador {
     @Column(unique = true, length = 100, nullable = false)
     private String usuario;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 255, nullable = false)
     private String contrasena;
 

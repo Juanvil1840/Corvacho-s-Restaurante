@@ -3,7 +3,6 @@ package com.example.demo.entities;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,19 +36,16 @@ public class Pedido {
     private LocalDateTime fechaEntrega;
 
     // Cliente que realizo el pedido
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
     // Operador que gestiona el pedido
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_operador")
     private Operador operador;
 
     // Domiciliario asignado para la entrega
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_domiciliario")
     private Domiciliario domiciliario;
