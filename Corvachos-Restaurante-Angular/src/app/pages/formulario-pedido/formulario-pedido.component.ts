@@ -15,6 +15,7 @@ import { Cliente } from '../../models/cliente.model';
 import { Operador } from '../../models/operador.model';
 import { Domiciliario } from '../../models/domiciliario.model';
 import { ComidaPedido, FormularioPedido, PedidoCamposComponent } from './components/pedido-campos/pedido-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para crear o editar un pedido, su estado, domiciliario y comidas
 @Component({
@@ -60,7 +61,8 @@ export class FormularioPedidoComponent implements OnInit {
     private productoService: ProductoService,
     private adicionalService: AdicionalService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Carga las listas de clientes, operadores, domiciliarios, productos y adicionales, y el pedido si se está editando
@@ -123,18 +125,22 @@ export class FormularioPedidoComponent implements OnInit {
     // Validaciones de estado, cliente, domiciliario requerido al enviar y comidas mínimas
     if (this.estadoOriginal === 'Entregado') {
       this.error = 'El pedido ya fue entregado y no se puede modificar.';
+      this.alertaService.error(this.error);
       return;
     }
     if (!this.formulario.clienteId) {
       this.error = 'Debe seleccionar un cliente.';
+      this.alertaService.error(this.error);
       return;
     }
     if (this.formulario.estado === 'Enviado' && !this.formulario.domiciliarioId) {
       this.error = 'Para enviar el pedido debe seleccionar un domiciliario disponible.';
+      this.alertaService.error(this.error);
       return;
     }
     if (this.comidasSeleccionadas.length === 0) {
       this.error = 'Debe añadir al menos una comida al pedido.';
+      this.alertaService.error(this.error);
       return;
     }
 
@@ -163,12 +169,14 @@ export class FormularioPedidoComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('El pedido ha sido guardado correctamente.');
         this.router.navigate(['/pedidos']);
       },
       error: (error) => {
         console.error('Error al guardar el pedido:', error);
         this.guardando = false;
         this.error = error.error?.mensaje || 'No fue posible guardar el pedido. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../service/categoria.service';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaTablaComponent } from './components/categoria-tabla/categoria-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para listar y administrar las categorías de productos
 @Component({
@@ -20,7 +21,10 @@ export class ListaCategoriasComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(
+    private categoriaService: CategoriaService,
+    private alertaService: AlertaService
+  ) {}
 
   // Carga las categorías al iniciar el componente
   ngOnInit(): void {
@@ -46,18 +50,27 @@ export class ListaCategoriasComponent implements OnInit {
   }
 
   // Solicita confirmación y elimina una categoría por su ID
-  eliminarCategoria(id: number): void {
-    if (confirm('¿Eliminar esta categoría?')) {
-      this.categoriaService.eliminarCategoria(id).subscribe({
-        next: () => {
-          // Actualiza el listado tras la eliminación
-          this.cargarCategorias();
-        },
-        error: (error) => {
-          console.error('Error al eliminar la categoría:', error);
-          this.error = 'No fue posible eliminar la categoría.';
-        }
-      });
-    }
+  async eliminarCategoria(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que deseas eliminar esta categoría?',
+      'Eliminar Categoría'
+    );
+
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.categoriaService.eliminarCategoria(id).subscribe({
+      next: () => {
+        this.alertaService.exito('La categoría ha sido eliminada correctamente.');
+        this.cargarCategorias();
+      },
+      error: (error) => {
+        console.error('Error al eliminar la categoría:', error);
+        // Si el backend devuelve el mensaje de por qué no se puede eliminar, lo mostramos
+        const mensajeError = error.error?.mensaje || 'No fue posible eliminar la categoría.';
+        this.alertaService.error(mensajeError);
+      }
+    });
   }
 }

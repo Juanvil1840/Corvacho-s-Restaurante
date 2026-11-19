@@ -6,6 +6,7 @@ import { ClienteService } from '../../service/cliente.service';
 import { CarritoService } from '../../service/carrito.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteCamposComponent } from './components/cliente-campos/cliente-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para registrar, editar, desactivar o reactivar un cliente
 @Component({
@@ -38,7 +39,8 @@ export class FormularioClienteComponent implements OnInit {
     private clienteService: ClienteService,
     private carritoService: CarritoService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Carga los datos del cliente si se recibe un ID en los parámetros de la ruta
@@ -71,27 +73,36 @@ export class FormularioClienteComponent implements OnInit {
       next: (guardado) => {
         this.guardando = false;
         this.carritoService.setClienteLogueado(guardado);
+        this.alertaService.exito('Los datos del cliente han sido guardados correctamente.');
         this.router.navigate(['/clientes/perfil', guardado.clienteId]);
       },
       error: (err) => {
         console.error('Error al guardar el cliente:', err);
         this.guardando = false;
         this.error = err?.error?.message || 'No fue posible guardar los datos del cliente.';
+        this.alertaService.error(this.error);
       }
     });
   }
 
   // Solicita confirmación y desactiva la cuenta del cliente actual
-  desactivarCuenta(): void {
-    if (confirm('¿Estás seguro de que quieres desactivar tu cuenta? Podrás reactivarla más tarde.')) {
+  async desactivarCuenta(): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que quieres desactivar tu cuenta? Podrás reactivarla más tarde.',
+      'Desactivar Cuenta'
+    );
+
+    if (confirmado) {
       this.clienteService.desactivarCliente(this.cliente.clienteId).subscribe({
         next: (actualizado) => {
           this.cliente = actualizado;
           this.carritoService.setClienteLogueado(actualizado);
+          this.alertaService.exito('La cuenta ha sido desactivada.');
         },
         error: (err) => {
           console.error('Error al desactivar la cuenta:', err);
           this.error = 'No fue posible desactivar la cuenta.';
+          this.alertaService.error(this.error);
         }
       });
     }
@@ -103,10 +114,12 @@ export class FormularioClienteComponent implements OnInit {
       next: (actualizado) => {
         this.cliente = actualizado;
         this.carritoService.setClienteLogueado(actualizado);
+        this.alertaService.exito('La cuenta ha sido reactivada.');
       },
       error: (err) => {
         console.error('Error al reactivar la cuenta:', err);
         this.error = 'No fue posible reactivar la cuenta.';
+        this.alertaService.error(this.error);
       }
     });
   }
@@ -119,5 +132,4 @@ export class FormularioClienteComponent implements OnInit {
       this.router.navigate(['/clientes']);
     }
   }
-
 }

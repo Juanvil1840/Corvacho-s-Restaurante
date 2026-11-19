@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ClienteService } from '../../service/cliente.service';
 import { Cliente } from '../../models/cliente.model';
 import { ClienteTablaComponent } from './components/cliente-tabla/cliente-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para visualizar y gestionar el listado de clientes registrados
 @Component({
@@ -20,7 +21,10 @@ export class ListaClientesComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private clienteService: ClienteService) {}
+  constructor(
+    private clienteService: ClienteService,
+    private alertaService: AlertaService
+  ) {}
 
   // Carga los clientes al iniciar el componente
   ngOnInit(): void {
@@ -46,19 +50,26 @@ export class ListaClientesComponent implements OnInit {
   }
 
   // Pide confirmación y elimina un cliente según su ID
-  eliminarCliente(id: number): void {
-    if (confirm('¿Estas seguro de eliminar este cliente?')) {
-      this.clienteService.eliminarCliente(id).subscribe({
-        next: () => {
-          // Recarga el listado de clientes tras eliminar
-          this.cargarClientes();
-        },
-        error: (err) => {
-          console.error('Error al eliminar cliente:', err);
-          this.error = 'No fue posible eliminar el cliente.';
-        }
-      });
-    }
-  }
+  async eliminarCliente(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de eliminar este cliente?',
+      'Eliminar Cliente'
+    );
 
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.clienteService.eliminarCliente(id).subscribe({
+      next: () => {
+        this.alertaService.exito('El cliente ha sido eliminado correctamente.');
+        this.cargarClientes();
+      },
+      error: (err) => {
+        console.error('Error al eliminar cliente:', err);
+        const mensajeError = err.error?.mensaje || 'No fue posible eliminar el cliente (puede tener pedidos asociados).';
+        this.alertaService.error(mensajeError);
+      }
+    });
+  }
 }

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { OperadorService } from '../../service/operador.service';
 import { Operador } from '../../models/operador.model';
 import { OperadorTablaComponent } from './components/operador-tabla/operador-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para listar y administrar los operadores del sistema
 @Component({
@@ -20,7 +21,10 @@ export class ListaOperadoresComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private operadorService: OperadorService) {}
+  constructor(
+    private operadorService: OperadorService,
+    private alertaService: AlertaService
+  ) {}
 
   // Carga los operadores al inicializar el componente
   ngOnInit(): void {
@@ -46,18 +50,27 @@ export class ListaOperadoresComponent implements OnInit {
   }
 
   // Solicita confirmación y elimina un operador por su ID
-  eliminarOperador(id: number): void {
-    if (confirm('¿Eliminar este operador?')) {
-      this.operadorService.eliminarOperador(id).subscribe({
-        next: () => {
-          // Recarga la lista de operadores tras eliminar
-          this.cargarOperadores();
-        },
-        error: (error) => {
-          console.error('Error al eliminar el operador:', error);
-          this.error = 'No fue posible eliminar el operador.';
-        }
-      });
-    }
+  async eliminarOperador(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que deseas eliminar este operador?',
+      'Eliminar Operador'
+    );
+
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.operadorService.eliminarOperador(id).subscribe({
+      next: () => {
+        this.alertaService.exito('El operador ha sido eliminado correctamente.');
+        this.cargarOperadores();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el operador:', error);
+        // Aquí se atrapa el mensaje del backend si el operador tiene pedidos asociados
+        const mensajeError = error.error?.mensaje || 'No fue posible eliminar el operador (puede tener pedidos asociados).';
+        this.alertaService.error(mensajeError);
+      }
+    });
   }
 }

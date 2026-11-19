@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OperadorService } from '../../service/operador.service';
 import { Operador } from '../../models/operador.model';
 import { OperadorCamposComponent } from './components/operador-campos/operador-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para registrar o editar un operador del sistema
 @Component({
@@ -32,7 +33,8 @@ export class FormularioOperadorComponent implements OnInit {
   constructor(
     private operadorService: OperadorService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Si la ruta incluye un ID, activa la edición y consulta los datos del operador
@@ -72,12 +74,14 @@ export class FormularioOperadorComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('El operador ha sido guardado correctamente.');
         this.router.navigate(['/operadores']);
       },
       error: (error) => {
         console.error('Error al guardar el operador:', error);
         this.guardando = false;
         this.error = error?.error?.message || 'No fue posible guardar el operador. Verifica que el usuario no esté repetido.';
+        this.alertaService.error(this.error);
       }
     });
   }

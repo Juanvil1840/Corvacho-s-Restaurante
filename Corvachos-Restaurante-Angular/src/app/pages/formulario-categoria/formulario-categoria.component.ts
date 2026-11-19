@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriaService } from '../../service/categoria.service';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaCamposComponent } from './components/categoria-campos/categoria-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para crear o editar una categoría de productos
 @Component({
@@ -30,7 +31,8 @@ export class FormularioCategoriaComponent implements OnInit {
   constructor(
     private categoriaService: CategoriaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Verifica si se está editando una categoría existente para cargar sus datos
@@ -64,12 +66,14 @@ export class FormularioCategoriaComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('La categoría ha sido guardada correctamente.');
         this.router.navigate(['/categorias']);
       },
       error: (error) => {
         console.error('Error al guardar la categoría:', error);
         this.guardando = false;
         this.error = 'No fue posible guardar la categoría. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }

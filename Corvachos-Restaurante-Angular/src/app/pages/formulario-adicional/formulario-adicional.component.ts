@@ -7,6 +7,7 @@ import { CategoriaService } from '../../service/categoria.service';
 import { Adicional } from '../../models/adicional.model';
 import { Categoria } from '../../models/categoria.model';
 import { AdicionalCamposComponent } from './components/adicional-campos/adicional-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para crear o editar un adicional del menú
 @Component({
@@ -37,7 +38,8 @@ export class FormularioAdicionalComponent implements OnInit {
     private adicionalService: AdicionalService,
     private categoriaService: CategoriaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Carga las categorías disponibles y, si viene un ID en la URL, carga el adicional a editar
@@ -94,12 +96,14 @@ export class FormularioAdicionalComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('El adicional ha sido guardado correctamente.');
         this.router.navigate(['/adicionales']);
       },
       error: (error) => {
         console.error('Error al guardar el adicional:', error);
         this.guardando = false;
         this.error = 'No fue posible guardar el adicional. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }

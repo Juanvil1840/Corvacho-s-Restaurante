@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { DomiciliarioService } from '../../service/domiciliario.service';
 import { Domiciliario } from '../../models/domiciliario.model';
 import { DomiciliarioTablaComponent } from './components/domiciliario-tabla/domiciliario-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para listar y gestionar los domiciliarios del restaurante
 @Component({
@@ -20,7 +21,10 @@ export class ListaDomiciliariosComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private domiciliarioService: DomiciliarioService) {}
+  constructor(
+    private domiciliarioService: DomiciliarioService,
+    private alertaService: AlertaService
+  ) {}
 
   // Carga la lista de domiciliarios al iniciar el componente
   ngOnInit(): void {
@@ -46,18 +50,26 @@ export class ListaDomiciliariosComponent implements OnInit {
   }
 
   // Confirma con el usuario y elimina un domiciliario por su ID
-  eliminarDomiciliario(id: number): void {
-    if (confirm('¿Eliminar este domiciliario?')) {
-      this.domiciliarioService.eliminarDomiciliario(id).subscribe({
-        next: () => {
-          // Recarga la lista tras eliminar el domiciliario
-          this.cargarDomiciliarios();
-        },
-        error: (error) => {
-          console.error('Error al eliminar el domiciliario:', error);
-          this.error = 'No fue posible eliminar el domiciliario.';
-        }
-      });
-    }
+  async eliminarDomiciliario(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que deseas eliminar este domiciliario?',
+      'Eliminar Domiciliario'
+    );
+
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.domiciliarioService.eliminarDomiciliario(id).subscribe({
+      next: () => {
+        this.alertaService.exito('El domiciliario ha sido eliminado correctamente.');
+        this.cargarDomiciliarios();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el domiciliario:', error);
+        const mensajeError = error.error?.mensaje || 'No fue posible eliminar el domiciliario (puede tener pedidos asociados).';
+        this.alertaService.error(mensajeError);
+      }
+    });
   }
 }

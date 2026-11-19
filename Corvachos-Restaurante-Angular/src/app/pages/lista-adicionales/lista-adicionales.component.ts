@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { AdicionalService } from '../../service/adicional.service';
 import { Adicional } from '../../models/adicional.model';
 import { AdicionalTablaComponent } from './components/adicional-tabla/adicional-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para listar y administrar los adicionales del restaurante
 @Component({
@@ -20,7 +21,10 @@ export class ListaAdicionalesComponent implements OnInit {
   cargando = false;
   error = '';
 
-  constructor(private adicionalService: AdicionalService) {}
+  constructor(
+    private adicionalService: AdicionalService,
+    private alertaService: AlertaService
+  ) {}
 
   // Carga los adicionales al inicializar el componente
   ngOnInit(): void {
@@ -46,18 +50,26 @@ export class ListaAdicionalesComponent implements OnInit {
   }
 
   // Solicita confirmación y elimina un adicional por su ID
-  eliminarAdicional(id: number): void {
-    if (confirm('¿Eliminar este adicional?')) {
-      this.adicionalService.eliminarAdicional(id).subscribe({
-        next: () => {
-          // Recarga la lista tras eliminar exitosamente
-          this.cargarAdicionales();
-        },
-        error: (error) => {
-          console.error('Error al eliminar el adicional:', error);
-          this.error = error.error?.mensaje || 'No fue posible eliminar el adicional.';
-        }
-      });
-    }
+  async eliminarAdicional(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que deseas eliminar este adicional?',
+      'Eliminar Adicional'
+    );
+
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.adicionalService.eliminarAdicional(id).subscribe({
+      next: () => {
+        this.alertaService.exito('El adicional ha sido eliminado correctamente.');
+        this.cargarAdicionales();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el adicional:', error);
+        const mensajeError = error.error?.mensaje || 'No fue posible eliminar el adicional.';
+        this.alertaService.error(mensajeError);
+      }
+    });
   }
 }

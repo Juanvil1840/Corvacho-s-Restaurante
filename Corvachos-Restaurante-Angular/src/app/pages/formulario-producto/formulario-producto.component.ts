@@ -7,6 +7,7 @@ import { Producto } from '../../models/producto.model';
 import { Categoria } from '../../models/categoria.model';
 import { CategoriaService } from '../../service/categoria.service';
 import { ProductoCamposComponent } from './components/producto-campos/producto-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para registrar o editar un producto del menú
 @Component({
@@ -39,7 +40,8 @@ export class FormularioProductoComponent implements OnInit {
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Carga las categorías y, si existe un ID en la URL, consulta los datos del producto a editar
@@ -96,12 +98,14 @@ export class FormularioProductoComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('El producto ha sido guardado correctamente.');
         this.router.navigate(['/productos']);
       },
       error: (error) => {
         console.error('Error al guardar el producto:', error);
         this.guardando = false;
         this.error = 'No fue posible guardar el producto. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdministradorService } from '../../service/administrador.service';
 import { Administrador } from '../../models/administrador.model';
 import { AdministradorCamposComponent } from './components/administrador-campos/administrador-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para registrar o editar un administrador
 @Component({
@@ -32,7 +33,8 @@ export class FormularioAdministradorComponent implements OnInit {
   constructor(
     private administradorService: AdministradorService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Si existe un ID en la ruta, activa el modo edición y consulta los datos del administrador
@@ -74,6 +76,8 @@ export class FormularioAdministradorComponent implements OnInit {
       next: (adminGuardado) => {
         this.guardando = false;
 
+        this.alertaService.exito('El administrador ha sido guardado correctamente.');
+
         const adminLogueadoStr = localStorage.getItem('administrador');
         
         if (adminLogueadoStr) {
@@ -96,6 +100,7 @@ export class FormularioAdministradorComponent implements OnInit {
         console.error('Error al guardar el administrador:', error);
         this.guardando = false;
         this.error = error?.error?.message || 'No fue posible guardar el administrador. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }

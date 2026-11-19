@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AdministradorService } from '../../service/administrador.service';
 import { Administrador } from '../../models/administrador.model';
 import { AdministradorTablaComponent } from './components/administrador-tabla/administrador-tabla.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Componente para listar y gestionar los administradores del sistema
 @Component({
@@ -22,7 +23,8 @@ export class ListaAdministradoresComponent implements OnInit {
 
   constructor(
     private administradorService: AdministradorService,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Inicializa el componente cargando la lista de administradores
@@ -54,18 +56,26 @@ export class ListaAdministradoresComponent implements OnInit {
   }
 
   // Confirma y elimina un administrador por su ID
-  eliminarAdministrador(id: number): void {
-    if (confirm('¿Eliminar este administrador?')) {
-      this.administradorService.eliminarAdministrador(id).subscribe({
-        next: () => {
-          // Recarga la lista después de eliminar
-          this.cargarAdministradores();
-        },
-        error: (error) => {
-          console.error('Error al eliminar el administrador:', error);
-          this.error = 'No fue posible eliminar el administrador.';
-        }
-      });
-    }
+  async eliminarAdministrador(id: number): Promise<void> {
+    const confirmado = await this.alertaService.confirmar(
+      '¿Estás seguro de que deseas eliminar este administrador?',
+      'Eliminar Administrador'
+    );
+
+    if (!confirmado) return;
+
+    this.error = '';
+
+    this.administradorService.eliminarAdministrador(id).subscribe({
+      next: () => {
+        this.alertaService.exito('El administrador ha sido eliminado correctamente.');
+        this.cargarAdministradores();
+      },
+      error: (error) => {
+        console.error('Error al eliminar el administrador:', error);
+        const mensajeError = error.error?.mensaje || 'No fue posible eliminar el administrador.';
+        this.alertaService.error(mensajeError);
+      }
+    });
   }
 }

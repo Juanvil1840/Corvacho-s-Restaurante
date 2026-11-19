@@ -7,6 +7,7 @@ import { OperadorService } from '../../service/operador.service';
 import { Domiciliario } from '../../models/domiciliario.model';
 import { Operador } from '../../models/operador.model';
 import { DomiciliarioCamposComponent } from './components/domiciliario-campos/domiciliario-campos.component';
+import { AlertaService } from '../../service/alerta.service';
 
 // Página de formulario para registrar o editar un domiciliario y su operador encargado
 @Component({
@@ -39,7 +40,8 @@ export class FormularioDomiciliarioComponent implements OnInit {
     private domiciliarioService: DomiciliarioService,
     private operadorService: OperadorService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertaService: AlertaService
   ) {}
 
   // Carga la lista de operadores y, si viene un ID en la URL, consulta los datos del domiciliario
@@ -102,12 +104,14 @@ export class FormularioDomiciliarioComponent implements OnInit {
     peticion.subscribe({
       next: () => {
         this.guardando = false;
+        this.alertaService.exito('El domiciliario ha sido guardado correctamente.');
         this.router.navigate(['/domiciliarios']);
       },
       error: (error) => {
         console.error('Error al guardar el domiciliario:', error);
         this.guardando = false;
         this.error = 'No fue posible guardar el domiciliario. Intenta nuevamente.';
+        this.alertaService.error(this.error);
       }
     });
   }
