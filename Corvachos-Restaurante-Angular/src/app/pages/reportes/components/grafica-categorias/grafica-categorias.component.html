@@ -1,0 +1,11 @@
+<section class="rep-card rep-panel">
+  <header class="rep-panel-cabecera">
+    <div>
+      <h2 class="rep-panel-titulo">Ventas por categoría</h2>
+      <p class="rep-panel-subtitulo">Qué parte del menú genera más ingresos</p>
+    </div>
+  </header>
+  <div class="lienzo-contenedor" [style.height.px]="60 + datos.length * 34">
+    <canvas #lienzo role="img" aria-label="Barras con las ventas de cada categoría"></canvas>
+  </div>
+</section>

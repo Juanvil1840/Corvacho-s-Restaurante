@@ -1,0 +1,17 @@
+<section class="rep-card rep-panel">
+  <header class="rep-panel-cabecera">
+    <div>
+      <h2 class="rep-panel-titulo">Ventas por día</h2>
+      <p class="rep-panel-subtitulo">Total facturado cada día del periodo</p>
+    </div>
+    @if (mejorDia && mejorDia.ventas > 0) {
+      <div class="mejor-dia">
+        <span>Mejor día</span>
+        <strong>{{ etiquetaDia(mejorDia.fecha) }}</strong>
+      </div>
+    }
+  </header>
+  <div class="lienzo-contenedor">
+    <canvas #lienzo role="img" aria-label="Gráfica de línea con las ventas diarias del periodo"></canvas>
+  </div>
+</section>

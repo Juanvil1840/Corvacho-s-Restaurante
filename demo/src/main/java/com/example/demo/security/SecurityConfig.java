@@ -64,6 +64,9 @@ public class SecurityConfig {
                 // Menu: productos, categorias y adicionales se pueden ver sin iniciar sesion
                 .requestMatchers(HttpMethod.GET, "/api/productos/**", "/api/categorias/**", "/api/adicionales/**").permitAll()
 
+                // ---------- Reportes de ventas (dashboard): solo ADMIN ----------
+                .requestMatchers("/api/reportes/**").hasAuthority(ADMIN)
+
                 // ---------- Administradores: solo ADMIN ----------
                 .requestMatchers("/api/administradores/**").hasAuthority(ADMIN)
 
@@ -123,6 +126,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        // Para que Angular pueda leer el nombre del archivo al descargar el Excel
+        config.setExposedHeaders(List.of("Content-Disposition"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

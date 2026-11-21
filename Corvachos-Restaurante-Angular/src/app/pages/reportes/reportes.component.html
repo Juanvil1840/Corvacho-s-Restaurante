@@ -1,0 +1,81 @@
+<main class="reportes">
+  <div class="reportes-contenedor" #contenido>
+
+    <header class="reportes-cabecera">
+      <div>
+        <a routerLink="/portal-admin" class="reportes-volver" data-no-pdf><i class="bi bi-arrow-left"></i> Panel de control</a>
+        <h1 class="reportes-titulo">Reportes del negocio</h1>
+        <p class="reportes-periodo">
+          @if (reporte) {
+            {{ textoPeriodo }}
+            @if (ultimaActualizacion) { <span data-no-pdf> · Actualizado {{ horaActualizacion }}</span> }
+          } @else {
+            Cargando periodo…
+          }
+        </p>
+      </div>
+
+      <div class="reportes-acciones" data-no-pdf>
+        <button type="button" class="boton-exportar" (click)="descargarExcel()" [disabled]="!reporte || exportandoExcel">
+          @if (exportandoExcel) { <span class="spinner-border spinner-border-sm"></span> } @else { <i class="bi bi-file-earmark-spreadsheet"></i> }
+          Excel
+        </button>
+        <button type="button" class="boton-exportar boton-principal" (click)="descargarPdf()" [disabled]="!reporte || exportandoPdf">
+          @if (exportandoPdf) { <span class="spinner-border spinner-border-sm"></span> } @else { <i class="bi bi-file-earmark-pdf"></i> }
+          PDF
+        </button>
+      </div>
+    </header>
+
+    <div data-no-pdf>
+      <app-reporte-filtros (rangoCambiado)="cambiarRango($event)"></app-reporte-filtros>
+    </div>
+
+    @if (error) {
+      <div class="reportes-error" role="alert" data-no-pdf>
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>{{ error }}</span>
+        <button type="button" (click)="reintentar()">Reintentar</button>
+      </div>
+    }
+
+    @if (cargando && !reporte) {
+      <div class="esqueleto" aria-busy="true" aria-label="Cargando reporte">
+        @for (i of [1, 2, 3, 4]; track i) { <div class="esqueleto-bloque esqueleto-kpi"></div> }
+        <div class="esqueleto-bloque esqueleto-grande"></div>
+        <div class="esqueleto-bloque esqueleto-grande"></div>
+      </div>
+    } @else if (reporte) {
+      <div class="reportes-cuerpo" [class.actualizando]="cargando">
+
+        <app-reporte-kpis [indicadores]="reporte.indicadores"></app-reporte-kpis>
+
+        @if (sinPedidos) {
+          <div class="rep-card reportes-vacio">
+            <i class="bi bi-calendar-x"></i>
+            <h2>No hubo pedidos en este periodo</h2>
+            <p>Prueba con un rango de fechas más amplio.</p>
+          </div>
+        } @else {
+          <div class="reportes-grid">
+            <app-grafica-ventas class="ancho-doble" [datos]="reporte.ventasPorDia"></app-grafica-ventas>
+            <app-reporte-estados [estados]="reporte.pedidosPorEstado"
+              [minutosEntrega]="reporte.indicadores.minutosPromedioEntrega"></app-reporte-estados>
+
+            <app-reporte-ranking titulo="Platos más vendidos" subtitulo="Por unidades vendidas" icono="bi-award"
+              metrica="cantidad" [conImagen]="true" [items]="reporte.topProductos"></app-reporte-ranking>
+            <app-grafica-categorias class="ancho-doble" [datos]="reporte.ventasPorCategoria"></app-grafica-categorias>
+
+            <app-mapa-calor class="ancho-doble" [matriz]="reporte.mapaCalor"></app-mapa-calor>
+            <app-reporte-ranking titulo="Adicionales estrella" subtitulo="Los extras que más ingresos dejan"
+              icono="bi-stars" metrica="total" [items]="reporte.topAdicionales"
+              textoVacio="Ningún pedido llevó adicionales"></app-reporte-ranking>
+
+            <app-reporte-ranking class="ancho-completo" titulo="Mejores clientes" subtitulo="Quiénes más compraron en el periodo"
+              icono="bi-gem" metrica="total" unidad="pedidos" [items]="reporte.topClientes"></app-reporte-ranking>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</main>

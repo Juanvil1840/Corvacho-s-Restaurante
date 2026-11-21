@@ -83,6 +83,14 @@ export const routes: Routes = [
     { path: 'login-admin', component: LoginAdminComponent, canActivate: [sinSesionGuard] },
     { path: 'portal-admin', component: PortalAdminComponent, canActivate: [authGuard], data: SOLO_ADMIN },
 
+    // Dashboard de reportes: se carga bajo demanda (lazy) porque trae las librerias de graficas
+    {
+        path: 'reportes',
+        loadComponent: () => import('./pages/reportes/reportes.component').then(m => m.ReportesComponent),
+        canActivate: [authGuard],
+        data: SOLO_ADMIN
+    },
+
     // Rutas de clientes, autenticación, menú público y manejo de errores
     { path: 'clientes', component: ListaClientesComponent, canActivate: [authGuard], data: SOLO_ADMIN },
     { path: 'clientes/nuevo', component: FormularioClienteComponent, canActivate: [authGuard], data: SOLO_ADMIN },

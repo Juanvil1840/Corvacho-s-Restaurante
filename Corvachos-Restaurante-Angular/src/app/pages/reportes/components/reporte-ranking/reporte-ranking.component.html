@@ -1,0 +1,41 @@
+<section class="rep-card rep-panel">
+  <header class="rep-panel-cabecera">
+    <div>
+      <h2 class="rep-panel-titulo"><i class="bi" [class]="icono"></i> {{ titulo }}</h2>
+      @if (subtitulo) { <p class="rep-panel-subtitulo">{{ subtitulo }}</p> }
+    </div>
+  </header>
+
+  @if (items.length === 0) {
+    <p class="ranking-vacio"><i class="bi bi-inbox"></i> {{ textoVacio }}</p>
+  } @else {
+    <ol class="ranking">
+      @for (item of items; track item.id ?? item.nombre; let i = $index) {
+        <li class="ranking-fila" [style.animation-delay.ms]="i * 70">
+          <span class="ranking-puesto" [class.podio]="i < 3">{{ i + 1 }}</span>
+
+          @if (conImagen && item.imagen && !fallidas.has(item.imagen)) {
+            <img class="ranking-avatar" [src]="item.imagen" [alt]="item.nombre" loading="lazy"
+              (error)="fallidas.add(item.imagen)">
+          } @else {
+            <span class="ranking-avatar ranking-iniciales" aria-hidden="true">{{ iniciales(item.nombre) }}</span>
+          }
+
+          <div class="ranking-cuerpo">
+            <div class="ranking-linea">
+              <span class="ranking-nombre" [title]="item.nombre">{{ item.nombre }}</span>
+              <span class="ranking-valor">{{ valorPrincipal(item) }}</span>
+            </div>
+            <div class="ranking-barra" aria-hidden="true">
+              <span [style.width.%]="porcentaje(item)"></span>
+            </div>
+            <div class="ranking-linea ranking-meta">
+              <span class="ranking-detalle" [title]="item.detalle ?? ''">{{ item.detalle }}</span>
+              <span>{{ valorSecundario(item) }}</span>
+            </div>
+          </div>
+        </li>
+      }
+    </ol>
+  }
+</section>

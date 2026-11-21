@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,4 +28,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     // Busca pedidos por estado ignorando mayúsculas y minúsculas, ordenados por fecha e ID descendentes
     @Query("SELECT p FROM Pedido p WHERE LOWER(p.estado) = LOWER(:estado) ORDER BY p.fechaCreacion DESC, p.id_Pedido DESC")
     List<Pedido> findByEstadoIgnoreCase(@Param("estado") String estado);
+
+    // Reportes: pedidos creados dentro de un rango de fechas (con su cliente para no hacer una consulta por pedido)
+    @Query("SELECT p FROM Pedido p LEFT JOIN FETCH p.cliente WHERE p.fechaCreacion >= :desde AND p.fechaCreacion < :hasta")
+    List<Pedido> findCreadosEntre(@Param("desde") LocalDateTime desde, @Param("hasta") LocalDateTime hasta);
+
+    // Reportes: cuantos pedidos estan en un estado (por ejemplo, los activos en este momento)
+    long countByEstadoIgnoreCase(String estado);
 }
