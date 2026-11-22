@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -10,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -180,17 +180,10 @@ public class ReporteServiceImpl implements ReporteService {
         return (actual - anterior) * 100 / anterior;
     }
 
-    // Promedio de minutos entre que se crea el pedido y se entrega (solo pedidos entregados)
+    // Promedio de minutos entre que se crea el pedido y se entrega; null si no hubo entregas
     private Double minutosPromedioEntrega(List<Pedido> pedidos) {
-        return pedidos.stream()
-                .filter(p -> ENTREGADO.equalsIgnoreCase(p.getEstado()))
-                .filter(p -> p.getFechaCreacion() != null && p.getFechaEntrega() != null)
-                .mapToLong(p -> Duration.between(p.getFechaCreacion(), p.getFechaEntrega()).toMinutes())
-                // Se descartan datos imposibles (negativos o de mas de un dia)
-                .filter(minutos -> minutos > 0 && minutos < 24 * 60)
-                .average()
-                .stream().boxed().findFirst()
-                .orElse(null);
+        OptionalDouble promedio = TiemposEntrega.promedioMinutos(pedidos);
+        return promedio.isPresent() ? promedio.getAsDouble() : null;
     }
 
     private List<VentaDia> ventasPorDia(LocalDate desde, LocalDate hasta, DatosPeriodo datos) {

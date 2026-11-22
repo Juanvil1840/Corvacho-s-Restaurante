@@ -29,6 +29,7 @@ import com.example.demo.entities.Cliente;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Pedido;
 import com.example.demo.service.PedidoService;
+import com.example.demo.service.SeguimientoPedidoService;
 
 // Pruebas unitarias con MOCKS del controlador REST (PedidoRestController) usando MockMvc y @MockitoBean
 @WebMvcTest(PedidoRestController.class)
@@ -42,6 +43,10 @@ class PedidoRestControllerTest {
     // Se simula (mockea) el servicio de negocio para aislar completamente la capa web del controlador
     @MockitoBean
     private PedidoService pedidoService;
+
+    // El controlador tambien expone el seguimiento en vivo
+    @MockitoBean
+    private SeguimientoPedidoService seguimientoService;
 
     private Pedido pedidoPrueba;
     private Cliente clientePrueba;

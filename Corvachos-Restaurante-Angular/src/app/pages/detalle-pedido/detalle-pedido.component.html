@@ -1,9 +1,22 @@
 <div class="pedidos-body">
   <main class="pedidos-container">
 
-    <button type="button" (click)="volver()" class="btn-volver">
-      <i class="bi bi-arrow-left"></i> Volver
-    </button>
+    <div class="detalle-barra-superior">
+      <button type="button" (click)="volver()" class="btn-volver">
+        <i class="bi bi-arrow-left"></i> Volver
+      </button>
+
+      @if (seguimiento && seguimiento.paso !== 4) {
+        <span class="conexion" [ngClass]="conexion" role="status">
+          <span class="punto"></span>
+          @switch (conexion) {
+            @case ('en-vivo') { En vivo }
+            @case ('reconectando') { Reconectando… }
+            @default { Conectando… }
+          }
+        </span>
+      }
+    </div>
 
     @if (cargando) {
       <p class="pedido-lista-mensaje">Cargando detalle del pedido...</p>
@@ -18,9 +31,21 @@
       <!-- Subcomponente de Cabecera (Fechas, Estado y Cliente) -->
       <app-pedido-cabecera [pedido]="pedido"></app-pedido-cabecera>
 
+      <!-- Hora estimada de llegada (solo mientras se sigue el pedido en vivo) -->
+      @if (seguimiento) {
+        <app-pedido-llegada [seguimiento]="seguimiento" [ahora]="ahora"></app-pedido-llegada>
+      }
+
       <!-- Subcomponente de Tabla de Productos y Total -->
       <app-pedido-productos [detalles]="detalles"></app-pedido-productos>
 
     }
   </main>
+
+  @if (aviso) {
+    <div class="aviso" role="alert">
+      <i class="bi" [ngClass]="aviso.icono"></i>
+      <span>{{ aviso.texto }}</span>
+    </div>
+  }
 </div>

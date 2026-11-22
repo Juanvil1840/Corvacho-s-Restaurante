@@ -56,6 +56,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         filter(event => event instanceof NavigationEnd)
       ).subscribe(event => {
         this.actualizarEstadoRuta((event as NavigationEnd).urlAfterRedirects);
+        this.cerrarMenuMovil();
       })
     );
 
@@ -87,6 +88,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   // Actualiza las banderas de vista y sesión según la URL actual
+  // En celular el menú desplegable de Bootstrap queda abierto al cambiar de página; aquí se cierra
+  private cerrarMenuMovil(): void {
+    const menu = document.getElementById('navbarNav');
+    if (!menu?.classList.contains('show')) {
+      return;
+    }
+    const bootstrap = (window as any).bootstrap;
+    if (bootstrap?.Collapse) {
+      bootstrap.Collapse.getOrCreateInstance(menu, { toggle: false }).hide();
+    } else {
+      menu.classList.remove('show');
+    }
+  }
+
   private actualizarEstadoRuta(url: string): void {
     this.esPaginaLogin = url === '/login' || url.startsWith('/login?');
     this.esPortalOperario = url.startsWith('/portal-operario') || url.startsWith('/login-operario');
@@ -205,11 +220,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.carritoService.notificarPedidoCreado();
         this.exitoPedido = `¡Pedido #${pedidoCreado.id_Pedido} realizado con éxito! Estado: ${pedidoCreado.estado}`;
 
-        // Cierra el carrito después de unos instantes y lleva al cliente a su perfil
+        // Cierra el carrito después de unos instantes y lleva al cliente al detalle de su pedido, que se actualiza en vivo
         setTimeout(() => {
           this.cerrarCarrito();
           this.exitoPedido = '';
-          this.router.navigate(['/clientes/perfil', cliente.clienteId]);
+          this.router.navigate(['/pedidos/detalle', pedidoCreado.id_Pedido]);
         }, 1200);
       },
       error: (err) => {

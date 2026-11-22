@@ -35,4 +35,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     // Reportes: cuantos pedidos estan en un estado (por ejemplo, los activos en este momento)
     long countByEstadoIgnoreCase(String estado);
+
+    // Seguimiento: pedidos entregados desde una fecha, para calcular el tiempo promedio de entrega
+    @Query("SELECT p FROM Pedido p WHERE LOWER(p.estado) = 'entregado' AND p.fechaEntrega IS NOT NULL AND p.fechaCreacion >= :desde")
+    List<Pedido> findEntregadosDesde(@Param("desde") LocalDateTime desde);
 }

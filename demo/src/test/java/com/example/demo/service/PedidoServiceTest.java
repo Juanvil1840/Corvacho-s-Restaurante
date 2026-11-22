@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -62,6 +63,10 @@ class PedidoServiceTest {
 
     @Mock
     private AdicionalRepository adicionalRepository;
+
+    // Publica el aviso de pedido actualizado (seguimiento en vivo)
+    @Mock
+    private ApplicationEventPublisher eventos;
 
     @InjectMocks
     private PedidoServiceImpl pedidoService;

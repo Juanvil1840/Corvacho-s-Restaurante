@@ -2,6 +2,8 @@ package com.example.demo.security;
 
 import java.util.List;
 
+import jakarta.servlet.DispatcherType;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -54,6 +56,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
             .authorizeHttpRequests(auth -> auth
+                // Respuestas que siguen abiertas (seguimiento en vivo): la peticion original ya se autorizo
+                // con el JWT; Spring la vuelve a despachar internamente (ASYNC) para enviar cada evento
+                .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
+
                 // ---------- Publico ----------
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/h2/**", "/error").permitAll()
@@ -95,7 +101,8 @@ public class SecurityConfig {
 
                 // ---------- Pedidos ----------
                 .requestMatchers(HttpMethod.POST, "/api/pedidos").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
-                .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**", "/api/pedidos/*").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**", "/api/pedidos/*", "/api/pedidos/*/seguimiento")
+                        .hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
                 .requestMatchers("/api/pedidos/**").hasAnyAuthority(OPERADOR, ADMIN)
                 .requestMatchers("/api/detalles-pedido/**").hasAnyAuthority(OPERADOR, ADMIN)
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProductoRepository productoRepository;
     private final DetallePedidoRepository detallePedidoRepository;
     private final AdicionalRepository adicionalRepository;
+    private final ApplicationEventPublisher eventos;
 
     // Constructor con inyeccion de todos los repositorios requeridos
     public PedidoServiceImpl(
@@ -53,7 +55,8 @@ public class PedidoServiceImpl implements PedidoService {
             DomiciliarioRepository domiciliarioRepository,
             ProductoRepository productoRepository,
             DetallePedidoRepository detallePedidoRepository,
-            AdicionalRepository adicionalRepository) {
+            AdicionalRepository adicionalRepository,
+            ApplicationEventPublisher eventos) {
         this.pedidoRepository = pedidoRepository;
         this.clienteRepository = clienteRepository;
         this.operadorRepository = operadorRepository;
@@ -61,6 +64,7 @@ public class PedidoServiceImpl implements PedidoService {
         this.productoRepository = productoRepository;
         this.detallePedidoRepository = detallePedidoRepository;
         this.adicionalRepository = adicionalRepository;
+        this.eventos = eventos;
     }
 
     // Obtiene todos los pedidos registrados
@@ -196,6 +200,8 @@ public class PedidoServiceImpl implements PedidoService {
             guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos(), productosPrevios);
         }
 
+        // Avisa que el pedido cambio (lo escucha el seguimiento en vivo del cliente)
+        eventos.publishEvent(new PedidoActualizadoEvent(actualizado.getId_Pedido()));
         return actualizado;
     }
 
