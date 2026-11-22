@@ -22,6 +22,9 @@
               <p><strong>Estado:</strong> <span class="pedido-estado">{{ pedido.estado }}</span></p>
               <p><strong>Fecha:</strong> <span>{{ pedido.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
               <p><strong>Total:</strong> <span class="pedido-total">$ {{ pedido.total | number }}</span></p>
+              @if (pedido.cupon) {
+                <p><strong>Cupón:</strong> <span>{{ pedido.cupon }} (ahorraste $ {{ pedido.descuento | number }})</span></p>
+              }
 
               <!-- Detalles del pedido -->
               @if (pedido.productos.length > 0) {

@@ -1,16 +1,3 @@
-// Fila de arriba: botón Volver y, a la derecha, el indicador de seguimiento en vivo
-.detalle-barra-superior { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-
-.conexion {
-  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
-  font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  border: 1px solid currentColor; color: #9fb3bf;
-
-  .punto { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-  &.en-vivo { color: #6fcf97; .punto { animation: pulso 1.6s infinite; } }
-  &.reconectando { color: #e2b765; }
-}
-
 // Aviso flotante cuando el pedido cambia de estado
 .aviso {
   position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 1100;
@@ -21,6 +8,5 @@
   i { font-size: 1.4rem; }
 }
 
-@keyframes pulso { 50% { opacity: 0.3; } }
 @keyframes subir { from { opacity: 0; transform: translate(-50%, 20px); } }
-@media (prefers-reduced-motion: reduce) { .aviso, .conexion .punto { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .aviso { animation: none !important; } }

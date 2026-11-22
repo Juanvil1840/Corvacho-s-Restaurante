@@ -238,6 +238,16 @@
           <span>Total en productos:</span>
           <strong>{{ calcularTotal() | currency:'USD':'symbol':'1.0-0' }}</strong>
         </div>
+        @if (cupon) {
+          <div class="pedido-comidas-total" style="border-top: none; padding-top: 0.2rem;">
+            <span>Cupón {{ cupon.codigo }}:</span>
+            <strong style="color: #6fcf97; font-size: 1rem;">− {{ descuentoCupon() | currency:'USD':'symbol':'1.0-0' }}</strong>
+          </div>
+          <div class="pedido-comidas-total" style="border-top: none; padding-top: 0.2rem;">
+            <span>Total a pagar:</span>
+            <strong>{{ calcularTotal() - descuentoCupon() | currency:'USD':'symbol':'1.0-0' }}</strong>
+          </div>
+        }
       </div>
     } @else {
       <p class="pedido-sin-comidas">

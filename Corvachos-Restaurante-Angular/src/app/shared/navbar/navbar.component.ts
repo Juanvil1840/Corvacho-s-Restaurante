@@ -7,12 +7,14 @@ import { CarritoService, ItemCarrito } from '../../service/carrito.service';
 import { PedidoService } from '../../service/pedido.service';
 import { AuthService } from '../../service/auth.service';
 import { Cliente } from '../../models/cliente.model';
+import { CuponValidado } from '../../models/cupon.model';
+import { CarritoCuponComponent } from '../carrito-cupon/carrito-cupon.component';
 
 // Barra de navegación principal que incluye los enlaces de acceso, estado de sesión y el panel del carrito de compras
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CarritoCuponComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -36,6 +38,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   enviandoPedido = false;
   errorPedido = '';
   exitoPedido = '';
+
+  // Cupón de descuento aplicado en el carrito (el backend lo vuelve a validar al crear el pedido)
+  cuponAplicado: CuponValidado | null = null;
 
   // Suscripciones activas para liberarlas al destruir el componente
   private subs: Subscription[] = [];
@@ -69,6 +74,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.carritoService.items$.subscribe(items => {
         this.itemsCarrito = items;
+        if (items.length === 0) {
+          this.cuponAplicado = null;
+        }
       })
     );
 
@@ -132,6 +140,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   // Calcula el precio unitario de un ítem sumando sus adicionales
+  // Lo que se paga: el total menos el descuento del cupón
+  get totalAPagar(): number {
+    return Math.max(0, this.totalPrecio - (this.cuponAplicado?.descuento ?? 0));
+  }
+
   calcularUnitario(item: ItemCarrito): number {
     return this.carritoService.calcularPrecioUnitarioItem(item);
   }
@@ -202,6 +215,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Solo se envian ids y cantidades, el backend busca los precios
     const nuevoPedido = {
       cliente: { clienteId: cliente.clienteId },
+      codigoCupon: this.cuponAplicado?.codigo ?? null,
       detallePedidos: this.itemsCarrito.map(item => ({
         cantidad: item.cantidad,
         producto: { id: item.producto.id },
@@ -216,6 +230,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.pedidoService.agregarPedido(nuevoPedido).subscribe({
       next: (pedidoCreado) => {
         this.enviandoPedido = false;
+        this.cuponAplicado = null;
         this.carritoService.vaciarCarrito();
         this.carritoService.notificarPedidoCreado();
         this.exitoPedido = `¡Pedido #${pedidoCreado.id_Pedido} realizado con éxito! Estado: ${pedidoCreado.estado}`;

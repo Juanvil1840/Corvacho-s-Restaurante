@@ -44,6 +44,14 @@ export interface Conteo {
   cantidad: number;
 }
 
+// Uso de cupones en el periodo; en el ranking nombre = código, cantidad = usos, total = valor descontado
+export interface ResumenCupones {
+  totalDescontado: number;
+  pedidosConCupon: number;
+  porcentajePedidos: number;
+  ranking: Ranking[];
+}
+
 export interface ReporteDashboard {
   periodo: Periodo;
   indicadores: Indicadores;
@@ -55,6 +63,7 @@ export interface ReporteDashboard {
   pedidosPorEstado: Conteo[];
   // Matriz 7x24: fila 0 = lunes ... fila 6 = domingo, columna = hora del dia
   mapaCalor: number[][];
+  cupones?: ResumenCupones;
 }
 
 // Rango de fechas en formato ISO (yyyy-MM-dd)

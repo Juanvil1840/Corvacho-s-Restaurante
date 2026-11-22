@@ -71,8 +71,11 @@
               icono="bi-stars" metrica="total" [items]="reporte.topAdicionales"
               textoVacio="Ningún pedido llevó adicionales"></app-reporte-ranking>
 
-            <app-reporte-ranking class="ancho-completo" titulo="Mejores clientes" subtitulo="Quiénes más compraron en el periodo"
+            <app-reporte-ranking class="ancho-doble" titulo="Mejores clientes" subtitulo="Quiénes más compraron en el periodo"
               icono="bi-gem" metrica="total" unidad="pedidos" [items]="reporte.topClientes"></app-reporte-ranking>
+            <app-reporte-ranking titulo="Cupones más usados" [subtitulo]="resumenCupones" icono="bi-ticket-perforated"
+              metrica="cantidad" unidad="usos" [items]="reporte.cupones?.ranking ?? []"
+              textoVacio="Crea cupones en el panel de control"></app-reporte-ranking>
           </div>
         }
       </div>

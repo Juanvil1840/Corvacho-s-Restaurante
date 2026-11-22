@@ -27,6 +27,7 @@ import com.example.demo.entities.Adicional;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Cupon;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Pedido;
@@ -67,6 +68,10 @@ class PedidoServiceTest {
     // Publica el aviso de pedido actualizado (seguimiento en vivo)
     @Mock
     private ApplicationEventPublisher eventos;
+
+    // Valida los cupones de descuento
+    @Mock
+    private CuponService cuponService;
 
     @InjectMocks
     private PedidoServiceImpl pedidoService;
@@ -126,6 +131,62 @@ class PedidoServiceTest {
 
         verify(pedidoRepository).save(any(Pedido.class));
         verify(detallePedidoRepository).save(any(DetallePedido.class));
+    }
+
+    // 1b. Con cupon: el descuento lo calcula el backend con los precios reales y se ignora el que mande el frontend
+    @Test
+    void crearPedido_conCupon_aplicaDescuentoDelBackend() {
+        Pedido pedido = crearPedidoBase(clienteActivo, null);
+        DetallePedido detalle = new DetallePedido();
+        detalle.setPedido(pedido);
+        detalle.setProducto(productoValido);
+        detalle.setCantidad(2);
+        detalle.setAdicionales(new ArrayList<>(List.of(new AdicionalSeleccionado(20L, "Falso", 1, 1))));
+        pedido.setDetallePedidos(new ArrayList<>(List.of(detalle)));
+        pedido.setCodigoCupon("bienvenida10");
+        pedido.setDescuento(999999.0); // intento de trampa desde el navegador
+
+        Cupon cupon = new Cupon("BIENVENIDA10", null, Cupon.PORCENTAJE, 10, 0, null, null, true);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteActivo));
+        when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> {
+            Pedido p = invocation.getArgument(0);
+            p.setId_Pedido(100L);
+            return p;
+        });
+        when(productoRepository.findById(10L)).thenReturn(Optional.of(productoValido));
+        when(adicionalRepository.findById(20L)).thenReturn(Optional.of(adicionalValido));
+        // (30.000 del plato + 5.000 del adicional) x 2 = 70.000
+        when(cuponService.validar("bienvenida10", 70000)).thenReturn(cupon);
+        when(cuponService.calcularDescuento(cupon, 70000)).thenReturn(7000.0);
+
+        Pedido resultado = pedidoService.crearPedido(pedido);
+
+        assertThat(resultado.getCupon()).isSameAs(cupon);
+        assertThat(resultado.getDescuento()).isEqualTo(7000.0);
+        verify(cuponService).registrarUso(cupon);
+    }
+
+    // 1c. Sin cupon no queda ningun descuento aunque el frontend mande uno
+    @Test
+    void crearPedido_sinCupon_ignoraDescuentoDelFrontend() {
+        Pedido pedido = crearPedidoBase(clienteActivo, null);
+        DetallePedido detalle = new DetallePedido();
+        detalle.setPedido(pedido);
+        detalle.setProducto(productoValido);
+        detalle.setCantidad(1);
+        pedido.setDetallePedidos(new ArrayList<>(List.of(detalle)));
+        pedido.setDescuento(5000.0);
+        pedido.setCupon(new Cupon("FALSO", null, Cupon.VALOR_FIJO, 5000, 0, null, null, true));
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteActivo));
+        when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(productoRepository.findById(10L)).thenReturn(Optional.of(productoValido));
+
+        Pedido resultado = pedidoService.crearPedido(pedido);
+
+        assertThat(resultado.getCupon()).isNull();
+        assertThat(resultado.valorDescuento()).isZero();
+        verify(cuponService, never()).registrarUso(any());
     }
 
     // 2. Crear pedido falla si el cliente está desactivado

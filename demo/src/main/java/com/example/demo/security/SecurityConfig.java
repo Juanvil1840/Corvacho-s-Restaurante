@@ -106,6 +106,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/pedidos/**").hasAnyAuthority(OPERADOR, ADMIN)
                 .requestMatchers("/api/detalles-pedido/**").hasAnyAuthority(OPERADOR, ADMIN)
 
+                // ---------- Cupones: el cliente solo prueba un codigo en su carrito; el resto es del admin ----------
+                .requestMatchers(HttpMethod.GET, "/api/cupones/validar").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
+                .requestMatchers("/api/cupones/**").hasAuthority(ADMIN)
+
                 // Cualquier otra cosa requiere estar autenticado
                 .anyRequest().authenticated()
             );

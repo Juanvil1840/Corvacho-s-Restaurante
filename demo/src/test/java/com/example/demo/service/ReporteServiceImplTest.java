@@ -27,6 +27,7 @@ import com.example.demo.dto.reportes.ReporteDashboardDTO;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Categoria;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Cupon;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
 import com.example.demo.entities.Producto;
@@ -130,6 +131,30 @@ class ReporteServiceImplTest {
 
         assertThat(reporte.indicadores().variacionVentas()).isNull();
         assertThat(reporte.indicadores().variacionPedidos()).isNull();
+    }
+
+    // 2b. Las ventas son lo cobrado (con el descuento del cupon restado) y se resume el uso de cupones
+    @Test
+    void generarDashboard_restaDescuentosYResumeCupones() {
+        Cupon cupon = new Cupon("BIENVENIDA10", "Bienvenida", Cupon.PORCENTAJE, 10, 0, null, null, true);
+        cupon.setId_cupon(7L);
+        Pedido conCupon = pedido(ana, LocalDateTime.of(2026, 11, 16, 13, 0), 30);
+        conCupon.setCupon(cupon);
+        conCupon.setDescuento(3000.0);
+        Pedido sinCupon = pedido(luis, LocalDateTime.of(2026, 11, 17, 13, 0), 30);
+        simularPeriodo(DESDE, HASTA, List.of(conCupon, sinCupon), List.of(detalle(conCupon, 1), detalle(sinCupon, 1)));
+        simularPeriodo(DESDE_ANTERIOR, DESDE.minusDays(1), List.of(), List.of());
+        when(pedidoRepository.findByEstadoNotIgnoreCase("Entregado")).thenReturn(List.of());
+
+        ReporteDashboardDTO reporte = reporteService.generarDashboard(DESDE, HASTA);
+
+        // 30.000 - 3.000 + 30.000
+        assertThat(reporte.indicadores().ventas()).isEqualTo(57000);
+        assertThat(reporte.cupones().totalDescontado()).isEqualTo(3000);
+        assertThat(reporte.cupones().pedidosConCupon()).isEqualTo(1);
+        assertThat(reporte.cupones().porcentajePedidos()).isCloseTo(50.0, within(0.001));
+        assertThat(reporte.cupones().ranking()).singleElement()
+                .satisfies(r -> assertThat(r.nombre()).isEqualTo("BIENVENIDA10"));
     }
 
     // 3. Rango invalido (inicio despues del fin) responde 400 y no consulta la base de datos

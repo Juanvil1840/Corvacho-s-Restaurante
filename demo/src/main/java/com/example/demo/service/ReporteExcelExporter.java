@@ -38,6 +38,9 @@ public class ReporteExcelExporter {
             hojaRanking(libro, estilos, "Adicionales", "Adicional", null, reporte.topAdicionales());
             hojaRanking(libro, estilos, "Categorías", "Categoría", null, reporte.ventasPorCategoria());
             hojaRanking(libro, estilos, "Clientes", "Cliente", "Correo", reporte.topClientes());
+            if (reporte.cupones() != null) {
+                hojaRanking(libro, estilos, "Cupones", "Cupón", "Descripción", reporte.cupones().ranking());
+            }
 
             libro.write(salida);
             return salida.toByteArray();
@@ -65,6 +68,10 @@ public class ReporteExcelExporter {
         fila = filaIndicador(hoja, fila, estilos, "Platos vendidos", ind.unidadesVendidas(), estilos.entero, null);
         fila = filaIndicador(hoja, fila, estilos, "Ingresos por adicionales", ind.ingresosAdicionales(), estilos.moneda, null);
         fila = filaIndicador(hoja, fila, estilos, "% de ventas por adicionales", ind.porcentajeAdicionales() / 100, estilos.porcentaje, null);
+        if (reporte.cupones() != null) {
+            fila = filaIndicador(hoja, fila, estilos, "Descuentos con cupones", reporte.cupones().totalDescontado(), estilos.moneda, null);
+            fila = filaIndicador(hoja, fila, estilos, "Pedidos con cupón", reporte.cupones().pedidosConCupon(), estilos.entero, null);
+        }
         if (ind.minutosPromedioEntrega() != null) {
             filaIndicador(hoja, fila, estilos, "Tiempo promedio de entrega (min)", ind.minutosPromedioEntrega(), estilos.decimal, null);
         }

@@ -1,22 +1,9 @@
 <div class="pedidos-body">
   <main class="pedidos-container">
 
-    <div class="detalle-barra-superior">
-      <button type="button" (click)="volver()" class="btn-volver">
-        <i class="bi bi-arrow-left"></i> Volver
-      </button>
-
-      @if (seguimiento && seguimiento.paso !== 4) {
-        <span class="conexion" [ngClass]="conexion" role="status">
-          <span class="punto"></span>
-          @switch (conexion) {
-            @case ('en-vivo') { En vivo }
-            @case ('reconectando') { Reconectando… }
-            @default { Conectando… }
-          }
-        </span>
-      }
-    </div>
+    <button type="button" (click)="volver()" class="btn-volver">
+      <i class="bi bi-arrow-left"></i> Volver
+    </button>
 
     @if (cargando) {
       <p class="pedido-lista-mensaje">Cargando detalle del pedido...</p>
@@ -37,7 +24,7 @@
       }
 
       <!-- Subcomponente de Tabla de Productos y Total -->
-      <app-pedido-productos [detalles]="detalles"></app-pedido-productos>
+      <app-pedido-productos [detalles]="detalles" [cupon]="pedido.cupon" [descuento]="pedido.descuento || 0"></app-pedido-productos>
 
     }
   </main>

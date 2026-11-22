@@ -1,0 +1,22 @@
+.cupon-codigo {
+  font-family: 'Montserrat', sans-serif; font-weight: 700; letter-spacing: 0.08em; color: #cd9e46;
+  border: 1px dashed rgba(205, 158, 70, 0.6); border-radius: 6px; padding: 2px 8px; display: inline-block;
+}
+
+.cupon-descripcion { display: block; color: #9fb3bf; font-size: 0.8rem; margin-top: 4px; }
+
+.cupon-usos {
+  display: block; width: 90px; height: 4px; border-radius: 4px; background: #1d3a4a; margin-top: 6px; overflow: hidden;
+  span { display: block; height: 100%; background: #cd9e46; }
+}
+
+.cupon-estado {
+  display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  font-family: 'Montserrat', sans-serif; border: 1px solid currentColor;
+  &.activo { color: #6fcf97; }
+  &.inactivo { color: #9fb3bf; }
+  &.vencido { color: #eb6e64; }
+  &.agotado { color: #e2b765; }
+}
+
+.cupon-acciones { white-space: nowrap; }

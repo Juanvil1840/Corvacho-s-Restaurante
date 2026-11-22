@@ -1,0 +1,27 @@
+<div class="body-adicional-lista">
+  <div class="adicional-lista-contenedor">
+    <h1 class="adicional-lista-titulo">Cupones de descuento</h1>
+
+    <div class="adicional-lista-acciones">
+      <a routerLink="/cupones/nuevo" class="adicional-lista-btn-nuevo">
+        + Nuevo Cupón
+      </a>
+    </div>
+
+    @if (cargando) {
+      <p class="adicional-lista-mensaje">Cargando cupones...</p>
+    }
+
+    @if (error) {
+      <p class="adicional-lista-error">{{ error }}</p>
+    }
+
+    @if (!cargando) {
+      <app-cupon-tabla
+        [cupones]="cupones"
+        (eliminar)="eliminarCupon($event)"
+        (cambiarActivo)="cambiarActivo($event)">
+      </app-cupon-tabla>
+    }
+  </div>
+</div>

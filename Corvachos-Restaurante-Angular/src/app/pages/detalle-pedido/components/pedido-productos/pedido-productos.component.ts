@@ -12,6 +12,9 @@ import { AdicionalPedido, DetallePedido } from '../../../../models/detallePedido
 export class PedidoProductosComponent {
   
   @Input() detalles: DetallePedido[] = [];
+  // Cupón usado en el pedido y valor descontado (el total ya lo tiene restado)
+  @Input() cupon: string | null | undefined = null;
+  @Input() descuento = 0;
 
   getAdicionales(detalle: DetallePedido): AdicionalPedido[] {
     return detalle.adicionales || [];
@@ -25,11 +28,15 @@ export class PedidoProductosComponent {
     return precioUnitario * detalle.cantidad;
   }
 
-  calcularTotal(): number {
+  calcularSubtotalPedido(): number {
     let total = 0;
     for (const detalle of this.detalles) {
       total += this.calcularSubtotal(detalle);
     }
     return total;
+  }
+
+  calcularTotal(): number {
+    return Math.max(0, this.calcularSubtotalPedido() - (this.descuento || 0));
   }
 }

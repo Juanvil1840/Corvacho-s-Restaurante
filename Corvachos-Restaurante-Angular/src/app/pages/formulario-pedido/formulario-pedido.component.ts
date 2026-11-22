@@ -14,7 +14,7 @@ import { PedidoGuardar } from '../../models/pedido.model';
 import { Cliente } from '../../models/cliente.model';
 import { Operador } from '../../models/operador.model';
 import { Domiciliario } from '../../models/domiciliario.model';
-import { ComidaPedido, FormularioPedido, PedidoCamposComponent } from './components/pedido-campos/pedido-campos.component';
+import { ComidaPedido, CuponFormulario, FormularioPedido, PedidoCamposComponent } from './components/pedido-campos/pedido-campos.component';
 
 // Página de formulario para crear o editar un pedido, su estado, domiciliario y comidas
 @Component({
@@ -48,6 +48,7 @@ export class FormularioPedidoComponent implements OnInit {
   idPedido = 0;
   editando = false;
   estadoOriginal = 'Recibido';
+  cupon: CuponFormulario | null = null;
   domiciliarioAsignadoId = 0;
   guardando = false;
   error = '';
@@ -93,6 +94,10 @@ export class FormularioPedidoComponent implements OnInit {
       this.pedidoService.getPedidoById(this.idPedido).subscribe({
         next: (pedido) => {
           this.estadoOriginal = pedido.estado;
+          // Cupon con el que se pago el pedido, para mostrar el descuento en el formulario
+          this.cupon = pedido.cupon
+            ? { codigo: pedido.cupon, tipo: pedido.cuponTipo ?? '', valor: pedido.cuponValor ?? 0 }
+            : null;
           this.domiciliarioAsignadoId = pedido.domiciliario?.id_domiciliario ?? 0;
           this.formulario = {
             estado: pedido.estado,

@@ -17,6 +17,9 @@ export interface PedidoHistorial {
   id_Pedido: number;
   estado: string;
   fechaCreacion: string;
+  // Total pagado (ya con el descuento del cupón restado)
   total: number;
   productos: DetalleHistorial[];
+  cupon?: string | null;
+  descuento?: number;
 }

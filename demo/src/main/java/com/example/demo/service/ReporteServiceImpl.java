@@ -21,9 +21,11 @@ import com.example.demo.dto.reportes.ReporteDashboardDTO.Conteo;
 import com.example.demo.dto.reportes.ReporteDashboardDTO.Indicadores;
 import com.example.demo.dto.reportes.ReporteDashboardDTO.Periodo;
 import com.example.demo.dto.reportes.ReporteDashboardDTO.Ranking;
+import com.example.demo.dto.reportes.ReporteDashboardDTO.ResumenCupones;
 import com.example.demo.dto.reportes.ReporteDashboardDTO.VentaDia;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Cupon;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
 import com.example.demo.entities.Producto;
@@ -99,7 +101,8 @@ public class ReporteServiceImpl implements ReporteService {
                 ventasPorCategoria(actual.detalles()),
                 topClientes(actual, limiteRanking),
                 pedidosPorEstado(actual.pedidos()),
-                mapaCalor(actual.pedidos()));
+                mapaCalor(actual.pedidos()),
+                resumenCupones(actual.pedidos(), limiteRanking));
     }
 
     // ---------------------------------------------------------------- carga de datos
@@ -147,6 +150,12 @@ public class ReporteServiceImpl implements ReporteService {
         }
         for (DetallePedido detalle : detalles) {
             totalPorPedido.merge(detalle.getPedido().getId_Pedido(), subtotal(detalle), Double::sum);
+        }
+        // Las ventas son lo que realmente se cobro: se resta el descuento de los cupones
+        for (Pedido pedido : pedidos) {
+            if (pedido.valorDescuento() > 0) {
+                totalPorPedido.merge(pedido.getId_Pedido(), -pedido.valorDescuento(), Double::sum);
+            }
         }
         return new DatosPeriodo(pedidos, detalles, totalPorPedido);
     }
@@ -260,6 +269,28 @@ public class ReporteServiceImpl implements ReporteService {
                     .sumar(1, datos.totalPorPedido().getOrDefault(pedido.getId_Pedido(), 0.0));
         }
         return ordenar(porCliente, limite, Comparator.comparingDouble(Acumulado::getTotal).reversed());
+    }
+
+    // Cuanto se desconto con cupones y cuales se usaron mas
+    private ResumenCupones resumenCupones(List<Pedido> pedidos, int limite) {
+        Map<Long, Acumulado> porCupon = new HashMap<>();
+        double totalDescontado = 0;
+        long pedidosConCupon = 0;
+        for (Pedido pedido : pedidos) {
+            Cupon cupon = pedido.getCupon();
+            if (cupon == null) {
+                continue;
+            }
+            pedidosConCupon++;
+            totalDescontado += pedido.valorDescuento();
+            porCupon.computeIfAbsent(cupon.getId_cupon(),
+                    id -> new Acumulado(id, cupon.getCodigo(), cupon.getDescripcion(), null))
+                    .sumar(1, pedido.valorDescuento());
+        }
+        double porcentaje = pedidos.isEmpty() ? 0 : pedidosConCupon * 100.0 / pedidos.size();
+        return new ResumenCupones(totalDescontado, pedidosConCupon, porcentaje,
+                ordenar(porCupon, limite, Comparator.comparingLong(Acumulado::getCantidad)
+                        .thenComparingDouble(Acumulado::getTotal).reversed()));
     }
 
     private List<Conteo> pedidosPorEstado(List<Pedido> pedidos) {

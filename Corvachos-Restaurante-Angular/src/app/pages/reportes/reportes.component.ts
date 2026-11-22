@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { EMPTY, Subject, catchError, finalize, map, switchMap, timer } from 'rxjs';
 import { RangoFechas, ReporteDashboard } from '../../models/reporte.model';
 import { ReporteService } from '../../service/reporte.service';
-import { fechaLegible } from './reporte-formato';
+import { fechaLegible, formatear } from './reporte-formato';
 import { ReporteFiltrosComponent } from './components/reporte-filtros/reporte-filtros.component';
 import { ReporteKpisComponent } from './components/reporte-kpis/reporte-kpis.component';
 import { GraficaVentasComponent } from './components/grafica-ventas/grafica-ventas.component';
@@ -92,6 +92,16 @@ export class ReportesComponent implements OnInit {
 
   get horaActualizacion(): string {
     return this.ultimaActualizacion?.toLocaleTimeString('es-CO', { hour: 'numeric', minute: '2-digit' }) ?? '';
+  }
+
+  // Ej: "$ 225.950 descontados en 16 pedidos (5,8% del total)"
+  get resumenCupones(): string {
+    const cupones = this.reporte?.cupones;
+    if (!cupones || cupones.pedidosConCupon === 0) {
+      return 'Ningún pedido usó cupón en este periodo';
+    }
+    return `${formatear(cupones.totalDescontado, 'moneda')} descontados en ${formatear(cupones.pedidosConCupon, 'entero')} `
+      + `pedidos (${formatear(cupones.porcentajePedidos, 'decimal')}% del total)`;
   }
 
   get sinPedidos(): boolean {

@@ -61,6 +61,12 @@ export const routes: Routes = [
     { path: 'adicionales', component: ListaAdicionalesComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
     { path: 'adicionales/nuevo', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
     { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+
+    // Cupones de descuento (solo admin); se cargan bajo demanda
+    { path: 'cupones', loadComponent: () => import('./pages/lista-cupones/lista-cupones.component').then(m => m.ListaCuponesComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'cupones/nuevo', loadComponent: () => import('./pages/formulario-cupon/formulario-cupon.component').then(m => m.FormularioCuponComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'cupones/editar/:id', loadComponent: () => import('./pages/formulario-cupon/formulario-cupon.component').then(m => m.FormularioCuponComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+
     { path: 'portal-operario', component: PortalOperarioComponent, canActivate: [authGuard], data: SOLO_OPERADOR },
 
     // CRUD Pedido y Domiciliario

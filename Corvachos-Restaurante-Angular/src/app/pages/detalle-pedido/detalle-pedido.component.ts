@@ -9,7 +9,7 @@ import { SeguimientoService } from '../../service/seguimiento.service';
 import { Pedido } from '../../models/pedido.model';
 import { AdicionalPedido, DetallePedido } from '../../models/detallePedido.model';
 import { ESTADOS_PEDIDO } from '../../models/estado-pedido.model';
-import { EstadoConexion, EventoSeguimiento, SeguimientoPedido } from '../../models/seguimiento.model';
+import { EventoSeguimiento, SeguimientoPedido } from '../../models/seguimiento.model';
 
 import { PedidoCabeceraComponent } from './components/pedido-cabecera/pedido-cabecera.component';
 import { PedidoProductosComponent } from './components/pedido-productos/pedido-productos.component';
@@ -43,9 +43,8 @@ export class DetallePedidoComponent implements OnInit {
   cargando = true;
   error = '';
 
-  // Seguimiento en vivo: hora estimada, estado de la conexión y aviso cuando el pedido avanza
+  // Seguimiento en vivo: hora estimada y aviso cuando el pedido avanza
   seguimiento: SeguimientoPedido | null = null;
-  conexion: EstadoConexion = 'conectando';
   ahora = new Date();
   aviso: Aviso | null = null;
   private temporizadorAviso?: ReturnType<typeof setTimeout>;
@@ -103,8 +102,8 @@ export class DetallePedidoComponent implements OnInit {
   }
 
   private procesarEvento(evento: EventoSeguimiento): void {
+    // Los eventos de conexión (reconectando, etc.) no se muestran en esta página
     if (evento.tipo === 'conexion') {
-      this.conexion = evento.estado;
       return;
     }
     const anterior = this.seguimiento;

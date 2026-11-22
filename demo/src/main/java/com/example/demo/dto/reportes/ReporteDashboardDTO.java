@@ -14,7 +14,8 @@ public record ReporteDashboardDTO(
         List<Ranking> ventasPorCategoria,
         List<Ranking> topClientes,
         List<Conteo> pedidosPorEstado,
-        int[][] mapaCalor) {
+        int[][] mapaCalor,
+        ResumenCupones cupones) {
 
     // Rango consultado (las fechas se incluyen completas)
     public record Periodo(LocalDate desde, LocalDate hasta, long dias) {
@@ -44,6 +45,12 @@ public record ReporteDashboardDTO(
 
     // Elemento de un ranking: producto, adicional, categoria o cliente
     public record Ranking(Long id, String nombre, String detalle, String imagen, long cantidad, double total) {
+    }
+
+    // Uso de cupones en el periodo: cuanto se desconto, en cuantos pedidos y que cupones se usaron mas
+    // (en el ranking: nombre = codigo, detalle = descripcion, cantidad = usos, total = valor descontado)
+    public record ResumenCupones(double totalDescontado, long pedidosConCupon, double porcentajePedidos,
+            List<Ranking> ranking) {
     }
 
     // Cantidad de pedidos por estado

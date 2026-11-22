@@ -1,0 +1,12 @@
+// Filas de subtotal y cupón encima del total (sin el recuadro dorado del total)
+.detalle-total-cupon {
+  border: 0;
+  background: none;
+  padding: 2px 28px;
+  color: #9fb3bf;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.detalle-total-cupon + .detalle-total:not(.detalle-total-cupon) { margin-top: 10px; }
+
+.detalle-descuento { color: #6fcf97; font-weight: 600; }

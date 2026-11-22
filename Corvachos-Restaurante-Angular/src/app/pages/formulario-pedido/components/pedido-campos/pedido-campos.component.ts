@@ -19,6 +19,13 @@ export interface FormularioPedido {
   domiciliarioId: number;
 }
 
+// Cupon aplicado a un pedido que se esta editando
+export interface CuponFormulario {
+  codigo: string;
+  tipo: string;
+  valor: number;
+}
+
 // Una comida del pedido con sus adicionales
 export interface ComidaPedido {
   producto: ProductoPedido;
@@ -46,6 +53,7 @@ export class PedidoCamposComponent {
   @Input() editando: boolean = false;
   @Input() estadoOriginal: string = 'Recibido';
   @Input() domiciliarioAsignadoId: number = 0;
+  @Input() cupon: CuponFormulario | null = null;
 
   // Variables temporales para agregar una nueva comida a la lista del pedido
   productoSeleccionadoId: number = 0;
@@ -197,6 +205,18 @@ export class PedidoCamposComponent {
       total += this.precioUnitario(item) * item.cantidad;
     }
     return total;
+  }
+
+  // Descuento del cupon sobre el total actual (mismo calculo que el backend)
+  descuentoCupon(): number {
+    const total = this.calcularTotal();
+    if (!this.cupon || total <= 0) {
+      return 0;
+    }
+    const descuento = this.cupon.tipo === 'PORCENTAJE'
+      ? total * this.cupon.valor / 100
+      : this.cupon.valor;
+    return Math.min(Math.round(descuento), total);
   }
 
   // Verifica si dos listas de adicionales contienen los mismos elementos y cantidades
