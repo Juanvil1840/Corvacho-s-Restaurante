@@ -79,3 +79,27 @@ main {
 .categoria-seccion {
     margin-bottom: 50px; 
 }
+
+/* Celular: una tarjeta por fila y marco mas delgado para aprovechar el ancho */
+@media (max-width: 576px) {
+    .menu-grid {
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 16px;
+        border-width: 10px;
+    }
+
+    .tarjetas {
+        grid-template-columns: 1fr;
+    }
+
+    .categoria-header .menu-text1 {
+        white-space: normal;
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .linea-divisoria {
+        margin: 0 10px;
+    }
+}

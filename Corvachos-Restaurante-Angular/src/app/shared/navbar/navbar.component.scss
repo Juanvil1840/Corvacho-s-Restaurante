@@ -391,3 +391,19 @@
 .btn-vaciar-carrito:hover {
     background: rgba(229, 115, 115, 0.15);
 }
+
+/* Celular y tablet: menos margen lateral para que el logo y el boton del menu quepan */
+@media (max-width: 991.98px) {
+    .navbar {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .navbar-toggler {
+        border-color: rgba(205, 158, 70, 0.6);
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 2px rgba(205, 158, 70, 0.5);
+    }
+}

@@ -165,3 +165,19 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
 }
+
+/* Celular: en "Comidas del pedido" cada selector ocupa toda la fila y debajo quedan cantidad y boton.
+   Se antepone app-pedido-campos para ganarle en especificidad a los estilos del componente. */
+@media (max-width: 576px) {
+    app-pedido-campos .pedido-campo.pedido-seccion-comidas .pedido-agregar-comida-fila {
+        flex-wrap: wrap;
+    }
+
+    app-pedido-campos .pedido-campo.pedido-seccion-comidas .pedido-agregar-comida-fila select {
+        flex-basis: 100%;
+    }
+
+    app-pedido-campos .pedido-campo.pedido-seccion-comidas .btn-agregar-comida {
+        flex: 1;
+    }
+}

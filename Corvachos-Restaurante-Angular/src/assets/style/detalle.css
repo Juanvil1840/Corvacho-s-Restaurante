@@ -326,6 +326,12 @@
         margin-top: 100px;
     }
 
+    /* El componente de la imagen ocupa todo el ancho para que la foto se pueda centrar */
+    app-detalle-imagen,
+    .detalle-imagen-container {
+        width: 100%;
+    }
+
     .detalle-imagen {
         width: 100%;
         max-width: 350px;
@@ -334,5 +340,18 @@
 
     .detalle-nombre {
         font-size: 32px;
+    }
+}
+
+/* Celular: marco mas delgado para que el contenido no quede apretado */
+@media (max-width: 576px) {
+    .detalle-container {
+        margin-left: 12px;
+        margin-right: 12px;
+        border-width: 10px;
+    }
+
+    .detalle-imagen {
+        height: 260px;
     }
 }

@@ -94,8 +94,13 @@
         gap: 24px;
     }
 
+    .hero-logo {
+        max-width: 100%;
+    }
+
     .hero-logo img {
-        max-width: 500px;
+        max-width: min(500px, 100%);
+        height: auto;
     }
 
     .hero-divider {
