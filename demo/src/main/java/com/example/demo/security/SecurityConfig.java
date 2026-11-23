@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.servlet.DispatcherType;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,6 +39,10 @@ public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final JWTGenerator jwtGenerator;
     private final CustomUserDetailsService customUserDetailsService;
+
+    // Paginas que pueden llamar al API (separadas por coma). En Render se cambia con la variable CORS_ORIGINS
+    @Value("${app.cors.origins}")
+    private String corsOrigins;
 
     public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JWTGenerator jwtGenerator,
             CustomUserDetailsService customUserDetailsService) {
@@ -130,11 +135,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS para que Angular (localhost:4200) pueda mandar el header Authorization
+    // CORS para que Angular (localhost:4200 o la pagina publicada) pueda mandar el header Authorization
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Patrones para aceptar tambien las URLs de vista previa de Vercel (https://*.vercel.app)
+        config.setAllowedOriginPatterns(List.of(corsOrigins.split("\\s*,\\s*")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         // Para que Angular pueda leer el nombre del archivo al descargar el Excel

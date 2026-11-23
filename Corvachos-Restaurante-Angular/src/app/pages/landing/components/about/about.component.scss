@@ -1,5 +1,5 @@
 .about {
-    height: 100vh;
+    min-height: 100vh;
     color: white;
     background-color: #013741;
 }
@@ -19,18 +19,43 @@
     gap: 20px;
 
     p {
+        flex: 1;
         line-height: 2;
         font-size: 1.4rem;
     }
 
     img {
+        flex-shrink: 0;
+        max-width: 45%;
         border-radius: 8px;
         height: 500px;
         object-fit: cover;
     }
 }
 
-@media (max-width: 768px) {
+/* Pantallas medianas: menos margen a los lados para que el texto no quede apretado */
+@media (min-width: 992px) and (max-width: 1399px) {
+    .about {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+
+    .about-content {
+        padding-left: 8%;
+        padding-right: 8%;
+        gap: 40px;
+
+        p {
+            font-size: 1.2rem;
+        }
+
+        img {
+            height: 420px;
+        }
+    }
+}
+
+@media (max-width: 991px) {
     .about {
         height: auto;
         padding-top: 60px;
@@ -47,6 +72,7 @@
             width: 100%;
             max-width: 350px;
             height: auto;
+            flex-shrink: 1;
         }
     }
 }
