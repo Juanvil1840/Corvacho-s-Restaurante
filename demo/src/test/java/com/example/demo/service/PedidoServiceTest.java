@@ -166,6 +166,56 @@ class PedidoServiceTest {
         verify(cuponService).registrarUso(cupon);
     }
 
+    // 1b2. El premio de la ruleta (RULETA10) se rechaza si el cliente ya tenia pedidos
+    @Test
+    void crearPedido_conPremioRuleta_noEsPrimerPedido_falla() {
+        Pedido pedido = crearPedidoBase(clienteActivo, null);
+        DetallePedido detalle = new DetallePedido();
+        detalle.setPedido(pedido);
+        detalle.setProducto(productoValido);
+        detalle.setCantidad(1);
+        pedido.setDetallePedidos(new ArrayList<>(List.of(detalle)));
+        pedido.setCodigoCupon("RULETA10");
+
+        Cupon ruleta = new Cupon("RULETA10", null, Cupon.PORCENTAJE, 10, 0, null, null, true);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteActivo));
+        when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(productoRepository.findById(10L)).thenReturn(Optional.of(productoValido));
+        when(cuponService.validar("RULETA10", 30000)).thenReturn(ruleta);
+        when(pedidoRepository.findByClienteClienteId(clienteActivo.getClienteId()))
+                .thenReturn(List.of(new Pedido(), new Pedido()));
+
+        assertThatThrownBy(() -> pedidoService.crearPedido(pedido))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining("primer pedido");
+        verify(cuponService, never()).registrarUso(any());
+    }
+
+    // 1b3. En el primer pedido el premio de la ruleta si se aplica
+    @Test
+    void crearPedido_conPremioRuleta_primerPedido_aplica() {
+        Pedido pedido = crearPedidoBase(clienteActivo, null);
+        DetallePedido detalle = new DetallePedido();
+        detalle.setPedido(pedido);
+        detalle.setProducto(productoValido);
+        detalle.setCantidad(1);
+        pedido.setDetallePedidos(new ArrayList<>(List.of(detalle)));
+        pedido.setCodigoCupon("RULETA10");
+
+        Cupon ruleta = new Cupon("RULETA10", null, Cupon.PORCENTAJE, 10, 0, null, null, true);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteActivo));
+        when(pedidoRepository.save(any(Pedido.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(productoRepository.findById(10L)).thenReturn(Optional.of(productoValido));
+        when(cuponService.validar("RULETA10", 30000)).thenReturn(ruleta);
+        when(cuponService.calcularDescuento(ruleta, 30000)).thenReturn(3000.0);
+        when(pedidoRepository.findByClienteClienteId(clienteActivo.getClienteId())).thenReturn(List.of(pedido));
+
+        Pedido resultado = pedidoService.crearPedido(pedido);
+
+        assertThat(resultado.getDescuento()).isEqualTo(3000.0);
+        verify(cuponService).registrarUso(ruleta);
+    }
+
     // 1c. Sin cupon no queda ningun descuento aunque el frontend mande uno
     @Test
     void crearPedido_sinCupon_ignoraDescuentoDelFrontend() {

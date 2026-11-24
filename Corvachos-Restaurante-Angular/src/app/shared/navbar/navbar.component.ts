@@ -14,6 +14,7 @@ import { CarritoCuponComponent } from '../carrito-cupon/carrito-cupon.component'
 // Estructura del descuento obtenido en la ruleta de bienvenida al registrarse
 interface DescuentoBienvenidaGuardado {
   porcentaje: number;
+  codigo?: string;
   correo: string;
   usado?: boolean;
 }
@@ -151,26 +152,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.carritoService.getTotalPrecio();
   }
 
-  // Porcentaje de bienvenida disponible para el cliente actual (si aún no lo ha usado)
-  get descuentoBienvenidaPorcentaje(): number {
+  // Cupón del premio de la ruleta de bienvenida (RULETA10 o RULETA5) si el cliente aún no lo ha usado.
+  // Se aplica solo en el carrito y el backend lo cobra como cualquier cupón, así el pedido guarda el descuento
+  get codigoBienvenida(): string | null {
     const dato = this.obtenerDescuentoBienvenidaActivo();
-    return dato ? dato.porcentaje : 0;
-  }
-
-  // Monto en dinero descontado por la ruleta de bienvenida sobre el subtotal
-  get descuentoBienvenidaMonto(): number {
-    const pct = this.descuentoBienvenidaPorcentaje;
-    if (!pct || this.totalPrecio <= 0) {
-      return 0;
-    }
-    return Math.round((this.totalPrecio * pct) / 100);
+    return dato ? (dato.codigo || 'RULETA' + dato.porcentaje) : null;
   }
 
   // Calcula el precio unitario de un ítem sumando sus adicionales
-  // Lo que se paga: el total menos el descuento del cupón y el descuento de bienvenida de la ruleta
+  // Lo que se paga: el total menos el descuento del cupón (el premio de la ruleta también llega como cupón)
   get totalAPagar(): number {
     const descCupon = this.cuponAplicado?.descuento ?? 0;
-    return Math.max(0, this.totalPrecio - descCupon - this.descuentoBienvenidaMonto);
+    return Math.max(0, this.totalPrecio - descCupon);
   }
 
   // Recupera el descuento de bienvenida si existe, no ha sido usado y corresponde al cliente actual
@@ -291,7 +284,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       next: (pedidoCreado) => {
         // Lanza la celebración de confeti y consume el descuento de bienvenida al confirmar con éxito
         this.confetiService.lanzarCelebracion();
-        this.marcarDescuentoBienvenidaUsado();
+        if (this.cuponAplicado && this.cuponAplicado.codigo === this.codigoBienvenida) {
+          this.marcarDescuentoBienvenidaUsado();
+        }
 
         this.enviandoPedido = false;
         this.cuponAplicado = null;

@@ -367,6 +367,12 @@ public class PedidoServiceImpl implements PedidoService {
     private void aplicarCupon(Pedido pedido, String codigoCupon, List<DetallePedido> detalles) {
         double subtotal = PreciosPedido.subtotal(detalles);
         Cupon cupon = cuponService.validar(codigoCupon, subtotal);
+        // El premio de la ruleta de bienvenida solo vale en el primer pedido (el pedido actual ya esta guardado)
+        if (cupon.esPremioRuleta() && pedido.getCliente() != null
+                && pedidoRepository.findByClienteClienteId(pedido.getCliente().getClienteId()).size() > 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "El premio de la ruleta solo aplica en tu primer pedido");
+        }
         pedido.setCupon(cupon);
         pedido.setDescuento(cuponService.calcularDescuento(cupon, subtotal));
         cuponService.registrarUso(cupon);

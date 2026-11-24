@@ -121,6 +121,8 @@ export class RuletaBienvenidaComponent implements OnInit {
           this.claveDescuento,
           JSON.stringify({
             porcentaje: segmentoElegido.porcentaje,
+            // Cupón real del backend con el que se cobra el premio en el primer pedido
+            codigo: 'RULETA' + segmentoElegido.porcentaje,
             correo: correoLimpio,
             usado: false
           })

@@ -17,6 +17,8 @@ export class CarritoCuponComponent implements OnChanges {
 
   // Valor del carrito antes del descuento
   @Input({ required: true }) subtotal = 0;
+  // Cupón que se aplica solo al abrir el carrito (el premio de la ruleta de bienvenida)
+  @Input() codigoInicial: string | null = null;
   // Cupón aplicado (o null al quitarlo o si deja de servir)
   @Output() cambio = new EventEmitter<CuponValidado | null>();
 
@@ -24,11 +26,19 @@ export class CarritoCuponComponent implements OnChanges {
   aplicado: CuponValidado | null = null;
   validando = false;
   error = '';
+  // Para no volver a poner el premio si el cliente lo quita a mano
+  private inicialIntentado = false;
 
   constructor(private cuponService: CuponService) {}
 
   // Si el cliente agrega o quita comidas, el descuento cambia (o el cupón deja de cumplir la compra mínima)
   ngOnChanges(cambios: SimpleChanges): void {
+    if (this.codigoInicial && !this.inicialIntentado && !this.aplicado) {
+      this.inicialIntentado = true;
+      this.codigo = this.codigoInicial;
+      this.validar(this.codigoInicial);
+      return;
+    }
     if (cambios['subtotal'] && !cambios['subtotal'].firstChange && this.aplicado) {
       this.validar(this.aplicado.codigo);
     }

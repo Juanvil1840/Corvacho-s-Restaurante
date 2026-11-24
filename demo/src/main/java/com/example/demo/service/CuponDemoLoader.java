@@ -58,6 +58,7 @@ public class CuponDemoLoader implements CommandLineRunner {
     @Transactional
     public void run(String... args) {
         if (cuponRepository.count() > 0) {
+            asegurarCuponesRuleta();
             return;
         }
         LocalDate hoy = LocalDate.now();
@@ -76,6 +77,22 @@ public class CuponDemoLoader implements CommandLineRunner {
 
         if (conHistorial) {
             asignarAlHistorial(bienvenida, corvacho, finde, halloween, primeros, hoy);
+        }
+        asegurarCuponesRuleta();
+    }
+
+    // Premios de la ruleta de bienvenida: el cliente nuevo que gana se lleva uno de estos cupones.
+    // El backend solo los acepta en el primer pedido del cliente (ver PedidoServiceImpl)
+    private void asegurarCuponesRuleta() {
+        crearSiNoExiste(new Cupon(Cupon.CODIGO_RULETA_10, "Premio de la ruleta: 10% en tu primer pedido",
+                Cupon.PORCENTAJE, 10, 0, null, null, true));
+        crearSiNoExiste(new Cupon(Cupon.CODIGO_RULETA_5, "Premio de la ruleta: 5% en tu primer pedido",
+                Cupon.PORCENTAJE, 5, 0, null, null, true));
+    }
+
+    private void crearSiNoExiste(Cupon cupon) {
+        if (!cuponRepository.existsByCodigoIgnoreCase(cupon.getCodigo())) {
+            cuponRepository.save(cupon);
         }
     }
 

@@ -20,6 +20,14 @@ public class Cupon {
 
     // Tipos de descuento
     public static final String PORCENTAJE = "PORCENTAJE";
+
+    // Cupones que entrega la ruleta de bienvenida (solo sirven en el primer pedido del cliente)
+    public static final String CODIGO_RULETA_10 = "RULETA10";
+    public static final String CODIGO_RULETA_5 = "RULETA5";
+
+    public boolean esPremioRuleta() {
+        return CODIGO_RULETA_10.equalsIgnoreCase(codigo) || CODIGO_RULETA_5.equalsIgnoreCase(codigo);
+    }
     public static final String VALOR_FIJO = "VALOR_FIJO";
 
     @Id

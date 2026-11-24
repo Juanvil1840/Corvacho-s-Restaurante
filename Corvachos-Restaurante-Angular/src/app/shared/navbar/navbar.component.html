@@ -193,7 +193,7 @@
     @if (itemsCarrito.length > 0) {
       <footer class="carrito-footer">
         @if (clienteLogueado) {
-          <app-carrito-cupon [subtotal]="totalPrecio" (cambio)="cuponAplicado = $event"></app-carrito-cupon>
+          <app-carrito-cupon [subtotal]="totalPrecio" [codigoInicial]="codigoBienvenida" (cambio)="cuponAplicado = $event"></app-carrito-cupon>
         }
         <div class="carrito-resumen-fila">
           <span>Total ({{ totalCantidad }} {{ totalCantidad === 1 ? 'producto' : 'productos' }}):</span>
