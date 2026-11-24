@@ -5,7 +5,7 @@
   }
 
   <label for="correo">Correo Electronico</label>
-  <input type="text" id="correo" [(ngModel)]="correo" name="correo" placeholder="camilo&#64;gmail.com" required>
+  <input type="email" id="correo" [(ngModel)]="correo" name="correo" placeholder="camilo&#64;gmail.com" autocapitalize="none" autocorrect="off" autocomplete="email" required>
 
   <label for="contrasena">Contrasena</label>
   <input type="password" id="contrasena" [(ngModel)]="contrasena" name="contrasena" placeholder="**********" required>

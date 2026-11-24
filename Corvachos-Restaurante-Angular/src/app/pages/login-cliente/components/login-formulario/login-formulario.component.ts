@@ -24,7 +24,8 @@ export class LoginFormularioComponent {
   // Envía las credenciales capturadas hacia el componente padre
   onSubmit(): void {
     this.iniciarSesion.emit({
-      correo: this.correo,
+      // El celular suele poner la primera letra en mayúscula: el correo se manda sin espacios y en minúsculas
+      correo: this.correo.trim().toLowerCase(),
       contrasena: this.contrasena
     });
   }
