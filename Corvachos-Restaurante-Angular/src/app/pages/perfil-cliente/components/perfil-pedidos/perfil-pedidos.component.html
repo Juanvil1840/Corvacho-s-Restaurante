@@ -52,6 +52,41 @@
               <a [routerLink]="['/pedidos/detalle', pedido.id_Pedido]" class="perfil-btn-pedido" style="display: inline-block; margin-top: 0.5rem;">
                 Ver detalle
               </a>
+
+              @if (pedido.estado.toLowerCase() === 'entregado') {
+                <div class="resena-pedido">
+                  @if (resenas.get(pedido.id_Pedido); as resena) {
+                    <p><strong>Tu calificación:</strong>
+                      <span class="estrellas-lectura" [attr.aria-label]="resena.puntuacion + ' de 5 estrellas'">
+                        @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                          <span [class.activa]="estrella <= resena.puntuacion">★</span>
+                        }
+                      </span>
+                    </p>
+                    @if (resena.comentario) { <p class="resena-comentario">{{ resena.comentario }}</p> }
+                  } @else {
+                    <p><strong>¿Cómo fue tu experiencia?</strong></p>
+                    <div class="estrellas-selector" role="group" aria-label="Calificar pedido">
+                      @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                        <button type="button" (click)="puntuaciones[pedido.id_Pedido] = estrella"
+                          [class.activa]="estrella <= (puntuaciones[pedido.id_Pedido] || 0)"
+                          [attr.aria-label]="estrella + ' estrellas'" [attr.aria-pressed]="puntuaciones[pedido.id_Pedido] === estrella">★</button>
+                      }
+                    </div>
+                    <label class="resena-etiqueta" [for]="'comentario-' + pedido.id_Pedido">Comentario (opcional)</label>
+                    <textarea [id]="'comentario-' + pedido.id_Pedido" maxlength="1000"
+                      [value]="comentarios[pedido.id_Pedido] || ''"
+                      (input)="comentarios[pedido.id_Pedido] = $any($event.target).value"
+                      placeholder="Cuéntanos cómo te fue"></textarea>
+                    <button type="button" class="perfil-btn-pedido resena-enviar"
+                      [disabled]="!puntuaciones[pedido.id_Pedido] || guardando.has(pedido.id_Pedido)"
+                      (click)="calificar(pedido.id_Pedido)">
+                      {{ guardando.has(pedido.id_Pedido) ? 'Guardando...' : 'Enviar calificación' }}
+                    </button>
+                    @if (errores[pedido.id_Pedido]) { <p class="resena-error" role="alert">{{ errores[pedido.id_Pedido] }}</p> }
+                  }
+                </div>
+              }
             </div>
           }
         </div>

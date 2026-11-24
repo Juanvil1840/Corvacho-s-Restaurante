@@ -1,0 +1,14 @@
+.resenas-admin { min-height: 100vh; padding: 110px 24px 60px; color: #f2eee6; background: #082a36; }
+.resenas-admin-caja { max-width: 1050px; margin: 0 auto; }
+.resenas-admin h1 { color: #e2ad45; margin: 1rem 0 1.5rem; }
+.resenas-volver { color: #e2ad45; text-decoration: none; }
+.resena-card { padding: 1.2rem 1.4rem; margin-bottom: 1rem; border: 1px solid #45636d; border-radius: 14px; background: #103844; }
+.resena-card header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.resena-card h2 { margin: 0; font-size: 1.15rem; color: #f7f1e5; }
+.resena-card header p { margin: .35rem 0; color: #c1cfd0; }
+.resenas-estrellas { display: flex; gap: .15rem; align-items: center; color: #71868b; font-size: 1.5rem; margin: .6rem 0; }
+.resenas-estrellas .activa { color: #e2ad45; }
+.resenas-estrellas strong { margin-left: .5rem; color: #f5eedf; font-size: .95rem; }
+.resenas-comentario { white-space: pre-wrap; margin-bottom: 0; }
+.resenas-error { color: #ffb0a7; }
+@media (max-width: 600px) { .resenas-admin { padding: 96px 14px 40px; } .resena-card header { display: block; } }

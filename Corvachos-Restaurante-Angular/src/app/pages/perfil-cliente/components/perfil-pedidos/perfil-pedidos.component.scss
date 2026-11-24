@@ -1,0 +1,23 @@
+.resena-pedido {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(205, 158, 70, .45);
+  border-radius: 12px;
+  background: rgba(0, 28, 42, .55);
+}
+.resena-pedido p { margin: .35rem 0; }
+.estrellas-selector, .estrellas-lectura { display: inline-flex; gap: .2rem; margin: .35rem 0; }
+.estrellas-selector button {
+  border: 0; background: transparent; color: #82929a; cursor: pointer;
+  font-size: 1.9rem; line-height: 1;
+}
+.estrellas-selector button.activa, .estrellas-lectura .activa { color: #e2ad45; }
+.resena-pedido textarea {
+  display: block; width: 100%; min-height: 76px; margin: .35rem 0 .65rem; padding: .7rem;
+  border: 1px solid #637984; border-radius: 8px; background: #f6f4ef; color: #142c35;
+  font: inherit; resize: vertical;
+}
+.resena-etiqueta { display: block; margin-top: .35rem; }
+.resena-enviar:disabled { opacity: .55; cursor: not-allowed; }
+.resena-comentario { white-space: pre-wrap; }
+.resena-error { color: #ffb0a7; }
