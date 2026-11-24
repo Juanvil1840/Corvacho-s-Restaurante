@@ -88,6 +88,7 @@ export const routes: Routes = [
     { path: 'login-operario', component: LoginOperarioComponent, canActivate: [sinSesionGuard] },
     { path: 'login-admin', component: LoginAdminComponent, canActivate: [sinSesionGuard] },
     { path: 'portal-admin', component: PortalAdminComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'resenas', loadComponent: () => import('./pages/lista-resenas/lista-resenas.component').then(m => m.ListaResenasComponent), canActivate: [authGuard], data: SOLO_ADMIN },
 
     // Dashboard de reportes: se carga bajo demanda (lazy) porque trae las librerias de graficas
     {

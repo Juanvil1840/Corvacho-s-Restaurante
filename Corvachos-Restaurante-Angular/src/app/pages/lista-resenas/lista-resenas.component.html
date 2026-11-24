@@ -1,0 +1,24 @@
+<main class="resenas-admin">
+  <div class="resenas-admin-caja">
+    <a routerLink="/portal-admin" class="resenas-volver">← Panel de control</a>
+    <h1>Reseñas de clientes</h1>
+    @if (cargando) { <p>Cargando reseñas...</p> }
+    @if (error) { <p class="resenas-error" role="alert">{{ error }}</p> }
+    @if (!cargando && !error && resenas.length === 0) { <p>Aún no hay reseñas recibidas.</p> }
+    @for (resena of resenas; track resena.id) {
+      <article class="resena-card">
+        <header>
+          <div><h2>Pedido #{{ resena.pedidoId }}</h2><p>{{ resena.cliente }} · {{ resena.correoCliente }}</p></div>
+          <time>{{ resena.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</time>
+        </header>
+        <p class="resenas-estrellas" [attr.aria-label]="resena.puntuacion + ' de 5 estrellas'">
+          @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+            <span [class.activa]="estrella <= resena.puntuacion">★</span>
+          }
+          <strong>{{ resena.puntuacion }}/5</strong>
+        </p>
+        <p class="resenas-comentario">{{ resena.comentario || 'Sin comentario.' }}</p>
+      </article>
+    }
+  </div>
+</main>
