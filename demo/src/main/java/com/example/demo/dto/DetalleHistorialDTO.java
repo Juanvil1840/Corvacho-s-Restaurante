@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"cantidad", "producto", "adicionales", "subtotal"})
+@JsonPropertyOrder({"cantidad", "productoId", "producto", "adicionales", "subtotal"})
 public class DetalleHistorialDTO {
 
     @JsonProperty("cantidad")
@@ -23,6 +23,9 @@ public class DetalleHistorialDTO {
 
     @JsonProperty("producto")
     private String producto;
+
+    @JsonProperty("productoId")
+    private Long productoId;
 
     @JsonProperty("adicionales")
     private List<AdicionalHistorialDTO> adicionales;
@@ -52,6 +55,7 @@ public class DetalleHistorialDTO {
         return new DetalleHistorialDTO(
                 cantidad,
                 detalle.getProducto() != null ? detalle.getProducto().getNombre() : "",
+                detalle.getProducto() != null ? detalle.getProducto().getId() : null,
                 seleccionados.stream().map(AdicionalHistorialDTO::fromEntity).toList(),
                 (precioBase + extras) * cantidad
         );

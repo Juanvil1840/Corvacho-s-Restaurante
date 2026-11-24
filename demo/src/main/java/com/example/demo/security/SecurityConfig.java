@@ -105,6 +105,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/carritos/**").hasAnyAuthority(CLIENTE, ADMIN)
 
                 // ---------- Pedidos ----------
+                .requestMatchers(HttpMethod.GET, "/api/calificaciones-productos/cliente/**").hasAuthority(CLIENTE)
+                .requestMatchers(HttpMethod.POST, "/api/calificaciones-productos/**").hasAuthority(CLIENTE)
                 .requestMatchers(HttpMethod.GET, "/api/resenas/cliente/**").hasAuthority(CLIENTE)
                 .requestMatchers(HttpMethod.GET, "/api/resenas").hasAuthority(ADMIN)
                 .requestMatchers(HttpMethod.POST, "/api/resenas/**").hasAuthority(CLIENTE)

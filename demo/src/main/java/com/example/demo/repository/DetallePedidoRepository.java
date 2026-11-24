@@ -17,6 +17,10 @@ public interface DetallePedidoRepository extends JpaRepository<DetallePedido, Lo
     // true si el producto aparece en al menos un pedido (sin importar su estado)
     boolean existsByProducto_Id(Long productoId);
 
+    @Query("SELECT CASE WHEN COUNT(d) > 0 THEN true ELSE false END FROM DetallePedido d "
+            + "WHERE d.pedido.id_Pedido = :pedidoId AND d.producto.id = :productoId")
+    boolean existsProductoEnPedido(@Param("pedidoId") Long pedidoId, @Param("productoId") Long productoId);
+
     // Obtiene todos los detalles asociados a un pedido especifico
     @Query("SELECT d FROM DetallePedido d WHERE d.pedido.id_Pedido = :id_Pedido")
     List<DetallePedido> findByPedido_Id_Pedido(@Param("id_Pedido") Long id_Pedido);
