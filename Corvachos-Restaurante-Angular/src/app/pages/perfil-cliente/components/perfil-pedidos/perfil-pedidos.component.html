@@ -43,6 +43,37 @@
                           </span>
                         }
                         - $ {{ detalle.subtotal | number }}
+                        @if (pedido.estado.toLowerCase() === 'entregado' && detalle.productoId) {
+                          <div class="calificacion-producto-pedido">
+                            @if (calificacionesProducto.get(claveCalificacion(pedido.id_Pedido, detalle.productoId)); as calificacion) {
+                              <span><strong>Tu calificación de este producto:</strong></span>
+                              <span class="calificacion-producto-estrellas" [attr.aria-label]="calificacion.puntuacion + ' de 5 estrellas'">
+                                @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                                  <span [class.activa]="estrella <= calificacion.puntuacion">★</span>
+                                }
+                              </span>
+                            } @else {
+                              <span>Califica este producto:</span>
+                              <span class="calificacion-producto-selector" role="group" aria-label="Calificar producto">
+                                @for (estrella of [1, 2, 3, 4, 5]; track estrella) {
+                                  <button type="button"
+                                    (click)="puntuacionesProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId!)] = estrella"
+                                    [class.activa]="estrella <= (puntuacionesProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId)] || 0)"
+                                    [attr.aria-label]="estrella + ' estrellas'"
+                                    [attr.aria-pressed]="puntuacionesProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId)] === estrella">★</button>
+                                }
+                              </span>
+                              <button type="button" class="perfil-btn-pedido calificacion-producto-enviar"
+                                [disabled]="!puntuacionesProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId)] || guardandoProducto.has(claveCalificacion(pedido.id_Pedido, detalle.productoId))"
+                                (click)="calificarProducto(pedido.id_Pedido, detalle.productoId)">
+                                {{ guardandoProducto.has(claveCalificacion(pedido.id_Pedido, detalle.productoId)) ? 'Guardando...' : 'Enviar' }}
+                              </button>
+                              @if (erroresProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId)]) {
+                                <span class="calificacion-producto-error" role="alert">{{ erroresProducto[claveCalificacion(pedido.id_Pedido, detalle.productoId)] }}</span>
+                              }
+                            }
+                          </div>
+                        }
                       </li>
                     }
                   </ul>

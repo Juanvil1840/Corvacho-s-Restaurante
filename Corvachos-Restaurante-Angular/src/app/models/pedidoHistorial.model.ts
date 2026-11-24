@@ -7,6 +7,7 @@ export interface AdicionalHistorial {
 // Detalle de un producto dentro del historial de pedidos del cliente
 export interface DetalleHistorial {
   cantidad: number;
+  productoId: number | null;
   producto: string;
   adicionales: AdicionalHistorial[];
   subtotal: number;

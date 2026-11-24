@@ -7,6 +7,8 @@ import { PedidoService } from '../../../../service/pedido.service';
 import { CarritoService } from '../../../../service/carrito.service';
 import { ResenaService } from '../../../../service/resena.service';
 import { Resena } from '../../../../models/resena.model';
+import { CalificacionProducto } from '../../../../models/calificacionProducto.model';
+import { CalificacionProductoService } from '../../../../service/calificacion-producto.service';
 
 // Componente que muestra el historial de pedidos realizados por un cliente
 @Component({
@@ -29,11 +31,16 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
   comentarios: Record<number, string> = {};
   guardando = new Set<number>();
   errores: Record<number, string> = {};
+  calificacionesProducto = new Map<string, CalificacionProducto>();
+  puntuacionesProducto: Record<string, number> = {};
+  guardandoProducto = new Set<string>();
+  erroresProducto: Record<string, string> = {};
 
   constructor(
     private pedidoService: PedidoService,
     private carritoService: CarritoService,
-    private resenaService: ResenaService
+    private resenaService: ResenaService,
+    private calificacionProductoService: CalificacionProductoService
   ) {}
 
   // Carga el historial inicial y se suscribe a nuevos pedidos creados desde el carrito
@@ -64,6 +71,7 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
       next: (pedidos) => {
         this.pedidos = (pedidos || []).sort((a, b) => (b.id_Pedido || 0) - (a.id_Pedido || 0));
         this.cargarResenas();
+        this.cargarCalificacionesProducto();
       },
       error: (err) => console.error('Error al cargar pedidos del cliente:', err)
     });
@@ -73,6 +81,40 @@ export class PerfilPedidosComponent implements OnInit, OnChanges, OnDestroy {
     this.resenaService.getPorCliente(this.clienteId).subscribe({
       next: resenas => this.resenas = new Map(resenas.map(resena => [resena.pedidoId, resena])),
       error: err => console.error('Error al cargar las reseñas:', err)
+    });
+  }
+
+  private cargarCalificacionesProducto(): void {
+    this.calificacionProductoService.getPorCliente(this.clienteId).subscribe({
+      next: calificaciones => this.calificacionesProducto = new Map(
+        calificaciones.map(calificacion => [this.claveCalificacion(calificacion.pedidoId, calificacion.productoId), calificacion])
+      ),
+      error: err => console.error('Error al cargar las calificaciones de productos:', err)
+    });
+  }
+
+  claveCalificacion(pedidoId: number, productoId: number): string {
+    return `${pedidoId}-${productoId}`;
+  }
+
+  calificarProducto(pedidoId: number, productoId: number): void {
+    const clave = this.claveCalificacion(pedidoId, productoId);
+    const puntuacion = this.puntuacionesProducto[clave];
+    if (!puntuacion || this.guardandoProducto.has(clave)) return;
+    this.guardandoProducto.add(clave);
+    this.erroresProducto[clave] = '';
+    this.calificacionProductoService.calificar(pedidoId, productoId, puntuacion).subscribe({
+      next: calificacion => {
+        this.calificacionesProducto.set(clave, calificacion);
+        this.calificacionesProducto = new Map(this.calificacionesProducto);
+        this.guardandoProducto.delete(clave);
+      },
+      error: err => {
+        this.erroresProducto[clave] = err.status === 409
+          ? 'Ya calificaste este producto en este pedido.'
+          : 'No fue posible guardar la calificación. Intenta nuevamente.';
+        this.guardandoProducto.delete(clave);
+      }
     });
   }
 

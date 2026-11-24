@@ -3,6 +3,15 @@
   <div class="card-body">
     <h5 class="card-title">{{ producto.nombre }}</h5>
     <p class="card-text">$ {{ producto.precio | number }}</p>
+    @if (producto.cantidadCalificaciones && producto.promedioCalificacion != null) {
+      <p class="producto-calificacion" [attr.aria-label]="'Promedio de ' + (producto.promedioCalificacion | number:'1.1-1') + ' estrellas, ' + producto.cantidadCalificaciones + ' calificaciones'">
+        <span class="producto-calificacion-estrella" aria-hidden="true">★</span>
+        <strong>{{ producto.promedioCalificacion | number:'1.1-1' }}</strong>
+        <small>({{ producto.cantidadCalificaciones }} {{ producto.cantidadCalificaciones === 1 ? 'calificación' : 'calificaciones' }})</small>
+      </p>
+    } @else {
+      <p class="producto-calificacion producto-sin-calificacion">Aún sin calificaciones</p>
+    }
     <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
       <a [id]="'btnDetalle-' + producto.id" [routerLink]="['/menu/detalle', producto.id]" class="btn btn-primary btn-detalle-producto">
         Ver detalle / Adicionales

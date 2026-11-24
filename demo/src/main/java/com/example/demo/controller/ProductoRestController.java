@@ -19,6 +19,7 @@ import com.example.demo.dto.MensajeDTO;
 import com.example.demo.dto.ProductoDTO;
 import com.example.demo.entities.Producto;
 import com.example.demo.service.ProductoService;
+import com.example.demo.service.CalificacionProductoService;
 
 // Controlador REST para la gestion de Productos
 @RestController
@@ -27,10 +28,13 @@ import com.example.demo.service.ProductoService;
 public class ProductoRestController {
 
     private final ProductoService productoService;
+    private final CalificacionProductoService calificacionProductoService;
 
     // Constructor para inyectar el servicio de productos
-    public ProductoRestController(ProductoService productoService) {
+    public ProductoRestController(ProductoService productoService,
+            CalificacionProductoService calificacionProductoService) {
         this.productoService = productoService;
+        this.calificacionProductoService = calificacionProductoService;
     }
 
     // Lista los productos (por defecto todos=true, con todos=false solo disponibles para el menú)
@@ -41,9 +45,10 @@ public class ProductoRestController {
                 ? productoService.obtenerTodos()
                 : productoService.obtenerDisponibles();
 
-        return productos
-                .stream()
-                .map(ProductoDTO::fromEntity)
+        var resumenes = calificacionProductoService.resumenes(
+                productos.stream().map(Producto::getId).toList());
+        return productos.stream()
+                .map(producto -> ProductoDTO.fromEntity(producto, resumenes.get(producto.getId())))
                 .toList();
     }
 
@@ -54,7 +59,9 @@ public class ProductoRestController {
         if (producto == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ProductoDTO.fromEntity(producto));
+        var resumen = calificacionProductoService.resumenes(java.util.List.of(producto.getId()))
+                .get(producto.getId());
+        return ResponseEntity.ok(ProductoDTO.fromEntity(producto, resumen));
     }
 
     // Crea un nuevo producto en la base de datos

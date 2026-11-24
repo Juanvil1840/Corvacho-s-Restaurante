@@ -9,4 +9,6 @@ export interface Producto{
     imagen: string;
     disponible: boolean;
     categoria: Categoria;
+    promedioCalificacion?: number | null;
+    cantidadCalificaciones?: number;
 }

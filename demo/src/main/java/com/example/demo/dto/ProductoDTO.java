@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 // DTO con la informacion completa de un producto del menu y su categoria
 @Data
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "nombre", "precio", "descripcion", "imagen", "disponible", "categoria"})
+@JsonPropertyOrder({"id", "nombre", "precio", "descripcion", "imagen", "disponible", "categoria", "promedioCalificacion", "cantidadCalificaciones"})
 public class ProductoDTO {
 
     @JsonProperty("id")
@@ -33,6 +33,12 @@ public class ProductoDTO {
     @JsonProperty("categoria")
     private CategoriaDTO categoria;
 
+    @JsonProperty("promedioCalificacion")
+    private Double promedioCalificacion;
+
+    @JsonProperty("cantidadCalificaciones")
+    private long cantidadCalificaciones;
+
     // Constructor con todos los atributos del producto
     public ProductoDTO(Long id, String nombre, double precio, String descripcion, String imagen, boolean disponible, CategoriaDTO categoria) {
         this.id = id;
@@ -46,10 +52,15 @@ public class ProductoDTO {
 
     // Convierte una entidad Producto a ProductoDTO
     public static ProductoDTO fromEntity(Producto producto) {
+        return fromEntity(producto, null);
+    }
+
+    public static ProductoDTO fromEntity(Producto producto,
+            com.example.demo.dto.ProductoCalificacionResumenDTO resumen) {
         if (producto == null) {
             return null;
         }
-        return new ProductoDTO(
+        ProductoDTO dto = new ProductoDTO(
                 producto.getId(),
                 producto.getNombre(),
                 producto.getPrecio(),
@@ -58,5 +69,10 @@ public class ProductoDTO {
                 producto.isDisponible(),
                 CategoriaDTO.fromEntity(producto.getCategoria())
         );
+        if (resumen != null) {
+            dto.setPromedioCalificacion(resumen.promedio());
+            dto.setCantidadCalificaciones(resumen.cantidad());
+        }
+        return dto;
     }
 }
