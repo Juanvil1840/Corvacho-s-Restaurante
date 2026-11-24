@@ -11,6 +11,13 @@ import { Cliente } from '../../models/cliente.model';
 import { CuponValidado } from '../../models/cupon.model';
 import { CarritoCuponComponent } from '../carrito-cupon/carrito-cupon.component';
 
+// Estructura del descuento obtenido en la ruleta de bienvenida al registrarse
+interface DescuentoBienvenidaGuardado {
+  porcentaje: number;
+  correo: string;
+  usado?: boolean;
+}
+
 // Barra de navegación principal que incluye los enlaces de acceso, estado de sesión y el panel del carrito de compras
 @Component({
   selector: 'app-navbar',
@@ -42,6 +49,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   // Cupón de descuento aplicado en el carrito (el backend lo vuelve a validar al crear el pedido)
   cuponAplicado: CuponValidado | null = null;
+
+  // Clave en localStorage donde se guarda el descuento de bienvenida de la ruleta
+  private readonly claveDescuentoBienvenida = 'corvachos_descuento_bienvenida';
 
   // Suscripciones activas para liberarlas al destruir el componente
   private subs: Subscription[] = [];
@@ -141,10 +151,58 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.carritoService.getTotalPrecio();
   }
 
+  // Porcentaje de bienvenida disponible para el cliente actual (si aún no lo ha usado)
+  get descuentoBienvenidaPorcentaje(): number {
+    const dato = this.obtenerDescuentoBienvenidaActivo();
+    return dato ? dato.porcentaje : 0;
+  }
+
+  // Monto en dinero descontado por la ruleta de bienvenida sobre el subtotal
+  get descuentoBienvenidaMonto(): number {
+    const pct = this.descuentoBienvenidaPorcentaje;
+    if (!pct || this.totalPrecio <= 0) {
+      return 0;
+    }
+    return Math.round((this.totalPrecio * pct) / 100);
+  }
+
   // Calcula el precio unitario de un ítem sumando sus adicionales
-  // Lo que se paga: el total menos el descuento del cupón
+  // Lo que se paga: el total menos el descuento del cupón y el descuento de bienvenida de la ruleta
   get totalAPagar(): number {
-    return Math.max(0, this.totalPrecio - (this.cuponAplicado?.descuento ?? 0));
+    const descCupon = this.cuponAplicado?.descuento ?? 0;
+    return Math.max(0, this.totalPrecio - descCupon - this.descuentoBienvenidaMonto);
+  }
+
+  // Recupera el descuento de bienvenida si existe, no ha sido usado y corresponde al cliente actual
+  private obtenerDescuentoBienvenidaActivo(): DescuentoBienvenidaGuardado | null {
+    try {
+      const raw = localStorage.getItem(this.claveDescuentoBienvenida);
+      if (!raw) {
+        return null;
+      }
+      const parsed: DescuentoBienvenidaGuardado = JSON.parse(raw);
+      if (!parsed || parsed.usado || !parsed.porcentaje) {
+        return null;
+      }
+      const correoActual = (this.clienteLogueado?.correo ?? '').trim().toLowerCase();
+      if (correoActual && parsed.correo && correoActual !== parsed.correo.trim().toLowerCase()) {
+        return null;
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
+  }
+
+  // Marca el descuento de bienvenida como usado al confirmar el pedido para que no se repita
+  private marcarDescuentoBienvenidaUsado(): void {
+    const activo = this.obtenerDescuentoBienvenidaActivo();
+    if (activo) {
+      localStorage.setItem(
+        this.claveDescuentoBienvenida,
+        JSON.stringify({ ...activo, usado: true })
+      );
+    }
   }
 
   calcularUnitario(item: ItemCarrito): number {
@@ -231,8 +289,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.enviandoPedido = true;
     this.pedidoService.agregarPedido(nuevoPedido).subscribe({
       next: (pedidoCreado) => {
-        // Lanza la celebración de confeti al confirmar el pedido con éxito
+        // Lanza la celebración de confeti y consume el descuento de bienvenida al confirmar con éxito
         this.confetiService.lanzarCelebracion();
+        this.marcarDescuentoBienvenidaUsado();
 
         this.enviandoPedido = false;
         this.cuponAplicado = null;

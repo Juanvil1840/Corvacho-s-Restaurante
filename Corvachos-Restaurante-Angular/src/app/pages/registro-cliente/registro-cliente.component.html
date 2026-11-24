@@ -13,4 +13,11 @@
     </div>
   </section>
 
+  @if (mostrarRuleta) {
+    <app-ruleta-bienvenida
+      [correoUsuario]="correoRegistrado"
+      (continuar)="irAPerfil()">
+    </app-ruleta-bienvenida>
+  }
+
 </div>

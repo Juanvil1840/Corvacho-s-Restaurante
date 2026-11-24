@@ -1,0 +1,53 @@
+<div class="ruleta-backdrop">
+  <div class="ruleta-modal" role="dialog" aria-modal="true" aria-label="Ruleta de Bienvenida Corvacho's">
+    <h2 class="ruleta-titulo">¡Bienvenido a Corvacho's!</h2>
+    <p class="ruleta-subtitulo">
+      Por ser usuario nuevo, gira la ruleta y descubre tu sorpresa.
+    </p>
+
+    <div class="ruleta-escenario">
+      <div class="ruleta-puntero" aria-hidden="true">▼</div>
+      <div
+        class="ruleta-circulo"
+        [style.transform]="'rotate(' + rotacionActual + 'deg)'">
+        @for (seg of segmentos; track $index; let i = $index) {
+          <div
+            class="ruleta-porcion"
+            [style.transform]="'rotate(' + (i * (360 / segmentos.length) + (180 / segmentos.length)) + 'deg)'">
+            <span class="ruleta-texto">{{ seg.etiqueta }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (mensajeEstado) {
+      <p class="ruleta-aviso">{{ mensajeEstado }}</p>
+    }
+
+    @if (resultado) {
+      <div class="ruleta-premio">
+        <strong>{{ resultado.etiqueta }}</strong>
+        <p>{{ resultado.mensaje }}</p>
+      </div>
+    }
+
+    <div class="ruleta-acciones">
+      @if (!yaGiro) {
+        <button
+          type="button"
+          class="btn-girar"
+          [disabled]="girando"
+          (click)="girar()">
+          {{ girando ? 'Girando...' : 'Girar Ruleta' }}
+        </button>
+      }
+      <button
+        type="button"
+        class="btn-continuar"
+        [disabled]="girando"
+        (click)="irAlPerfil()">
+        Ir a mi Perfil
+      </button>
+    </div>
+  </div>
+</div>
