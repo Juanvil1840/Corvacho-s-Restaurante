@@ -65,6 +65,16 @@
 
 <!-- TOTAL DEL PEDIDO -->
 @if (detalles.length > 0) {
+  @if (cupon && descuento > 0) {
+    <div class="detalle-total detalle-total-cupon">
+      <span class="detalle-total-label">Subtotal:</span>
+      <span>${{ calcularSubtotalPedido() | number:'1.0-0' }}</span>
+    </div>
+    <div class="detalle-total detalle-total-cupon">
+      <span class="detalle-total-label"><i class="bi bi-ticket-perforated"></i> Cupón {{ cupon }}:</span>
+      <span class="detalle-descuento">− ${{ descuento | number:'1.0-0' }}</span>
+    </div>
+  }
   <div class="detalle-total">
     <span class="detalle-total-label">Total del Pedido:</span>
     <span class="detalle-total-valor">${{ calcularTotal() | number:'1.0-0' }}</span>

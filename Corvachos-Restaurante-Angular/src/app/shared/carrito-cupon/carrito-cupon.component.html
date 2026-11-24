@@ -1,0 +1,26 @@
+<div class="cupon">
+  @if (aplicado) {
+    <div class="cupon-aplicado">
+      <i class="bi bi-ticket-perforated-fill"></i>
+      <div class="cupon-aplicado-texto">
+        <strong>{{ aplicado.codigo }}</strong>
+        <span>{{ aplicado.descripcion || (aplicado.tipo === 'PORCENTAJE' ? aplicado.valor + '% de descuento' : 'Descuento aplicado') }}</span>
+      </div>
+      <span class="cupon-descuento">− $ {{ aplicado.descuento | number:'1.0-0' }}</span>
+      <button type="button" class="cupon-quitar" (click)="quitar()" aria-label="Quitar cupón">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+  } @else {
+    <form class="cupon-form" (ngSubmit)="aplicar()">
+      <input name="codigo" type="text" [(ngModel)]="codigo" placeholder="¿Tienes un cupón?" maxlength="20"
+        autocomplete="off" aria-label="Código del cupón" />
+      <button type="submit" [disabled]="validando || !codigo.trim()">
+        {{ validando ? '...' : 'Aplicar' }}
+      </button>
+    </form>
+  }
+  @if (error) {
+    <p class="cupon-error"><i class="bi bi-exclamation-circle"></i> {{ error }}</p>
+  }
+</div>

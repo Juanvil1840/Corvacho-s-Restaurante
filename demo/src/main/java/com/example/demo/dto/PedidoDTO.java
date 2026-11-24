@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 // DTO con toda la informacion detallada de un pedido, incluyendo cliente, operador, domiciliario e items
 @Data
 @NoArgsConstructor
-@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "fechaEntrega", "cliente", "operador", "domiciliario", "detallePedidos"})
+@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "fechaEntrega", "cliente", "operador", "domiciliario", "detallePedidos", "cupon", "cuponTipo", "cuponValor", "descuento"})
 public class PedidoDTO {
 
     @JsonProperty("id_Pedido")
@@ -40,6 +40,20 @@ public class PedidoDTO {
 
     @JsonProperty("detallePedidos")
     private List<DetallePedidoDTO> detallePedidos;
+
+    // Codigo del cupon usado (null si no uso ninguno) y valor que se desconto
+    @JsonProperty("cupon")
+    private String cupon;
+
+    // Tipo y valor del cupon, para que el formulario de edicion recalcule el descuento al cambiar las comidas
+    @JsonProperty("cuponTipo")
+    private String cuponTipo;
+
+    @JsonProperty("cuponValor")
+    private Double cuponValor;
+
+    @JsonProperty("descuento")
+    private double descuento;
 
     // Constructor completo de PedidoDTO
     public PedidoDTO(Long id_Pedido, String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega,
@@ -79,7 +93,7 @@ public class PedidoDTO {
             detallesDto = Collections.emptyList();
         }
 
-        return new PedidoDTO(
+        PedidoDTO dto = new PedidoDTO(
                 pedido.getId_Pedido(),
                 pedido.getEstado(),
                 pedido.getFechaCreacion(),
@@ -89,5 +103,12 @@ public class PedidoDTO {
                 DomiciliarioPedidoDTO.fromEntity(pedido.getDomiciliario()),
                 detallesDto
         );
+        if (pedido.getCupon() != null) {
+            dto.setCupon(pedido.getCupon().getCodigo());
+            dto.setCuponTipo(pedido.getCupon().getTipo());
+            dto.setCuponValor(pedido.getCupon().getValor());
+        }
+        dto.setDescuento(pedido.valorDescuento());
+        return dto;
     }
 }

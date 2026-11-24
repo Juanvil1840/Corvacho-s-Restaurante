@@ -6,13 +6,16 @@ import { filter } from 'rxjs/operators';
 import { CarritoService, ItemCarrito } from '../../service/carrito.service';
 import { PedidoService } from '../../service/pedido.service';
 import { AuthService } from '../../service/auth.service';
+import { ConfetiService } from '../../service/confeti.service';
 import { Cliente } from '../../models/cliente.model';
+import { CuponValidado } from '../../models/cupon.model';
+import { CarritoCuponComponent } from '../carrito-cupon/carrito-cupon.component';
 
 // Barra de navegación principal que incluye los enlaces de acceso, estado de sesión y el panel del carrito de compras
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CarritoCuponComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -37,6 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   errorPedido = '';
   exitoPedido = '';
 
+  // Cupón de descuento aplicado en el carrito (el backend lo vuelve a validar al crear el pedido)
+  cuponAplicado: CuponValidado | null = null;
+
   // Suscripciones activas para liberarlas al destruir el componente
   private subs: Subscription[] = [];
 
@@ -44,7 +50,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router,
     private carritoService: CarritoService,
     private pedidoService: PedidoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private confetiService: ConfetiService
   ) {}
 
   // Se suscribe a los cambios de ruta, sesión del cliente y estado del carrito al iniciar
@@ -56,6 +63,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         filter(event => event instanceof NavigationEnd)
       ).subscribe(event => {
         this.actualizarEstadoRuta((event as NavigationEnd).urlAfterRedirects);
+        this.cerrarMenuMovil();
       })
     );
 
@@ -68,6 +76,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subs.push(
       this.carritoService.items$.subscribe(items => {
         this.itemsCarrito = items;
+        if (items.length === 0) {
+          this.cuponAplicado = null;
+        }
       })
     );
 
@@ -87,6 +98,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   // Actualiza las banderas de vista y sesión según la URL actual
+  // En celular el menú desplegable de Bootstrap queda abierto al cambiar de página; aquí se cierra
+  private cerrarMenuMovil(): void {
+    const menu = document.getElementById('navbarNav');
+    if (!menu?.classList.contains('show')) {
+      return;
+    }
+    const bootstrap = (window as any).bootstrap;
+    if (bootstrap?.Collapse) {
+      bootstrap.Collapse.getOrCreateInstance(menu, { toggle: false }).hide();
+    } else {
+      menu.classList.remove('show');
+    }
+  }
+
   private actualizarEstadoRuta(url: string): void {
     this.esPaginaLogin = url === '/login' || url.startsWith('/login?');
     this.esPortalOperario = url.startsWith('/portal-operario') || url.startsWith('/login-operario');
@@ -117,6 +142,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   // Calcula el precio unitario de un ítem sumando sus adicionales
+  // Lo que se paga: el total menos el descuento del cupón
+  get totalAPagar(): number {
+    return Math.max(0, this.totalPrecio - (this.cuponAplicado?.descuento ?? 0));
+  }
+
   calcularUnitario(item: ItemCarrito): number {
     return this.carritoService.calcularPrecioUnitarioItem(item);
   }
@@ -187,6 +217,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // Solo se envian ids y cantidades, el backend busca los precios
     const nuevoPedido = {
       cliente: { clienteId: cliente.clienteId },
+      codigoCupon: this.cuponAplicado?.codigo ?? null,
       detallePedidos: this.itemsCarrito.map(item => ({
         cantidad: item.cantidad,
         producto: { id: item.producto.id },
@@ -200,16 +231,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.enviandoPedido = true;
     this.pedidoService.agregarPedido(nuevoPedido).subscribe({
       next: (pedidoCreado) => {
+        // Lanza la celebración de confeti al confirmar el pedido con éxito
+        this.confetiService.lanzarCelebracion();
+
         this.enviandoPedido = false;
+        this.cuponAplicado = null;
         this.carritoService.vaciarCarrito();
         this.carritoService.notificarPedidoCreado();
         this.exitoPedido = `¡Pedido #${pedidoCreado.id_Pedido} realizado con éxito! Estado: ${pedidoCreado.estado}`;
 
-        // Cierra el carrito después de unos instantes y lleva al cliente a su perfil
+        // Cierra el carrito después de unos instantes y lleva al cliente al detalle de su pedido, que se actualiza en vivo
         setTimeout(() => {
           this.cerrarCarrito();
           this.exitoPedido = '';
-          this.router.navigate(['/clientes/perfil', cliente.clienteId]);
+          this.router.navigate(['/pedidos/detalle', pedidoCreado.id_Pedido]);
         }, 1200);
       },
       error: (err) => {

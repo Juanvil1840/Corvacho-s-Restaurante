@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,19 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detallePedidos;
 
+    // Cupon de descuento usado en el pedido (null si no uso ninguno)
+    @ManyToOne
+    @JoinColumn(name = "id_cupon")
+    private Cupon cupon;
+
+    // Valor descontado por el cupon, calculado por el backend al crear el pedido (null o 0 = sin descuento)
+    @Column(nullable = true)
+    private Double descuento;
+
+    // Codigo que escribio el cliente al hacer el pedido; no se guarda en la tabla, solo llega en la peticion
+    @Transient
+    private String codigoCupon;
+
     // Constructor para crear un pedido asegurando el estado inicial "Recibido" por defecto
     public Pedido(String estado, LocalDateTime fechaCreacion, LocalDateTime fechaEntrega, Cliente cliente, Operador operador, Domiciliario domiciliario) {
         this.estado = (estado != null && !estado.trim().isEmpty()) ? estado : "Recibido";
@@ -62,5 +76,10 @@ public class Pedido {
         this.cliente = cliente;
         this.operador = operador;
         this.domiciliario = domiciliario;
+    }
+
+    // Descuento como numero (0 si no tiene)
+    public double valorDescuento() {
+        return descuento != null ? descuento : 0;
     }
 }

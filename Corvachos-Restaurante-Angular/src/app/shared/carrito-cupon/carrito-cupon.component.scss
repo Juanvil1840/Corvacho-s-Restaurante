@@ -1,0 +1,38 @@
+.cupon { margin-bottom: 12px; font-family: 'Montserrat', sans-serif; }
+
+.cupon-form {
+  display: flex; gap: 8px;
+  input {
+    flex: 1; min-width: 0; padding: 8px 12px; border-radius: 6px; border: 1px dashed rgba(205, 158, 70, 0.6);
+    background: #001c2a; color: #fcfafa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em;
+    &::placeholder { text-transform: none; letter-spacing: normal; color: #6f8896; }
+    &:focus { outline: none; border-style: solid; border-color: #cd9e46; }
+  }
+  button {
+    padding: 8px 14px; border-radius: 6px; border: 1px solid #cd9e46; background: transparent; color: #cd9e46;
+    font-weight: 600; font-size: 0.8rem; cursor: pointer;
+    &:hover:not(:disabled) { background: #cd9e46; color: #001c2a; }
+    &:disabled { opacity: 0.5; cursor: default; }
+  }
+}
+
+.cupon-aplicado {
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;
+  background: rgba(111, 207, 151, 0.08); border: 1px solid rgba(111, 207, 151, 0.4);
+  > i { color: #6fcf97; font-size: 1.2rem; }
+}
+
+.cupon-aplicado-texto {
+  flex: 1; min-width: 0; display: flex; flex-direction: column;
+  strong { color: #6fcf97; font-size: 0.8rem; letter-spacing: 0.08em; }
+  span { color: #9fb3bf; font-size: 0.72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+.cupon-descuento { color: #6fcf97; font-weight: 700; font-size: 0.9rem; white-space: nowrap; }
+
+.cupon-quitar {
+  background: none; border: 0; color: #9fb3bf; cursor: pointer; padding: 2px 4px;
+  &:hover { color: #eb6e64; }
+}
+
+.cupon-error { color: #eb6e64; font-size: 0.75rem; margin: 6px 0 0; }

@@ -91,3 +91,27 @@
     font-size: 1rem;
     color: #fcfcfc;
 }
+
+/* Celular y tablet: las tres columnas se apilan y quedan centradas */
+@media (max-width: 768px) {
+    #footer {
+        padding: 40px 20px 0 20px;
+    }
+
+    #footer-main {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    #footer-logo-col {
+        align-items: center;
+    }
+
+    #footer-logo {
+        height: 120px;
+    }
+
+    #footer-redes-iconos {
+        flex-direction: row;
+    }
+}

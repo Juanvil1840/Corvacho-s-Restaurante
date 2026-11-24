@@ -1,0 +1,33 @@
+<div class="kpis">
+  @for (kpi of kpis; track kpi.titulo; let i = $index) {
+    <article class="kpi rep-card" [class.kpi-principal]="i === 0" [style.animation-delay.ms]="i * 60">
+      <header class="kpi-cabecera">
+        <span class="kpi-icono"><i class="bi" [class]="kpi.icono"></i></span>
+        <h3>{{ kpi.titulo }}</h3>
+        @if (kpi.enVivo) {
+          <span class="kpi-vivo" title="Se actualiza automáticamente"><span class="pulso"></span> En vivo</span>
+        }
+      </header>
+
+      <p class="kpi-valor">
+        <span [appContador]="kpi.valor" [formato]="kpi.formato"></span>
+        @if (kpi.sufijo) { <small>{{ kpi.sufijo }}</small> }
+      </p>
+
+      @if (kpi.variacion !== undefined) {
+        @if (kpi.variacion === null) {
+          <p class="kpi-nota">Sin datos del periodo anterior</p>
+        } @else {
+          <p class="kpi-variacion" [class.positiva]="kpi.variacion > 0" [class.negativa]="kpi.variacion < 0">
+            <i class="bi" [class.bi-arrow-up-right]="kpi.variacion > 0" [class.bi-arrow-down-right]="kpi.variacion < 0"
+              [class.bi-dash]="kpi.variacion === 0"></i>
+            {{ textoVariacion(kpi.variacion) }}
+            <span>vs. periodo anterior</span>
+          </p>
+        }
+      } @else {
+        <p class="kpi-nota">{{ kpi.nota }}</p>
+      }
+    </article>
+  }
+</div>

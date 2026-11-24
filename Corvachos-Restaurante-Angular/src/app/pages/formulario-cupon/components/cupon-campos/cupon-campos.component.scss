@@ -1,0 +1,23 @@
+.cupon-fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+
+.cupon-input-codigo { text-transform: uppercase; letter-spacing: 0.08em; }
+
+.adicional-campo input[type="date"] {
+  width: 100%; padding: 0.7rem 0.9rem; border: 1px solid #334955; border-radius: 6px; background: #001c2a;
+  color: #fcfafa; font-family: 'Cormorant Garamond', serif; font-size: 1rem; box-sizing: border-box; color-scheme: dark;
+}
+
+.cupon-check { justify-content: flex-end; }
+
+.cupon-ayuda { color: #6f8896; font-size: 0.78rem; margin: 6px 0 0; font-family: 'Montserrat', sans-serif; }
+
+.cupon-vista-previa {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 10px;
+  border: 1px dashed rgba(205, 158, 70, 0.6); background: rgba(205, 158, 70, 0.06);
+  font-family: 'Montserrat', sans-serif; color: #9fb3bf; font-size: 0.85rem;
+  i { font-size: 1.8rem; color: #cd9e46; }
+  strong { display: block; color: #cd9e46; letter-spacing: 0.08em; }
+  b { color: #fcfafa; }
+}
+
+@media (max-width: 576px) { .cupon-fila { grid-template-columns: 1fr; } }

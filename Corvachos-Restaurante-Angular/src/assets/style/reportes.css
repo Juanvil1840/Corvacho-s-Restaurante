@@ -1,0 +1,43 @@
+/* Estilos compartidos por el dashboard de reportes y sus subcomponentes */
+.reportes {
+  --rep-fondo: #001c2a;
+  --rep-tarjeta: #0b2b3c;
+  --rep-borde: rgba(205, 158, 70, 0.22);
+  --rep-oro: #cd9e46;
+  --rep-texto: #fcfafa;
+  --rep-texto-suave: #9fb3bf;
+  --rep-positivo: #6fcf97;
+  --rep-negativo: #eb6e64;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(205, 158, 70, 0.10), transparent 60%),
+    var(--rep-fondo);
+}
+
+.rep-card {
+  background: var(--rep-tarjeta);
+  border: 1px solid var(--rep-borde);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.rep-panel { padding: 20px 22px; height: 100%; }
+
+.rep-panel-cabecera {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 18px;
+}
+.rep-panel-cabecera > div:first-child {
+  flex: 1; min-width: 0;
+}
+
+.rep-panel-titulo {
+  margin: 0; font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 600; color: var(--rep-texto);
+}
+.rep-panel-titulo .bi { color: var(--rep-oro); margin-right: 4px; }
+
+.rep-panel-subtitulo { margin: 2px 0 0; font-size: 0.95rem; color: var(--rep-texto-suave); }
+
+/* Mientras se genera el PDF se apagan las animaciones de entrada (ver descargarPdf) */
+.exportando-pdf *, .exportando-pdf *::before, .exportando-pdf *::after {
+  animation: none !important;
+  transition: none !important;
+}

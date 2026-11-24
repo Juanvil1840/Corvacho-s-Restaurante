@@ -61,6 +61,12 @@ export const routes: Routes = [
     { path: 'adicionales', component: ListaAdicionalesComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
     { path: 'adicionales/nuevo', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
     { path: 'adicionales/editar/:id', component: FormularioAdicionalComponent, canActivate: [authGuard], data: ADMIN_U_OPERADOR },
+
+    // Cupones de descuento (solo admin); se cargan bajo demanda
+    { path: 'cupones', loadComponent: () => import('./pages/lista-cupones/lista-cupones.component').then(m => m.ListaCuponesComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'cupones/nuevo', loadComponent: () => import('./pages/formulario-cupon/formulario-cupon.component').then(m => m.FormularioCuponComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+    { path: 'cupones/editar/:id', loadComponent: () => import('./pages/formulario-cupon/formulario-cupon.component').then(m => m.FormularioCuponComponent), canActivate: [authGuard], data: SOLO_ADMIN },
+
     { path: 'portal-operario', component: PortalOperarioComponent, canActivate: [authGuard], data: SOLO_OPERADOR },
 
     // CRUD Pedido y Domiciliario
@@ -82,6 +88,14 @@ export const routes: Routes = [
     { path: 'login-operario', component: LoginOperarioComponent, canActivate: [sinSesionGuard] },
     { path: 'login-admin', component: LoginAdminComponent, canActivate: [sinSesionGuard] },
     { path: 'portal-admin', component: PortalAdminComponent, canActivate: [authGuard], data: SOLO_ADMIN },
+
+    // Dashboard de reportes: se carga bajo demanda (lazy) porque trae las librerias de graficas
+    {
+        path: 'reportes',
+        loadComponent: () => import('./pages/reportes/reportes.component').then(m => m.ReportesComponent),
+        canActivate: [authGuard],
+        data: SOLO_ADMIN
+    },
 
     // Rutas de clientes, autenticación, menú público y manejo de errores
     { path: 'clientes', component: ListaClientesComponent, canActivate: [authGuard], data: SOLO_ADMIN },

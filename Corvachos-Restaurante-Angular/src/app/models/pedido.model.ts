@@ -32,6 +32,11 @@ export interface Pedido {
     operador: OperadorPedido | null;
     domiciliario: DomiciliarioPedido | null;
     detallePedidos: DetallePedido[];
+    // Código del cupón usado (null si no usó) y valor descontado
+    cupon?: string | null;
+    cuponTipo?: string | null;
+    cuponValor?: number | null;
+    descuento?: number;
 }
 
 // Fila de la tabla de pedidos
@@ -52,6 +57,8 @@ export interface PedidoGuardar {
     cliente: { clienteId: number };
     operador?: { id_operador: number } | null;
     domiciliario?: { id_domiciliario: number } | null;
+    // Cupón que escribió el cliente; el backend calcula el descuento
+    codigoCupon?: string | null;
     detallePedidos: {
         cantidad: number;
         producto: { id: number };

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" data-bs-theme="dark">
   <div class="container-fluid">
     <!-- Logo -->
     <a class="navbar-brand" routerLink="/">
@@ -192,9 +192,17 @@
 
     @if (itemsCarrito.length > 0) {
       <footer class="carrito-footer">
+        @if (clienteLogueado) {
+          <app-carrito-cupon [subtotal]="totalPrecio" (cambio)="cuponAplicado = $event"></app-carrito-cupon>
+        }
         <div class="carrito-resumen-fila">
           <span>Total ({{ totalCantidad }} {{ totalCantidad === 1 ? 'producto' : 'productos' }}):</span>
-          <strong id="carritoTotal" class="carrito-total-valor">$ {{ totalPrecio | number }}</strong>
+          <strong id="carritoTotal" class="carrito-total-valor">
+            @if (cuponAplicado) {
+              <s style="color: #6f8896; font-size: 0.75em; font-weight: 400; margin-right: 6px;">$ {{ totalPrecio | number }}</s>
+            }
+            $ {{ totalAPagar | number }}
+          </strong>
         </div>
 
         <button

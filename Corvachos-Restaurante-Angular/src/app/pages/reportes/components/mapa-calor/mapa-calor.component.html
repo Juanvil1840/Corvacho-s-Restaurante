@@ -1,0 +1,42 @@
+<section class="rep-card rep-panel">
+  <header class="rep-panel-cabecera">
+    <div>
+      <h2 class="rep-panel-titulo">Horas pico</h2>
+      <p class="rep-panel-subtitulo">Pedidos por día de la semana y hora, para planear turnos y cocina</p>
+    </div>
+    @if (pico) {
+      <div class="pico">
+        <span>Momento más ocupado</span>
+        <strong>{{ pico.dia }}, {{ formatoHora(pico.hora) }}</strong>
+      </div>
+    }
+  </header>
+
+  <div class="mapa-scroll">
+    <div class="mapa" [style.grid-template-columns]="'72px repeat(' + horas.length + ', minmax(22px, 1fr))'" role="table"
+      aria-label="Pedidos por día y hora">
+      <span></span>
+      @for (hora of horas; track hora) {
+        <span class="mapa-hora" role="columnheader">{{ formatoHora(hora) }}</span>
+      }
+
+      @for (fila of filas; track $index; let d = $index) {
+        <span class="mapa-dia" role="rowheader">{{ dias[d] }}</span>
+        @for (celda of fila; track celda.hora) {
+          <span class="mapa-celda" role="cell" tabindex="0"
+            [style.background]="color(celda.intensidad)"
+            [attr.aria-label]="descripcion(dias[d], celda)"
+            [attr.data-tooltip]="descripcion(dias[d], celda)"></span>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="leyenda" aria-hidden="true">
+    <span>Menos</span>
+    @for (paso of pasosLeyenda; track paso) {
+      <span class="leyenda-paso" [style.background]="color(paso)"></span>
+    }
+    <span>Más pedidos</span>
+  </div>
+</section>

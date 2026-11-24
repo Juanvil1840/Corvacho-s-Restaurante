@@ -1,0 +1,13 @@
+<section class="detalle-info-card llegada">
+  <h3><i class="bi bi-clock-history"></i> {{ entregado ? 'Entregado a las' : 'Llegada estimada' }}</h3>
+  <strong class="hora">{{ horaLlegada }}</strong>
+  @if (entregado) {
+    @if (duracionEntrega) { <p>Llegó en {{ duracionEntrega }}</p> }
+  } @else if (minutosRestantes > 0) {
+    <p>Faltan aprox. <b>{{ minutosRestantes }} min</b></p>
+  } @else {
+    <p>Llegando en cualquier momento</p>
+  }
+  <div class="barra" aria-hidden="true"><span [style.width.%]="avanceTiempo"></span></div>
+  <small>Calculado con el tiempo promedio de entrega del restaurante ({{ seguimiento.minutosPromedioEntrega }} min)</small>
+</section>

@@ -1,0 +1,7 @@
+.lienzo-contenedor { position: relative; height: 300px; }
+
+.mejor-dia {
+  text-align: right; font-family: 'Montserrat', sans-serif;
+  span { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--rep-texto-suave); white-space: nowrap; }
+  strong { font-size: 0.85rem; color: var(--rep-oro); font-weight: 600; white-space: nowrap; }
+}

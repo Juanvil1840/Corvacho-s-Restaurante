@@ -1,0 +1,27 @@
+<div class="filtros">
+  <div class="filtros-presets" role="group" aria-label="Periodo del reporte">
+    @for (preset of presets; track preset.id) {
+      <button type="button" class="filtro-chip" [class.activo]="activo === preset.id"
+        [attr.aria-pressed]="activo === preset.id" (click)="elegir(preset.id)">
+        {{ preset.texto }}
+      </button>
+    }
+  </div>
+
+  @if (activo === 'personalizado') {
+    <form class="filtros-rango" (ngSubmit)="aplicar()">
+      <label>
+        <span>Desde</span>
+        <input type="date" name="desde" [(ngModel)]="desde" [max]="hasta || hoy">
+      </label>
+      <label>
+        <span>Hasta</span>
+        <input type="date" name="hasta" [(ngModel)]="hasta" [min]="desde" [max]="hoy">
+      </label>
+      <button type="submit" class="filtro-aplicar"><i class="bi bi-funnel"></i> Aplicar</button>
+    </form>
+    @if (error) {
+      <p class="filtros-error" role="alert"><i class="bi bi-exclamation-circle"></i> {{ error }}</p>
+    }
+  }
+</div>

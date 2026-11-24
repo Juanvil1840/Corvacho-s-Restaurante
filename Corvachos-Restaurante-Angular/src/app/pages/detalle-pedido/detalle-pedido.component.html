@@ -18,9 +18,21 @@
       <!-- Subcomponente de Cabecera (Fechas, Estado y Cliente) -->
       <app-pedido-cabecera [pedido]="pedido"></app-pedido-cabecera>
 
+      <!-- Hora estimada de llegada (solo mientras se sigue el pedido en vivo) -->
+      @if (seguimiento) {
+        <app-pedido-llegada [seguimiento]="seguimiento" [ahora]="ahora"></app-pedido-llegada>
+      }
+
       <!-- Subcomponente de Tabla de Productos y Total -->
-      <app-pedido-productos [detalles]="detalles"></app-pedido-productos>
+      <app-pedido-productos [detalles]="detalles" [cupon]="pedido.cupon" [descuento]="pedido.descuento || 0"></app-pedido-productos>
 
     }
   </main>
+
+  @if (aviso) {
+    <div class="aviso" role="alert">
+      <i class="bi" [ngClass]="aviso.icono"></i>
+      <span>{{ aviso.texto }}</span>
+    </div>
+  }
 </div>

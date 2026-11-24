@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "total", "productos"})
+@JsonPropertyOrder({"id_Pedido", "estado", "fechaCreacion", "total", "productos", "cupon", "descuento"})
 public class PedidoHistorialDTO {
 
     @JsonProperty("id_Pedido")
@@ -35,6 +35,13 @@ public class PedidoHistorialDTO {
     @JsonProperty("productos")
     private List<DetalleHistorialDTO> productos;
 
+    // Codigo del cupon usado y valor descontado (el total ya tiene el descuento restado)
+    @JsonProperty("cupon")
+    private String cupon;
+
+    @JsonProperty("descuento")
+    private double descuento;
+
     // Convierte un pedido y sus detalles al formato del historial, calculando el total pagado
     public static PedidoHistorialDTO fromEntity(Pedido pedido, List<DetallePedido> detalles) {
         if (pedido == null) {
@@ -45,14 +52,17 @@ public class PedidoHistorialDTO {
                 ? detalles.stream().map(DetalleHistorialDTO::fromEntity).toList()
                 : Collections.emptyList();
 
-        double total = productos.stream().mapToDouble(DetalleHistorialDTO::getSubtotal).sum();
+        double descuento = pedido.valorDescuento();
+        double total = productos.stream().mapToDouble(DetalleHistorialDTO::getSubtotal).sum() - descuento;
 
         return new PedidoHistorialDTO(
                 pedido.getId_Pedido(),
                 pedido.getEstado(),
                 pedido.getFechaCreacion(),
                 total,
-                productos
+                productos,
+                pedido.getCupon() != null ? pedido.getCupon().getCodigo() : null,
+                descuento
         );
     }
 }

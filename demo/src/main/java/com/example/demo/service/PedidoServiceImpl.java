@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.entities.Adicional;
 import com.example.demo.entities.AdicionalSeleccionado;
 import com.example.demo.entities.Cliente;
+import com.example.demo.entities.Cupon;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Domiciliario;
 import com.example.demo.entities.Operador;
@@ -44,6 +46,8 @@ public class PedidoServiceImpl implements PedidoService {
     private final ProductoRepository productoRepository;
     private final DetallePedidoRepository detallePedidoRepository;
     private final AdicionalRepository adicionalRepository;
+    private final ApplicationEventPublisher eventos;
+    private final CuponService cuponService;
 
     // Constructor con inyeccion de todos los repositorios requeridos
     public PedidoServiceImpl(
@@ -53,7 +57,9 @@ public class PedidoServiceImpl implements PedidoService {
             DomiciliarioRepository domiciliarioRepository,
             ProductoRepository productoRepository,
             DetallePedidoRepository detallePedidoRepository,
-            AdicionalRepository adicionalRepository) {
+            AdicionalRepository adicionalRepository,
+            ApplicationEventPublisher eventos,
+            CuponService cuponService) {
         this.pedidoRepository = pedidoRepository;
         this.clienteRepository = clienteRepository;
         this.operadorRepository = operadorRepository;
@@ -61,6 +67,8 @@ public class PedidoServiceImpl implements PedidoService {
         this.productoRepository = productoRepository;
         this.detallePedidoRepository = detallePedidoRepository;
         this.adicionalRepository = adicionalRepository;
+        this.eventos = eventos;
+        this.cuponService = cuponService;
     }
 
     // Obtiene todos los pedidos registrados
@@ -118,8 +126,18 @@ public class PedidoServiceImpl implements PedidoService {
         List<DetallePedido> detallesRecibidos = pedido.getDetallePedidos();
         pedido.setDetallePedidos(null);
 
+        // El cupon y el descuento los calcula el backend; se ignora lo que mande el frontend en esos campos
+        String codigoCupon = pedido.getCodigoCupon();
+        pedido.setCupon(null);
+        pedido.setDescuento(null);
+
         Pedido guardado = pedidoRepository.save(pedido);
-        guardarDetallesDelPedido(guardado, detallesRecibidos, new ArrayList<>());
+        List<DetallePedido> detalles = guardarDetallesDelPedido(guardado, detallesRecibidos, new ArrayList<>());
+
+        if (codigoCupon != null && !codigoCupon.isBlank()) {
+            aplicarCupon(guardado, codigoCupon, detalles);
+            guardado = pedidoRepository.save(guardado);
+        }
 
         return guardado;
     }
@@ -193,9 +211,17 @@ public class PedidoServiceImpl implements PedidoService {
             if (!previos.isEmpty()) {
                 detallePedidoRepository.deleteAll(previos);
             }
-            guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos(), productosPrevios);
+            List<DetallePedido> nuevos = guardarDetallesDelPedido(actualizado, pedido.getDetallePedidos(), productosPrevios);
+            // Si cambiaron las comidas se recalcula el descuento del cupon que ya tenia el pedido
+            if (actualizado.getCupon() != null) {
+                actualizado.setDescuento(cuponService.calcularDescuento(actualizado.getCupon(),
+                        PreciosPedido.subtotal(nuevos)));
+                actualizado = pedidoRepository.save(actualizado);
+            }
         }
 
+        // Avisa que el pedido cambio (lo escucha el seguimiento en vivo del cliente)
+        eventos.publishEvent(new PedidoActualizadoEvent(actualizado.getId_Pedido()));
         return actualizado;
     }
 
@@ -276,13 +302,14 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     // productosPrevios son los productos que el pedido ya tenia: esos se dejan aunque ahora esten agotados
-    private void guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos,
+    private List<DetallePedido> guardarDetallesDelPedido(Pedido pedidoGuardado, List<DetallePedido> detallesRecibidos,
             List<Long> productosPrevios) {
         if (detallesRecibidos == null || detallesRecibidos.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "El pedido debe tener al menos una comida");
         }
+        List<DetallePedido> guardados = new ArrayList<>();
         for (DetallePedido d : detallesRecibidos) {
             if (d.getProducto() == null || d.getProducto().getId() == null) {
                 continue;
@@ -330,7 +357,19 @@ public class PedidoServiceImpl implements PedidoService {
             }
             nuevo.setAdicionales(adicionales);
             detallePedidoRepository.save(nuevo);
+            guardados.add(nuevo);
         }
+        return guardados;
+    }
+
+    // Valida el cupon con el valor real del pedido (precios de la base de datos), guarda el descuento
+    // y le suma un uso. Si el cupon no sirve se lanza el error y no se crea el pedido
+    private void aplicarCupon(Pedido pedido, String codigoCupon, List<DetallePedido> detalles) {
+        double subtotal = PreciosPedido.subtotal(detalles);
+        Cupon cupon = cuponService.validar(codigoCupon, subtotal);
+        pedido.setCupon(cupon);
+        pedido.setDescuento(cuponService.calcularDescuento(cupon, subtotal));
+        cuponService.registrarUso(cupon);
     }
 
     // Elimina un pedido por su id y libera al domiciliario si el pedido estaba en camino

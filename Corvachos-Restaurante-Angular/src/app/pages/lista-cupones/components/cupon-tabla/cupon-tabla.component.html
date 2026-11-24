@@ -1,0 +1,51 @@
+<div class="adicional-tabla">
+<table class="adicional-tabla">
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Descuento</th>
+      <th>Compra mínima</th>
+      <th>Usos</th>
+      <th>Vence</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (cupon of cupones; track cupon.id_cupon) {
+      <tr>
+        <td>
+          <span class="cupon-codigo">{{ cupon.codigo }}</span>
+          @if (cupon.descripcion) { <small class="cupon-descripcion">{{ cupon.descripcion }}</small> }
+        </td>
+        <td>
+          @if (cupon.tipo === 'PORCENTAJE') { {{ cupon.valor }}% } @else { $ {{ cupon.valor | number:'1.0-0' }} }
+        </td>
+        <td>{{ cupon.compraMinima > 0 ? '$ ' + (cupon.compraMinima | number:'1.0-0') : 'Sin mínimo' }}</td>
+        <td>
+          {{ cupon.usos }} / {{ cupon.usosMaximos ?? '∞' }}
+          @if (cupon.usosMaximos) {
+            <span class="cupon-usos"><span [style.width.%]="porcentajeUsos(cupon)"></span></span>
+          }
+        </td>
+        <td>{{ cupon.fechaVencimiento ? (cupon.fechaVencimiento | date:'dd/MM/yyyy') : 'No vence' }}</td>
+        <td><span class="cupon-estado" [class]="(cupon.estado || '').toLowerCase()">{{ cupon.estado }}</span></td>
+        <td class="cupon-acciones">
+          <a [routerLink]="['/cupones/editar', cupon.id_cupon]" class="adicional-tabla-btn-editar">Editar</a>
+          <button type="button" class="adicional-tabla-btn-editar" (click)="cambiarActivo.emit(cupon)">
+            {{ cupon.activo ? 'Desactivar' : 'Activar' }}
+          </button>
+          @if (cupon.usos === 0) {
+            <button type="button" class="adicional-tabla-btn-eliminar" (click)="eliminar.emit(cupon.id_cupon)">Eliminar</button>
+          }
+        </td>
+      </tr>
+    }
+    @if (cupones.length === 0) {
+      <tr>
+        <td colspan="7" class="adicional-tabla-vacio">No hay cupones. Crea el primero con "+ Nuevo Cupón".</td>
+      </tr>
+    }
+  </tbody>
+</table>
+</div>

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.demo.dto.PedidoDTO;
 import com.example.demo.dto.PedidoHistorialDTO;
@@ -23,6 +25,7 @@ import com.example.demo.dto.PedidoListaDTO;
 import com.example.demo.entities.DetallePedido;
 import com.example.demo.entities.Pedido;
 import com.example.demo.service.PedidoService;
+import com.example.demo.service.SeguimientoPedidoService;
 
 // Controlador REST para la gestion de Pedidos
 @RestController
@@ -31,10 +34,12 @@ import com.example.demo.service.PedidoService;
 public class PedidoRestController {
 
     private final PedidoService pedidoService;
+    private final SeguimientoPedidoService seguimientoService;
 
-    // Constructor para inyectar el servicio de pedidos
-    public PedidoRestController(PedidoService pedidoService) {
+    // Constructor para inyectar los servicios de pedidos y de seguimiento en vivo
+    public PedidoRestController(PedidoService pedidoService, SeguimientoPedidoService seguimientoService) {
         this.pedidoService = pedidoService;
+        this.seguimientoService = seguimientoService;
     }
 
     // Lista los pedidos registrados (con activos=true no trae los entregados)
@@ -66,6 +71,14 @@ public class PedidoRestController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(convertirPedido(pedido));
+    }
+
+    // Seguimiento en vivo (Server-Sent Events): deja la respuesta abierta y envia un evento "estado"
+    // con el estado actual y despues cada vez que el pedido cambia. Solo el personal o el dueño del pedido.
+    @GetMapping(value = "/{id}/seguimiento", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PreAuthorize("@seguridad.esPersonal() or @seguridad.esPedidoDelCliente(#id)")
+    public SseEmitter seguimiento(@PathVariable Long id) {
+        return seguimientoService.suscribir(id);
     }
 
     // Crea un nuevo pedido en la base de datos

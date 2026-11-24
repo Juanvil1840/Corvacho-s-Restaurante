@@ -1,0 +1,60 @@
+:host { display: block; }
+.ranking { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+
+.ranking-fila {
+  display: grid; grid-template-columns: 24px 44px minmax(0, 1fr); align-items: center; gap: 12px;
+  animation: entrar 0.45s ease both;
+}
+
+.ranking-puesto {
+  font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.85rem;
+  color: var(--rep-texto-suave); text-align: center;
+  &.podio { color: var(--rep-oro); }
+}
+
+.ranking-avatar {
+  width: 44px; height: 44px; border-radius: 10px; object-fit: cover;
+  border: 1px solid var(--rep-borde);
+}
+
+.ranking-iniciales {
+  display: grid; place-items: center; background: rgba(205, 158, 70, 0.14); color: var(--rep-oro);
+  font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 600;
+}
+
+.ranking-cuerpo { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+
+.ranking-linea {
+  display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ranking-nombre {
+  font-size: 0.88rem; color: var(--rep-texto); font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize;
+}
+
+.ranking-valor { font-size: 0.85rem; font-weight: 600; color: var(--rep-texto); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.ranking-meta { font-size: 0.72rem; color: var(--rep-texto-suave); }
+.ranking-detalle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.ranking-barra {
+  height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.06); overflow: hidden;
+  span {
+    display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, rgba(205, 158, 70, 0.55), var(--rep-oro));
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: crecer 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    transform-origin: left;
+  }
+}
+
+.ranking-vacio {
+  margin: 0; padding: 32px 0; text-align: center; color: var(--rep-texto-suave);
+  font-family: 'Montserrat', sans-serif; font-size: 0.85rem;
+}
+
+@keyframes entrar { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+@keyframes crecer { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) { .ranking-fila, .ranking-barra span { animation: none; } }

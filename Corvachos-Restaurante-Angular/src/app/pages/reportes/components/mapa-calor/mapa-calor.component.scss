@@ -1,0 +1,36 @@
+:host { display: block; }
+.mapa-scroll { overflow-x: auto; padding-top: 34px; margin-top: -26px; }
+
+.mapa { display: grid; gap: 3px; min-width: 560px; font-family: 'Montserrat', sans-serif; }
+
+.mapa-hora { font-size: 0.62rem; color: var(--rep-texto-suave); text-align: center; padding-bottom: 4px; }
+.mapa-dia { font-size: 0.72rem; color: var(--rep-texto-suave); align-self: center; }
+
+.mapa-celda {
+  height: 26px; border-radius: 4px; position: relative; cursor: default;
+  transition: transform 0.15s, outline-color 0.15s;
+  outline: 1px solid transparent;
+
+  &:hover, &:focus-visible { transform: scale(1.12); outline-color: var(--rep-texto); z-index: 2; }
+
+  // Tooltip propio para cada celda (se muestra con mouse o teclado)
+  &:hover::after, &:focus-visible::after {
+    content: attr(data-tooltip);
+    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+    background: #06141d; color: var(--rep-texto); border: 1px solid var(--rep-borde);
+    padding: 6px 10px; border-radius: 6px; font-size: 0.72rem; white-space: nowrap; pointer-events: none;
+  }
+}
+
+.pico {
+  text-align: right; font-family: 'Montserrat', sans-serif;
+  span { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--rep-texto-suave); white-space: nowrap; }
+  strong { font-size: 0.85rem; color: var(--rep-oro); font-weight: 600; white-space: nowrap; }
+}
+
+.leyenda {
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-top: 14px;
+  font-family: 'Montserrat', sans-serif; font-size: 0.68rem; color: var(--rep-texto-suave);
+}
+
+.leyenda-paso { display: block; width: 18px; height: 10px; border-radius: 2px; }

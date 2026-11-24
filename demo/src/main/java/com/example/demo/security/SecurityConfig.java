@@ -2,6 +2,9 @@ package com.example.demo.security;
 
 import java.util.List;
 
+import jakarta.servlet.DispatcherType;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +40,10 @@ public class SecurityConfig {
     private final JWTGenerator jwtGenerator;
     private final CustomUserDetailsService customUserDetailsService;
 
+    // Paginas que pueden llamar al API (separadas por coma). En Render se cambia con la variable CORS_ORIGINS
+    @Value("${app.cors.origins}")
+    private String corsOrigins;
+
     public SecurityConfig(JwtAuthEntryPoint jwtAuthEntryPoint, JWTGenerator jwtGenerator,
             CustomUserDetailsService customUserDetailsService) {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
@@ -54,6 +61,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
             .authorizeHttpRequests(auth -> auth
+                // Respuestas que siguen abiertas (seguimiento en vivo): la peticion original ya se autorizo
+                // con el JWT; Spring la vuelve a despachar internamente (ASYNC) para enviar cada evento
+                .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
+
                 // ---------- Publico ----------
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/h2/**", "/error").permitAll()
@@ -63,6 +74,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/clientes").permitAll()
                 // Menu: productos, categorias y adicionales se pueden ver sin iniciar sesion
                 .requestMatchers(HttpMethod.GET, "/api/productos/**", "/api/categorias/**", "/api/adicionales/**").permitAll()
+
+                // ---------- Reportes de ventas (dashboard): solo ADMIN ----------
+                .requestMatchers("/api/reportes/**").hasAuthority(ADMIN)
 
                 // ---------- Administradores: solo ADMIN ----------
                 .requestMatchers("/api/administradores/**").hasAuthority(ADMIN)
@@ -92,9 +106,14 @@ public class SecurityConfig {
 
                 // ---------- Pedidos ----------
                 .requestMatchers(HttpMethod.POST, "/api/pedidos").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
-                .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**", "/api/pedidos/*").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/cliente/**", "/api/pedidos/*", "/api/pedidos/*/seguimiento")
+                        .hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
                 .requestMatchers("/api/pedidos/**").hasAnyAuthority(OPERADOR, ADMIN)
                 .requestMatchers("/api/detalles-pedido/**").hasAnyAuthority(OPERADOR, ADMIN)
+
+                // ---------- Cupones: el cliente solo prueba un codigo en su carrito; el resto es del admin ----------
+                .requestMatchers(HttpMethod.GET, "/api/cupones/validar").hasAnyAuthority(CLIENTE, OPERADOR, ADMIN)
+                .requestMatchers("/api/cupones/**").hasAuthority(ADMIN)
 
                 // Cualquier otra cosa requiere estar autenticado
                 .anyRequest().authenticated()
@@ -116,13 +135,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // CORS para que Angular (localhost:4200) pueda mandar el header Authorization
+    // CORS para que Angular (localhost:4200 o la pagina publicada) pueda mandar el header Authorization
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Patrones para aceptar tambien las URLs de vista previa de Vercel (https://*.vercel.app)
+        config.setAllowedOriginPatterns(List.of(corsOrigins.split("\\s*,\\s*")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        // Para que Angular pueda leer el nombre del archivo al descargar el Excel
+        config.setExposedHeaders(List.of("Content-Disposition"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

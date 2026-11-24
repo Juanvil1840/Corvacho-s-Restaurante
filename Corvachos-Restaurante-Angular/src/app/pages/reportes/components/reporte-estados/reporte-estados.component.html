@@ -1,0 +1,27 @@
+<section class="rep-card rep-panel">
+  <header class="rep-panel-cabecera">
+    <div>
+      <h2 class="rep-panel-titulo">Operación</h2>
+      <p class="rep-panel-subtitulo">Pedidos del periodo según su estado</p>
+    </div>
+  </header>
+
+  <ol class="estados">
+    @for (estado of estados; track estado.nombre) {
+      <li class="estado" [class.final]="estado.nombre === 'Entregado'">
+        <span class="estado-icono"><i class="bi" [class]="icono(estado.nombre)"></i></span>
+        <span class="estado-nombre">{{ estado.nombre }}</span>
+        <span class="estado-cantidad">{{ estado.cantidad }}</span>
+        <span class="estado-porcentaje">{{ porcentaje(estado.cantidad) }}</span>
+      </li>
+    }
+  </ol>
+
+  <div class="entrega">
+    <i class="bi bi-stopwatch"></i>
+    <div>
+      <strong>{{ minutosTexto }} <small>min</small></strong>
+      <span>Tiempo promedio desde que se hace el pedido hasta que se entrega</span>
+    </div>
+  </div>
+</section>

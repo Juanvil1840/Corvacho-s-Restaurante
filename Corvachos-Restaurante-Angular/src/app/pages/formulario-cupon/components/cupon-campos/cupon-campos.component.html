@@ -1,0 +1,70 @@
+<div class="adicional-campos">
+
+  <div class="adicional-campo">
+    <label for="codigo">Código</label>
+    <input id="codigo" name="codigo" type="text" maxlength="20" class="cupon-input-codigo"
+      [(ngModel)]="cupon.codigo" placeholder="Ej: BIENVENIDA10" required />
+    <small class="cupon-ayuda">Lo que escribe el cliente en el carrito. Letras y números, sin espacios.</small>
+  </div>
+
+  <div class="adicional-campo">
+    <label for="descripcion">Descripción (opcional)</label>
+    <input id="descripcion" name="descripcion" type="text" maxlength="120"
+      [(ngModel)]="cupon.descripcion" placeholder="Ej: 10% de descuento de bienvenida" />
+  </div>
+
+  <div class="cupon-fila">
+    <div class="adicional-campo">
+      <label for="tipo">Tipo de descuento</label>
+      <select id="tipo" name="tipo" [(ngModel)]="cupon.tipo">
+        <option value="PORCENTAJE">Porcentaje (%)</option>
+        <option value="VALOR_FIJO">Valor fijo ($)</option>
+      </select>
+    </div>
+    <div class="adicional-campo">
+      <label for="valor">{{ cupon.tipo === 'PORCENTAJE' ? 'Porcentaje' : 'Valor (COP)' }}</label>
+      <input id="valor" name="valor" type="number" min="1" [max]="cupon.tipo === 'PORCENTAJE' ? 100 : null"
+        [step]="cupon.tipo === 'PORCENTAJE' ? 1 : 500" [(ngModel)]="cupon.valor" required />
+    </div>
+  </div>
+
+  <div class="cupon-fila">
+    <div class="adicional-campo">
+      <label for="compraMinima">Compra mínima (COP)</label>
+      <input id="compraMinima" name="compraMinima" type="number" min="0" step="1000"
+        [(ngModel)]="cupon.compraMinima" placeholder="0 = sin mínimo" />
+    </div>
+    <div class="adicional-campo">
+      <label for="usosMaximos">Máximo de usos</label>
+      <input id="usosMaximos" name="usosMaximos" type="number" min="1" step="1"
+        [(ngModel)]="cupon.usosMaximos" placeholder="Vacío = ilimitado" />
+    </div>
+  </div>
+
+  <div class="cupon-fila">
+    <div class="adicional-campo">
+      <label for="fechaVencimiento">Vence el (opcional)</label>
+      <input id="fechaVencimiento" name="fechaVencimiento" type="date" [(ngModel)]="cupon.fechaVencimiento" />
+    </div>
+    <div class="adicional-campo adicional-campo-check cupon-check">
+      <label for="activo">
+        <input id="activo" name="activo" type="checkbox" [(ngModel)]="cupon.activo" />
+        Activo
+      </label>
+    </div>
+  </div>
+
+  @if (cupon.usos > 0) {
+    <p class="cupon-ayuda">Este cupón ya se ha usado {{ cupon.usos }} {{ cupon.usos === 1 ? 'vez' : 'veces' }}.</p>
+  }
+
+  <div class="cupon-vista-previa">
+    <i class="bi bi-ticket-perforated"></i>
+    <div>
+      <strong>{{ (cupon.codigo || 'CODIGO').toUpperCase() }}</strong>
+      <span>En una compra de $ {{ compraEjemplo | number:'1.0-0' }} el cliente ahorra
+        <b>$ {{ ahorroEjemplo | number:'1.0-0' }}</b> y paga $ {{ compraEjemplo - ahorroEjemplo | number:'1.0-0' }}.</span>
+    </div>
+  </div>
+
+</div>
