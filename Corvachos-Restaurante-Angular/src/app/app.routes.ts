@@ -49,7 +49,8 @@ const CUALQUIER_ROL = { roles: ['CLIENTE', 'OPERADOR', 'ADMIN'] };
 export const routes: Routes = [
 
     // Página de inicio y gestión de productos
-    { path: '', component: LandingComponent, canActivate: [sinSesionGuard] },
+    // La portada se puede ver con o sin sesion iniciada (INICIO siempre lleva aqui)
+    { path: '', component: LandingComponent },
     { path: 'productos', component: ListaProductosComponent, canActivate: [authGuard], data: SOLO_ADMIN },
     { path: 'productos/nuevo', component: FormularioProductoComponent, canActivate: [authGuard], data: SOLO_ADMIN },
     { path: 'productos/editar/:id', component: FormularioProductoComponent, canActivate: [authGuard], data: SOLO_ADMIN },
