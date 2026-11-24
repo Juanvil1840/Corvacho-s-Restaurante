@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +31,9 @@ import com.example.demo.repository.ProductoRepository;
 import com.example.demo.repository.CalificacionProductoRepository;
 
 @SpringBootTest
+// Base en memoria y sin las reseñas de demostracion, para que cada prueba parta de cero
+@ActiveProfiles("test")
+@TestPropertySource(properties = "app.demo.resenas=false")
 @AutoConfigureMockMvc
 @Transactional
 class CalificacionProductoIntegracionTest {

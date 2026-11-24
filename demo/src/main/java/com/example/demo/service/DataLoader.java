@@ -106,6 +106,7 @@ public class DataLoader implements CommandLineRunner {
 
                 // Si ya existen categorias registradas no se vuelven a insertar los datos iniciales
                 if (baseConDatos) {
+                        asegurarClienteWeb();
                         return;
                 }
 
@@ -142,6 +143,7 @@ public class DataLoader implements CommandLineRunner {
                                 "7799881", "3145533789", "Calle 150 #9-50", true));
                 Cliente cliente10 = clienteRepository.save(new Cliente("Sebastián", "Angarita",
                                 "angarita.sebastian@yahoo.com", "5554445", "3143224455", "Calle 24b #5-75", true));
+                asegurarClienteWeb();
 
                 /* Productos */
 
@@ -435,5 +437,14 @@ public class DataLoader implements CommandLineRunner {
                 productoCarritoRepository.save(new ProductoCarrito(1, producto5, carrito5));
                 productoCarritoRepository.save(new ProductoCarrito(4, producto6, carrito1));
 
+        }
+
+        // Cliente de demostracion para entrar rapido en la presentacion (web@gmail.com / 123).
+        // Se crea si no existe; su usuario y la contraseña encriptada los arma UsuariosDataLoader al arrancar
+        private void asegurarClienteWeb() {
+                if (clienteRepository.findByCorreo("web@gmail.com") == null) {
+                        clienteRepository.save(new Cliente("Cliente", "Web", "web@gmail.com", "123",
+                                        "3000000000", "Calle 40 #7-60", true));
+                }
         }
 }
